@@ -573,18 +573,19 @@ the initial profile to the right.  This means that with periodic boundary
 condition, after advecting for one period, our numerical solution should
 be identical to the initial conditions.  Any differences are our
 numerical error.  We can quantify the error by taking the norm of error as:
+This is the {\em L2-norm} of the relative error.  Sometimes we instead look
+at the norm of the absolute error:
 \begin{equation}
-\epsilon^\mathrm{rel} = \left [ \frac{1}{N} \sum_{i=1}^N 
-  \left ( \frac{a_i^\mathrm{final} - a_i^\mathrm{init}}{a_i^\mathrm{init}} 
-  \right )^2
+\epsilon^\mathrm{abs} = \| a^\mathrm{final} - a^\mathrm{init} \|_2 \equiv
+   \left [ \frac{1}{N} \sum_{i=1}^N 
+   ( a_i^\mathrm{final} - a_i^\mathrm{init} )^2
   \right ]^{1/2}
 \end{equation}
-This is the {\em L2-norm} of the relative error.  Sometimes we instead look
-at the norm of the absolution error:
+It is sometimes useful to compare to the norm of the original solution
+to get a measure of the relative error:
 \begin{equation}
-\epsilon^\mathrm{abs} = \left [ \frac{1}{N} \sum_{i=1}^N 
-   | a_i^\mathrm{final} - a_i^\mathrm{init} |
-  \right ]^{1/2}
+\epsilon^\mathrm{rel} \equiv \frac{\| a^\mathrm{final} - a^\mathrm{init} \|_2}
+   {\| a^\mathrm{init} \|_2}
 \end{equation}
 Note that it is important in these definitions to normalize by the number
 of zones, $N$, otherwise our error will be resolution-dependent.
