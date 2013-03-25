@@ -63,6 +63,7 @@ f = pylab.gcf()
 f.set_size_inches(8.0,2.0)
 
 pylab.savefig("rea-start.eps")
+pylab.savefig("rea-start.png")
 
 
 
@@ -108,6 +109,7 @@ f = pylab.gcf()
 f.set_size_inches(8.0,2.0)
 
 pylab.savefig("rea-reconstruction.eps")
+pylab.savefig("rea-reconstruction.png")
 
 
 
@@ -150,6 +152,7 @@ f = pylab.gcf()
 f.set_size_inches(8.0,2.0)
 
 pylab.savefig("rea-trace.eps")
+pylab.savefig("rea-trace.png")
 
 
 #-----------------------------------------------------------------------------
@@ -195,6 +198,7 @@ f = pylab.gcf()
 f.set_size_inches(8.0,2.0)
 
 pylab.savefig("rea-evolve.eps")
+pylab.savefig("rea-evolve.png")
 
 
 #-----------------------------------------------------------------------------
@@ -254,4 +258,7 @@ f = pylab.gcf()
 f.set_size_inches(8.0,2.0)
 
 pylab.savefig("rea-final.eps")
+pylab.savefig("rea-final.png")
+
+
 
