@@ -248,8 +248,9 @@ with this method will still have a small $C$).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Second-order advection in one-dimension and the finite-volume method}
 
-We will typically use a {\em finite-volume} discretization of the advection equation.
-First we rewrite the advection equation in {\em conservation form}:
+We will typically use a {\em finite-volume} discretization of the
+advection equation.  First we rewrite the advection equation in {\em
+  conservation form}:
 \begin{equation}
 a_t + \left[f(a)\right]_x = 0
 \label{eq:advect-cons}
@@ -269,12 +270,12 @@ its flux.
 Recall that in the finite-volume discretization, $\langle a\rangle_i$
 represents the average of $a(x,t)$ over the interval $x_{i-1/2}$ to
 $x_{i+1/2}$, where the half-integer indexes denote the zone edges
-(i.e.\ $x_{i-1/2} = x_i - \Delta x/2$).  Figure~\ref{fig:fvghost} shows
-an example of such a grid with 2 ghost cells at each end.  (For simplicitly of notation,
-we drop the $\langle \rangle$ going forward).  To discretize
-Eq.~\ref{eq:advect-cons}, we integrate it over a zone, from
-${x_{i-1/2}}$ to ${x_{i+1/2}}$, normalizing by the zone width, $\Delta
-x$:
+(i.e.\ $x_{i-1/2} = x_i - \Delta x/2$).  Figure~\ref{fig:fvghost}
+shows an example of such a grid with 2 ghost cells at each end.  (For
+simplicitly of notation, we drop the $\langle \rangle$ going forward).
+To discretize Eq.~\ref{eq:advect-cons}, we integrate it over a zone,
+from ${x_{i-1/2}}$ to ${x_{i+1/2}}$, normalizing by the zone width,
+$\Delta x$:
 \begin{eqnarray}
 \frac{1}{\Delta x} \int_{x_{i-1/2}}^{x_{i+1/2}} a_t \, dx &=& 
    - \frac{1}{\Delta x} \int_{x_{i-1/2}}^{x_{i+1/2}} \frac{\partial}{\partial x} f(a) \, dx \\
@@ -295,13 +296,13 @@ half-time, that is, we do :
 \begin{equation}
 \left [f(a) \right ]_{i+1/2}^{n+1/2} = f(a_{i+1/2}^{n+1/2}) \enskip .
 \end{equation}
-We construct a second-order accurate
-approximation to $a_{i+1/2}^{n+1/2}$ by Taylor expanding the data in
-the cell to the interface.  Note that for each interface, there are
-two possible interface states we can construct---one using the data to
-the left of the interface (which we will denote with a ``L''
-subscript) and the other using the data to the right of the interface
-(denoted with an ``R'' subscript)---see Figure~\ref{fig:riemann}.  These states are:
+We construct a second-order accurate approximation to
+$a_{i+1/2}^{n+1/2}$ by Taylor expanding the data in the cell to the
+interface.  Note that for each interface, there are two possible
+interface states we can construct---one using the data to the left of
+the interface (which we will denote with a ``L'' subscript) and the
+other using the data to the right of the interface (denoted with an
+``R'' subscript)---see Figure~\ref{fig:riemann}.  These states are:
 \begin{eqnarray}
 a_{i+1/2,L}^{n+1/2} &=& a_i^n + \frac{\Delta x}{2} \left .\frac{\partial a}{\partial x} \right |_i + \frac{\Delta t}{2} \left .\frac{\partial a}{\partial t} \right |_i + \mathcal{O}(\Delta x^2) + \mathcal{O}(\Delta t^2) \nonumber \\
     &=& a_i^n + \frac{\Delta x}{2} \left .\frac{\partial a}{\partial x} \right |_i +  \frac{\Delta t}{2} \left ( - u \left .\frac{\partial a}{\partial x} \right |_i \right ) + \ldots \nonumber \\
@@ -387,6 +388,8 @@ Use both the top-hat and Gaussian initial conditions and periodic boundary
 conditions and compare to the first-order method.
 }
 \end{quote}
+
+\subsection{Limiting}
 
 The second-order method likely showed some oscillations in the
 solution, especially for the top-hat initial conditions.  {\em
@@ -479,7 +482,7 @@ Eq. 191).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Reconstruct-evolve-average}
+\subsection{Reconstruct-evolve-average}
 
 Another way to think about these methods is as a reconstruction,
 evolve, and average (R-E-A) process (see Figure~\ref{fig:rea}).  

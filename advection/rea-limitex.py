@@ -48,8 +48,12 @@ def evolve(gr, a, C, num, nolimit=1):
     f = pylab.gcf()
     f.set_size_inches(8.0,2.0)
 
-    pylab.savefig("rea-start_%3.3d.png" % (num))
-
+    if (nolimit):
+        pylab.savefig("rea-nolimit-start_%3.3d.png" % (num))
+        pylab.savefig("rea-nolimit-start_%3.3d.eps" % (num))
+    else:
+        pylab.savefig("rea-start_%3.3d.png" % (num))
+        pylab.savefig("rea-start_%3.3d.eps" % (num))
 
     #-------------------------------------------------------------------------
     # second frame -- reconstruction
@@ -89,7 +93,12 @@ def evolve(gr, a, C, num, nolimit=1):
     f = pylab.gcf()
     f.set_size_inches(8.0,2.0)
 
-    pylab.savefig("rea-reconstruction_%3.3d.png" % (num))
+    if (nolimit):
+        pylab.savefig("rea-nolimit-reconstruction_%3.3d.png" % (num))
+        pylab.savefig("rea-nolimit-reconstruction_%3.3d.eps" % (num))
+    else:
+        pylab.savefig("rea-reconstruction_%3.3d.png" % (num))
+        pylab.savefig("rea-reconstruction_%3.3d.eps" % (num))
 
 
     #-------------------------------------------------------------------------
@@ -131,7 +140,12 @@ def evolve(gr, a, C, num, nolimit=1):
     f = pylab.gcf()
     f.set_size_inches(8.0,2.0)
 
-    pylab.savefig("rea-evolve_%3.3d.png" % (num))
+    if (nolimit):
+        pylab.savefig("rea-nolimit-evolve_%3.3d.png" % (num))
+        pylab.savefig("rea-nolimit-evolve_%3.3d.eps" % (num))
+    else:
+        pylab.savefig("rea-evolve_%3.3d.png" % (num))
+        pylab.savefig("rea-evolve_%3.3d.eps" % (num))
 
 
     #-------------------------------------------------------------------------
@@ -187,7 +201,12 @@ def evolve(gr, a, C, num, nolimit=1):
     f = pylab.gcf()
     f.set_size_inches(8.0,2.0)
 
-    pylab.savefig("rea-final_%3.3d.png" % (num))
+    if (nolimit):
+        pylab.savefig("rea-nolimit-final_%3.3d.png" % (num))
+        pylab.savefig("rea-nolimit-final_%3.3d.eps" % (num))
+    else:
+        pylab.savefig("rea-final_%3.3d.png" % (num))
+        pylab.savefig("rea-final_%3.3d.eps" % (num))
 
     return anew
 
