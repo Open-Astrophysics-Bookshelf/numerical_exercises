@@ -421,11 +421,44 @@ with
     \end{array}
   \right .
 \end{equation}
-Use this slope in your second-order advection code and notice that
-the oscillations go away.  See the text by LeVeque~\cite{leveque:2002} for alternate choices of 
-limiters. (Note: most limiters will have some sort of test on $a\cdot b$---this is $< 0$ at an extremum, which is precisely where we want to limit).
-}
+Use this slope in your second-order advection code and notice that the
+oscillations go away }
 \end{quote}
+
+Figure~\ref{fig:limitingex} shows the evolution
+of an initial discontinuity with and without limiting.  See the text
+by LeVeque~\cite{leveque:2002} for alternate choices of
+limiters. Note: most limiters will have some sort of test on the product
+of a left-sided and right-sided difference ($a\cdot
+b$ above)---this is $< 0$ at an extremum, which is precisely where we want to
+limit. 
+
+\begin{figure}[p!]
+\centering
+\includegraphics[width=3.25in]{rea-nolimit-start_001}\hspace{1em}
+\includegraphics[width=3.25in]{rea-nolimit-start_005} \\
+\includegraphics[width=3.25in]{rea-nolimit-start_002}\hspace{1em}
+\includegraphics[width=3.25in]{rea-nolimit-start_006} \\
+\includegraphics[width=3.25in]{rea-nolimit-start_003}\hspace{1em}
+\includegraphics[width=3.25in]{rea-nolimit-start_007} \\
+\includegraphics[width=3.25in]{rea-nolimit-start_004}\hspace{1em}
+\includegraphics[width=3.25in]{rea-nolimit-start_008} \\
+\vskip 0.5in
+\includegraphics[width=3.25in]{rea-start_001}\hspace{1em}
+\includegraphics[width=3.25in]{rea-start_005} \\
+\includegraphics[width=3.25in]{rea-start_002}\hspace{1em}
+\includegraphics[width=3.25in]{rea-start_006} \\
+\includegraphics[width=3.25in]{rea-start_003}\hspace{1em}
+\includegraphics[width=3.25in]{rea-start_007} \\
+\includegraphics[width=3.25in]{rea-start_004}\hspace{1em}
+\includegraphics[width=3.25in]{rea-start_008} \\
+\caption{\label{fig:limitingex}Initially discontinuous data evolved for several steps with
+  no limiting (top sequence) and limiting (bottom sequence).  Note
+  that without limiting, there are overshoots and undershoots
+  surrounding the discontinuity, and that the discontinuity remains
+  sharper with limiting.}
+\clearpage
+\end{figure}
 
 A slightly more complex limiter is the MC limiter (monotonized central
 difference).  First we define an extrema test,

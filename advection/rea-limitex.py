@@ -230,7 +230,7 @@ for i in range(1,9):
 
     fillgc(gr, a)
 
-    anew = evolve(gr, a, C, i, nolimit=0)
+    anew = evolve(gr, a, C, i, nolimit=1)
 
     a[:] = anew[:]
 
