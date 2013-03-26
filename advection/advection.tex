@@ -150,7 +150,7 @@ and specify $C$ as part of the problem (a typical value may be $C = 0.7$).
   you advect the profile exactly, without any numerical error.}
 \end{quote}
 
-Keep in mind that, in general, you will be solving a non-linear
+Keep in mind that, in general, we will be solving a non-linear
 system of equations, so it is not possible to run with $C=1$, 
 since $u$ (and therefore $C$) will change from zone to zone.
 Instead, one looks at the most restrictive timestep over all the
@@ -329,6 +329,10 @@ as
 \left . \frac{\partial a}{\partial x}\right |_i = \frac{a_{i+1} - a_{i-1}}{2 \Delta x} \label{eq:slopecentered}
 \end{equation}
 
+We can think of this method as reconstructing the function form of the
+data from the cell-average data in each cell using  a piecewise linear
+polynomial. 
+
 We now have two states, $a_{i+1/2,L}^{n+1/2}$ and
 $a_{i+1/2,R}^{n+1/2}$ separated by an interface---this is called the
 {\em Riemann problem}.
@@ -389,7 +393,7 @@ solution, especially for the top-hat initial conditions.  {\em
   Godunov's theorem} says that any monotonic linear method for
 advection is first-order accurate (see, e.g,~\cite{laney}).  In this
 context, monotonic means that no new minima or maxima are introduced.
-The conserve is true too, which suggests that in order to have a
+The converse is true too, which suggests that in order to have a
 second-order accurate method for this linear equation, the algorithm
 itself must be nonlinear.
 
@@ -496,9 +500,9 @@ a_i^{n+1} = a_i^n +
 \end{equation}
 
 If we instead look at this via the R-E-A procedure, we write the reconstructed
-$a$ in each zone in the form of 
+$a$ in each zone in the form of a piecewise linear polynomial
 \begin{equation}
-a(x) = a_i + \frac{\Delta a}{\Delta x} (x - x_i)
+a_i(x) = a_i + \frac{\Delta a}{\Delta x} (x - x_i)
 \end{equation}
 Consider zone $i$.  
 If we are advecting with a CFL number $C$, then that means that the fraction
