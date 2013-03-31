@@ -66,8 +66,12 @@ def drawGrid(gr, centerOnly=0, drawGhost=0, emphasizeEnd=0, edgeTicks=1):
         print nstart, nstop
 
         if not drawGhost:
-            pylab.plot([gr.xmin-0.5*gr.dx, gr.xmax+0.5*gr.dx], 
-                       [0,0], color="k", lw=2)
+            if (emphasizeEnd):
+                pylab.plot([gr.xmin, gr.xmax], 
+                           [0,0], color="k", lw=2)
+            else:
+                pylab.plot([gr.xmin-0.5*gr.dx, gr.xmax+0.5*gr.dx], 
+                           [0,0], color="k", lw=2)
         else:
             pylab.plot([gr.xmin-gr.ng*gr.dx, gr.xmin],
                        [0,0], color="k", lw=2, ls=":")
@@ -88,6 +92,14 @@ def drawGrid(gr, centerOnly=0, drawGhost=0, emphasizeEnd=0, edgeTicks=1):
                            [-0.05, gridTop], color="k", lw=2)
       
             n += 1
+
+        if (emphasizeEnd):
+            pylab.plot([gr.xc[gr.ilo], gr.xc[gr.ilo]], 
+                       [-0.05, gridTop], color="k", lw=4)
+
+            pylab.plot([gr.xc[gr.ihi], gr.xc[gr.ihi]], 
+                       [-0.05, gridTop], color="k", lw=4)
+
 
 
     else:
@@ -210,7 +222,7 @@ def markCellRightState(gr, idx, string, color="k"):
 
 #-----------------------------------------------------------------------------
 def drawFDData(gr, idx, value, color="0.5", marker="o"):
-    pylab.scatter([gr.xc[idx]], [value], color=color, marker=marker)
+    pylab.scatter([gr.xc[idx]], [value], color=color, marker=marker, zorder=100)
 
 
 
