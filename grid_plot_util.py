@@ -5,7 +5,7 @@ import sys
 
 class grid:
 
-    def __init__(self, nx, ng = 0, xmin=0.0, xmax=1.0, fd=0):
+    def __init__(self, nx, ng = 0, xmin=0.0, xmax=1.0, fd=0, voff=0.0):
 
         # grid stuff
 
@@ -46,6 +46,9 @@ class grid:
         # if this a finite-difference (node-centered) grid?
         self.fd = fd
 
+        # vertical offset (if we want to stack grids)
+        self.voff = voff
+
 
 def drawGrid(gr, centerOnly=0, drawGhost=0, emphasizeEnd=0, edgeTicks=1):
 
@@ -71,14 +74,14 @@ def drawGrid(gr, centerOnly=0, drawGhost=0, emphasizeEnd=0, edgeTicks=1):
                            [0,0], color="k", lw=2)
             else:
                 pylab.plot([gr.xmin-0.5*gr.dx, gr.xmax+0.5*gr.dx], 
-                           [0,0], color="k", lw=2)
+                           [gr.voff,gr.voff], color="k", lw=2)
         else:
             pylab.plot([gr.xmin-gr.ng*gr.dx, gr.xmin],
-                       [0,0], color="k", lw=2, ls=":")
+                       [gr.voff,gr.voff], color="k", lw=2, ls=":")
             pylab.plot([gr.xmax, gr.xmax+gr.ng*gr.dx], 
-                       [0,0], color="k", lw=2, ls=":")
+                       [gr.voff,gr.voff], color="k", lw=2, ls=":")
             pylab.plot([gr.xmin, gr.xmax], 
-                       [0,0], color="k", lw=2)
+                       [gr.voff,gr.voff], color="k", lw=2)
 
         n = nstart
         while (n <= nstop):
@@ -86,19 +89,19 @@ def drawGrid(gr, centerOnly=0, drawGhost=0, emphasizeEnd=0, edgeTicks=1):
             # draw center (node) indicator line
             if (n < gr.ilo or n > gr.ihi):
                 pylab.plot([gr.xc[n], gr.xc[n]], 
-                           [-0.05, gridTop], color="k", ls=":", lw=2)
+                           [-0.05+gr.voff, gridTop+gr.voff], color="k", ls=":", lw=2)
             else:
                 pylab.plot([gr.xc[n], gr.xc[n]], 
-                           [-0.05, gridTop], color="k", lw=2)
+                           [-0.05+gr.voff, gridTop+gr.voff], color="k", lw=2)
       
             n += 1
 
         if (emphasizeEnd):
             pylab.plot([gr.xc[gr.ilo], gr.xc[gr.ilo]], 
-                       [-0.05, gridTop], color="k", lw=4)
+                       [-0.05+gr.voff, gridTop+gr.voff], color="k", lw=4)
 
             pylab.plot([gr.xc[gr.ihi], gr.xc[gr.ihi]], 
-                       [-0.05, gridTop], color="k", lw=4)
+                       [-0.05+gr.voff, gridTop+gr.voff], color="k", lw=4)
 
 
 
@@ -125,16 +128,16 @@ def drawGrid(gr, centerOnly=0, drawGhost=0, emphasizeEnd=0, edgeTicks=1):
             print "drawing line", nstart, nstop
 
             pylab.plot([gr.xl[nstart], gr.xr[nstop]], 
-                       [0,0], color="k", lw=2)
+                       [gr.voff,gr.voff], color="k", lw=2)
 
         else:
             # horizontal line
             pylab.plot([gr.xl[nstart]-0.5*gr.dx, gr.xr[nstop]+0.5*gr.dx], 
-                       [0,0], color="k", lw=2)
+                       [gr.voff,gr.voff], color="k", lw=2)
 
         # draw first left edge
         pylab.plot([gr.xl[nstart], gr.xl[nstart]], 
-                   [0, gridTop], color="k", lw=2)
+                   [gr.voff, gridTop+gr.voff], color="k", lw=2)
 
 
         n = nstart
@@ -143,61 +146,61 @@ def drawGrid(gr, centerOnly=0, drawGhost=0, emphasizeEnd=0, edgeTicks=1):
             # emphasize?
             if (emphasizeEnd and n == gr.ilo):
                 pylab.plot([gr.xl[n], gr.xl[n]], 
-                           [0, gridTop], color="k", lw=4)                
+                           [gr.voff, gridTop+gr.voff], color="k", lw=4)                
 
 
             # draw right edge
             if (emphasizeEnd and n == gr.ihi):
-                pylab.plot([gr.xr[n], gr.xr[n]], [0, gridTop], 
+                pylab.plot([gr.xr[n], gr.xr[n]], [gr.voff, gridTop+gr.voff], 
                            color="k", lw=4)        
             else:
-                pylab.plot([gr.xr[n], gr.xr[n]], [0, gridTop], 
+                pylab.plot([gr.xr[n], gr.xr[n]], [gr.voff, gridTop+gr.voff], 
                            color="k", lw=2)        
 
             # draw center marker
-            pylab.plot([gr.xc[n], gr.xc[n]], [-0.05, 0], color="k")      
+            pylab.plot([gr.xc[n], gr.xc[n]], [-0.05+gr.voff, gr.voff], color="k")      
 
             # draw edge marker
             if (n == nstart and edgeTicks):
-                pylab.plot([gr.xl[nstart], gr.xl[nstart]], [-0.05, 0],
+                pylab.plot([gr.xl[nstart], gr.xl[nstart]], [-0.05+gr.voff, gr.voff],
                            color="k")
 
             if edgeTicks:
-                pylab.plot([gr.xr[n], gr.xr[n]], [-0.05, 0], color="k")
+                pylab.plot([gr.xr[n], gr.xr[n]], [-0.05+gr.voff, gr.voff], color="k")
                 
             n += 1
 
 
 def labelCenter(gr, idx, string):
 
-    pylab.text(gr.xc[idx], -0.1, string, 
+    pylab.text(gr.xc[idx], gr.voff-0.1, string, 
                horizontalalignment='center', verticalalignment='top', 
                fontsize="small")
 
 
 def labelEdge(gr, idx, string):
 
-    pylab.text(gr.xl[idx], -0.075, string,
+    pylab.text(gr.xl[idx], gr.voff-0.075, string,
                horizontalalignment='center', verticalalignment='top', 
                fontsize="small")
 
 
 def labelCellAvg(gr, idx, value, string, color="k"):
 
-    pylab.text(gr.xc[idx], value+0.1, string,
+    pylab.text(gr.xc[idx], gr.voff+value+0.1, string,
                horizontalalignment='center', verticalalignment='bottom',
                fontsize="large", color=color)
 
 def labelCellCenter(gr, idx, string):
 
-    pylab.text(gr.xc[idx], 0.5, string,
+    pylab.text(gr.xc[idx], gr.voff+0.5, string,
                horizontalalignment='center', verticalalignment='center',
                fontsize="large")
 
 
 def labelFD(gr, idx, value, string, color="k"):
 
-    pylab.text(gr.xc[idx], value+0.1, string,
+    pylab.text(gr.xc[idx], gr.voff+value+0.1, string,
                horizontalalignment='center', verticalalignment='bottom',
                fontsize="large", color=color)
 
@@ -205,31 +208,31 @@ def labelFD(gr, idx, value, string, color="k"):
 #-----------------------------------------------------------------------------
 def markCellLeftState(gr, idx, string, color="k"):
 
-    pylab.scatter(gr.xl[idx]+0.05*gr.dx, 0.5, marker="x", color=color)
+    pylab.scatter(gr.xl[idx]+0.05*gr.dx, gr.voff+0.5, marker="x", color=color)
 
-    pylab.text(gr.xl[idx]+0.075*gr.dx, 0.5, string,
+    pylab.text(gr.xl[idx]+0.075*gr.dx, gr.voff+0.5, string,
                horizontalalignment='left', verticalalignment='center', color=color)
 
 
 def markCellRightState(gr, idx, string, color="k"):
 
-    pylab.scatter(gr.xr[idx]-0.05*gr.dx, 0.5, marker="x", color=color)
+    pylab.scatter(gr.xr[idx]-0.05*gr.dx, gr.voff+0.5, marker="x", color=color)
 
-    pylab.text(gr.xr[idx]-0.075*gr.dx, 0.5, string,
+    pylab.text(gr.xr[idx]-0.075*gr.dx, gr.voff+0.5, string,
                horizontalalignment='right', verticalalignment='center', color=color)
 
 
 
 #-----------------------------------------------------------------------------
 def drawFDData(gr, idx, value, color="0.5", marker="o"):
-    pylab.scatter([gr.xc[idx]], [value], color=color, marker=marker, zorder=100)
+    pylab.scatter([gr.xc[idx]], [gr.voff+value], color=color, marker=marker, zorder=100)
 
 
 
 #-----------------------------------------------------------------------------
 def drawCellAvg(gr, idx, value, color="0.5", ls="-"):
     print "drawing average: ", idx
-    pylab.plot([gr.xl[idx], gr.xr[idx]], [value, value], color=color, ls=ls)
+    pylab.plot([gr.xl[idx], gr.xr[idx]], [gr.voff+value, gr.voff+value], color=color, ls=ls)
 
 
 
@@ -262,8 +265,8 @@ def lslopes(a, nolimit=0):
 
 def drawSlope(gr, idx, slope, value, color="r", ls="-"):
 
-    yl = slope*(gr.xl[idx] - gr.xc[idx])/gr.dx + value
-    yr = slope*(gr.xr[idx] - gr.xc[idx])/gr.dx + value
+    yl = slope*(gr.xl[idx] - gr.xc[idx])/gr.dx + gr.voff+value
+    yr = slope*(gr.xr[idx] - gr.xc[idx])/gr.dx + gr.voff+value
 
     pylab.plot([gr.xl[idx], gr.xr[idx]], [yl, yr], 
                color=color, ls=ls, lw=1, zorder=10)
@@ -274,7 +277,7 @@ def slopeTraceLeft(gr, idx, slope, value, sigma, color="0.5"):
     # sigma is the fraction of the domain -- the CFL number
     x = numpy.linspace(gr.xr[idx]-sigma*gr.dx, gr.xr[idx], 50)
 
-    a = value + (slope/gr.dx) * (x - gr.xc[idx])
+    a = gr.voff+value + (slope/gr.dx) * (x - gr.xc[idx])
 
     xx = numpy.zeros(len(x) + 3, dtype=numpy.float64)
     yy = numpy.zeros(len(x) + 3, dtype=numpy.float64)
@@ -283,7 +286,7 @@ def slopeTraceLeft(gr, idx, slope, value, sigma, color="0.5"):
     xx[len(x):] = [gr.xr[idx], gr.xr[idx]-sigma*gr.dx, gr.xr[idx]-sigma*gr.dx]
 
     yy[0:len(x)] = a
-    yy[len(x):] = [0.0, 0.0, a[0]]
+    yy[len(x):] = [gr.voff, gr.voff, a[0]]
 
     pylab.fill(xx, yy, color=color, lw=1, zorder=-1)
 
@@ -293,7 +296,7 @@ def slopeTraceRight(gr, idx, slope, value, sigma, color="0.5"):
     # sigma is the fraction of the domain -- the CFL number
     x = numpy.linspace(gr.xl[idx], gr.xl[idx]+sigma*gr.dx, 50)
 
-    a = value + (slope/gr.dx) * (x - gr.xc[idx])
+    a = gr.voff+value + (slope/gr.dx) * (x - gr.xc[idx])
 
     xx = numpy.zeros(len(x) + 3, dtype=numpy.float64)
     yy = numpy.zeros(len(x) + 3, dtype=numpy.float64)
@@ -302,7 +305,7 @@ def slopeTraceRight(gr, idx, slope, value, sigma, color="0.5"):
     xx[len(x):] = [gr.xl[idx]+sigma*gr.dx, gr.xl[idx], gr.xl[idx]]
 
     yy[0:len(x)] = a
-    yy[len(x):] = [0.0, 0.0, a[0]]
+    yy[len(x):] = [gr.voff, gr.voff, a[0]]
 
     pylab.fill(xx, yy, color=color, lw=1, zorder=-1)
 
