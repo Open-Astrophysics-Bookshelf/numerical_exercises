@@ -223,6 +223,13 @@ to update the state in time as:
 \begin{equation}
 U^{n+1}_i = U^n_i + \frac{\Delta t}{\Delta x} \left ( F_{i-1/2}^{n+1/2} - F_{i+1/2}^{n+1/2} \right )
 \end{equation}
+Instead of approximating the flux itself on the interface, we find an approximation
+to the state on the interface, $U_{i-1/2}^{n+1/2}$ and $U_{i+1/2}^{n+1/2}$ and
+use this with the flux function to define the flux through the interface:
+\begin{eqnarray}
+F_{i-1/2}^{n+1/2} &=& F(U_{i-1/2}^{n+1/2}) \\
+F_{i+1/2}^{n+1/2} &=& F(U_{i+1/2}^{n+1/2})
+\end{eqnarray}
 We use the conserved variables for the final update, but in
 constructing the interface states, it is often easier to work with the
 primitive variables and then switch back to the conserved variables.
@@ -302,15 +309,103 @@ interface.  First, we recognize that $A = R \Lambda L$ and replacing the `$1$'
 in Eq.~\ref{eq:taylorstate} with the identity, $I = LR$, we rewrite this
 expression as:
 \begin{equation}
-q_{i+1/2,L}^{n+1/2} = q_i^n + \frac{1}{2} \left [ RL - \frac{\Delta t}{\Delta x} R\Lambda L \right ]_i \overline{\Delta q}_i
+q_{i+1/2,L}^{n+1/2} = q_i^n + 
+     \frac{1}{2} \left [ RL - \frac{\Delta t}{\Delta x} R\Lambda L \right ]_i \overline{\Delta q}_i
 \end{equation}
 We see the common factor of $L \Delta q$.  We now write this back in
-component form, summing over the three waves, giving:
+component form.  Consider
+\begin{equation}
+\renewcommand{\arraystretch}{1.5}
+R\Lambda L \overline{\Delta q} =
+   \left ( \begin{array}{c|c|c}
+             r_1^{(1)} & r_1^{(2)} & r_1^{(3)} \\
+             r_2^{(1)} & r_2^{(2)} & r_2^{(3)} \\
+             r_3^{(1)} & r_3^{(2)} & r_3^{(3)} \end{array} \right )
+   \left ( \begin{array}{ccc}
+             \lambda^{(1)} &               & \\
+                           & \lambda^{(2)} & \\
+                           &               & \lambda^{(3)} \end{array} \right )
+   \left ( \begin{array}{ccc}
+             l_1^{(1)} & l_2^{(1)} & l_3^{(1)} \\
+             \hline 
+             l_1^{(2)} & l_2^{(2)} & l_3^{(2)} \\
+             \hline
+             l_1^{(3)} & l_2^{(3)} & l_3^{(3)} \end{array} \right )
+   \left ( \begin{array}{c}
+            \overline{\Delta \rho} \\
+            \overline{\Delta u} \\
+            \overline{\Delta p} \end{array} \right )
+\renewcommand{\arraystretch}{1.0}
+\end{equation}
+Starting with $L \overline{\Delta q}$, which is a vector with each component
+the dot-product of a left eigenvalue with $\overline{Delta q}$, we have
+\begin{equation}
+\renewcommand{\arraystretch}{1.5}
+R\Lambda L \overline{\Delta q} =
+   \left ( \begin{array}{c|c|c}
+             r_1^{(1)} & r_1^{(2)} & r_1^{(3)} \\
+             r_2^{(1)} & r_2^{(2)} & r_2^{(3)} \\
+             r_3^{(1)} & r_3^{(2)} & r_3^{(3)} \end{array} \right )
+   \left ( \begin{array}{ccc}
+             \lambda^{(1)} &               & \\
+                           & \lambda^{(2)} & \\
+                           &               & \lambda^{(3)} \end{array} \right )
+   \left ( \begin{array}{c}
+            l^{(1)} \cdot \overline{\Delta q} \\
+            l^{(2)} \cdot \overline{\Delta q} \\
+            l^{(3)} \cdot \overline{\Delta q} \end{array} \right )
+\renewcommand{\arraystretch}{1.0}
+\end{equation}
+Next we see that multiplying this vector by $\Lambda$ simply puts the
+eigenvalue with its respective eigenvector in the resulting column vector:
+\begin{equation}
+\renewcommand{\arraystretch}{1.5}
+R\Lambda L \overline{\Delta q} =
+   \left ( \begin{array}{c|c|c}
+             r_1^{(1)} & r_1^{(2)} & r_1^{(3)} \\
+             r_2^{(1)} & r_2^{(2)} & r_2^{(3)} \\
+             r_3^{(1)} & r_3^{(2)} & r_3^{(3)} \end{array} \right )
+   \left ( \begin{array}{c}
+            \lambda^{(1)} \, l^{(1)} \cdot \overline{\Delta q} \\
+            \lambda^{(2)} \, l^{(2)} \cdot \overline{\Delta q} \\
+            \lambda^{(3)} \, l^{(3)} \cdot \overline{\Delta q} \end{array} \right )
+\renewcommand{\arraystretch}{1.0}
+\end{equation}
+Finally, the last multiple results in a column vector with each component
+taking the respective component from the each right eigenvector with the vector,
+giving:
+\begin{equation}
+\renewcommand{\arraystretch}{1.5}
+R\Lambda L \overline{\Delta q} =
+   \left ( \begin{array}{c}
+            r_1^{(1)} \, \lambda^{(1)} \, l^{(1)} \cdot \overline{\Delta q} +
+            r_1^{(2)} \, \lambda^{(2)} \, l^{(2)} \cdot \overline{\Delta q} +
+            r_1^{(3)} \, \lambda^{(3)} \, l^{(3)} \cdot \overline{\Delta q} \\
+%
+            r_2^{(1)} \, \lambda^{(1)} \, l^{(1)} \cdot \overline{\Delta q} +
+            r_2^{(2)} \, \lambda^{(2)} \, l^{(2)} \cdot \overline{\Delta q} +
+            r_2^{(3)} \, \lambda^{(3)} \, l^{(3)} \cdot \overline{\Delta q} \\
+%
+            r_3^{(1)} \, \lambda^{(1)} \, l^{(1)} \cdot \overline{\Delta q} +
+            r_3^{(2)} \, \lambda^{(2)} \, l^{(2)} \cdot \overline{\Delta q} +
+            r_3^{(3)} \, \lambda^{(3)} \, l^{(3)} \cdot \overline{\Delta q} \\
+   \end{array} \right )
+\renewcommand{\arraystretch}{1.0}
+\end{equation}
+We see that this is simply the column vector:
+\begin{equation}
+\sum_\nu \lambda^{(\nu)} (l^{(\nu)} \cdot \overline{\Delta q}) r^{(\nu)}
+\end{equation}
+where we use $\nu$ to indicate which wave we are summing over.  A similar 
+expansion is used for $RL \overline{\Delta q}$.  The resulting vector
+for the left state is:
 \begin{equation}
 q_{i+1/2,L}^{n+1/2} = q_i^n + \frac{1}{2} \sum_{\nu; \lambda^{(\nu)} \ge 0} 
   \left [ 1 - \frac{\Delta t}{\Delta x} \lambda_i^{(\nu)} \right ] (l_i^{(\nu)} \cdot \overline{\Delta q}_i) r_i^{(\nu)} 
 \end{equation}
-Here we use $\nu$ to indicate which of the three waves we are considering. 
+Note that we make a slight change here, and only include a term in the sum if
+its wave is moving toward the interface.
+
 Starting with the data in the $i+1$ zone and expanding to the left, we can
 find the right state on the $i+1/2$ interface:
 \begin{equation}
