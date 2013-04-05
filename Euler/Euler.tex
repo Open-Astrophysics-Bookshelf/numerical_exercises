@@ -34,6 +34,7 @@
 \renewcommand{\captionlabelfont}{\footnotesize}
 \setlength{\captionmargin}{5em}
 
+\usepackage{arydshln}
 
 \usepackage{sectsty}
 \allsectionsfont{\sffamily}
@@ -192,7 +193,7 @@ in the primitive variable across each wave is proportion to the
 right-eigenvector associated with that wave.  So, for example, since
 $r^{(2)}$ is non-zero only for the density element, this then means
 that only density jumps across the $\lambda = u$ wave (see for
-example, Toro~\cite{toro:1997}, Ch.\ 2, 3 or Leveque~\cite{leveque:2002} for a thorough discussion).  Figure~\ref{fig:sod} shows the three waves 
+example, Toro~\cite{toro:1997}, Ch.\ 2, 3 or LeVeque~\cite{leveque:2002} for a thorough discussion).  Figure~\ref{fig:sod} shows the three waves 
 emanating from an initial discontinuity.
 
 \begin{figure}
@@ -263,7 +264,7 @@ U_{i+1/2,R} &=& U_{i+1}
 \end{eqnarray}
 This does not take into account in any way how the state $U$ may be changing
 through the cell.  As a result, it is first-order accurate in space, and since
-no attempt was made to center it in time, it is first-order accuate in time.
+no attempt was made to center it in time, it is first-order accurate in time.
 
 \subsection{Piecewise linear}
 
@@ -317,7 +318,7 @@ component form.  Consider
 \begin{equation}
 \renewcommand{\arraystretch}{1.5}
 R\Lambda L \overline{\Delta q} =
-   \left ( \begin{array}{c|c|c}
+   \left ( \begin{array}{c:c:c}
              r_1^{(1)} & r_1^{(2)} & r_1^{(3)} \\
              r_2^{(1)} & r_2^{(2)} & r_2^{(3)} \\
              r_3^{(1)} & r_3^{(2)} & r_3^{(3)} \end{array} \right )
@@ -327,9 +328,9 @@ R\Lambda L \overline{\Delta q} =
                            &               & \lambda^{(3)} \end{array} \right )
    \left ( \begin{array}{ccc}
              l_1^{(1)} & l_2^{(1)} & l_3^{(1)} \\
-             \hline 
+             \hdashline 
              l_1^{(2)} & l_2^{(2)} & l_3^{(2)} \\
-             \hline
+             \hdashline
              l_1^{(3)} & l_2^{(3)} & l_3^{(3)} \end{array} \right )
    \left ( \begin{array}{c}
             \overline{\Delta \rho} \\
@@ -342,7 +343,7 @@ the dot-product of a left eigenvalue with $\overline{Delta q}$, we have
 \begin{equation}
 \renewcommand{\arraystretch}{1.5}
 R\Lambda L \overline{\Delta q} =
-   \left ( \begin{array}{c|c|c}
+   \left ( \begin{array}{c:c:c}
              r_1^{(1)} & r_1^{(2)} & r_1^{(3)} \\
              r_2^{(1)} & r_2^{(2)} & r_2^{(3)} \\
              r_3^{(1)} & r_3^{(2)} & r_3^{(3)} \end{array} \right )
@@ -361,7 +362,7 @@ eigenvalue with its respective eigenvector in the resulting column vector:
 \begin{equation}
 \renewcommand{\arraystretch}{1.5}
 R\Lambda L \overline{\Delta q} =
-   \left ( \begin{array}{c|c|c}
+   \left ( \begin{array}{c:c:c}
              r_1^{(1)} & r_1^{(2)} & r_1^{(3)} \\
              r_2^{(1)} & r_2^{(2)} & r_2^{(3)} \\
              r_3^{(1)} & r_3^{(2)} & r_3^{(3)} \end{array} \right )
@@ -473,7 +474,7 @@ q_{i+1/2,L}^{n+1/2} &=& \tilde{q}_{i,L} + \frac{1}{2} \frac{\Delta t}{\Delta x}
        \sum_{\nu; \lambda^{(\nu)} \ge 0} \left [ \max(\lambda_i^+,0) - \lambda_i^{(\nu)} \right ]
                                           (l_i^{(\nu)} \cdot \overline{\Delta q}_i) \, r_i^{(\nu)}
 \end{eqnarray}
-This is equivalent to the expression in Saltzmann~\cite{saltzman:1994}
+This is equivalent to the expression in Saltzman~\cite{saltzman:1994}
 (p.\ 161, first column, second-to-last equation) and
 Colella~\cite{colella:1990} (p.\ 191, the group of expressions at the
 end).  The corresponding state to the right of this interface is:
@@ -512,7 +513,7 @@ The piecewise parabolic method uses a parabolic reconstruction in each
 cell.  This is more accurate than the linear reconstruction.
 Figure~\ref{fig:ppm} shows the reconstructed parabolic profiles within
 a few cells.  Since the original PPM
-paper~\cite{colellawoodward:1984}, there have been many dicussions of
+paper~\cite{colellawoodward:1984}, there have been many discussions of
 the method, with many variations.  Here we focus on the presentation
 by Miller \& Colella~\cite{millercolella:2002}, since that is the most
 straightforward.
@@ -648,7 +649,7 @@ Figure~\ref{fig:ppm}.  }
 \begin{quote}
 \noindent\makebox[\linewidth]{\rule{0.9\textwidth}{1pt}} 
 {\em Aside}: 
-Note that this characterstic projection of $\tilde{q}_+ -
+Note that this characteristic projection of $\tilde{q}_+ -
 \mathcal{I}_+^{(\nu)}$ is discussed in the original PPM paper in the
 paragraph following Eq. 3.5.  They do not keep things in this form
 however, and instead explicitly multiply out the $l\cdot [\ldots] r$
@@ -1121,13 +1122,13 @@ of the first valid zone in the domain (just inside the left boundary).
   values there) and the second ghost cell (since the flattening procedure
   looks at the coefficients in its immediate upwinded neighbor).
 
-\item {\em Artifical viscosity}: Colella and Woodward argue discuss
+\item {\em Artificial viscosity}: Colella and Woodward argue discuss
   that behind slow-moving shocks these methods can have oscillations.
-  The fix they propose is to use some artifical viscosity---this is
+  The fix they propose is to use some artificial viscosity---this is
   additional dissipation that kicks in at shocks.  (They argue that
   flattening alone is not enough).  
 
-  We use a multidimensional analog of their artifical viscosity
+  We use a multidimensional analog of their artificial viscosity
   (\cite{colellawoodward:1984}, Eq.\ 4.5) which modifies the fluxes.
   By design, it only kicks in for converging flows, such that you
   would find around a shock.
@@ -1136,7 +1137,7 @@ of the first valid zone in the domain (just inside the left boundary).
   do not steepen (they are associated with the middle characteristic
   wave, and the velocity does not change across that, meaning there
   cannot be any convergence).  The original PPM
-  paper advocates a contact steepening method to artifically steepen
+  paper advocates a contact steepening method to artificially steepen
   contact waves.  While it shows good results in 1-d, it can be
   problematic in multi-dimensions.  
 
@@ -1220,7 +1221,7 @@ a system described by
 \begin{equation}
 U_t + [F^{(x)}(U)]_x + [F^{(y)}(U)]_y = H
 \end{equation}
-we predict to the edges in the same fashion as descibed above, but now
+we predict to the edges in the same fashion as described above, but now
 when we replace $\partial U/\partial t$ with the divergence of the
 fluxes, we also pick up the source term.  This appears as:
 \begin{eqnarray}
@@ -1261,7 +1262,7 @@ and derive an evolution equation for $\gamma_e$ (C\&G, Eq.\ 26).  This
 evolution equation is used to predict $\gamma_e$ to interfaces, and
 these interface values of $\gamma_e$ are used in the Riemann solver 
 presented there to find the fluxes through the interface.  A different
-adabatic index (they call $\Gamma$, others call $\gamma_c$) appears in
+adiabatic index (they call $\Gamma$, others call $\gamma_c$) appears in
 the definition of the sound speed.  They argue that this can be brought
 to interfaces in a piecewise constant fashion while still making the
 overall method second order, since $\gamma_c$ does not explicitly
@@ -1276,7 +1277,7 @@ from an unpublished manuscript by Colella, Glaz, and Ferguson that
 predicts $\rho e$ to edges in addition to $\rho$, $u$, and $p$.  Since
 $\rho e$ comes from a conservation-like equation, predicting it to the
 interface in the unsplit formulation is straightforward.  This
-overspecifies the thermodynamics, but eliminates the need for
+over-specifies the thermodynamics, but eliminates the need for
 $\gamma_e$.
 
 With the addition of $\rho e$, our system becomes:
