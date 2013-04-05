@@ -34,6 +34,10 @@
 \renewcommand{\captionlabelfont}{\footnotesize}
 \setlength{\captionmargin}{5em}
 
+\newcommand{\evm}{{(-)}}
+\newcommand{\evz}{{(\circ)}}
+\newcommand{\evp}{{(+)}}
+\newcommand{\enu}{{(\nu)}}
 
 \usepackage{sectsty}
 \allsectionsfont{\sffamily}
@@ -47,9 +51,8 @@ Notes on the Euler Equations}}
 \end{center}
 
 \begin{quote}
-\noindent {\em These notes describe how to do a high-order solution to
-  the Euler equations by compiling the discussions of several
-  papers/books.}
+\noindent {\em These notes describe how to do a piecewise linear or piecewise
+  parabolic method for the Euler equations.}
 \end{quote}
 
 %-----------------------------------------------------------------------------
@@ -66,7 +69,8 @@ The Euler equations in one dimension appear as:
 \frac{\partial(\rho E)}{\partial t} + 
     \frac{\partial(\rho u E + u p)}{\partial x} &=& 0
 \end{eqnarray}
-These represent conservation of mass, momentum, and energy.  Here $E$
+These represent conservation of mass, momentum, and energy.  Here $\rho$ is the
+density, $u$ is the one-dimensional velocity, $p$ is the pressure, and $E$
 is the total energy / mass, and can be expressed in terms of the
 specific internal energy and kinetic energies as:
 \begin{equation}
@@ -117,45 +121,48 @@ The eigenvalues of $A$ can be found via $| A - \lambda I | = 0$,
 where $|\ldots|$ indicates the determinant and $\lambda$ are the eigenvalues.
 \begin{quote}
 {\em Exercise 2: 
-Show that the eigenvalues of $A$ are $\lambda_1 = u -c$, $\lambda_2 = u$, $\lambda_3 = u+c$ where the speed of sound is $c = \sqrt{\gamma p /\rho}$.
+Show that the eigenvalues of $A$ are $\lambda^\evm = u -c$, $\lambda^\evz = u$, $\lambda^\evp = u+c$ where the speed of sound is $c = \sqrt{\gamma p /\rho}$.
 }
 \end{quote}
+We'll use the symbols $\{-,\circ,+\}$ to denote the eigenvalues and their
+corresponding eigenvectors thoughout these notes.
 These eigenvalues are the speeds at which information propagates for the
-fluids equations.
-Since the eigenvalues are real, this system (the Euler equations) are said
+fluid equations.
+Since the eigenvalues are real, this system (the Euler equations) is said
 to be {\em hyperbolic}.  Additionally, since $A = A(q)$, the system is
 said to be {\em quasi-linear}.  
 %
 The right and left eigenvectors can be found via:
 \begin{equation}
-A \, r^{(k)} = \lambda_k r^{(k)} \; ;
+A \, r^\enu = \lambda^\enu r^\enu \; ;
 \qquad
-l^{(k)} \, A  = \lambda_k l^{(k)}
+l^\enu \, A  = \lambda^\enu l^\enu
 \end{equation}
-where there is one right and one left eigenvector for each of the eigenvalues.
+where $\nu = \{-,\circ,+\}$ corresponding to the three waves, and 
+there is one right and one left eigenvector for each of the eigenvalues.
 %
 \begin{quote}
 {\em Exercise 3: 
 Show that the right eigenvectors are:
 \begin{equation}
-r^{(1)} = \left ( \begin{array}{c} 1 \\ -c/\rho \\ c^2 \end{array} \right )
+r^\evm = \left ( \begin{array}{c} 1 \\ -c/\rho \\ c^2 \end{array} \right )
 %
 \qquad
-r^{(2)} = \left ( \begin{array}{c} 1 \\ 0 \\ 0  \end{array} \right )
+r^\evz = \left ( \begin{array}{c} 1 \\ 0 \\ 0  \end{array} \right )
 %
 \qquad
-r^{(3)} = \left ( \begin{array}{c} 1 \\ c/\rho \\ c^2 \end{array} \right )
+r^\evp = \left ( \begin{array}{c} 1 \\ c/\rho \\ c^2 \end{array} \right )
 \end{equation}
 and the left eigenvectors are:
 \begin{equation}
-l^{(1)} = \left ( \begin{array}{ccc} 0 & -\frac{\rho}{2c} & \frac{1}{2c^2} 
+l^\evm = \left ( \begin{array}{ccc} 0 & -\frac{\rho}{2c} & \frac{1}{2c^2} 
                   \end{array} \right )
 %
 \qquad
-l^{(2)} = \left ( \begin{array}{ccc} 1 & 0 & -\frac{1}{c^2}  \end{array} \right )
+l^\evz = \left ( \begin{array}{ccc} 1 & 0 & -\frac{1}{c^2}  \end{array} \right )
 %
 \qquad
-l^{(3)} = \left ( \begin{array}{ccc} 0 & \frac{\rho}{2c} & \frac{1}{2c^2} \end{array} \right )
+l^\evp = \left ( \begin{array}{ccc} 0 & \frac{\rho}{2c} & \frac{1}{2c^2} \end{array} \right )
 \end{equation}
 Note that in general, there can be an arbitrary constant in front of each
 eigenvector.  Here they are normalized such that 
@@ -165,8 +172,8 @@ $l^{(i)} \cdot r^{(j)} = \delta_{ij}$.
 
 A final form of the equations is called the {\em characteristic form}.  Here,
 we wish to diagonalize the matrix $A$.  We take the matrix $R$ to be the
-matrix of right eigenvectors, $R = (r^{(1)} | r^{(2)} | r^{(3)} )$, and $L$
-is the corresponding matrix of left eigenvectors.  Note that $L\, R = I$, and
+matrix of right eigenvectors, $R = (r^\evm | r^\evz | r^\evp )$, and $L$
+is the corresponding matrix of left eigenvectors.  Note that $L\, R = I = R\, L$, and
 $L = R^{-1}$.
 \begin{quote}
 {\em Exercise 4: 
@@ -182,16 +189,17 @@ Here, the $w$ are the characteristic variables.  Note that we cannot
 in general integrate $dw = L dq$ to write down the characteristic
 quantities.  Since $\Lambda$ is diagonal, this system is a set of
 decoupled advection-like equations.  If the system were linear, then the
-solution to each would simply be the solution to the respective linear
-advection equation.  
+solution to each would simply be to advect the quantity $w^\enu$ at
+the wave speed $\lambda^\enu$.
 
 The way to think about this system is that there are 3 wave speeds
 (one for each eigenvalue) and each wave carries with it a change in
 the characteristic variable.  Since $dq = L^{-1}dw = R dw$, the jump
 in the primitive variable across each wave is proportion to the
 right-eigenvector associated with that wave.  So, for example, since
-$r^{(2)}$ is non-zero only for the density element, this then means
-that only density jumps across the $\lambda = u$ wave (see for
+$r^\evz$ is only non-zero for the density element, this then means
+that only density jumps across the $\lambda^\evz = u$ wave---pressure
+and velocity are constant across this wave (see for
 example, Toro~\cite{toro:1997}, Ch.\ 2, 3 or Leveque~\cite{leveque:2002} for a thorough discussion).  Figure~\ref{fig:sod} shows the three waves 
 emanating from an initial discontinuity.
 
@@ -214,15 +222,21 @@ right eigenvectors.}
 
 \label{sec:onedrecon}
 
-To solve the Euler equations using a high-order Godunov method, we
+To solve the Euler equations using a high-order {\em Godunov method}---a finite volume method whereby the fluxes through the interfaces are computed by
+solving the Riemann problem for our system.  The finite-volume update for
+our system appears as:
+\begin{equation}
+U^{n+1}_i = U^n_i + \frac{\Delta t}{\Delta x} \left ( F_{i-1/2}^{n+1/2} - F_{i+1/2}^{n+1/2} \right )
+\end{equation}
+This says that each of the conserved quantities in $U$ change only due to
+the flux of that quantity through the boundary of the cell.
+, we
 need left and right states at each interface (centered in time), which
 are the input to the Riemann solver.  The Riemann solver will then return
 the fluxes through the interface.
 This is illustrated in Figure~\ref{fig:riemann}.  The fluxes allow us
 to update the state in time as:
-\begin{equation}
-U^{n+1}_i = U^n_i + \frac{\Delta t}{\Delta x} \left ( F_{i-1/2}^{n+1/2} - F_{i+1/2}^{n+1/2} \right )
-\end{equation}
+
 We use the conserved variables for the final update, but in
 constructing the interface states, it is often easier to work with the
 primitive variables and then switch back to the conserved variables.
