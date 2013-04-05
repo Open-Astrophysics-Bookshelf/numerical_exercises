@@ -38,17 +38,17 @@ def simplegrid():
     # draw waves
     # u - c
     pylab.plot([xr[0], xr[0]-0.75*dx], [0,0.6], color="k", ls="--", lw=2)
-    pylab.text(xr[0]-0.75*dx, 0.6+0.05, "$\lambda = u - c$", 
+    pylab.text(xr[0]-0.75*dx, 0.6+0.05, "$\lambda^{(-)} = u - c$", 
                horizontalalignment="center")
 
     # u
     pylab.plot([xr[0], xr[0]-0.2*dx], [0,0.6], color="k", ls="--", lw=2)
-    pylab.text(xr[0]-0.2*dx, 0.6+0.05, "$\lambda = u$", 
+    pylab.text(xr[0]-0.2*dx, 0.6+0.05, "$\lambda^{(\circ)} = u$", 
                horizontalalignment="center")
 
     # u + c
     pylab.plot([xr[0], xr[0]+0.4*dx], [0,0.6], color="k", ls="--", lw=2)    
-    pylab.text(xr[0]+0.4*dx, 0.6+0.05, "$\lambda = u + c$", 
+    pylab.text(xr[0]+0.4*dx, 0.6+0.05, "$\lambda^{(+)} = u + c$", 
                horizontalalignment="center")
 
     # label regions
