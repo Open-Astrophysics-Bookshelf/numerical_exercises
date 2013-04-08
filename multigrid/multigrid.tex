@@ -137,6 +137,7 @@ relaxation methods exist, including linear combinations of these two.
 The text by Briggs is an excellent reference for this, and discusses
 the strengths of these different approaches.
 
+
 Next consider the Helmholz equation with constant coefficients:
 \begin{equation}
 (\alpha - \beta \nabla^2) \phi = f
@@ -253,6 +254,45 @@ so the error in our solution obeys a Poisson equation with the residual
 as the source.
 
 \subsection{Performance}
+
+
+\begin{figure}
+\centering
+\includegraphics[width=5.5in]{smooth-error.eps}
+\caption{\label{fig:smootherror} Gauss-Seidel relaxation applied to
+  $\phi_{xx} = \sin(x)$ with $\phi(0) = \phi(1) = 0$.  Shown are the
+  L2 norm of the error compared with the true solution (solid lines)
+  and the L2 norm of the residual (dotted lines) for 3 different
+  resolutions (16, 32, and 64 zones).}
+\end{figure}
+
+Conside the simple Poisson problem on $x \in [0,1]$:
+\begin{equation}
+\phi_{xx} = \sin(x), \qquad \phi(0) = \phi(1) = 0
+\end{equation}
+The analytic solution to this is simply 
+\begin{equation}
+\phi^a(x) = -\sin(x) + x \sin(1)
+\end{equation}
+We can perform smoothing and compute both the error against the
+analytic solution (the `true' error), $e \equiv \| \phi^a(x_i) - \phi_i \|_2$ and the
+residual error, $\| r_i \|_2$.  Figure~\ref{fig:smootherror} shows these
+errors as a function of the number of smoothing iterations for 3
+different resolutions.
+
+Notice that the true error stalls at a relatively high value---this is
+the truncation error of the method.  From one resolution to the next,
+the true error changes as $\Delta x^2$, indicating that we are
+converging as our method should.  No additional amount of smoothing
+will change this---we are getting the best answer to the problem we
+can with our choice of discretization.
+
+In contrast, the residual error decreases to machine precision
+levels---this is indicating that our solution is an exact solution to
+the discrete equation (to roundoff-error).
+In practice, we can only monitor the residual error, not the true
+error, and we hope that small residual error implies a small true
+error.
 
 \begin{figure}[t]
 \centering
@@ -375,11 +415,20 @@ work well.
 
 \subsection{Bottom solver}
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=5.5in]{mgtower}
+\caption{\label{fig:mgtower} Illustration of the hierarchy of grids
+  leading to the coarsest 2-zone grid (in one-dimension).  Each grid
+  has a single ghost cell to accomodate boundary conditions.}
+\end{figure}
+
 Once the grid is sufficiently coarse, the linear system is small
 enough to be solved directly.  This is the bottom solver operation.
 In the most ideal case, where the finest grid is some power of 2, $N_x
 = N_y = 2^n$, then the multigrid procedure can continue down until a
-$2\times 2$ grid is created.  This is the coarsest grid upon which one
+$2\times 2$ grid is created (Figure~\ref{fig:mgtower} illustrates this idea
+for a one-dimensional grid).  This is the coarsest grid upon which one
 can still impose boundary conditions.  With this small grid, just
 doing additional smoothing is sufficient enough to `solve' the
 problem.  No fancy bottom solver is needed.
@@ -406,7 +455,19 @@ when
 The general rule-of-thumb is that each V-cycle should reduce your
 residual by about 1 order of magnitude.  It is important that your
 bottom solver solves the coarse problem to a tolerance of $10^-3$ or
-$10^-4$ in order for the solver to converge.
+$10^-4$ in order for the solver to converge.  Figure~\ref{fig:mgerror}
+shows the true and residual errors for $\phi_{xx} = \sin(x)$ as a function
+of V-cycle number, illustrating the expected performance.
+
+\begin{figure}
+\centering
+\includegraphics[width=5.5in]{mg_error_vs_cycle}
+\caption{\label{fig:mgerror} Error in the multigrid solution to our model
+problem ($\phi_{xx} = \sin(x)$) as a function of V-cycle.  We see
+that the true error, $\|e\|$ stalls at truncation error while the 
+residual error, $\|r\|$ reaches roundoff error, the same behavior as seen
+with smoothing alone (as expected).}
+\end{figure}
 
 
 \section{Other notes}
