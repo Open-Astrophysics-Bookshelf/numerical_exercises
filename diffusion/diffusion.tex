@@ -271,8 +271,8 @@ distributing the grid across parallel processors.
   \begin{equation}
   \frac{\phi_i^{n+1} - \phi_i^n}{\Delta t} = 
         \frac{1}{2} \left \{
-               \nabla \cdot [ k(\phi^n) \nabla \phi^n ] +
-               \nabla \cdot [ k(\phi^{n+1}) \nabla \phi^{n+1} ] 
+               \nabla \cdot [ k(\phi^n) \nabla \phi^n ]_i +
+               \nabla \cdot [ k(\phi^{n+1}) \nabla \phi^{n+1} ]_i 
                \right \}
   \end{equation}
   (for example, with thermal diffusion, the conductivity can
