@@ -35,7 +35,7 @@
 \usepackage{sectsty}
 \allsectionsfont{\sffamily}
 
-
+\usepackage{amsmath}
 
 \begin{document}
 
@@ -71,7 +71,9 @@ for these systems.
 \begin{quote}
 {\em Exercise 1: Show that $a(x - ut)$ is a solution to
   Eq.~\ref{eq:advect} for any choice of a.  This means that
-the solution is constant along the lines $x = u t$.}
+the solution is constant along the lines $x = u t$
+(the curves along which the solution is constant are called the
+characteristics).}
 \end{quote}
 
 To get a flavor of the methods for advection, we will use a simple
@@ -866,6 +868,51 @@ a_{i+1/2,j}^{n+1/2} = \mathcal{R}(a_{i+1/2,j,L}^{n+1/2},
 The final conservative update is then done via Eq.~\ref{eq:update2du}.
 
 See \cite{colella:1990} for more details on this unsplit method.
+
+
+\section{Burger's equation}
+
+The inviscid Burger's equation is the simplest nonlinear hyperbolic
+equation:
+\begin{equation}
+u_t + u u_x = 0
+\end{equation}
+Here $u$ is both the quantity being advected and the speed at which 
+it is moving.
+In conservative form, this appears as:
+\begin{equation}
+u_t = \left [\tfrac{1}{2} u^2 \right ]_x = 0
+\end{equation}
+
+The solution of this follows the same methodology as outlined above.
+
+The Riemann problem differs from linear advection.  It remains the
+case that the solution is constant along the lines $x = ut + x_0$ (the
+characteristics), but now those lines are no longer parallel.  If the
+characteristic lines intersect, then there it is not possible to trace
+backward from time to learn where the flow originated.  This is the 
+condition for a {\em shock}.
+
+Shock speed from jump conditions
+
+Riemann problem
+\begin{eqnarray}
+\mathrm{if~} u_l > u_r:&& u_s = \left \{ \begin{array}{cl}
+                u_l & \mathrm{if~} S > 0 \\ 
+                u_r & \mathrm{if~} S < 0 \\
+                0   & \mathrm{if~} S = 0 \end{array} \right . \\[1em]
+\mathrm{otherwise:}&& u_s = \left \{ \begin{array}{cl}
+                u_l & \mathrm{if~} u_l \ge 0 \\  
+                u_r & \mathrm{if~} u_l \le 0 \\  
+                0   & \mathrm{otherwise} \end{array} \right .
+\end{eqnarray}
+               
+
+\begin{figure}
+\centering
+\includegraphics[width=3.25in]{fv-burger-rarefaction}
+\includegraphics[width=3.25in]{fv-burger-sine}
+\end{figure}
 
 \section{Going further}
 
