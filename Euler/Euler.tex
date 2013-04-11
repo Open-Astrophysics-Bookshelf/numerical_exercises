@@ -1298,11 +1298,11 @@ $u$, not $\rho$ or $p$.  Note that in the PPM paper, they put $G$ on
 the lefthand side of the primitive variable equation, so our signs are
 opposite.  Our projections are now:
 \begin{equation}
-\sum_{\nu; \lambda_\nu \ge 0}l^\nu \cdot (\tilde{q} - \mathcal{I}^\nu_+(q) - \Delta t G) r^\nu
+\sum_{\nu; \lambda_\nu \ge 0}l^\nu \cdot (\tilde{q} - \mathcal{I}^\nu_+(q) - \tfrac{\Delta t}{2} G) r^\nu
 \end{equation}
 for the left state, and
 \begin{equation}
-\sum_{\nu; \lambda_\nu \le 0} l^\nu \cdot (\tilde{q} - \mathcal{I}^\nu_-(q) - \Delta t G) r^\nu 
+\sum_{\nu; \lambda_\nu \le 0} l^\nu \cdot (\tilde{q} - \mathcal{I}^\nu_-(q) - \tfrac{\Delta t}{2} G) r^\nu 
 \end{equation}
 for the right state.  Since $G$ is only non-zero for velocity, only
 the velocity changes.  Writing out the sum (and performing the vector products), we
@@ -1311,22 +1311,24 @@ get:
 u_{i+1/2,L}^{n+1/2} =
    \tilde{u}_+ 
   &-& \frac{1}{2} \left [
-      \left (\tilde{u}_+ - \mathcal{I}_+^\evm(u) -\Delta t \mathcal{I}^\evm_+(g) \right ) - 
+      \left (\tilde{u}_+ - \mathcal{I}_+^\evm(u) - \frac{\Delta t}{2} \mathcal{I}^\evm_+(g) \right ) - 
        \frac{\tilde{p}_+ - \mathcal{I}_+^\evm(p)}{C} \right ] \nonumber \\
   &-& \frac{1}{2} \left [
-      \left (\tilde{u}_+ - \mathcal{I}_+^\evp(u) -\Delta t \mathcal{I}^\evp_+(g) \right ) +
+      \left (\tilde{u}_+ - \mathcal{I}_+^\evp(u) - \frac{\Delta t}{2} \mathcal{I}^\evp_+(g) \right ) +
        \frac{\tilde{p}_+ - \mathcal{I}_+^\evp(p)}{C} \right ]
 \end{eqnarray}
 where the only change from Eq.~\ref{eq:ufull} are the
-$\mathcal{I}^\evm_+(g)$ and $\mathcal{I}^\evp_+(g)$ terms.
+$\mathcal{I}^\evm_+(g)$ and $\mathcal{I}^\evp_+(g)$ terms.  
 
+These differ from the expression in the PPM paper, where $\Delta t G$,
+not $\Delta t/2 G$ is used in the projection, however this appears to
+be a typo.  To see this, notice that if both waves are moving toward
+the interface, then the source term that is added to the interface
+state is $(\Delta t/4) (\mathcal{I}_+^\evm(g) +
+\mathcal{I}_+^\evp(g))$ for the left state, which reduces to $(\Delta
+t/2) g$ for constant g---this matches the result from the Taylor
+expansion above (Eq.~\ref{eq:Utaylorstatesource}).
 
-Nevertheless, some sources (e.g.\ the PPM
-paper) use edge-centered values for the gravitational source.  Note
-also that in the original PPM paper, they include the source terms in
-the characteristic projection (see \cite{colellawoodward:1984}, Eq. 3.7,
-but note that there the full acceleration over the timestep is used
-while most sources have a factor of 1/2).
 
 
 \item {\em General equation of state}: The above methods were formulated
