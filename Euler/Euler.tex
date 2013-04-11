@@ -1285,7 +1285,7 @@ Note that the source here is cell-centered.  This expansion is
 second-order accurate.  This is the approach outlined in Miller 
 \& Colella \cite{millercolella:2002}.
 
-The original PPM paper does things differently.  The construct a parabolic
+The original PPM paper does things differently.  They construct a parabolic
 profile of $g$ in each zone and integrate under that profile to determine
 the average $g$ carried by each wave to the interface.  Finally, they include
 the gravitational source term in the characteristic projection itself.
@@ -1298,11 +1298,11 @@ $u$, not $\rho$ or $p$.  Note that in the PPM paper, they put $G$ on
 the lefthand side of the primitive variable equation, so our signs are
 opposite.  Our projections are now:
 \begin{equation}
-\sum_{\nu; \lambda_\nu \ge 0}l^\nu \cdot (\tilde{q} - \mathcal{I}^\nu_+(q) - \tfrac{\Delta t}{2} G) r^\nu
+\sum_{\nu; \lambda^\enu \ge 0}l^\enu \cdot (\tilde{q} - \mathcal{I}^\enu_+(q) - \tfrac{\Delta t}{2} G) r^\enu
 \end{equation}
 for the left state, and
 \begin{equation}
-\sum_{\nu; \lambda_\nu \le 0} l^\nu \cdot (\tilde{q} - \mathcal{I}^\nu_-(q) - \tfrac{\Delta t}{2} G) r^\nu 
+\sum_{\nu; \lambda^\enu \le 0} l^\enu \cdot (\tilde{q} - \mathcal{I}^\enu_-(q) - \tfrac{\Delta t}{2} G) r^\enu 
 \end{equation}
 for the right state.  Since $G$ is only non-zero for velocity, only
 the velocity changes.  Writing out the sum (and performing the vector products), we
