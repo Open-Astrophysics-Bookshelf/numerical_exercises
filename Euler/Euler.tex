@@ -763,6 +763,7 @@ u_{i+1/2,L}^{n+1/2} =
   - \frac{1}{2} \left [
       (\tilde{u}_+ - \mathcal{I}_+^\evp(u) ) +
        \frac{\tilde{p}_+ - \mathcal{I}_+^\evp(p)}{C} \right ]
+\label{eq:ufull}
 \end{equation}
 where $C$ is the Lagrangian sound speed ($C = \sqrt{\gamma p \rho}$).
 Defining 
@@ -1281,7 +1282,46 @@ We can compute things as above, but simply add the source term to the
 $\hat{U}$'s and carry it through.  
 
 Note that the source here is cell-centered.  This expansion is
-second-order accurate.  Nevertheless, some sources (e.g.\ the PPM
+second-order accurate.  This is the approach outlined in Miller 
+\& Colella \cite{millercolella:2002}.
+
+The original PPM paper does things differently.  The construct a parabolic
+profile of $g$ in each zone and integrate under that profile to determine
+the average $g$ carried by each wave to the interface.  Finally, they include
+the gravitational source term in the characteristic projection itself.
+To see this, write our system in primitive form as:
+\begin{equation}
+q_t + A(q) q_x = G
+\end{equation}
+where $G = (0, g, 0)^T$---i.e. the gravitational source only affects
+$u$, not $\rho$ or $p$.  Note that in the PPM paper, they put $G$ on 
+the lefthand side of the primitive variable equation, so our signs are
+opposite.  Our projections are now:
+\begin{equation}
+\sum_{\nu; \lambda_\nu \ge 0}l^\nu \cdot (\tilde{q} - \mathcal{I}^\nu_+(q) - \Delta t G) r^\nu
+\end{equation}
+for the left state, and
+\begin{equation}
+\sum_{\nu; \lambda_\nu \le 0} l^\nu \cdot (\tilde{q} - \mathcal{I}^\nu_-(q) - \Delta t G) r^\nu 
+\end{equation}
+for the right state.  Since $G$ is only non-zero for velocity, only
+the velocity changes.  Writing out the sum (and performing the vector products), we
+get:
+\begin{eqnarray}
+u_{i+1/2,L}^{n+1/2} =
+   \tilde{u}_+ 
+  &-& \frac{1}{2} \left [
+      \left (\tilde{u}_+ - \mathcal{I}_+^\evm(u) -\Delta t \mathcal{I}^\evm_+(g) \right ) - 
+       \frac{\tilde{p}_+ - \mathcal{I}_+^\evm(p)}{C} \right ] \nonumber \\
+  &-& \frac{1}{2} \left [
+      \left (\tilde{u}_+ - \mathcal{I}_+^\evp(u) -\Delta t \mathcal{I}^\evp_+(g) \right ) +
+       \frac{\tilde{p}_+ - \mathcal{I}_+^\evp(p)}{C} \right ]
+\end{eqnarray}
+where the only change from Eq.~\ref{eq:ufull} are the
+$\mathcal{I}^\evm_+(g)$ and $\mathcal{I}^\evp_+(g)$ terms.
+
+
+Nevertheless, some sources (e.g.\ the PPM
 paper) use edge-centered values for the gravitational source.  Note
 also that in the original PPM paper, they include the source terms in
 the characteristic projection (see \cite{colellawoodward:1984}, Eq. 3.7,

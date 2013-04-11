@@ -41,6 +41,7 @@ f = pylab.gcf()
 f.set_size_inches(8.0,2.0)
 
 pylab.savefig("piecewise-constant.eps")
+pylab.savefig("piecewise-constant.png")
 
 
 #------------- PLM -------------
@@ -80,6 +81,7 @@ f = pylab.gcf()
 f.set_size_inches(8.0,2.0)
 
 pylab.savefig("piecewise-linear.eps")
+pylab.savefig("piecewise-linear.png")
 
 
 #------------- PPM -------------
@@ -124,6 +126,8 @@ f.set_size_inches(8.0,2.0)
 
 
 pylab.savefig("piecewise-parabolic.eps")
+pylab.savefig("piecewise-parabolic.png")
+
                
 
 
