@@ -1146,13 +1146,17 @@ of the first valid zone in the domain (just inside the left boundary).
   Flattening is a procedure to add additional dissipation at shocks,
   to ensure that they are smeared out over $\sim 2$ zones.  The
   flattening procedure is a multi-dimensional operation that looks at
-  the pressure and velocity profiles and returns a coefficient, $\chi$
-  in $[0,1]$ that multiplies the limited slopes.  The convention most
+  the pressure and velocity profiles and returns a coefficient, $\chi
+  \in [0,1]$ that multiplies the limited slopes.  The convention most
   sources use is that $\chi = 1$ means no flattening (the slopes are
   unaltered), while $\chi = 0$ means complete flattening---the slopes
   are zeroed, dropping us to a first-order method.
-
-  We use the flattening method described in Saltzman (1994).
+  See for example in Saltzman~\cite{saltzman:1994}.  Once the flattening
+  coefficient is determined, the interface state is blended with the
+  cell-centered value via:
+  \begin{equation}
+  q_{i+1/2,\{L,R\}}^{n+1/2} \leftarrow (1 - \chi) q_i + \chi q_{i+1/2,\{L,R\}}^{n+1/2}
+  \end{equation}
 
   Note that the flattening algorithm increases the stencil size of
   piecewise-linear and piecewise-parabolic reconstruction to 4 ghost cells
