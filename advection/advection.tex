@@ -900,11 +900,12 @@ Riemann problem
 \mathrm{if~} u_l > u_r:&& u_s = \left \{ \begin{array}{cl}
                 u_l & \mathrm{if~} S > 0 \\ 
                 u_r & \mathrm{if~} S < 0 \\
-                0   & \mathrm{if~} S = 0 \end{array} \right . \\[1em]
-\mathrm{otherwise:}&& u_s = \left \{ \begin{array}{cl}
+                0   & \mathrm{if~} S = 0 \end{array} \right .   \\[1em]
+%
+\mathrm{otherwise:}&& u_s = \left \{ \begin{array}{clc}
                 u_l & \mathrm{if~} u_l \ge 0 \\  
                 u_r & \mathrm{if~} u_l \le 0 \\  
-                0   & \mathrm{otherwise} \end{array} \right .
+                0   & \mathrm{otherwise} \end{array} \right .   
 \end{eqnarray}
                
 
