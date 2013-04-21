@@ -51,6 +51,7 @@ f.set_size_inches(3.0,2.0)
 
 
 pylab.savefig("ppm-trace.eps")
+pylab.savefig("ppm-trace.png")
                
 
 
