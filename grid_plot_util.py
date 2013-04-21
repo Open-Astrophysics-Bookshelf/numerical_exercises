@@ -52,7 +52,7 @@ class grid:
 
 def drawGrid(gr, centerOnly=0, drawGhost=0, emphasizeEnd=0, edgeTicks=1):
 
-    if centerOnly and emphaizeEnd:
+    if centerOnly and emphasizeEnd:
         sys.exit("centerOnly and emphasizeEnd are incompatible")
 
     if gr.fd:
