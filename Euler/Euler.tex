@@ -100,6 +100,33 @@ U = \left ( \begin{array}{c} \rho \\ \rho u \\ \rho E \end{array} \right )
 F(U) = \left ( \begin{array}{c} \rho u \\ \rho uu + p \\ \rho u E + up \end{array} \right )
 \end{equation}
 %
+We can write this in quasi-linear form by first expressing the flux
+vector in terms of the conserved variables directly.  Taking $u_1 =
+\rho, u_2 = \rho u, u_3 = \rho E$, we have
+\begin{equation}
+F(U) = \left ( \begin{array}{c} 
+      u_2 \\
+      \frac{u_2^2}{u_1} \left (1 - \frac{\hat{\gamma}}{2} \right ) + u_3 \hat{\gamma} \\
+      \frac{u_3 u_2}{u_1}(1 + \hat{\gamma}) - \frac{1}{2} \frac{u_2^3}{u_1^2} \hat{\gamma} \end{array} \right )
+\end{equation}
+where $\hat{\gamma} = \gamma - 1$, and $p = \rho e \hat{\gamma} = (\rho E - (1/2) \rho u^2)\hat{\gamma}$.  The Jacobian of this flux vector is $A = \partial F/\partial U$:
+\begin{equation}
+A(U) = \left ( \begin{array}{ccc} 
+   0  & 1 & 0 \\
+   -\frac{1}{2}u^2(3 -\gamma) & u (3 -\gamma) & \gamma - 1 \\
+   \frac{1}{2}(\gamma -2)u^3 - \frac{uc^2}{\gamma -1} &
+       \frac{3-2\gamma}{2} u^2 + \frac{c^2}{\gamma -1} & u \gamma
+  \end{array} \right )
+\end{equation}
+where the speed of sound is $c = \sqrt{\gamma p/\rho}$.   With this, our
+system can be written as:
+\begin{equation}
+U_t + A(U) U_x = 0
+\end{equation}
+This matrix is
+quite complex and difficult to work with.
+
+
 An alternate way to express these equations is using the {\em
   primitive variables}: $\rho, u, p$.
 \begin{quote}
@@ -124,7 +151,7 @@ The eigenvalues of $A$ can be found via $| A - \lambda I | = 0$,
 where $|\ldots|$ indicates the determinant and $\lambda$ are the eigenvalues.
 \begin{quote}
 {\em Exercise 2: 
-Show that the eigenvalues of $A$ are $\lambda^\evm = u -c$, $\lambda^\evz = u$, $\lambda^\evp = u+c$ where the speed of sound is $c = \sqrt{\gamma p /\rho}$.
+Show that the eigenvalues of $A$ are $\lambda^\evm = u -c$, $\lambda^\evz = u$, $\lambda^\evp = u+c$.
 }
 \end{quote}
 We'll use the symbols $\{-,\circ,+\}$ to denote the eigenvalues and their
@@ -176,12 +203,27 @@ $l^{(i)} \cdot r^{(j)} = \delta_{ij}$.
 A final form of the equations is called the {\em characteristic form}.  Here,
 we wish to diagonalize the matrix $A$.  We take the matrix $R$ to be the
 matrix of right eigenvectors, $R = (r^\evm | r^\evz | r^\evp )$, and $L$
-is the corresponding matrix of left eigenvectors.  Note that $L\, R = I = R\, L$, and
+is the corresponding matrix of left eigenvectors:
+\begin{equation}
+L = \left ( \begin{array}{c} l^\evm \\              
+                             \hdashline 
+                             l^\evz \\
+                             \hdashline 
+                             l^\evp \end{array} \right )
+\end{equation}
+Note that $L\, R = I = R\, L$, and
 $L = R^{-1}$.
 \begin{quote}
 {\em Exercise 4: 
 Show that $\Lambda = L A R$ is a diagonal matrix with the diagonal elements
-simply the 3 eigenvalues we found above.
+simply the 3 eigenvalues we found above:
+\begin{equation}
+\Lambda = 
+   \left ( \begin{array}{ccc}
+             \lambda^\evm &              & \\
+                          & \lambda^\evz & \\
+                          &              & \lambda^\evp \end{array} \right )
+\end{equation}
 }
 \end{quote}
 Defining $dw = L dq$, we can write our system as:
