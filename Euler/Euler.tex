@@ -75,11 +75,12 @@ The Euler equations in one dimension appear as:
 These represent conservation of mass, momentum, and energy.  Here $\rho$ is the
 density, $u$ is the one-dimensional velocity, $p$ is the pressure, and $E$
 is the total energy / mass, and can be expressed in terms of the
-specific internal energy and kinetic energies as:
+specific internal energy and kinetic energy as:
 \begin{equation}
 E = e + \frac{1}{2} u^2
 \end{equation}
-The equations are closed with the addition of an equation of state:
+The equations are closed with the addition of an equation of state.  A common
+choice is the gamma-law EOS:
 \begin{equation}
 p = \rho e(\gamma - 1)
 \end{equation}
@@ -123,8 +124,8 @@ system can be written as:
 \begin{equation}
 U_t + A(U) U_x = 0
 \end{equation}
-This matrix is
-quite complex and difficult to work with.
+This matrix is quite complex and difficult to work with.  The eigenvectors
+of this matrix can be found in a variety of sources (e.g. \cite{toro:1997,athena}).
 
 
 An alternate way to express these equations is using the {\em
@@ -154,6 +155,10 @@ where $|\ldots|$ indicates the determinant and $\lambda$ are the eigenvalues.
 Show that the eigenvalues of $A$ are $\lambda^\evm = u -c$, $\lambda^\evz = u$, $\lambda^\evp = u+c$.
 }
 \end{quote}
+Note that both the conserved Jacobian matrix ($A(U)$) and the primitive 
+variable matrix, ($A(q)$) have the same eigenvalues---as expected since
+they represent the same physics.
+
 We'll use the symbols $\{-,\circ,+\}$ to denote the eigenvalues and their
 corresponding eigenvectors thoughout these notes.
 These eigenvalues are the speeds at which information propagates for the
@@ -237,10 +242,13 @@ decoupled advection-like equations.  If the system were linear, then the
 solution to each would simply be to advect the quantity $w^\enu$ at
 the wave speed $\lambda^\enu$.
 
-The way to think about this system is that there are 3 wave speeds
-(one for each eigenvalue) and each wave carries with it a change in
-the characteristic variable.  Since $dq = L^{-1}dw = R dw$, the jump
-in the primitive variable across each wave is proportion to the
+Imagine initial conditions consisting of a jump in the primitive
+variables, $\Delta q$.  The corresponding characteristic variables are
+$\Delta w \sim L \Delta q$ (where the $\sim$ accounts for the fact
+that in a nonlinear system, $L = L(q)$).  The characteristic form
+of the equations says that each of the waves will carry with it
+a jump in $w$.  Since $dq = L^{-1}dw = R dw$, the jump
+in the primitive variable across each wave is proportional to the
 right-eigenvector associated with that wave.  So, for example, since
 $r^\evz$ is only non-zero for the density element, this then means
 that only density jumps across the $\lambda^\evz = u$ wave---pressure
@@ -252,14 +260,18 @@ emanating from an initial discontinuity.
 \begin{figure}
 \centering
 \includegraphics[width=6.0in]{sod}
-\caption{\label{fig:sod} Evolution following from an initial discontinuity
-at $x = 0.5$.  These particular conditions are called the {\em Sod problem},
-and in general, a setup with two states separated by a discontinuity is
-called a shock-tube problem.  Here we see the three waves propagating
-away from the initial discontinuity.  The left ($u-c$) wave is a rarefaction,
-the middle ($u$) is the contact discontinuity, and the right ($u+c$) is a shock. Note that all 3 primitive variables jump across the left and right waves,
-but only the density jumps across the middle wave.  This reflects the
-right eigenvectors.}
+\caption{\label{fig:sod} Evolution following from an initial
+  discontinuity at $x = 0.5$.  These particular conditions are called
+  the {\em Sod problem}, and in general, a setup with two states
+  separated by a discontinuity is called a shock-tube problem.  Here
+  we see the three waves propagating away from the initial
+  discontinuity.  The left ($u-c$) wave is a rarefaction, the middle
+  ($u$) is the contact discontinuity, and the right ($u+c$) is a
+  shock. Note that all 3 primitive variables jump across the left and
+  right waves, but only the density jumps across the middle wave.
+  This reflects the right eigenvectors.  Also note that no waves have
+  reached the far left and far right yet, the conditions there are the
+  same as the initial conditions.}
 \end{figure}
 
 
@@ -291,18 +303,17 @@ interface (centered in time), which are the input to the Riemann
 solver.  The Riemann solver will then look at the characteristic wave
 structure and determine the fluid state on the interface, which is
 then used to compute the flux.  This is illustrated in
-Figure~\ref{fig:riemann}.  The fluxes allow us to update the state in
-time as:
-\begin{equation}
-U^{n+1}_i = U^n_i + \frac{\Delta t}{\Delta x} \left ( F_{i-1/2}^{n+1/2} - F_{i+1/2}^{n+1/2} \right )
-\end{equation}
+Figure~\ref{fig:riemann}.  
 
 Finally, although we use the conserved variables for the final update,
 in constructing the interface states it is often easier to work with
 the primitive variables.  These have a simpler characteristic
 structure.  The interface states in terms of the primitive variables
 can be converted into the interface states of the conserved variables
-through a simple algebraic transformation.
+through a simple algebraic transformation, 
+\begin{equation}
+U_{i+1/2,L}^{n+1/2} = U(q_{i+1/2,L}^{n+1/2})
+\end{equation}
 
 \begin{figure}[t]
 \centering
@@ -315,12 +326,11 @@ by the Riemann solver using these states as input.}
 Constructing these interface states requires reconstructing the
 cell-average data with a piecewise constant, linear, or parabolic
 polynomial and doing characteristic tracing to see how much of each
-characteristic quantity comes to the interface over $\Delta t$/2.
-Since we are comfortable working with the primitive variables, the
-reconstruction is done on those, and they are then projected into the
-characteristic variables (using the left- and right-eigenvectors) to
-determine how much of each characteristic quantity is carried by each
-of the 3 waves.  We look at several methods below.
+characteristic quantity comes to the interface over the timestep.  The
+jump in the primitive variables is projected into the characteristic
+variables, and only jumps moving toward the interface are included in
+our reconstruction.  We look at several methods below that build off
+of these ideas below.
 
 \subsection{Piecewise constant}
 
@@ -470,14 +480,33 @@ We can rewrite this compactly as:
 \sum_\nu \lambda^{(\nu)} (l^{(\nu)} \cdot \overline{\Delta q}) r^{(\nu)}
 \end{equation}
 where we use $\nu$ to indicate which wave we are summing over.  A similar 
-expansion is used for $RL \overline{\Delta q}$.  The resulting vector
+expansion is used for $RL \overline{\Delta q}$.  In fact, any vector
+can be decomposed in this fashion:
+\begin{equation}
+\chi = I \chi = R L \chi = \sum_\nu (l^\enu \cdot \chi) r^\enu
+\end{equation}
+And then it is easy to see that the above manipulations for $A \Delta q$
+can be expressed as:
+\begin{equation}
+A \Delta q =  A \sum_\nu (l^\enu \cdot \overline{\Delta q}) r^\enu = \sum_\nu (l^\enu \cdot \overline{\Delta q}) A r^\enu = \sum_\nu (l^\enu \cdot \overline{\Delta q}) \lambda^\enu r^\enu
+\end{equation} 
+where we used $A r^\enu = \lambda^\enu r^\enu$.  The quantity $(l^\enu
+\cdot \overline{\Delta q})$ that shows up here is the projection of
+the vector $\overline{\Delta q}$ into the characteristic variable
+carried by wave $\nu$.  This sum shows, as discussed earlier, that each wave
+carries a jump in the characteristic variable, with the jump in the primitive
+variables proportion to the right eigenvector, $r^\enu$.
+
+The resulting vector
 for the left state is:
 \begin{equation}
 q_{i+1/2,L}^{n+1/2} = q_i^n + \frac{1}{2} \sum_{\nu; \lambda^{(\nu)} \ge 0} 
   \left [ 1 - \frac{\Delta t}{\Delta x} \lambda_i^{(\nu)} \right ] (l_i^{(\nu)} \cdot \overline{\Delta q}_i) r_i^{(\nu)} 
 \end{equation}
 Note that we make a slight change here, and only include a term in the sum if
-its wave is moving toward the interface ($\lambda^\enu \ge 0$).
+its wave is moving toward the interface ($\lambda^\enu \ge 0$).  The quantity
+$\Delta t \lambda^\enu/\Delta x$ inside the brackets is simply the CFL
+number for the wave $\nu$.
 
 Starting with the data in the $i+1$ zone and expanding to the left, we can
 find the right state on the $i+1/2$ interface:
@@ -642,13 +671,14 @@ keep our expressions for the interface states.
 \centering
 \includegraphics[width=3.5in]{ppm-trace}
 \caption{\label{fig:ppm_trace} Integration under the parabolic
-  profile.  For each of the waves, $\sigma$ is the fraction of the
-  cell that they cross in a timestep, and $\sigma \Delta x = \lambda
-  \Delta t$ is the distance they can travel.  Here we are integrating
-  under the parabola to the right interface of cell $i$ to define
-  $\mathcal{I}_+$ (this is indicated by the shaded region).  The $\mathcal{I}_+$ carried
-  by this wave will be added to those carried by the other waves to
-  form the left state at interface $i+1/2$.}
+  profile.  For each of the waves, $\sigma^\enu$ is the fraction of
+  the cell that they cross in a timestep, and $\sigma^\enu \Delta x =
+  \lambda^\enu \Delta t$ is the distance they can travel.  Here we are
+  integrating under the parabola to the right interface of cell $i$ to
+  define $\mathcal{I}_+^\enu$ (this is indicated by the shaded
+  region).  The $\mathcal{I}_+^\enu$ carried by this wave will be
+  added to those carried by the other waves to form the left state at
+  interface $i+1/2$.}
 \end{figure}
 
 In particular, we define 
