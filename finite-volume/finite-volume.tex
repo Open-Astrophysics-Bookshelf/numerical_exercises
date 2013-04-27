@@ -46,6 +46,44 @@ Notes on Grids}}
 }
 \end{center}
 
+\section{Discretization}
+
+The physical systems we model are described by continuous mathematical
+functions, $f(x,t)$ and their derivatives in space and time.  To
+represent this continuous system on a computer we must discretize
+it---convert the continuous function into a discrete number of points
+in space at one or more discrete instances in time.
+
+There are many different discretization methods used throughout the
+physical sciences, engineering, and applied mathematics fields, each
+with their own strenghts and weaknesses.  Broadly speaking, we can
+divide these methods into grid-based and gridless methods.  
+
+Gridless methods include those which represent the function as a
+superposition of continuous basis functions (e.g.\ sines and cosines).
+This is the fundamental idea behind {\em spectral methods}.  A different
+class of methods are those that use discrete particles to represent the
+mass distribution and produce continuous functions by integrating
+over these particles with a suitable kernel---this is the basis of
+{\em smoothed particle hydrodynamics} (SPH).  SPH is a very popular
+method in astrophysics.
+
+Grid-based methods include the finite-difference, finite-volume, and
+finite-element methods.  Finite element methods are widely used in
+engineering together with unstructure grids.  A type of finite-element
+method called a {\em galerkin method} can be formed by integrating the
+continuous function agains a compact basis set represented by
+tetrahedra.  These methods work will with the irregular geometries
+that arise in engineering.  Finite-difference and finite-volume
+methods can both be applied to {\em structured grids} (each zone can
+be referenced simply by an integer index for each spatial dimension).
+The main difference between these methods is that the
+finite-difference methods build from the differential form of PDEs
+while the finite-volume methods build from the integral form of the
+PDEs.  Both of these methods find wide use in astrophysics.
+
+In these notes, we will focus on grid-based methods.
+
 
 \section{Grid basics}
 
