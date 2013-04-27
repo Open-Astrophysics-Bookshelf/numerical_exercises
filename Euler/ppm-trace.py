@@ -41,6 +41,9 @@ pylab.plot([gr.xr[gr.nx/2-1]-sigma*gr.dx, gr.xr[gr.nx/2-1]-sigma*gr.dx], [1.15, 
 pylab.plot([gr.xr[gr.nx/2-1], gr.xr[gr.nx/2-1]], [1.15, 1.25], color="k")
 pylab.text(gr.xr[gr.nx/2-1]-0.5*sigma*gr.dx, 1.3, r"$\sigma_{i}^{(\nu)} \Delta x$", horizontalalignment="center")
 
+pylab.text(gr.xr[gr.nx/2-1]-0.5*sigma*gr.dx, 0.4, r"$\mathcal{I}_+^{(\nu)}$",
+           color="r", horizontalalignment="center")
+
 pylab.axis([gr.xl[gr.nx/2-1]-0.5*gr.dx,gr.xr[gr.nx/2]+0.5*gr.dx, -0.25, 1.4])
 pylab.axis("off")
 
