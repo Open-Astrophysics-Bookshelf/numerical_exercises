@@ -50,7 +50,7 @@ class grid:
         self.voff = voff
 
 
-def drawGrid(gr, centerOnly=0, drawGhost=0, emphasizeEnd=0, edgeTicks=1):
+def drawGrid(gr, centerOnly=0, drawGhost=0, emphasizeEnd=0, edgeTicks=1, color="k"):
 
     if centerOnly and emphasizeEnd:
         sys.exit("centerOnly and emphasizeEnd are incompatible")
@@ -71,17 +71,17 @@ def drawGrid(gr, centerOnly=0, drawGhost=0, emphasizeEnd=0, edgeTicks=1):
         if not drawGhost:
             if (emphasizeEnd):
                 pylab.plot([gr.xmin, gr.xmax], 
-                           [0,0], color="k", lw=2)
+                           [0,0], color=color, lw=2)
             else:
                 pylab.plot([gr.xmin-0.5*gr.dx, gr.xmax+0.5*gr.dx], 
-                           [gr.voff,gr.voff], color="k", lw=2)
+                           [gr.voff,gr.voff], color=color, lw=2)
         else:
             pylab.plot([gr.xmin-gr.ng*gr.dx, gr.xmin],
-                       [gr.voff,gr.voff], color="k", lw=2, ls=":")
+                       [gr.voff,gr.voff], color=color, lw=2, ls=":")
             pylab.plot([gr.xmax, gr.xmax+gr.ng*gr.dx], 
-                       [gr.voff,gr.voff], color="k", lw=2, ls=":")
+                       [gr.voff,gr.voff], color=color, lw=2, ls=":")
             pylab.plot([gr.xmin, gr.xmax], 
-                       [gr.voff,gr.voff], color="k", lw=2)
+                       [gr.voff,gr.voff], color=color, lw=2)
 
         n = nstart
         while (n <= nstop):
@@ -89,19 +89,19 @@ def drawGrid(gr, centerOnly=0, drawGhost=0, emphasizeEnd=0, edgeTicks=1):
             # draw center (node) indicator line
             if (n < gr.ilo or n > gr.ihi):
                 pylab.plot([gr.xc[n], gr.xc[n]], 
-                           [-0.05+gr.voff, gridTop+gr.voff], color="k", ls=":", lw=2)
+                           [-0.05+gr.voff, gridTop+gr.voff], color=color, ls=":", lw=2)
             else:
                 pylab.plot([gr.xc[n], gr.xc[n]], 
-                           [-0.05+gr.voff, gridTop+gr.voff], color="k", lw=2)
+                           [-0.05+gr.voff, gridTop+gr.voff], color=color, lw=2)
       
             n += 1
 
         if (emphasizeEnd):
             pylab.plot([gr.xc[gr.ilo], gr.xc[gr.ilo]], 
-                       [-0.05+gr.voff, gridTop+gr.voff], color="k", lw=4)
+                       [-0.05+gr.voff, gridTop+gr.voff], color=color, lw=4)
 
             pylab.plot([gr.xc[gr.ihi], gr.xc[gr.ihi]], 
-                       [-0.05+gr.voff, gridTop+gr.voff], color="k", lw=4)
+                       [-0.05+gr.voff, gridTop+gr.voff], color=color, lw=4)
 
 
 
@@ -128,16 +128,16 @@ def drawGrid(gr, centerOnly=0, drawGhost=0, emphasizeEnd=0, edgeTicks=1):
             print "drawing line", nstart, nstop
 
             pylab.plot([gr.xl[nstart], gr.xr[nstop]], 
-                       [gr.voff,gr.voff], color="k", lw=2)
+                       [gr.voff,gr.voff], color=color, lw=2)
 
         else:
             # horizontal line
             pylab.plot([gr.xl[nstart]-0.5*gr.dx, gr.xr[nstop]+0.5*gr.dx], 
-                       [gr.voff,gr.voff], color="k", lw=2)
+                       [gr.voff,gr.voff], color=color, lw=2)
 
         # draw first left edge
         pylab.plot([gr.xl[nstart], gr.xl[nstart]], 
-                   [gr.voff, gridTop+gr.voff], color="k", lw=2)
+                   [gr.voff, gridTop+gr.voff], color=color, lw=2)
 
 
         n = nstart
@@ -146,27 +146,27 @@ def drawGrid(gr, centerOnly=0, drawGhost=0, emphasizeEnd=0, edgeTicks=1):
             # emphasize?
             if (emphasizeEnd and n == gr.ilo):
                 pylab.plot([gr.xl[n], gr.xl[n]], 
-                           [gr.voff, gridTop+gr.voff], color="k", lw=4)                
+                           [gr.voff, gridTop+gr.voff], color=color, lw=4)                
 
 
             # draw right edge
             if (emphasizeEnd and n == gr.ihi):
                 pylab.plot([gr.xr[n], gr.xr[n]], [gr.voff, gridTop+gr.voff], 
-                           color="k", lw=4)        
+                           color=color, lw=4)        
             else:
                 pylab.plot([gr.xr[n], gr.xr[n]], [gr.voff, gridTop+gr.voff], 
-                           color="k", lw=2)        
+                           color=color, lw=2)        
 
             # draw center marker
-            pylab.plot([gr.xc[n], gr.xc[n]], [-0.05+gr.voff, gr.voff], color="k")      
+            pylab.plot([gr.xc[n], gr.xc[n]], [-0.05+gr.voff, gr.voff], color=color)      
 
             # draw edge marker
             if (n == nstart and edgeTicks):
                 pylab.plot([gr.xl[nstart], gr.xl[nstart]], [-0.05+gr.voff, gr.voff],
-                           color="k")
+                           color=color)
 
             if edgeTicks:
-                pylab.plot([gr.xr[n], gr.xr[n]], [-0.05+gr.voff, gr.voff], color="k")
+                pylab.plot([gr.xr[n], gr.xr[n]], [-0.05+gr.voff, gr.voff], color=color)
                 
             n += 1
 
