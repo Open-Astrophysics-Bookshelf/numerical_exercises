@@ -31,7 +31,7 @@ pylab.axis("off")
 pylab.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
 
 
-pylab.savefig("nested1.png")
+pylab.savefig("nested1.png", dpi=200)
 pylab.savefig("nested1.eps")
 
 #-----------------------------------------------------------------------------
@@ -70,7 +70,7 @@ pylab.axis("off")
 pylab.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
 
 
-pylab.savefig("nested2.png")
+pylab.savefig("nested2.png", dpi=200)
 pylab.savefig("nested2.eps")
 
 
@@ -149,7 +149,7 @@ pylab.axis("off")
 pylab.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
 
 
-pylab.savefig("nested3.png")
+pylab.savefig("nested3.png", dpi=200)
 pylab.savefig("nested3.eps")
 
 
