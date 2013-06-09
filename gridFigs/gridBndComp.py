@@ -46,8 +46,8 @@ gpu.drawGrid(gr, emphasizeEnd=1, drawGhost=1)
 gpu.labelCenter(gr, ng+nnodes/2,   r"$i$")
 gpu.labelCenter(gr, ng+nnodes/2-1, r"$i-1$")
 gpu.labelCenter(gr, ng+nnodes/2+1, r"$i+1$")
-gpu.labelCenter(gr, ng+nnodes/2-2, r"$i-2$")
-gpu.labelCenter(gr, ng+nnodes/2+2, r"$i+2$")
+#gpu.labelCenter(gr, ng+nnodes/2-2, r"$i-2$")
+#gpu.labelCenter(gr, ng+nnodes/2+2, r"$i+2$")
 
 
 # draw the data
@@ -78,7 +78,7 @@ pylab.axis("off")
 pylab.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
 
 f = pylab.gcf()
-f.set_size_inches(10.0,3.0)
+f.set_size_inches(10.0,2.5)
 
 pylab.savefig("fd_grid_bnd.png")
 pylab.savefig("fd_grid_bnd.eps")
@@ -97,8 +97,8 @@ gpu.drawGrid(gr, emphasizeEnd=1, drawGhost=1)
 gpu.labelCenter(gr, ng+ncells/2,   r"$i$")
 gpu.labelCenter(gr, ng+ncells/2-1, r"$i-1$")
 gpu.labelCenter(gr, ng+ncells/2+1, r"$i+1$")
-gpu.labelCenter(gr, ng+ncells/2-2, r"$i-2$")
-gpu.labelCenter(gr, ng+ncells/2+2, r"$i+2$")
+#gpu.labelCenter(gr, ng+ncells/2-2, r"$i-2$")
+#gpu.labelCenter(gr, ng+ncells/2+2, r"$i+2$")
 
 
 # draw the data
@@ -130,7 +130,7 @@ pylab.axis("off")
 pylab.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
 
 f = pylab.gcf()
-f.set_size_inches(10.0,3.0)
+f.set_size_inches(10.0,2.5)
 
 pylab.savefig("ccfd_grid_bnd.png")
 pylab.savefig("ccfd_grid_bnd.eps")
@@ -148,11 +148,22 @@ gpu.drawGrid(gr, emphasizeEnd=1, drawGhost=1)
 gpu.labelCenter(gr, ng+ncells/2,   r"$i$")
 gpu.labelCenter(gr, ng+ncells/2-1, r"$i-1$")
 gpu.labelCenter(gr, ng+ncells/2+1, r"$i+1$")
-gpu.labelCenter(gr, ng+ncells/2-2, r"$i-2$")
-gpu.labelCenter(gr, ng+ncells/2+2, r"$i+2$")
+#gpu.labelCenter(gr, ng+ncells/2-2, r"$i-2$")
+#gpu.labelCenter(gr, ng+ncells/2+2, r"$i+2$")
+
+gpu.labelCenter(gr, ng+0, r"$\mathrm{lo}$")
+gpu.labelCenter(gr, ng-1, r"$\mathrm{lo-1}$")
+
+gpu.labelCenter(gr, ng+gr.nx-1, r"$\mathrm{hi}$")
+gpu.labelCenter(gr, ng+gr.nx, r"$\mathrm{hi+1}$")
+
 
 gpu.labelEdge(gr, ng+ncells/2,   r"$i-1/2$")
 gpu.labelEdge(gr, ng+ncells/2+1,   r"$i+1/2$")
+
+gpu.labelEdge(gr, ng+gr.nx,   r"$b$")
+gpu.labelEdge(gr, ng+0,   r"$a$")
+
 
 # draw the data
 i = 0
@@ -182,7 +193,7 @@ pylab.axis("off")
 pylab.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
 
 f = pylab.gcf()
-f.set_size_inches(10.0,3.0)
+f.set_size_inches(10.0,2.5)
 
 pylab.savefig("fv_grid_bnd.png")
 pylab.savefig("fv_grid_bnd.eps")
