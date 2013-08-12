@@ -1,22 +1,17 @@
 EPStoPDF = epstopdf
 
-ALL: multigrid.ps multigrid.pdf
+ALL: multigrid.pdf
 
 
-%.dvi: %.tex refs.bib
-	latex $< < /dev/null
-	bibtex multigrid
-	latex $< < /dev/null
-	latex $< < /dev/null
+multigrid.pdf: main.tex multigrid.tex
+	pdflatex -jobname=multigrid main.tex < /dev/null
+	bibtex multigrid.aux
+	pdflatex -jobname=multigrid main.tex < /dev/null
+	pdflatex -jobname=multigrid main.tex < /dev/null
 
-%.ps: %.dvi
-	dvips -t letter -Ppdf -o $@ $<
-
-%.pdf: %.ps
-	ps2pdf $<
 
 clean:
-	$(RM) *.aux *.log *.dvi
+	$(RM) *.aux *.log *.dvi *.bbl *.blg 
 	$(RM) *~
 
 .PHONY: clean

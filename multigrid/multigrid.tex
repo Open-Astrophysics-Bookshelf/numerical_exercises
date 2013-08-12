@@ -1,49 +1,3 @@
-\documentclass[11pt]{article}
-
-% margins
-\usepackage[margin=0.75in]{geometry}
-
-% figures
-\usepackage{graphicx}
-
-% font
-\usepackage{mathpazo}
-
-\usepackage{helvet}
-
-% coloring
-\usepackage{color}
-\definecolor{mygray}{gray}{0.5}
-
-% footer
-\usepackage{fancyhdr}
-\pagestyle{fancy}
-\fancyfoot[LO,LE]{\footnotesize \sffamily \color{mygray} M.\ Zingale---Notes on multigrid}
-\fancyfoot[RO,RE]{\footnotesize \sffamily \color{mygray}  (\today)}
-\fancyfoot[CO,CE]{\thepage}
-\fancyhead{}
-\renewcommand{\headrulewidth}{0.0pt}
-\renewcommand{\footrulewidth}{0.0pt}
-
-% captions
-\usepackage{caption}
-\renewcommand{\captionfont}{\footnotesize}
-\renewcommand{\captionlabelfont}{\footnotesize}
-\setlength{\captionmargin}{5em}
-
-
-\usepackage{sectsty}
-\allsectionsfont{\sffamily}
-
-
-\begin{document}
-
-\begin{center}
-{\LARGE \textsf{\textbf{
-Notes on multigrid}}
-}
-\end{center}
-
 \begin{quote}
 \noindent {\em These summarize multigrid on cell-centered grids.  The
   text ``A Multigrid Tutorial''~\cite{multigridtutorial} is an incredible
@@ -553,9 +507,3 @@ For reference, the BoxLib library uses $L_\infty$ in its multigrid solvers.
 \section*{acknowledgements}
 
 Thanks to Andy Nonaka and Ann Almgren for helpful discussions.
-
-\bibliographystyle{plain}
-\bibliography{refs}
-
-
-\end{document}
