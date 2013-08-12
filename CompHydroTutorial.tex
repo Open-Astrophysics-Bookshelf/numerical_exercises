@@ -1,0 +1,98 @@
+\documentclass[11pt]{book}
+
+% margins
+\usepackage[margin=0.75in]{geometry}
+
+%
+\usepackage{amsmath}
+
+% figures
+\usepackage{graphicx}
+
+\graphicspath{{finite-volume/}{advection/}{diffusion/}{Euler/}{incompressible/}{multigrid/}}
+
+% font
+\usepackage{mathpazo}
+
+\usepackage{helvet}
+
+% coloring
+\usepackage{color}
+\definecolor{mygray}{gray}{0.5}
+
+% footer
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyfoot[LO,LE]{\footnotesize \sffamily \color{mygray} M.\ Zingale---Notes on the Euler equations}
+\fancyfoot[RO,RE]{\footnotesize \sffamily \color{mygray} (\today)}
+\fancyfoot[CO,CE]{\thepage}
+\fancyhead{}
+\renewcommand{\headrulewidth}{0.0pt}
+\renewcommand{\footrulewidth}{0.0pt}
+
+% captions
+\usepackage{caption}
+\renewcommand{\captionfont}{\footnotesize}
+\renewcommand{\captionlabelfont}{\footnotesize}
+\setlength{\captionmargin}{5em}
+
+\newcommand{\evm}{{(-)}}
+\newcommand{\evz}{{(\circ)}}
+\newcommand{\evp}{{(+)}}
+\newcommand{\enu}{{(\nu)}}
+
+% shortcuts
+\newcommand{\Dux}{\overline{\Delta u}^{(x)}}
+\newcommand{\Duy}{\overline{\Delta u}^{(y)}}
+
+\newcommand{\Dvx}{\overline{\Delta v}^{(x)}}
+\newcommand{\Dvy}{\overline{\Delta v}^{(y)}}
+
+
+% for dotted lines in the matrics/arrays
+\usepackage{arydshln}
+
+\usepackage{sectsty}
+\allsectionsfont{\sffamily}
+
+\begin{document}
+
+\begin{center}
+{\LARGE \textsf{\textbf{
+Notes on the Euler Equations}}
+}
+\end{center}
+
+\chapter{Finite-Volume Grids}
+
+\input finite-volume/finite-volume.tex
+
+
+\chapter{Advection}
+
+\input advection/advection.tex
+
+
+\chapter{Euler Equations}
+
+\input Euler/Euler.tex
+
+
+\chapter{Multigrid and Elliptic Equations}
+
+\input multigrid/multigrid.tex
+
+
+\chapter{Diffusion}
+
+\input diffusion/diffusion.tex
+
+
+\chapter{Incompressible Flow and Projection Methods}
+
+\input incompressible/incompressible.tex
+
+\bibliographystyle{plain}
+\bibliography{refs}
+
+\end{document}
