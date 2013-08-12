@@ -1,22 +1,17 @@
 EPStoPDF = epstopdf
 
-ALL: diffusion.ps diffusion.pdf
+ALL: diffusion.pdf
 
 
-%.dvi: %.tex refs.bib
-	latex $< < /dev/null
-	bibtex diffusion
-	latex $< < /dev/null
-	latex $< < /dev/null
+diffusion.pdf: main.tex diffusion.tex
+	pdflatex -jobname=diffusion main.tex < /dev/null
+	bibtex diffusion.aux
+	pdflatex -jobname=diffusion main.tex < /dev/null
+	pdflatex -jobname=diffusion main.tex < /dev/null
 
-%.ps: %.dvi
-	dvips -t letter -Ppdf -o $@ $<
-
-%.pdf: %.ps
-	ps2pdf $<
 
 clean:
-	$(RM) *.aux *.log *.dvi
+	$(RM) *.aux *.log *.dvi *.bbl *.blg 
 	$(RM) *~
 
 .PHONY: clean
