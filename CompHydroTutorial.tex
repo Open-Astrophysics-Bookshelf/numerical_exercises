@@ -1,7 +1,7 @@
 \documentclass[11pt]{book}
 
 % margins
-\usepackage[margin=0.75in]{geometry}
+\usepackage[top=1.0in,bottom=1.0in,inner=0.85in,outer=0.85in]{geometry}         
 
 %
 \usepackage{amsmath}
@@ -21,14 +21,42 @@
 \definecolor{mygray}{gray}{0.5}
 
 % footer
+%% \usepackage{fancyhdr}
+%% \pagestyle{fancy}
+%% \fancyfoot[LO,LE]{\footnotesize \sffamily \color{mygray} M.\ Zingale---Notes on the Euler equations}
+%% \fancyfoot[RO,RE]{\footnotesize \sffamily \color{mygray} (\today)}
+%% \fancyfoot[CO,CE]{\thepage}
+%% \fancyhead{}
+%% \renewcommand{\headrulewidth}{0.0pt}
+%% \renewcommand{\footrulewidth}{0.0pt}
+
+% don't make the chapter/section headings uppercase.  See the fancyhdr
+% documentation (section 9)
 \usepackage{fancyhdr}
-\pagestyle{fancy}
-\fancyfoot[LO,LE]{\footnotesize \sffamily \color{mygray} M.\ Zingale---Notes on the Euler equations}
-\fancyfoot[RO,RE]{\footnotesize \sffamily \color{mygray} (\today)}
-\fancyfoot[CO,CE]{\thepage}
-\fancyhead{}
-\renewcommand{\headrulewidth}{0.0pt}
-\renewcommand{\footrulewidth}{0.0pt}
+\renewcommand{\chaptermark}[1]{%                                                
+ \markboth{\chaptername
+\ \thechapter.\ #1}{}}
+
+\renewcommand{\sectionmark}[1]{\markright{\thesection---#1}}
+
+
+
+% don't put a header on blank pages, see
+% http://www.latex-community.org/forum/viewtopic.php?f=4&p=51559
+% change ``plain'' to ``empty'' to eliminate the page number
+\makeatletter
+\renewcommand*\cleardoublepage{\clearpage\if@twoside
+\ifodd\c@page\else
+\hbox{}
+\thispagestyle{empty}
+\newpage
+\if@twocolumn\hbox{}\newpage\fi\fi\fi}
+\makeatother
+
+
+% skip a bit of space between paragraphs, to enhance readability
+\usepackage{parskip}
+
 
 % captions
 \usepackage{caption}
@@ -63,7 +91,7 @@
 
 \ \\[3in]
 \begin{center}
-{\LARGE \textsf{\textbf{
+{\huge \textsf{\textbf{
 Notes on Computational Hydrodynamics\\ for Astrophysics}}
 } \\[1em]
 
