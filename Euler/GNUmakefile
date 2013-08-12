@@ -1,22 +1,17 @@
 EPStoPDF = epstopdf
 
-ALL: Euler.ps Euler.pdf
+ALL: Euler.pdf
 
 
-%.dvi: %.tex refs.bib
-	latex $< < /dev/null
-	bibtex Euler
-	latex $< < /dev/null
-	latex $< < /dev/null
+Euler.pdf: main.tex Euler.tex
+	pdflatex -jobname=Euler main.tex < /dev/null
+	bibtex Euler.aux
+	pdflatex -jobname=Euler main.tex < /dev/null
+	pdflatex -jobname=Euler main.tex < /dev/null
 
-%.ps: %.dvi
-	dvips -t letter -Ppdf -o $@ $<
-
-%.pdf: %.ps
-	ps2pdf $<
 
 clean:
-	$(RM) *.aux *.log *.dvi
+	$(RM) *.aux *.log *.dvi *.bbl *.blg 
 	$(RM) *~
 
 .PHONY: clean

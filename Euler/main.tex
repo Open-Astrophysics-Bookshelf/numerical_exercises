@@ -1,0 +1,61 @@
+\documentclass[11pt]{article}
+
+% margins
+\usepackage[margin=0.75in]{geometry}
+
+%
+\usepackage{amsmath}
+
+% figures
+\usepackage{graphicx}
+
+% font
+\usepackage{mathpazo}
+
+\usepackage{helvet}
+
+% coloring
+\usepackage{color}
+\definecolor{mygray}{gray}{0.5}
+
+% footer
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyfoot[LO,LE]{\footnotesize \sffamily \color{mygray} M.\ Zingale---Notes on the Euler equations}
+\fancyfoot[RO,RE]{\footnotesize \sffamily \color{mygray} (\today)}
+\fancyfoot[CO,CE]{\thepage}
+\fancyhead{}
+\renewcommand{\headrulewidth}{0.0pt}
+\renewcommand{\footrulewidth}{0.0pt}
+
+% captions
+\usepackage{caption}
+\renewcommand{\captionfont}{\footnotesize}
+\renewcommand{\captionlabelfont}{\footnotesize}
+\setlength{\captionmargin}{5em}
+
+\newcommand{\evm}{{(-)}}
+\newcommand{\evz}{{(\circ)}}
+\newcommand{\evp}{{(+)}}
+\newcommand{\enu}{{(\nu)}}
+
+% for dotted lines in the matrics/arrays
+\usepackage{arydshln}
+
+\usepackage{sectsty}
+\allsectionsfont{\sffamily}
+
+\begin{document}
+
+\begin{center}
+{\LARGE \textsf{\textbf{
+Notes on the Euler Equations}}
+}
+\end{center}
+
+\input Euler
+
+\bibliographystyle{plain}
+\bibliography{refs}
+
+\end{document}
