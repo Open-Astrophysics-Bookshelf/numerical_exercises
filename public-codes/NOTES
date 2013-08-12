@@ -1,0 +1,34 @@
+Describe the features of public codes:
+
+
+Athena
+
+Castro
+
+Enzo
+
+Flash
+
+Maestro
+
+pyro
+
+
+
+give details on:
+
+ -- solver
+ -- griding (including subcycling?)
+ -- language
+ -- EOS
+ -- other physics
+ -- species
+ -- particles
+ -- visualization tools
+ -- gravity
+ -- other details
+ -- diffusion
+ -- radiation
+
+
+
