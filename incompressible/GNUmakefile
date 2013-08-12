@@ -1,22 +1,17 @@
 EPStoPDF = epstopdf
 
-ALL: incompressible.ps incompressible.pdf
+ALL: incompressible.pdf
 
 
-%.dvi: %.tex refs.bib
-	latex $< < /dev/null
-	bibtex incompressible
-	latex $< < /dev/null
-	latex $< < /dev/null
+incompressible.pdf: main.tex incompressible.tex
+	pdflatex -jobname=incompressible main.tex < /dev/null
+	bibtex incompressible.aux
+	pdflatex -jobname=incompressible main.tex < /dev/null
+	pdflatex -jobname=incompressible main.tex < /dev/null
 
-%.ps: %.dvi
-	dvips -t letter -Ppdf -o $@ $<
-
-%.pdf: %.ps
-	ps2pdf $<
 
 clean:
-	$(RM) *.aux *.log *.dvi
+	$(RM) *.aux *.log *.dvi *.bbl *.blg 
 	$(RM) *~
 
 .PHONY: clean

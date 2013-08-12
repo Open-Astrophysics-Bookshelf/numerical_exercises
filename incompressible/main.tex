@@ -1,0 +1,70 @@
+\documentclass[11pt]{article}
+
+% margins
+\usepackage[margin=0.75in]{geometry}
+
+% figures
+\usepackage{graphicx}
+
+% font
+\usepackage{mathpazo}
+
+\usepackage{helvet}
+
+% coloring
+\usepackage{color}
+\definecolor{mygray}{gray}{0.5}
+
+% footer
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyfoot[LO,LE]{\footnotesize\sffamily \color{mygray} M.\ Zingale---Notes on incompressible solvers}
+\fancyfoot[RO,RE]{\footnotesize \sffamily  \color{mygray} (\today)}
+\fancyfoot[CO,CE]{\thepage}
+\fancyhead{}
+\renewcommand{\headrulewidth}{0.0pt}
+\renewcommand{\footrulewidth}{0.0pt}
+
+% captions
+\usepackage{caption}
+\renewcommand{\captionfont}{\footnotesize}
+\renewcommand{\captionlabelfont}{\footnotesize}
+\setlength{\captionmargin}{5em}
+
+\usepackage{sectsty}
+\allsectionsfont{\sffamily}
+
+% shortcuts
+\newcommand{\Dux}{\overline{\Delta u}^{(x)}}
+\newcommand{\Duy}{\overline{\Delta u}^{(y)}}
+
+\newcommand{\Dvx}{\overline{\Delta v}^{(x)}}
+\newcommand{\Dvy}{\overline{\Delta v}^{(y)}}
+
+\setlength{\marginparwidth}{0.75in}
+\newcommand{\MarginPar}[1]{\marginpar{\vskip-\baselineskip\raggedright\tiny\sffamily\hrule\smallskip{\color{red}#1}\par\smallskip\hrule}}
+
+
+
+
+\begin{document}
+
+\begin{center}
+{\LARGE \textsf{\textbf{
+Notes on incompressible solvers}}
+}
+\end{center}
+
+\begin{quote}
+\noindent {\em These summarize methods for solving the incompressible
+  hydrodynamics equations using an cell-centered approximate
+  projection method.}
+\end{quote}
+
+\input incompressible
+
+\bibliographystyle{plain}
+\bibliography{refs}
+
+
+\end{document}
