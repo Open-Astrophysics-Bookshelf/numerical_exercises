@@ -1,19 +1,14 @@
 EPStoPDF = epstopdf
 
-ALL: advection.ps advection.pdf
+ALL: advection.pdf
 
 
-%.dvi: %.tex
-	latex $< < /dev/null
-	bibtex advection       
-	latex $< < /dev/null
-	latex $< < /dev/null
+advection.pdf: main.tex advection.tex
+	pdflatex -jobname=advection main.tex < /dev/null
+	bibtex advection.aux
+	pdflatex -jobname=advection main.tex < /dev/null
+	pdflatex -jobname=advection main.tex < /dev/null
 
-%.ps: %.dvi
-	dvips -t letter -Ppdf -o $@ $<
-
-%.pdf: %.ps
-	ps2pdf $<
 
 clean:
 	$(RM) *.aux *.log *.dvi *.bbl *.blg 
