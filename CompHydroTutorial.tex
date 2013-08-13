@@ -1,7 +1,13 @@
 \documentclass[11pt]{book}
 
 % margins
-\usepackage[top=1.0in,bottom=1.0in,inner=0.85in,outer=0.85in]{geometry}         
+\usepackage[top=1.0in,bottom=1.0in,inner=0.85in,outer=0.85in]{geometry} 
+
+\usepackage{hyperref}
+
+% custom hrule for title page
+\newcommand{\HRule}{\rule{\linewidth}{0.125mm}}
+
 
 %
 \usepackage{amsmath}
@@ -89,14 +95,23 @@
 
 \begin{titlepage}
 
-\ \\[3in]
+\ \\[2.5in]
 \begin{center}
-{\huge \textsf{\textbf{
+\HRule
+{\Huge \textsf{{
 Notes on Computational Hydrodynamics\\ for Astrophysics}}
-} \\[1em]
+}
+\HRule
+\\[2em]
 
-{\large Michael Zingale}
+{\Large \sf Michael Zingale} \\ {\sf Stony Brook University}
 \end{center}
+
+\vfill
+
+\begin{flushright}
+\today
+\end{flushright}
 
 \end{titlepage}
 
@@ -109,11 +124,34 @@ Notes on Computational Hydrodynamics\\ for Astrophysics}}
 
 These notes are intended to help new students come up to speed on the
 common methods used in computational hydrodynamics for astrophysical
-flows.
+flows.  They are written at a level appropriate for upper-level
+undergraduates.
+
+The best way to understand the methods described here is to run
+them for yourself.  The {\sf pyro} code is designed to make such
+experimentation easy.  You can download {\sf pyro} at: 
+\url{http://bender.astro.sunysb.edu/hydro_by_example/}
 
 \clearpage
 
 \mainmatter
+
+
+\chapter{What Is Simulation?}
+
+Understanding approximations
+
+Simulations should be used to gain insight and provide a physical
+understanding.  However, the systems we solve are highly-nonlinear.
+As such its best not to obsess about precise numbers, but rather the
+trends.  To really understand the limits of your simulations, you
+should do parameter and convergence studies.
+
+There is no \"uber-code.  Every algorithm begins with approximations and
+has limitations.
+
+
+
 
 \chapter{Finite-Volume Grids}
 
@@ -143,6 +181,10 @@ flows.
 \chapter{Incompressible Flow and Projection Methods}
 
 \input incompressible/incompressible.tex
+
+\backmatter
+
+\addcontentsline{toc}{chapter}{References}
 
 \bibliographystyle{plain}
 \bibliography{refs}
