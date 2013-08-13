@@ -1,30 +1,49 @@
 \documentclass[11pt]{book}
 
-% margins
+% include figures
+\usepackage{epsfig}
+
+% AMS symbols
+\usepackage{amsmath,amssymb}
+
+% Palatino font (and math symbols) -- looks nicer than the standard
+% LaTeX font
+\usepackage{mathpazo}
+%\usepackage{helvet}
+
+% margins -- this needs to come before fncychap
 \usepackage[top=1.0in,bottom=1.0in,inner=0.85in,outer=0.85in]{geometry} 
 
+% this needs to be done before the fncychap style, since that will 
+% redo the chapter stuff
+\usepackage{sectsty}
+\allsectionsfont{\sffamily}
+
+
+% chapter title styles
+\usepackage[Bjornstrup]{fncychap}
+\ChNumVar{\fontsize{76}{80}\usefont{OT1}{pzc}{m}{n}\selectfont}
+\ChTitleVar{\raggedleft\Large\sffamily\bfseries}
+
+
+
+% hyperlinks -- load after fncychap
 \usepackage{hyperref}
+
+% color package
+\usepackage{color}
+\definecolor{mygray}{gray}{0.5}
+
 
 % custom hrule for title page
 \newcommand{\HRule}{\rule{\linewidth}{0.125mm}}
 
 
-%
-\usepackage{amsmath}
 
-% figures
-\usepackage{graphicx}
+
 
 \graphicspath{{finite-volume/}{advection/}{diffusion/}{Euler/}{incompressible/}{multigrid/}}
 
-% font
-\usepackage{mathpazo}
-
-\usepackage{helvet}
-
-% coloring
-\usepackage{color}
-\definecolor{mygray}{gray}{0.5}
 
 % footer
 %% \usepackage{fancyhdr}
@@ -39,7 +58,7 @@
 % don't make the chapter/section headings uppercase.  See the fancyhdr
 % documentation (section 9)
 \usepackage{fancyhdr}
-\renewcommand{\chaptermark}[1]{%                                                
+\renewcommand{\chaptermark}[1]{%  
  \markboth{\chaptername
 \ \thechapter.\ #1}{}}
 
@@ -86,8 +105,6 @@
 % for dotted lines in the matrics/arrays
 \usepackage{arydshln}
 
-\usepackage{sectsty}
-\allsectionsfont{\sffamily}
 
 \begin{document}
 
