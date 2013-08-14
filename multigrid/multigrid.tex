@@ -132,10 +132,11 @@ slopes for our line.
 \begin{figure}[h]
 \centering
 \includegraphics[width=6.0in]{mg-bcs}
-\caption{\label{fig:bcs} The cell-centered grid showing the cells
-  (and ghost cells) surrounding the boundaries and indicating that
-  the boundary conditions are actually specified right at the boundary
-  itself.}
+\caption[The cell-centered grid showing the difference between ghost
+  cells and the physical boundary.]{\label{fig:bcs} The cell-centered
+  grid showing the cells (and ghost cells) surrounding the boundaries
+  and indicating that the boundary conditions are actually specified
+  right at the boundary itself.}
 \end{figure}
 
 Consider Dirichlet boundary conditions, specifying values $\phi_l$ on
@@ -213,7 +214,7 @@ as the source.
 \begin{figure}
 \centering
 \includegraphics[width=5.5in]{smooth-error.eps}
-\caption{\label{fig:smootherror} Gauss-Seidel relaxation applied to
+\caption[Convergence as a function of number of iterations using Gauss-Seidel relaxation.]{\label{fig:smootherror} Gauss-Seidel relaxation applied to
   $\phi_{xx} = \sin(x)$ with $\phi(0) = \phi(1) = 0$.  Shown are the
   L2 norm of the error compared with the true solution (solid lines)
   and the L2 norm of the residual (dotted lines) for 3 different
@@ -251,9 +252,10 @@ error.
 \begin{figure}[t]
 \centering
 \includegraphics{smooth_error}
-\caption{\label{fig:smooth} Error in the solution to $\phi'' = 0$
-  given an initial guess with 3 different wavenumbers of noise.
-  The different curves are different numbers of smoothing iterations.}
+\caption[Smoothing of different wavenumbers.]{\label{fig:smooth} Error
+  in the solution to $\phi'' = 0$ given an initial guess with 3
+  different wavenumbers of noise.  The different curves are different
+  numbers of smoothing iterations.}
 \end{figure}
 
 We can think of the error in the solution as a superposition of high
@@ -264,8 +266,8 @@ wavelength noise (see Figure~\ref{fig:smooth}).  Here the wavelength
 is in terms of the number of zones across the feature, and not a
 physical measure.  
 
-\begin{quote}
-{\em Exercise 1: implement 1-d smoothing for the Laplace equation on
+\begin{exercise}
+{Implement 1-d smoothing for the Laplace equation on
   cc-grid.  Use an initial guess for the solution:
   \begin{equation}
   \phi_0(x) = \frac{1}{3} ( \sin(2\pi x) + \sin(2\pi \, 8 x) + \sin(2\pi \, 16 x) )
@@ -276,7 +278,7 @@ physical measure.
   but many iterations are needed to remove the low-frequency noise.
   You should see something like Figure~\ref{fig:smooth}.
 }
-\end{quote}
+\end{exercise}
 
 This behavior suggests that if we could represent our
 problem on a coarser grid, the error will now be of shorter
@@ -320,11 +322,12 @@ the center coarse cell, and the fine grid cells are marked in red.
 \begin{figure}[h]
 \centering
 \includegraphics[width=4.0in]{2dgrid-prolong}
-\caption{\label{fig:2dgrid-prolong} Four fine cells and the underlying
-  coarse grid.  For prolongation, the fine cells in red are
+\caption[The geometry for 2-d
+  prolongation.]{\label{fig:2dgrid-prolong} Four fine cells and the
+  underlying coarse grid.  For prolongation, the fine cells in red are
   initialized from a coarse parent.  The gray coarse cells are used in
-  the reconstruction of the coarse data.  For restriction, the fine cells
-  are averaged to the underlying coarse cell.}
+  the reconstruction of the coarse data.  For restriction, the fine
+  cells are averaged to the underlying coarse cell.}
 \end{figure}
 
 Restriction from the fine grid to the coarse grid is straightforward.
@@ -372,9 +375,10 @@ work well.
 \begin{figure}[t]
 \centering
 \includegraphics[width=5.5in]{mgtower}
-\caption{\label{fig:mgtower} Illustration of the hierarchy of grids
-  leading to the coarsest 2-zone grid (in one-dimension).  Each grid
-  has a single ghost cell to accomodate boundary conditions.}
+\caption[A multigrid hierarchy.]{\label{fig:mgtower} Illustration of
+  the hierarchy of grids leading to the coarsest 2-zone grid (in
+  one-dimension).  Each grid has a single ghost cell to accomodate
+  boundary conditions.}
 \end{figure}
 
 Once the grid is sufficiently coarse, the linear system is small
@@ -416,11 +420,12 @@ of V-cycle number, illustrating the expected performance.
 \begin{figure}
 \centering
 \includegraphics[width=5.5in]{mg_error_vs_cycle}
-\caption{\label{fig:mgerror} Error in the multigrid solution to our model
-problem ($\phi_{xx} = \sin(x)$) as a function of V-cycle.  We see
-that the true error, $\|e\|$ stalls at truncation error while the 
-residual error, $\|r\|$ reaches roundoff error, the same behavior as seen
-with smoothing alone (as expected).}
+\caption[Error in solution as a function of multigrid V-cycle
+  number.]{\label{fig:mgerror} Error in the multigrid solution to our
+  model problem ($\phi_{xx} = \sin(x)$) as a function of V-cycle.  We
+  see that the true error, $\|e\|$ stalls at truncation error while
+  the residual error, $\|r\|$ reaches roundoff error, the same
+  behavior as seen with smoothing alone (as expected).}
 \end{figure}
 
 
