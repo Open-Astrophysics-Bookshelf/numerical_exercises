@@ -93,6 +93,8 @@
 \setlength{\captionmargin}{5em}
 
 
+%-----------------------------------------------------------------------------
+% define a new environment for exercises
 \newcounter{exercise}
 \usepackage{changepage}
 
@@ -107,6 +109,11 @@
 {% end code 
   \end{itshape}\end{adjustwidth}\vspace{\baselineskip}\ignorespacesafterend 
 }
+
+\makeatletter
+\@addtoreset{exercise}{chapter}
+\makeatother
+%-----------------------------------------------------------------------------
 
 
 \newcommand{\evm}{{(-)}}
