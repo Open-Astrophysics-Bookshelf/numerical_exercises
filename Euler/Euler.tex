@@ -76,9 +76,9 @@ of this matrix can be found in a variety of sources (e.g. \cite{toro:1997,athena
 
 An alternate way to express these equations is using the {\em
   primitive variables}: $\rho, u, p$.
-\begin{quote}
-{\em Exercise 1: Show that the Euler equations in primitive form can be written
-as 
+\begin{exercise}
+{Show that the Euler equations in primitive form can
+  be written as
 \begin{equation}
 q_t + A(q) q_x = 0
 \end{equation}
@@ -92,15 +92,15 @@ A(q) = \left ( \begin{array}{ccc} u  & \rho     & 0 \\
                                   0  & \gamma p & u \end{array} \right )
 \end{equation}
 }
-\end{quote}
+\end{exercise}
 %
 The eigenvalues of $A$ can be found via $| A - \lambda I | = 0$,
 where $|\ldots|$ indicates the determinant and $\lambda$ are the eigenvalues.
-\begin{quote}
-{\em Exercise 2: 
+\begin{exercise}
+{
 Show that the eigenvalues of $A$ are $\lambda^\evm = u -c$, $\lambda^\evz = u$, $\lambda^\evp = u+c$.
 }
-\end{quote}
+\end{exercise}
 Note that both the conserved Jacobian matrix ($A(U)$) and the primitive 
 variable matrix, ($A(q)$) have the same eigenvalues---as expected since
 they represent the same physics.
@@ -122,8 +122,8 @@ l^\enu \, A  = \lambda^\enu l^\enu
 where $\nu = \{-,\circ,+\}$ corresponding to the three waves, and 
 there is one right and one left eigenvector for each of the eigenvalues.
 %
-\begin{quote}
-{\em Exercise 3: 
+\begin{exercise}
+{
 Show that the right eigenvectors are:
 \begin{equation}
 r^\evm = \left ( \begin{array}{c} 1 \\ -c/\rho \\ c^2 \end{array} \right )
@@ -149,7 +149,7 @@ Note that in general, there can be an arbitrary constant in front of each
 eigenvector.  Here they are normalized such that 
 $l^{(i)} \cdot r^{(j)} = \delta_{ij}$.
 }
-\end{quote}
+\end{exercise}
 
 A final form of the equations is called the {\em characteristic form}.  Here,
 we wish to diagonalize the matrix $A$.  We take the matrix $R$ to be the
@@ -164,8 +164,8 @@ L = \left ( \begin{array}{c} l^\evm \\
 \end{equation}
 Note that $L\, R = I = R\, L$, and
 $L = R^{-1}$.
-\begin{quote}
-{\em Exercise 4: 
+\begin{exercise}
+{
 Show that $\Lambda = L A R$ is a diagonal matrix with the diagonal elements
 simply the 3 eigenvalues we found above:
 \begin{equation}
@@ -176,7 +176,7 @@ simply the 3 eigenvalues we found above:
                           &              & \lambda^\evp \end{array} \right )
 \end{equation}
 }
-\end{quote}
+\end{exercise}
 Defining $dw = L dq$, we can write our system as:
 \begin{equation}
 w_t + \Lambda w_x = 0
@@ -206,7 +206,7 @@ emanating from an initial discontinuity.
 \begin{figure}
 \centering
 \includegraphics[width=6.0in]{sod}
-\caption{\label{fig:sod} Evolution following from an initial
+\caption[The Sod problem.]{\label{fig:sod} Evolution following from an initial
   discontinuity at $x = 0.5$.  These particular conditions are called
   the {\em Sod problem}, and in general, a setup with two states
   separated by a discontinuity is called a shock-tube problem.  Here
@@ -264,9 +264,10 @@ U_{i+1/2,L}^{n+1/2} = U(q_{i+1/2,L}^{n+1/2})
 \begin{figure}[t]
 \centering
 \includegraphics[width=5.5in]{riemann}
-\caption{\label{fig:riemann} The left and right states at interface
-$i+1/2$.  The arrow indicates the flux through the interface, as computed
-by the Riemann solver using these states as input.}
+\caption[The left and right states for the Riemann
+  problem.]{\label{fig:riemann} The left and right states at interface
+  $i+1/2$.  The arrow indicates the flux through the interface, as
+  computed by the Riemann solver using these states as input.}
 \end{figure}
 
 Constructing these interface states requires reconstructing the
@@ -304,9 +305,10 @@ data.
 \begin{figure}[t]
 \centering
 \includegraphics[width=6.5in]{piecewise-linear}
-\caption{\label{fig:plm} Piecewise linear reconstruction of the
-cell averages.  The dotted line shows the unlimited center-difference
-slopes and the solid line shows the limited slopes.}
+\caption[Piecewise linear reconstruction of cell average
+  data.]{\label{fig:plm} Piecewise linear reconstruction of the cell
+  averages.  The dotted line shows the unlimited center-difference
+  slopes and the solid line shows the limited slopes.}
 \end{figure}
 
 Consider constructing the left state at the interface $i+1/2$ (see
@@ -474,11 +476,11 @@ expressed as:
 \begin{equation}
 P \chi = \sum_\nu (l^{(\nu)} . \chi) r^{(\nu)}
 \end{equation}
-\begin{quote}
-{\em Exercise 5: 
+\begin{exercise}
+{
 Show that $P q = q$, using the eigenvectors corresponding to the primitive
  variable form of the Euler equations.}
-\end{quote}
+\end{exercise}
 In the literature, sometimes a `$>$' or `$<$' subscript on $P$ is used
 to indicate the characteristic tracing.
 
@@ -553,7 +555,7 @@ in a loop over the zone centers.
 \begin{figure}
 \centering
 \includegraphics[width=5.5in]{states}
-\caption{\label{fig:states} The two interface states that are constructed
+\caption[The two interface states derived from a cell-center quantity.]{\label{fig:states} The two interface states that are constructed
 using $q_i$ as the starting point.}
 \end{figure}
 
@@ -573,11 +575,12 @@ this method is still only second-order.
 \begin{figure}[t]
 \centering
 \includegraphics[width=6.5in]{piecewise-parabolic}
-\caption{\label{fig:ppm} Piecewise parabolic reconstruction of the
-cell averages.  The dotted line shows the unlimited parabolas---note
-how they touch at each interface, since the interface values come from
-the same interpolant initially.  The solid line shows the limited
-parabolas.}
+\caption[Piecewise parabolic reconstruction of the cell
+  averages.]{\label{fig:ppm} Piecewise parabolic reconstruction of the
+  cell averages.  The dotted line shows the unlimited parabolas---note
+  how they touch at each interface, since the interface values come
+  from the same interpolant initially.  The solid line shows the
+  limited parabolas.}
 \end{figure}
 
 
@@ -602,10 +605,10 @@ recognizing that (similar to M\&C Eq.\ 88, but for the $i+1/2,L$ interface):
 \end{equation}
 where $q(x)$ is the reconstructed functional form of $q$ in the zone.
 
-\begin{quote}
-{\em Exercise 6: Show that this is exactly true for a linear reconstruction of $q(x)$, i.e.,
+\begin{exercise}
+{Show that this is exactly true for a linear reconstruction of $q(x)$, i.e.,
 $q(x) = q_i + (\partial q/\partial x) (x - x_i)$.}
-\end{quote}
+\end{exercise}
 
 \noindent The integral on the right represents the average of $q$ that
 can reach the right interface of the cell $i$ over timestep $\Delta
@@ -616,7 +619,8 @@ keep our expressions for the interface states.
 \begin{figure}
 \centering
 \includegraphics[width=3.5in]{ppm-trace}
-\caption{\label{fig:ppm_trace} Integration under the parabolic
+\caption[Integration under the parabola profile for to an
+  interface.]{\label{fig:ppm_trace} Integration under the parabolic
   profile.  For each of the waves, $\sigma^\enu$ is the fraction of
   the cell that they cross in a timestep, and $\sigma^\enu \Delta x =
   \lambda^\enu \Delta t$ is the distance they can travel.  Here we are
@@ -685,8 +689,8 @@ Figure~\ref{fig:ppm_trace} illustrates the process of integrating under
 the parabolic profile.
 
 
-\begin{quote}
-{\em Exercise 7: Show that $q(x)$ is a conservative interpolant.  That is
+\begin{exercise}
+{Show that $q(x)$ is a conservative interpolant.  That is
 \begin{equation}
 \frac{1}{\Delta x} \int_{x_{i-1/2}}^{x_{i+1/2}} q(x) dx = q_i
 \end{equation}
@@ -696,7 +700,7 @@ zone is $q_i + \frac{1}{4}\Delta q$.  This means that there are equal
 areas between the integral and zone average on the left and right
 sides of the zone.  This can be seen by looking at
 Figure~\ref{fig:ppm}.  }
-\end{quote}
+\end{exercise}
 
 \begin{quote}
 \noindent\makebox[\linewidth]{\rule{0.9\textwidth}{1pt}} 
@@ -864,9 +868,10 @@ separating space into 4 regions, marked: $L$, $L^*$, $R^*$, and $R$.
 \begin{figure}[h]
 \centering
 \includegraphics[width=4.5in]{riemann-waves}
-\caption{The wave structure and 4 distinct regions for the Riemann
-  problem.  Time can be thought of as the vertical axis here, so we
-  see the waves moving outward from the interface.}
+\caption[The Riemann problem wave struction for the Euler
+  equations.]{The wave structure and 4 distinct regions for the
+  Riemann problem.  Time can be thought of as the vertical axis here,
+  so we see the waves moving outward from the interface.}
 \end{figure} 
 We typically work in terms of primitive variables.  The states in the
 $L$ and $R$ regions are simply the left and right input states---the
@@ -1003,10 +1008,10 @@ There are now 4 eigenvalues.  For $A^{(x)}(q)$, they are $u-c$, $u$,
 $u$, $u+c$.  If we just look at the system for the $x$ evolution, we
 see that the transverse velocity (in this case, $v$) just advects with
 velocity $u$, corresponding to the additional eigenvalue.
-\begin{quote}
-{\em Exercise 8: 
+\begin{exercise}
+{
 Derive the form of $A^{(x)}(q)$ and $A^{(y)}(q)$ and find their left and right eigenvectors.}
-\end{quote}
+\end{exercise}
 
 We note here that $\hat{U}_{i+1/2,j,L}^{n+1/2}$ is essentially
 one-dimensional, since only the $x$-fluxes are involved (through
