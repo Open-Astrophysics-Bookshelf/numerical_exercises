@@ -70,12 +70,13 @@ presence of the ghost points allow us to use the same update equation
 \begin{figure}[t]
 \centering
 \includegraphics[width=7.0in]{fd_ghost}
-\caption{\label{fig:fdgrid} A simple finite-difference grid.  The solution
-  is stored at each of the labeled points.  The dotted lines show the
-  ghost points used to extend our grid past the physical boundaries to 
-  accommodate boundary conditions.  Note that if we are periodic, then
-  points $0$ and $N-1$ are at the same physical point in space, so we
-  would only need to update one of them.}
+\caption[A simple finite-difference grid]{\label{fig:fdgrid} A simple
+  finite-difference grid.  The solution is stored at each of the
+  labeled points.  The dotted lines show the ghost points used to
+  extend our grid past the physical boundaries to accommodate boundary
+  conditions.  Note that if we are periodic, then points $0$ and $N-1$
+  are at the same physical point in space, so we would only need to
+  update one of them.}
 \end{figure}
 
 The last piece of information needed to update the solution is the
@@ -218,7 +219,8 @@ its flux.
 \begin{figure}
 \centering
 \includegraphics[width=6.4in]{fv_ghost}
-\caption{\label{fig:fvghost} A finite-volume grid running from
+\caption[A finite-volume grid with valid cells
+  labelled]{\label{fig:fvghost} A finite-volume grid running from
   $\mathrm{lo}, \ldots, \mathrm{hi}$, with two ghost cells at each
   end.}
 \end{figure}
@@ -271,7 +273,7 @@ a_{i+1/2,R}^{n+1/2} &=& a_{i+1}^n - \frac{\Delta x}{2} \left .\frac{\partial a}{
 \begin{figure}[t]
 \centering
 \includegraphics[width=5.0in]{riemann}
-\caption{\label{fig:riemann} The left and right interface state at the
+\caption[The input state to the Riemann problem]{\label{fig:riemann} The left and right interface state at the
   $i+1/2$ interface.  Here, the left state, $a_{i+1/2,L}^{n+1/2}$, was
   predicted to the interface from the zone to the left of the
   interface, using $a_i$, and the right state, $a_{i+1/2,R}^{n+1/2}$,
@@ -408,7 +410,7 @@ limit.
 \includegraphics[width=3.25in]{rea-start_007} \\
 \includegraphics[width=3.25in]{rea-start_004}\hspace{1em}
 \includegraphics[width=3.25in]{rea-start_008} \\
-\caption{\label{fig:limitingex}Initially discontinuous data evolved for several steps with
+\caption[The effect of limiters on initially discontinuous data.]{\label{fig:limitingex}Initially discontinuous data evolved for several steps with
   no limiting (top sequence) and limiting (bottom sequence).  Note
   that without limiting, there are overshoots and undershoots
   surrounding the discontinuity, and that the discontinuity remains
@@ -448,7 +450,8 @@ can be found in \cite{toro:1997,leveque:2002}.
 \begin{figure}
 \centering
 \includegraphics[width=6.0in]{generalgrid}
-\caption{\label{fig:limit} A finite-volume grid showing the cell
+\caption[Piecewise linear slopes with an without
+  limiting.]{\label{fig:limit} A finite-volume grid showing the cell
   averages (gray horizontal lines), unlimited center-difference slopes
   (blue) and MC limited slopes (red).  Note that in zones $i$ and
   $i+1$, the slopes are limited slightly, so as not to overshoot or
@@ -546,16 +549,16 @@ conservative flux update.
 \includegraphics[width=6.0in]{rea-trace.eps} \\
 \includegraphics[width=6.0in]{rea-evolve.eps} \\
 \includegraphics[width=6.0in]{rea-final.eps}
-\caption{\label{fig:rea} Reconstruct-Evolve-Average.  The top panel
-  shows the origina cell-average data.  The second panel shows the
-  (limited) piecewise linear reconstruction of the data.  Assuming a
-  CFL number of 0.6 and advection to the right, the shaded regions
-  in the third panel show the data that will wind up in cell $i$
-  after advecting for a single step.  The fourth panel shows the
-  piecewise-linear data advected to the right by 0.6 of a cell-width
-  (corresponding to a CFL of 0.6).  The final panel shows the new
-  averages of the data, constructed by averaging the advected 
-  piecewise linear data in each cell.}
+\caption[The Reconstruct-Evolve-Average procedure.]{\label{fig:rea}
+  Reconstruct-Evolve-Average.  The top panel shows the origina
+  cell-average data.  The second panel shows the (limited) piecewise
+  linear reconstruction of the data.  Assuming a CFL number of 0.6 and
+  advection to the right, the shaded regions in the third panel show
+  the data that will wind up in cell $i$ after advecting for a single
+  step.  The fourth panel shows the piecewise-linear data advected to
+  the right by 0.6 of a cell-width (corresponding to a CFL of 0.6).
+  The final panel shows the new averages of the data, constructed by
+  averaging the advected piecewise linear data in each cell.}
 \end{figure}
 
 
@@ -614,9 +617,10 @@ perimeter of ghost cells to set the boundary conditions.
 \begin{figure}[h]
 \centering
 \includegraphics[width=4.0in]{2dgrid}
-\caption{\label{fig:2dgrid} A simple 2-d grid with the zone-centered
-  indexes.  The $\times$s mark the interface states at the upper edge
-  of the $i,j$ zone in each coordinate direction.}
+\caption[A 2-d grid with zone-centered indexes.]{\label{fig:2dgrid} A
+  simple 2-d grid with the zone-centered indexes.  The $\times$s mark
+  the interface states at the upper edge of the $i,j$ zone in each
+  coordinate direction.}
 \end{figure}
 
 We can discretize our equation by first integrating over the zones, 
@@ -801,7 +805,8 @@ the construction of the $a_{i+1/2,j,L}^{n+1/2}$ state.
 \centering
 \includegraphics[width=3.3in]{2dgrid-hat}
 \includegraphics[width=3.3in]{2dgrid-transverse}
-\caption{\label{fig:unsplitstates} The construction of the
+\caption[The construction of an interface state with the transverse
+  component.]{\label{fig:unsplitstates} The construction of the
   $a_{i+1/2,j,L}^{n+1/2}$ state.  Left: first we compute the
   $\hat{a}$'s---here we show all of the $\hat{a}$'s that will be used
   in computing the full left interface state at $(i+1/2,j)$.  Right:
@@ -895,12 +900,13 @@ condition over all the zones:
 \centering
 \includegraphics[width=3.25in]{fv-burger-rarefaction}
 \includegraphics[width=3.25in]{fv-burger-sine}
-\caption{\label{fig:burgers} Solution to the inviscid Burger's equation
-with 256 zones and a Courant number, $C = 0.8$.  On the left, is a
-rarefaction---the left half of the domain was initialized with $u = 1$ 
-and the right half with $u = 2$, creating a divergent flow.  On the
-right is a sine-wave steepening into a shock.  The curves are shown 0.02~s
-apart.}
+\caption[Solutions to the inviscid Burger's
+  equation.]{\label{fig:burgers} Solution to the inviscid Burger's
+  equation with 256 zones and a Courant number, $C = 0.8$.  On the
+  left, is a rarefaction---the left half of the domain was initialized
+  with $u = 1$ and the right half with $u = 2$, creating a divergent
+  flow.  On the right is a sine-wave steepening into a shock.  The
+  curves are shown 0.02~s apart.}
 \end{figure}
 
 Figure~\ref{fig:burgers} shows the solution for two cases: a rarefaction

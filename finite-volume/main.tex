@@ -35,8 +35,20 @@
 \usepackage{sectsty}
 \allsectionsfont{\sffamily}
 
+\newcounter{exercise}
+\usepackage{changepage}
 
-
+\newenvironment{exercise}% environment name 
+{% begin code 
+  \begin{adjustwidth}{1.0cm}{0.5cm}
+  \par\vspace{\baselineskip}\noindent 
+  \refstepcounter{exercise}%
+  \textbf{Exercise \theexercise\ }\begin{itshape}% 
+  %\par\vspace{\baselineskip}\noindent\ignorespaces 
+}% 
+{% end code 
+  \end{itshape}\end{adjustwidth}\vspace{\baselineskip}\ignorespacesafterend 
+}
 
 \begin{document}
 

@@ -2,8 +2,15 @@ EPStoPDF = epstopdf
 
 ALL: CompHydroTutorial.pdf
 
+TEXS := finite-volume/finite-volume.tex \
+        advection/advection.tex \
+        Euler/Euler.tex \
+        multigrid/multigrid.tex \
+        diffusion/diffusion.tex \
+        multiphysics/multiphysics.tex \
+        incompressible/incompressible.tex 
 
-CompHydroTutorial.pdf: CompHydroTutorial.tex
+CompHydroTutorial.pdf: CompHydroTutorial.tex $(TEXS)
 	pdflatex CompHydroTutorial  < /dev/null
 	bibtex CompHydroTutorial.aux
 	pdflatex CompHydroTutorial  < /dev/null

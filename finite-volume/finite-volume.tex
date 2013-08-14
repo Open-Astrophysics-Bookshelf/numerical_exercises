@@ -98,7 +98,7 @@ is the same as in the cell-centered finite-difference case.
 \includegraphics[width=5.5in]{fd_grid} \\
 \includegraphics[width=5.5in]{ccfd_grid} \\
 \includegraphics[width=5.5in]{fv_grid}
-\caption{\label{fig:grids} Different types of structured grids.  Top:
+\caption[Types of structured grids.]{\label{fig:grids} Different types of structured grids.  Top:
   a finite-difference grid---the discrete data are associated with a
   specific point in space.  Middle: a cell-centered finite-difference
   grid---again the data is at a specific point, but now we imagine the
@@ -150,11 +150,11 @@ arises because our numerical approximation throws away higher order
 terms.  The approximation ${\partial a}/{\partial x} |_i = ({a_{i+1} -
   a_i})/{\Delta x}$ has the same order of accuracy.
 
-\begin{quote}
-{\em Exercise 1: Show that a centered difference, ${\partial a}/
+\begin{exercise}
+{Show that a centered difference, ${\partial a}/
   {\partial x} |_i = ({a_{i+1} - a_{i-1}})/({2 \Delta x})$, is second order
 accurate, i.e.\ its truncation error is $\mathcal{O}(\Delta x^2)$.}
-\end{quote}
+\end{exercise}
 
 Generally speaking, higher-order methods have lower numerical error
 associated with them.
@@ -178,8 +178,9 @@ The figure below shows the grid, with the half-integer indices.
 \begin{figure}[h]
 \centering
 \includegraphics[width=6.0in]{simplegrid2}
-\caption{A simple 1-d finite-volume grid with the zone-centered and
-  zone-edge indexes.  Here we show only the data associated with zone $i$.}
+\caption[A simple 1-d finite-volume grid]{A simple 1-d finite-volume
+  grid with the zone-centered and zone-edge indexes.  Here we show
+  only the data associated with zone $i$.}
 \end{figure}
 %
 Here we've drawn $a_i$ as a horizontal line spanning the entire zone---this 
@@ -194,10 +195,10 @@ a_i = \frac{1}{\Delta x} \int_{x_{i-1/2}}^{x_{i+1/2}} a(x) dx \sim a(x_i)
 This means that we can treat the average of $a$ over a zone as simply $a(x)$
 evaluated at the zone center if we only want second-order accuracy.
 
-\begin{quote}
-{\em Exercise 2: Show that Eq.~\ref{eq:fv_cc} is true to $O(\Delta x^2)$ by expanding
+\begin{exercise}
+{Show that Eq.~\ref{eq:fv_cc} is true to $O(\Delta x^2)$ by expanding
 $a(x)$ as a Taylor series in the integral.}
-\end{quote}
+\end{exercise}
 
 \subsection{Conservation}
 
@@ -257,12 +258,13 @@ for all zones in the domain.
 \begin{figure}[h]
 \centering
 \includegraphics[width=6.0in]{simplegrid_gc}
-\caption{A simple 1-d finite-volume grid with a single ghost cell at
-  each end of the domain.  The domain boundaries are indicated by the
-  heavy vertical lines.  Here there are $\mathrm{hi}-\mathrm{lo}+1$
-  zones used in the discretization of the domain, with the first zone
-  in the domain labelled $\mathrm{lo}$ and the last in the domain
-  labelled $\mathrm{hi}$.}
+\caption[A simple 1-d finite-volume grid with ghost cells.]{A simple
+  1-d finite-volume grid with a single ghost cell at each end of the
+  domain.  The domain boundaries are indicated by the heavy vertical
+  lines.  Here there are $\mathrm{hi}-\mathrm{lo}+1$ zones used in the
+  discretization of the domain, with the first zone in the domain
+  labelled $\mathrm{lo}$ and the last in the domain labelled
+  $\mathrm{hi}$.}
 \end{figure}
 
 The number of ghostcells needed for the grid depends on how wide the
@@ -294,10 +296,11 @@ a_{\mathrm{lo}-1} &=& a_\mathrm{hi}
  \begin{figure}
  \centering
  \includegraphics{domain}
- \caption{\label{fig:domain} Domain decomposition of the computational
-   domain into 6 separate sub-domains.  Each sub-domain here has
-   $5\times 5$ zones.  For one of the sub-domains, the perimeter of
-   ghost cells is illustrated as the red boundary.}
+ \caption[Domain decomposition example.]{\label{fig:domain} Domain
+   decomposition of the computational domain into 6 separate
+   sub-domains.  Each sub-domain here has $5\times 5$ zones.  For one
+   of the sub-domains, the perimeter of ghost cells is illustrated as
+   the red boundary.}
  \end{figure}
 
 \item {\em AMR for structured grids}: adaptive mesh refinement uses a
