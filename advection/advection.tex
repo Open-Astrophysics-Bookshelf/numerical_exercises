@@ -22,13 +22,13 @@ looks like a system of (nonlinear) advection equations, so the
 advection equation provides important insight into the methods used
 for these systems.
 %
-\begin{quote}
-{\em Exercise 1: Show that $a(x - ut)$ is a solution to
+\begin{exercise}
+{Show that $a(x - ut)$ is a solution to
   Eq.~\ref{eq:advect} for any choice of a.  This means that
 the solution is constant along the lines $x = u t$
 (the curves along which the solution is constant are called the
 characteristics).}
-\end{quote}
+\end{exercise}
 
 To get a flavor of the methods for advection, we will use a simple
 finite-difference discretization---here, the domain is divided into
@@ -100,11 +100,11 @@ We traditionally write the timestep as
 \end{equation}
 and specify $C$ as part of the problem (a typical value may be $C = 0.7$).
 
-\begin{quote}
-{\em Exercise 2: Show analytically that when you use $C=1$ in the
+\begin{exercise}
+{Show analytically that when you use $C=1$ in the
   first-order differenced advection equation (Eq.~\ref{eq:fo}) that
   you advect the profile exactly, without any numerical error.}
-\end{quote}
+\end{exercise}
 
 Keep in mind that, in general, we will be solving a non-linear
 system of equations, so it is not possible to run with $C=1$, 
@@ -113,8 +113,8 @@ Instead, one looks at the most restrictive timestep over all the
 zones and uses that for the entire system.
 
 
-\begin{quote}
-{\em Exercise 3: Write a code to solve the 1-d linear advection equation
+\begin{exercise}
+{Write a code to solve the 1-d linear advection equation
   using the discretization of Eq.~\ref{eq:fo} on the domain $[0,1]$ with
   $u=1$ and periodic boundary conditions.  For initial conditions,
   try both a Gaussian profile and a top-hat:}
@@ -127,27 +127,27 @@ zones and uses that for the entire system.
       \right .
   \end{equation}
 
-  {\em Note: For a general treatment of boundary conditions, you would
+  \noindent Note: For a general treatment of boundary conditions, you would
     initialize the ghost points to their corresponding periodic data
     and apply the difference equations to zones $0, \ldots, N-1$.
     However, for periodic BCs on this grid, points $0$ and $N-1$ are
     identical, so you could do the update in this special case on
     points $1, \ldots, N-1$ without the need for ghost points and then
-    set $a_0 = a_{N-1}$ after the update.}
+    set $a_0 = a_{N-1}$ after the update. \\
 
-  \noindent {\em Run you program for one or more periods (one period
+  \noindent Run you program for one or more periods (one period
     is $T=1/u$) with several different CFL numbers and notice that
-    there is substantial numerical dissipation.}
-\end{quote}
+    there is substantial numerical dissipation.
+\end{exercise}
 
 
-\begin{quote}
-{\em Exercise 4: You may think that using a centered-difference for
+\begin{exercise}
+{You may think that using a centered-difference for
   the spatial derivative, $u_x \sim (u_{i+1} - u_{i-1})/(2 \Delta x)$
   would be more accurate.  This method is called FTCS (forward-time,
   centered-space).  Try this.  You will find that the solution is
   unconditionally unstable.  }
-\end{quote}
+\end{exercise}
 
 The classic method for understanding stability is to consider the growth 
 of a single Fourier mode in our discetization.  That is, substitute in
@@ -160,8 +160,8 @@ method is stable for $0\le C \le 1$.
 the difference Fourier modes are decoupled, nevertheless, we use its
 ideas for nonlinear advection problems as well).
 
-\begin{quote}
-{\em Exercise 5: To get an alternate feel for stability, we can ask
+\begin{exercise}
+{To get an alternate feel for stability, we can ask
   what the terms left out by truncation look like.  That is, we can
   begin with the discretized equation:
 \begin{equation}
@@ -177,14 +177,14 @@ a_t + u a_x &=& \frac{u \Delta x}{2} \left ( 1 - \frac{\Delta t u}{\Delta x} \ri
             &=& \frac{u \Delta x}{2} (1 - C) \frac{\partial^2 a}{\partial x^2}
 \end{eqnarray}
 
-Notice that the righthand side looks like a diffusion term, however,
+\noindent Notice that the righthand side looks like a diffusion term, however,
 if $C > 1$, then the coefficient of the diffusion is negative---this is
 unphysical.  This means that the diffusion would act to take smooth
 features and make them more strongly peaked---the opposite of physical
 diffusion.
 
 }
-\end{quote}
+\end{exercise}
 
 An alternate approach to time-discretization is to do an implicit
 discretization.  Here our upwind method would appear as:
@@ -322,8 +322,8 @@ left, $\mathrm{lo-2}$.  Therefore, we need two ghost cells at each end
 of the domain for this method.  Higher-order limiters may require even
 more ghost cells.
 
-\begin{quote}
-{\em Exercise 6: Write a second-order solver for the linear advection
+\begin{exercise}
+{Write a second-order solver for the linear advection
   equation.  To mimic a real hydrodynamics code, your code should have
   routines for finding initializing the state, filling boundary conditions,
   computing the timestep,
@@ -343,7 +343,7 @@ more ghost cells.
 Use both the top-hat and Gaussian initial conditions and periodic boundary
 conditions and compare to the first-order method.
 }
-\end{quote}
+\end{exercise}
 
 \subsection{Limiting}
 
@@ -356,8 +356,8 @@ The converse is true too, which suggests that in order to have a
 second-order accurate method for this linear equation, the algorithm
 itself must be nonlinear.
 
-\begin{quote}
-{\em Exercise 7:   To remove the oscillations in
+\begin{exercise}
+{To remove the oscillations in
 practice, we limit the slopes to ensure that no new minima or maxima are
 introduced during the advection process.  There are many choices for
 limited slopes.  A popular one is the {\em minmod} limiter.  Here, we
@@ -379,7 +379,7 @@ with
 \end{equation}
 Use this slope in your second-order advection code and notice that the
 oscillations go away }
-\end{quote}
+\end{exercise}
 
 Figure~\ref{fig:limitingex} shows the evolution
 of an initial discontinuity with and without limiting.  See the text
@@ -462,12 +462,12 @@ limiter, which is more accurate in smooth flows (this is shown in
 \cite{colella:1985}, Eqs. 2.5 and 2.6; and \cite{colella:1990},
 Eq. 191).
 
-\begin{quote}
-{\em Exercise 8: Show analytically that if you fully limit the slopes
+\begin{exercise}
+{Show analytically that if you fully limit the slopes
   (i.e.\ set $\partial a/\partial x |_i = 0$, that the second-order
   method reduces to precisely our first-order finite-difference discretization,
   Eq.~\ref{eq:fo}.  }
-\end{quote}
+\end{exercise}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -586,16 +586,16 @@ to get a measure of the relative error:
 Note that it is important in these definitions to normalize by the number
 of zones, $N$, otherwise our error will be resolution-dependent.
 %
-\begin{quote}
-{\em Exercise 9: Run the first-order solver for several different $\Delta x$s,
+\begin{exercise}
+{ Run the first-order solver for several different $\Delta x$s,
 each a factor of 2 smaller than the previous.  Compute $\epsilon$ for
 each resolution and observe that it converges in a first-order fashion
-(i.e.\ $\epsilon$ decreases by 2 when we decrease $\Delta x$ by a factor of 2).
+(i.e.\ $\epsilon$ decreases by 2 when we decrease $\Delta x$ by a factor of 2). \\
 
-Do the same with the second-order solver and observe that it converges
+\noindent Do the same with the second-order solver and observe that it converges
 as second-order.
 }
-\end{quote}
+\end{exercise}
 
 \section{Multi-dimensional advection}
 
