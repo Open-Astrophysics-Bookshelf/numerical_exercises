@@ -138,9 +138,13 @@
 
 % this makes the List of Exercises have a line break before each chapter,
 % just like in the main ToC.
+%
+% this has a bug -- it does not omit the space if the chapter has 0 exercises
 \usepackage{etoolbox}
 \preto\section{%
-  \ifnum\value{section}=0\addtocontents{exc}{\vskip10pt}\fi
+  \ifnum\value{chapter}=1{}\else   % don't skip before Ch 1
+    \ifnum\value{section}=0\addtocontents{exc}{\vskip10pt}\fi
+  \fi
 }
 
 %-----------------------------------------------------------------------------
