@@ -95,15 +95,20 @@
 
 %-----------------------------------------------------------------------------
 % define a new environment for exercises
-\newcounter{exercise}
-\usepackage{changepage}
+%\newcounter{exercise}    % simple way -- no TOC list
+\usepackage{tocloft}
+\newcommand{\listexercisename}{List of Exercises}
+\newlistof[chapter]{exercise}{exc}{\listexercisename}
+\usepackage{changepage}   % used to adjust the margins within the environment
 
 \newenvironment{exercise}% environment name 
 {% begin code 
   \begin{adjustwidth}{1.0cm}{0.5cm}
   \par\vspace{\baselineskip}\noindent 
   \refstepcounter{exercise}%
-  \textbf{Exercise \thechapter.\theexercise:}\ \begin{itshape}% 
+  %\textbf{Exercise \thechapter.\theexercise:}\ \begin{itshape}% 
+  \textbf{Exercise \theexercise:}\ \begin{itshape}% 
+  \addcontentsline{exc}{exercise}{\protect\numberline{\theexercise}}
   %\par\vspace{\baselineskip}\noindent\ignorespaces 
 }% 
 {% end code 
@@ -166,6 +171,10 @@ Notes on Computational Hydrodynamics\\ for Astrophysics}}
 
 \listoffigures
 \addcontentsline{toc}{chapter}{list of figures}
+
+\clearpage
+
+\listofexercise
 
 \clearpage
 
