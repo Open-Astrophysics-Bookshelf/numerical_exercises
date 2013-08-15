@@ -22,7 +22,7 @@ looks like a system of (nonlinear) advection equations, so the
 advection equation provides important insight into the methods used
 for these systems.
 %
-\begin{exercise}
+\begin{exercise}[Linear advection analytic solution]
 {Show that $a(x - ut)$ is a solution to
   Eq.~\ref{eq:advect} for any choice of a.  This means that
 the solution is constant along the lines $x = u t$
@@ -101,7 +101,7 @@ We traditionally write the timestep as
 \end{equation}
 and specify $C$ as part of the problem (a typical value may be $C = 0.7$).
 
-\begin{exercise}
+\begin{exercise}[Perfect advection with a Courant number of 1]
 {Show analytically that when you use $C=1$ in the
   first-order differenced advection equation (Eq.~\ref{eq:fo}) that
   you advect the profile exactly, without any numerical error.}
@@ -114,7 +114,7 @@ Instead, one looks at the most restrictive timestep over all the
 zones and uses that for the entire system.
 
 
-\begin{exercise}
+\begin{exercise}[A 1-d finite-difference solver for linear advection]
 {Write a code to solve the 1-d linear advection equation
   using the discretization of Eq.~\ref{eq:fo} on the domain $[0,1]$ with
   $u=1$ and periodic boundary conditions.  For initial conditions,
@@ -142,7 +142,7 @@ zones and uses that for the entire system.
 \end{exercise}
 
 
-\begin{exercise}
+\begin{exercise}[FTCS and stability]
 {You may think that using a centered-difference for
   the spatial derivative, $u_x \sim (u_{i+1} - u_{i-1})/(2 \Delta x)$
   would be more accurate.  This method is called FTCS (forward-time,
@@ -161,7 +161,7 @@ method is stable for $0\le C \le 1$.
 the difference Fourier modes are decoupled, nevertheless, we use its
 ideas for nonlinear advection problems as well).
 
-\begin{exercise}
+\begin{exercise}[Stability analysis]
 {To get an alternate feel for stability, we can ask
   what the terms left out by truncation look like.  That is, we can
   begin with the discretized equation:
@@ -324,7 +324,7 @@ left, $\mathrm{lo-2}$.  Therefore, we need two ghost cells at each end
 of the domain for this method.  Higher-order limiters may require even
 more ghost cells.
 
-\begin{exercise}
+\begin{exercise}[A second-order finite-volume solver for linear advection]
 {Write a second-order solver for the linear advection
   equation.  To mimic a real hydrodynamics code, your code should have
   routines for finding initializing the state, filling boundary conditions,
@@ -358,7 +358,7 @@ The converse is true too, which suggests that in order to have a
 second-order accurate method for this linear equation, the algorithm
 itself must be nonlinear.
 
-\begin{exercise}
+\begin{exercise}[Limiting and overshoots]
 {To remove the oscillations in
 practice, we limit the slopes to ensure that no new minima or maxima are
 introduced during the advection process.  There are many choices for
@@ -465,7 +465,7 @@ limiter, which is more accurate in smooth flows (this is shown in
 \cite{colella:1985}, Eqs. 2.5 and 2.6; and \cite{colella:1990},
 Eq. 191).
 
-\begin{exercise}
+\begin{exercise}[Limiting and reduction in order-of-accuracy]
 {Show analytically that if you fully limit the slopes
   (i.e.\ set $\partial a/\partial x |_i = 0$, that the second-order
   method reduces to precisely our first-order finite-difference discretization,
@@ -589,7 +589,7 @@ to get a measure of the relative error:
 Note that it is important in these definitions to normalize by the number
 of zones, $N$, otherwise our error will be resolution-dependent.
 %
-\begin{exercise}
+\begin{exercise}[Convergence testing]
 { Run the first-order solver for several different $\Delta x$s,
 each a factor of 2 smaller than the previous.  Compute $\epsilon$ for
 each resolution and observe that it converges in a first-order fashion

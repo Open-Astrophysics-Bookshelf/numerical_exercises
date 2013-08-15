@@ -76,7 +76,7 @@ of this matrix can be found in a variety of sources (e.g. \cite{toro:1997,athena
 
 An alternate way to express these equations is using the {\em
   primitive variables}: $\rho, u, p$.
-\begin{exercise}
+\begin{exercise}[Primitive variable form of the Euler equations]
 {Show that the Euler equations in primitive form can
   be written as
 \begin{equation}
@@ -96,7 +96,7 @@ A(q) = \left ( \begin{array}{ccc} u  & \rho     & 0 \\
 %
 The eigenvalues of $A$ can be found via $| A - \lambda I | = 0$,
 where $|\ldots|$ indicates the determinant and $\lambda$ are the eigenvalues.
-\begin{exercise}
+\begin{exercise}[The eigenvalues of the Euler system]
 {
 Show that the eigenvalues of $A$ are $\lambda^\evm = u -c$, $\lambda^\evz = u$, $\lambda^\evp = u+c$.
 }
@@ -122,7 +122,7 @@ l^\enu \, A  = \lambda^\enu l^\enu
 where $\nu = \{-,\circ,+\}$ corresponding to the three waves, and 
 there is one right and one left eigenvector for each of the eigenvalues.
 %
-\begin{exercise}
+\begin{exercise}[Eigenvectors of the Euler system]
 {
 Show that the right eigenvectors are:
 \begin{equation}
@@ -164,7 +164,7 @@ L = \left ( \begin{array}{c} l^\evm \\
 \end{equation}
 Note that $L\, R = I = R\, L$, and
 $L = R^{-1}$.
-\begin{exercise}
+\begin{exercise}[Characteristic form of the Euler equations]
 {
 Show that $\Lambda = L A R$ is a diagonal matrix with the diagonal elements
 simply the 3 eigenvalues we found above:
@@ -476,7 +476,7 @@ expressed as:
 \begin{equation}
 P \chi = \sum_\nu (l^{(\nu)} . \chi) r^{(\nu)}
 \end{equation}
-\begin{exercise}
+\begin{exercise}[Characteristic projection]
 {
 Show that $P q = q$, using the eigenvectors corresponding to the primitive
  variable form of the Euler equations.}
@@ -605,7 +605,7 @@ recognizing that (similar to M\&C Eq.\ 88, but for the $i+1/2,L$ interface):
 \end{equation}
 where $q(x)$ is the reconstructed functional form of $q$ in the zone.
 
-\begin{exercise}
+\begin{exercise}[The average state reacting the interface]
 {Show that this is exactly true for a linear reconstruction of $q(x)$, i.e.,
 $q(x) = q_i + (\partial q/\partial x) (x - x_i)$.}
 \end{exercise}
@@ -689,7 +689,7 @@ Figure~\ref{fig:ppm_trace} illustrates the process of integrating under
 the parabolic profile.
 
 
-\begin{exercise}
+\begin{exercise}[Conservative interpolation]
 {Show that $q(x)$ is a conservative interpolant.  That is
 \begin{equation}
 \frac{1}{\Delta x} \int_{x_{i-1/2}}^{x_{i+1/2}} q(x) dx = q_i
@@ -1008,7 +1008,7 @@ There are now 4 eigenvalues.  For $A^{(x)}(q)$, they are $u-c$, $u$,
 $u$, $u+c$.  If we just look at the system for the $x$ evolution, we
 see that the transverse velocity (in this case, $v$) just advects with
 velocity $u$, corresponding to the additional eigenvalue.
-\begin{exercise}
+\begin{exercise}[Eigenvectors for the 2-d Euler equations]
 {
 Derive the form of $A^{(x)}(q)$ and $A^{(y)}(q)$ and find their left and right eigenvectors.}
 \end{exercise}
