@@ -93,19 +93,21 @@
 %-----------------------------------------------------------------------------
 % define a new environment for exercises
 %\newcounter{exercise}    % simple way -- no TOC list
+% toclot allows us to make a list of exercises
+% the new environment stuff came from http://www.dickimaw-books.com/latex/novices/html/newenv.html
 \usepackage{tocloft}
 \newcommand{\listexercisename}{List of Exercises}
 \newlistof[chapter]{exercise}{exc}{\listexercisename}
 \usepackage{changepage}   % used to adjust the margins within the environment
 
-\newenvironment{exercise}% environment name 
+\newenvironment{exercise}[1][]% environment name 
 {% begin code 
   \begin{adjustwidth}{1.0cm}{0.5cm}
   \par\vspace{\baselineskip}\noindent 
   \refstepcounter{exercise}%
   %\textbf{Exercise \thechapter.\theexercise:}\ \begin{itshape}% 
   \textbf{Exercise \theexercise:}\ \begin{itshape}% 
-  \addcontentsline{exc}{exercise}{\protect\numberline{\theexercise}}
+  \addcontentsline{exc}{exercise}{\protect\numberline{\theexercise} #1}
   %\par\vspace{\baselineskip}\noindent\ignorespaces 
 }% 
 {% end code 
