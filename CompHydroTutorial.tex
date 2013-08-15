@@ -154,7 +154,9 @@
 \begin{center}
 \HRule
 {\Huge \textsf{{
-Notes on Computational Hydrodynamics\\ for Astrophysics}}
+Lecture Notes on \\
+Computational Hydrodynamics\\ 
+for Astrophysics}}
 }
 \HRule
 \\[2em]
@@ -204,10 +206,20 @@ common methods used in computational hydrodynamics for astrophysical
 flows.  They are written at a level appropriate for upper-level
 undergraduates.
 
+These are very much a work in progress, likely not spell-checked, and 
+definitely not complete.  These notes are updated at irregular
+intervals, usually when I have a new student working with me, or if
+I am using them for a course.
+
 The best way to understand the methods described here is to run
 them for yourself.  The {\sf pyro} code is designed to make such
 experimentation easy.  You can download {\sf pyro} at: 
 \url{http://bender.astro.sunysb.edu/hydro_by_example/}
+
+These notes benefited from numerous conversations with Ann Almgren,
+John Bell, Alan Calder, Chris Malone, \& Andy Nonaka.
+
+If you find errors, please e-mail me at Michael.Zingale@stonybrook.edu
 
 \clearpage
 
@@ -216,9 +228,10 @@ experimentation easy.  You can download {\sf pyro} at:
 
 \chapter{What Is Simulation?}
 
+Astronomy is an observation science.
 Unlike in terrestrial physics, we do not have the luxury of being able
 to build a model system and do physical experimentation on it to understand
-the core physics.  We have to take what nature gives us, through observation.
+the core physics.  We have to take what nature gives us.
 Simulation enables us to build a virtual model of a system and allows us
 to do virtual experiments to understand how this system reacts to a range
 of conditions and assumptions.  
@@ -234,7 +247,7 @@ and we need to convert the continuous functional form of our system
 into a discrete form that can be represented in the finite memory of 
 a computer.  This introduces yet more approximation.  V\&V
 
-Blindly trusting the numbers that come out of the code is a receipe
+Blindly trusting the numbers that come out of the code is a recipe
 for disaster.  You don't stop being a physicist the moment you execute
 the code---you job as a computational scientist is to make sure that
 the code is producing reasonable results, by testing it against known
@@ -260,7 +273,7 @@ your are using is doing under the hood.  This means understanding the
 core methods used in our field.  These notes are designed to provide
 a basic tour of some of the more popular methods, referring to the 
 key papers for full derivations and details.  A companion python code,
-{\sf pyro} is available to help 
+{\sf pyro} is available to help. 
 
 
 
