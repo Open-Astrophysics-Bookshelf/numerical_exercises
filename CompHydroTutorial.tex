@@ -101,7 +101,6 @@
 % the [chapter] argumenet here means that we reset the numbers each chapter
 % exc is the short name we give to this new list
 \newlistof[chapter]{exercise}{exc}{\listexercisename}  
-
 \usepackage{changepage}   % used to adjust the margins within the environment
 
 % environment name, with optional argument for display in the list of
@@ -146,6 +145,9 @@
     \ifnum\value{section}=0\addtocontents{exc}{\vskip10pt}\fi
   \fi
 }
+
+% indent these the standard amount for a chaptered section
+\setlength{\cftexerciseindent}{1.5em}
 
 %-----------------------------------------------------------------------------
 
