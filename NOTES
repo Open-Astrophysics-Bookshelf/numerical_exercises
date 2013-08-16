@@ -1,5 +1,7 @@
--- ODEs: do a stiff system, show simple backward difference, and
-   higher order stuff
+-- add to Ch 1 a review of numerical methods:
 
--- fitting?
+   . truncation vs. roundoff error
+   . numerical differentiation and integration
+   . ODEs
+   . linear algebra
 
