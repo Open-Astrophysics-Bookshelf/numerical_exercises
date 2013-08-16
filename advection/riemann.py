@@ -73,15 +73,16 @@ def riemann():
 
     
 
-    pylab.xlim(xl[0]-0.5*dx,xr[2*ng+nzones-1]+0.5*dx)
+    pylab.xlim(xl[0]-0.15*dx,xr[2*ng+nzones-1]+0.15*dx)
     pylab.ylim(-0.25, 0.6)
     pylab.axis("off")
 
     pylab.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
 
     f = pylab.gcf()
-    f.set_size_inches(8.0,2.0)
+    f.set_size_inches(7.0,2.0)
 
+    pylab.tight_layout()
 
     pylab.savefig("riemann.png")
     pylab.savefig("riemann.eps")
