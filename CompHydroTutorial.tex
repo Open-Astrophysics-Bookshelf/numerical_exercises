@@ -179,6 +179,11 @@
 \renewcommand*\contentsname{\bf\textsf{Table of Contents}}
 
 
+% short table of contents
+%\usepackage{shorttoc}
+
+
+
 \begin{document}
 
 \frontmatter
@@ -216,6 +221,9 @@ for Astrophysics}}
 Attribution-NonCommercial-NoDerivs 3.0 Unported (CC BY-NC-ND 3.0)
 license
 
+\clearpage
+
+%\shorttoc{Chapter Listing}{0}
 
 
 \setcounter{tocdepth}{2}
@@ -229,6 +237,7 @@ license
 \clearpage
 
 \listofexercise
+\addcontentsline{toc}{chapter}{list of exercises}
 
 \clearpage
 
