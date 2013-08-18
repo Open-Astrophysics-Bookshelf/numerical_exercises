@@ -8,8 +8,73 @@
 
 Method of lines vs.\ operator splitting
 
-
 \section{Ex: diffusion-reaction}
+
+Consider a diffusion-reaction equation:
+\begin{equation}
+\phi_t = \kappa \phi_{xx} = \frac{1}{\tau} R(\phi)
+\end{equation}
+This can be thought of as a simple model for a combustion flame, and
+can propagate a front.  It is often the case that the reactions are
+stiff, and require a smaller timestep then the diffusion part.  In
+fact, we may want to use an implicit integration method designed for
+stiff ODEs for the reaction part, but use a standard explicit method
+for the diffusion part.  This requires operator splitting.
+
+We can use Strang splitting \cite{strang} to make the integration
+second-order accurate overall:
+\begin{equation}
+\phi^{n+1} = R_{\Delta t/2} D_{\Delta t} R_{\Delta t/2} \phi^n
+\end{equation}
+where $R_{\Delta t/2}$ represents reacting for a step of $\Delta t/2$
+and $D_{\Delta t}$ represents diffusing for a step of $\Delta t$.  In
+each case, these operators act as if the other were not present, but
+they see the effect of the previous operation on the input $\phi$.  
+
+No explict source terms describing one process appear in the other
+process' update.  The procedure for updating appears as:
+\begin{itemize}
+\item {\em Evolve reaction ODE system for $\Delta t/2$}
+   %
+   \begin{equation}
+   \frac{d\phi^\star}{dt} = \frac{1}{\tau} R(\phi^\star), \qquad 
+   \phi^\star(0) = \phi^n
+   \end{equation}
+
+\item {\em Solve the diffusion equation for $\Delta t$ with an
+           implicit Crank-Nicolson discretization}
+   %
+   \begin{equation}
+   \frac{\phi^{\star\star} - \phi^\star}{\Delta t} =
+      \frac{1}{2} (D(\phi^\star) + D(\phi^{\star\star}))
+   \end{equation}
+
+\item {\em Evolve reaction ODE system for $\Delta t/2$}
+   %
+   \begin{equation}
+   \frac{d\phi^{n+1}}{dt} = \frac{1}{\tau} R(\phi^{n+1}), \qquad 
+   \phi^{n+1}(0) = \phi^{\star\star}
+   \end{equation}
+
+\end{itemize}
+
+\begin{exercise}[Diffusion-reaction system]
+ Consider a simple reaction source
+ \begin{equation}
+ R(\phi) = \frac{1}{4} \phi (1 - \phi)
+ \end{equation}
+ This is called a KPP reaction source.
+ Here $\phi$ can be thought of as a progress variable that varies
+ between pure ash ($\phi = 0$) and pure fuel ($\phi = 1$).
+
+ Solve the system with this source.  Note that you should begin with
+ some smooth initial conditions---if they are too sharp than the 
+ C-N discretization will cause jagged features to appear.  
+ The solution in this case is a wave with speed $S = \sqrt{\kappa/\tau}$
+ and thickness $\delta = \sqrt{\kappa \tau}$ (see \cite{vladimirova2006} for
+ some details of this system).
+\end{exercise}
+
 
 \section{Ex: advection-diffusion}
 
