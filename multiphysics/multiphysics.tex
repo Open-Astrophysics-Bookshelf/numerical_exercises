@@ -33,7 +33,7 @@ they see the effect of the previous operation on the input $\phi$.
 
 No explict source terms describing one process appear in the other
 process' update.  The procedure for updating appears as:
-\begin{itemize}
+\begin{enumerate}
 \item {\em Evolve reaction ODE system for $\Delta t/2$}
    %
    \begin{equation}
@@ -56,7 +56,7 @@ process' update.  The procedure for updating appears as:
    \phi^{n+1}(0) = \phi^{\star\star}
    \end{equation}
 
-\end{itemize}
+\end{enumerate}
 
 \begin{exercise}[Diffusion-reaction system]
  Consider a simple reaction source
@@ -78,6 +78,53 @@ process' update.  The procedure for updating appears as:
 
 \section{Ex: advection-diffusion}
 
-Here we look at the viscous Burger's equation.
+The viscous Burger's equation appears as:
+\begin{equation}
+u_t + u u_x = \epsilon u_{xx}
+\end{equation}
+This admits shocks and rarefactions just like the inviscid form, but now
+the viscosity can act to smooth out the shock---instead of being
+infinitely thin, it will have a physical width.
 
+As we saw earlier, there are efficient, accurate methods for handling
+the explicit parts explicitly, but for diffusion, we often want to 
+solve it implicitly.  We can split the solution up, but couple the 
+two processes together to make a method that is overall second-order
+accurate in time.  We write our equation as:
+\begin{equation}
+u_t + A(u) = D(u)
+\end{equation}
+with $A(u) = [\frac{1}{2} u^2]_x$ and $D(u) = eu_{xx}$.  Then our update 
+appears in two steps.
+\begin{enumerate}
+\item {\em Find the advective update over the timestep}:
+   We use an approximation of the diffusion term at time-level $n$, $D(u^n)$
+   as a source in the construction of the interface states for the 
+   advective part.  Once the interface states, $u_{i+1/2}^{n+1/2}$ are
+   known, we construct the advective update term as:
+   \begin{equation}
+   A_i^{n+1/2} = 
+     \frac{\left [ \frac{1}{2} \left (u_{i+1/2}^{n+1/2}\right)^2\right ] -
+           \left [ \frac{1}{2} \left (u_{i-1/2}^{n+1/2}\right)^2\right ]}
+          {\Delta x}
+    \end{equation}
 
+\item {\em Solve the diffusion equation with the advective source}:
+    We use a Crank-Nicolson discretization of the diffusion part of 
+    our equation, with the advective update term appearing as a source.
+    \begin{equation}
+    \frac{u^{n+1} - u^n}{\Delta t} = 
+        \frac{1}{2}D(u^n) + \frac{1}{2}D(u^{n+1}) - A^{n+1/2}
+    \end{equation}
+    
+    This is a linear system that can be solved as a tridiagonal matrix
+    or with multigrid.  The result of this step is that $u^{n+1}$ is
+    updated with both the advection and diffusion terms.
+
+\end{enumerate}
+
+Because the diffusion is done implicitly, the timestep constraint (for
+stability) for this solve is due to the advective portion only.
+
+For step 1, the addition of the explicit diffusion source requires
+a small change to the method we used to predict the interface states.
