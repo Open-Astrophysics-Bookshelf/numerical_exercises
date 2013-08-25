@@ -9,3 +9,7 @@
 *.dvi
 *.bbl
 *.blg
+*-converted-to.pdf
+*.lof
+*.exc
+*.toc
