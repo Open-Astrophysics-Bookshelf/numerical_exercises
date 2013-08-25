@@ -5,3 +5,9 @@
    . ODEs
    . linear algebra
 
+-- add section to each chapter: "Numerical Explorations"
+
+   . create a separate, non-pyro git repo that has basic examples for all 
+     of the methods in 1-d also add discussions from pyro.
+   . start with simple grid class and BC discussion 
+   . 1-d advection example
