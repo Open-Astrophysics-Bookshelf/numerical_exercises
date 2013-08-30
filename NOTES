@@ -11,3 +11,13 @@
      of the methods in 1-d also add discussions from pyro.
    . start with simple grid class and BC discussion 
    . 1-d advection example
+
+
+-- preface:
+
+  "Each of the main chapters has 2 sections at the end: "Numerical
+  Explorations" and "Going further".  The first guides the reader
+  through some exercises using the codes in the git repo associated
+  with these notes.  The latter briefly discusses some of the popular
+  extensions done to the core algorithms discussed here, with pointers
+  to the relevant papers in the literature.
