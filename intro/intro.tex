@@ -52,9 +52,37 @@ key papers for full derivations and details.  A companion python code,
 
 \subsection{Sources of Error}
 
+With any algorithm, there are two sources of error we are concerned
+with: {\em roundoff error} and {\em truncation error}.  
+
+Roundoff arises from the error inherent in representing a floating
+point number with a finite number of bits in the computer memory.  An
+excellent introduction to the details of how computers represent
+numbers is provided in \cite{goldberg:1991}.  While some
+reorganization of algorithms can help minimize roundoff
+(e.g.\ avoiding the subtraction of two very large numbers), it will
+always be present at some level.
+
+\begin{exercise}
+To see roundoff error in action, write a program to find the value
+of $\epsilon$ for which $1 + \epsilon = 1$.
+\end{exercise}
+
+Truncation error is a feature of an algorithm---when converting from a
+continuous representation of a function or operator defined in real
+space to a discrete representation, we make approximations.  
+
 \subsection{Root Finding}
 
 \subsection{Differentiation and Integration}
+
+For both of these processes, there are two cases we might encounter.
+In the first, we have function values at a discrete number of points
+and we want to compute the derivative at a point or integration over a
+range of points.  The second case is when we know a function
+analytically and we want to construct a derivative or integral of this
+function numerically.  In these notes, we'll be concerned only with
+the first case.
 
 \subsection{ODEs}
 
