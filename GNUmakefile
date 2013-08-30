@@ -2,7 +2,8 @@ EPStoPDF = epstopdf
 
 ALL: CompHydroTutorial.pdf
 
-TEXS := finite-volume/finite-volume.tex \
+TEXS := intro/intro.tex \
+        finite-volume/finite-volume.tex \
         advection/advection.tex \
         Euler/Euler.tex \
         multigrid/multigrid.tex \
