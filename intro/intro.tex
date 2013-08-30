@@ -58,10 +58,7 @@ with: {\em roundoff error} and {\em truncation error}.
 Roundoff arises from the error inherent in representing a floating
 point number with a finite number of bits in the computer memory.  An
 excellent introduction to the details of how computers represent
-numbers is provided in \cite{goldberg:1991}.  While some
-reorganization of algorithms can help minimize roundoff
-(e.g.\ avoiding the subtraction of two very large numbers), it will
-always be present at some level.
+numbers is provided in \cite{goldberg:1991}.  
 
 \begin{exercise}[Machine epsilon]
 To see roundoff error in action, write a program to find the value
@@ -69,6 +66,13 @@ of $\epsilon$ for which $1 + \epsilon = 1$.  This value of $\epsilon$
 is called {\em machine epsilon}.  You will get a different value for
 single- vs.\ double-precision floating point arithmetic.
 \end{exercise}
+
+Some reorganization of algorithms can help minimize roundoff,
+e.g.\ avoiding the subtraction of two very large numbers by factoring as:
+\begin{equation}
+x^3 - y^3 = (x - y)(x^2 + xy + y^2)
+\end{equation}
+but roundoff error will always be present at some level.
 
 Truncation error is a feature of an algorithm---we typically
 approximate an operator or function by expanding about some small
