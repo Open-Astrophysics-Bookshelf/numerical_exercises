@@ -11,7 +11,7 @@ TEXS := intro/intro.tex \
         multiphysics/multiphysics.tex \
         incompressible/incompressible.tex 
 
-CompHydroTutorial.pdf: CompHydroTutorial.tex $(TEXS)
+CompHydroTutorial.pdf: CompHydroTutorial.tex $(TEXS) refs.bib
 	pdflatex CompHydroTutorial  < /dev/null
 	bibtex CompHydroTutorial.aux
 	pdflatex CompHydroTutorial  < /dev/null
