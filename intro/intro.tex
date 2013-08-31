@@ -62,19 +62,50 @@ with: {\em roundoff error} and {\em truncation error}.
 Roundoff arises from the error inherent in representing a floating
 point number with a finite number of bits in the computer memory.  An
 excellent introduction to the details of how computers represent
-numbers is provided in \cite{goldberg:1991}.  While some
-reorganization of algorithms can help minimize roundoff
-(e.g.\ avoiding the subtraction of two very large numbers), it will
-always be present at some level.
+numbers is provided in \cite{goldberg:1991}.  
 
-\begin{exercise}
+\begin{exercise}[Machine epsilon]
 To see roundoff error in action, write a program to find the value
-of $\epsilon$ for which $1 + \epsilon = 1$.
+of $\epsilon$ for which $1 + \epsilon = 1$.  This value of $\epsilon$
+is called {\em machine epsilon}.  You will get a different value for
+single- vs.\ double-precision floating point arithmetic.
 \end{exercise}
 
-Truncation error is a feature of an algorithm---when converting from a
-continuous representation of a function or operator defined in real
-space to a discrete representation, we make approximations.  
+Some reorganization of algorithms can help minimize roundoff,
+e.g.\ avoiding the subtraction of two very large numbers by factoring as:
+\begin{equation}
+x^3 - y^3 = (x - y)(x^2 + xy + y^2)
+\end{equation}
+but roundoff error will always be present at some level.
+
+Truncation error is a feature of an algorithm---we typically
+approximate an operator or function by expanding about some small
+quantity.  When we throw away higher-order terms, we are truncating
+our expression, and introducing an error in the representation.  If
+the quantity we expand about truely is small, then the error is small.
+A simple example is to consider the Taylor series representation of
+$\sin(x)$:
+\begin{equation}
+\sin(x) = \sum_{n=1}^\infty (-1)^{n-1} \frac{x^{2n-1}}{(2n-1)!} 
+\end{equation}
+For $|x| \ll 1$, we can approximate this as:
+\begin{equation}
+\sin(x) \approx x - \frac{x^3}{6}
+\end{equation}
+in this case, our truncation error has the leading term $\propto x^5$,
+and we say that our approximation is $\mathcal{O}(x^5)$, or
+$5^\mathrm{th}$-order accurate.
+
+\begin{exercise}[Convergence and order-of-accuracy]
+We will be concerned with the order-of-accuracy of our methods, and a
+good way to test whether our method is behaving properly is to perform
+a convergence test.  Consider our $5^\mathrm{th}$-order accurate
+approximation to $\sin(x)$ above.  Pick a range of $x$'s ($< 1$), and
+compute the error in our approximation as $\epsilon \equiv \sin(x) - [
+  x - x^3/6 ]$, and show that as you cut $x$ in half, $\epsilon$
+reduces by $2^5$---demonstrating $5^\mathrm{th}$-order accuracy.
+\end{exercise}
+
 
 \subsection{Root Finding}
 
