@@ -41,14 +41,14 @@ def riemann():
                 length_includes_head=True, zorder=100)
     
 
-    # pylab.xlim(xl[0]-0.5*dx,xr[2*ng+nzones-1]+0.5*dx)
+    pylab.xlim(gr.xl[0]-0.25*gr.dx,gr.xr[2*ng+nzones-1]+0.25*gr.dx)
     # pylab.ylim(-0.25, 0.75)
     pylab.axis("off")
 
     pylab.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
 
     f = pylab.gcf()
-    f.set_size_inches(8.0,2.5)
+    f.set_size_inches(4.0,2.5)
 
 
     pylab.savefig("states.png")
