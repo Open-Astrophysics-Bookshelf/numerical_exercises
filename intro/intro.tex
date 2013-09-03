@@ -50,6 +50,10 @@ key papers for full derivations and details.  A companion python code,
 
 \section{Numerical Basics}
 
+We assume a familiarity with basic numerical methods, which we
+summarize below.  Any book on numerical methods can provide a
+deeper discussion of these methods.
+
 \subsection{Sources of Error}
 
 With any algorithm, there are two sources of error we are concerned
@@ -105,6 +109,9 @@ reduces by $2^5$---demonstrating $5^\mathrm{th}$-order accuracy.
 
 \subsection{Root Finding}
 
+The most popular method for root finding is the Newton-Raphson method.
+This arises from a Taylor expansion.
+
 \subsection{Differentiation and Integration}
 
 For both of these processes, there are two cases we might encounter.
@@ -117,6 +124,18 @@ the first case.
 
 \subsection{ODEs}
 
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=3.2in]{rk4_k1.eps} 
+\includegraphics[width=3.2in]{rk4_k2} \\
+%
+\includegraphics[width=3.2in]{rk4_k3.eps} 
+\includegraphics[width=3.2in]{rk4_final.eps} \\
+%
+\caption{\label{fig:rk} A graphical illustration of the $4^\mathrm{th}$-order
+Runge-Kutta method.}
+\end{figure}
 
 \section{A Sample of Public Codes}
 
