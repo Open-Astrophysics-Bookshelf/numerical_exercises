@@ -92,7 +92,7 @@ equation with 256 zones, $\kappa = 0.1$, $\tau = 1.0$ at several times.
 
 \section{Ex: advection-diffusion}
 
-The viscous Burger's equation appears as:
+The viscous Burgers' equation appears as:
 \begin{equation}
 u_t + u u_x = \epsilon u_{xx}
 \end{equation}
@@ -143,8 +143,8 @@ stability) for this solve is due to the advective portion only.
 \begin{figure}[t]
 \centering
 \includegraphics[width=5in]{burgervisc}
-\caption[Viscous Burger's equation solution.]
-  {\label{fig:viscburger} Solution to the viscous Burger's equation
+\caption[Viscous Burgers' equation solution.]
+  {\label{fig:viscburger} Solution to the viscous Burgers' equation
   with a variety of different viscosities.  The initial conditions was
   a single wavelength of a sine wave for $x \in [1/3,2/3]$, and $u = 1$
   otherwise.
@@ -166,10 +166,10 @@ diffusion on the prediction of the states for advection.  This entered
 into our states when we replaced $\partial u/\partial t$ with our PDE
 equation.  The spatial derivative, $\partial u/\partial x$ is replaced
 by a monotonized difference, and the method then proceeds as with the
-regular Burger's equation.  The Riemann problem is unchanged from the
+regular Burgers' equation.  The Riemann problem is unchanged from the
 inviscid case.
 
-Figure~\ref{fig:viscburger} shows the solution of the viscous Burger's
+Figure~\ref{fig:viscburger} shows the solution of the viscous Burgers'
 equation for shock initial conditions with different amounts of
 viscosity.  Notice that the effect of the viscosity is to smooth the
 shock profile, but the shock position itself agrees between the cases.
