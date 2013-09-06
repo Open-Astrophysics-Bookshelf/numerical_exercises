@@ -107,11 +107,6 @@ reduces by $2^5$---demonstrating $5^\mathrm{th}$-order accuracy.
 \end{exercise}
 
 
-\subsection{Root Finding}
-
-The most popular method for root finding is the Newton-Raphson method.
-This arises from a Taylor expansion.
-
 \subsection{Differentiation and Integration}
 
 For both of these processes, there are two cases we might encounter.
@@ -121,6 +116,34 @@ range of points.  The second case is when we know a function
 analytically and we want to construct a derivative or integral of this
 function numerically.  In these notes, we'll be concerned only with
 the first case.
+
+\subsection{Root Finding}
+
+The most popular method for root finding is the {\em Newton-Raphson method}.
+This arises from a Taylor expansion.  If you wish to find $x$, such that
+$f(x) = 0$, and start with an initial guess $x_0$ that you believe is
+close to the root, then you can improve the guess to the root by an amount
+$\delta x$ as:
+\begin{equation}
+f(x_0 + \delta x) \sim f(x_0) + f^\prime(x_0) \delta x + \ldots = 0
+\end{equation}
+\begin{equation}
+\delta x = -\frac{f(x_0)}{f^\prime(x_0)}
+\end{equation}
+This can be used to correct out guess as $x_0 \leftarrow x_0 + \delta
+x$, and we can iterate on this procedure until $\delta x$ falls below
+some tolerance.
+
+The main `gotya' with this technique is that you need a good initial guess.
+In the Taylor expansion, we threw away the $\delta x^2$ term, but if our
+guess was far from the root, this (and higher-order) term may not be small.
+Obviously, the derivative must be non-zero in the region around the 
+root that you search.
+
+The {\em secant method} for root finding is essentially
+Newton-Raphson, but instead of using an analytic derivative,
+$f^\prime$ is estimated as a numerical difference.
+
 
 \subsection{ODEs}
 
