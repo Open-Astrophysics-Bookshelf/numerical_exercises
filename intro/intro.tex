@@ -159,6 +159,8 @@ first-order explicit update ({\em Euler's method}) appears as:
 \begin{equation}
 y^{n+1}_k = y^n_k + \Delta t f(t^n, y^n_k)
 \end{equation}
+where $\Delta t$ is the stepsize. 
+
 Implicit methods different the system in a way that includes the new
 value of the dependent variables in the evaluation of $f$---the resulting
 implicit system is usually solved using, for example, Newton-Raphson iteration
@@ -167,8 +169,8 @@ A first-order implicit update (called {\em backward Euler}) is:
 y^{n+1}_k = y^n_k + \Delta t f(t^{+1}, y^{n+1}_k)
 \end{equation}
 
-Euler methods are easier to program and run faster, but implicit methods
-work better for {\em stiff} problems.
+Explicit methods are easier to program and run faster (for a given $
+Delta t$, but implicit methods work better for {\em stiff} problems.
 
 Perhaps the most popular explicit method for ODEs is the 4th-order
 Runge-Kutta method.
