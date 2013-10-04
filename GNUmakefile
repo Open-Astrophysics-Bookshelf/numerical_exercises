@@ -5,6 +5,7 @@ ALL: CompHydroTutorial.pdf
 TEXS := intro/intro.tex \
         finite-volume/finite-volume.tex \
         advection/advection.tex \
+	burgers/burgers.tex \
         Euler/Euler.tex \
         multigrid/multigrid.tex \
         diffusion/diffusion.tex \
