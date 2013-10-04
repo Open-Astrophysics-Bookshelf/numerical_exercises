@@ -120,49 +120,6 @@ the function $f(x)$ in each cell as:
 \langle f\rangle_i = \frac{1}{\Delta x} \int_{x_{i-1/2}}^{x_{i+1/2}} f(x) dx
 \end{equation}
 
-\section{Differences and order of accuracy}
-
-We can express the first derivative of a quantity $a$ at the cell-center $i$
-as:
-\begin{equation}
-\left . \frac{\partial a}{\partial x} \right |_i \approx \frac{a_i - a_{i-1}}{\Delta x}
-\end{equation}
-or
-\begin{equation}
-\left . \frac{\partial a}{\partial x} \right |_i \approx \frac{a_{i+1} - a_i}{\Delta x}
-\end{equation}
-%
-(Indeed, as $\Delta x \rightarrow 0$, this is the definition of a derivative from calculus.)
-Both of these are {\em one-sided differences}.  By Taylor expanding the data
-about $x_i$, we see
-\begin{equation}
-a_{i+1} = a_i + \Delta x \left . \frac{\partial a}{\partial x} \right |_i + \frac{1}{2} \Delta x^2 \left . \frac{\partial^2 a}{\partial x^2} \right |_i + \ldots
-\end{equation}
-Solving for ${\partial a}/{\partial x} |_i$, we see
-\begin{equation}
-\left . \frac{\partial a}{\partial x} \right |_i = \frac{a_i - a_{i-1}}{\Delta x} + \mathcal{O}(\Delta x)
-\end{equation}
-where $\mathcal{O}(\Delta x)$ indicates that the order of accuracy of
-this approximation is $\sim \Delta x$.  We say that this is {\em first
-  order accurate}.  This means that we are neglecting terms that scale
-as $\Delta x$.  This is our {\em truncation error}---the error that
-arises because our numerical approximation throws away higher order
-terms.  The approximation ${\partial a}/{\partial x} |_i = ({a_{i+1} -
-  a_i})/{\Delta x}$ has the same order of accuracy.
-
-\begin{exercise}[Trunction error]
-{Show that a centered difference, ${\partial a}/
-  {\partial x} |_i = ({a_{i+1} - a_{i-1}})/({2 \Delta x})$, is second order
-accurate, i.e.\ its truncation error is $\mathcal{O}(\Delta x^2)$.}
-\end{exercise}
-
-Generally speaking, higher-order methods have lower numerical error
-associated with them.
-
-Notice that the righthand side of all these approximations involve
-some linear combinations of $a_i$'s.  We call this the {\em stencil}.
-The {\em width} of the stencil is a measure of how many zones on
-either side of zone $i$ we reach when computing our approximation.
 
 \section{Finite-volume grids}
 
@@ -195,10 +152,23 @@ a_i = \frac{1}{\Delta x} \int_{x_{i-1/2}}^{x_{i+1/2}} a(x) dx \sim a(x_i)
 This means that we can treat the average of $a$ over a zone as simply $a(x)$
 evaluated at the zone center if we only want second-order accuracy.
 
-\begin{exercise}[Order-of-accuracy]
+\begin{exercise}[Finite-volume vs.\ finite-difference centering]
 {Show that Eq.~\ref{eq:fv_cc} is true to $O(\Delta x^2)$ by expanding
 $a(x)$ as a Taylor series in the integral.}
 \end{exercise}
+
+\subsection{Differences and order of accuracy}
+
+In practice, we can use the 2nd-order centered difference from
+\S~\ref{ch:intro:diff} treating the finite-voume data as living at the
+cell-centers and still be second-order accurate.  For higher accuracy,
+we can fit a {\em conservative interpolant} to a collection of points 
+and then differentiate the interpolant itself.
+
+Notice that the righthand side of all derivative approximations involve
+some linear combinations of $a_i$'s.  We call this the {\em stencil}.
+The {\em width} of the stencil is a measure of how many zones on
+either side of zone $i$ we reach when computing our approximation.
 
 \subsection{Conservation}
 
