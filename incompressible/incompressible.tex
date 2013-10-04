@@ -92,6 +92,8 @@ discretized Laplacian, $L$, would be the same as applying $G$ and $D$
 in succession (i.e. $L = DG$).  Depending on our data centerings, we
 may prefer to discretize the Laplacian independently to $D$ and $G$,
 such that $L \ne DG$.  This is called an {\em approximate projection}.
+Note that for an approximate projection, $P$ is not
+idempotent: $P^2 U \ne PU$.
 
 Many variations on this basic idea exist, using alternate forms of the
 projection, different grid centerings of the $\phi$ variable, and
@@ -729,6 +731,20 @@ algorithm.
 
   This system is described in detail in \cite{pember-flame,
     DayBell:2000,SNpaper}.
+
+\item {\em Stratified flows}: When the background is stratified, a
+  different velocity constraint can arise, capturing the expansion of
+  the fluid element due to the pressure change with altitude.  For example,
+  with an ideal gas, the equation of state can be recast as:
+  \begin{equation}
+  \nabla \cdot (p_0^{1/\gamma}) = 0
+  \end{equation}
+  where $p_0(z)$ is the pressure as a function of height,
+  representating the hydrostatic background, and $\gamma$ is the ratio
+  of specific heats.  For a general equation of state,
+  $p_0^(1/\gamma)$ is replaced with something more complicated (see
+  \cite{ABRZ:I,ABRZ:II,ABNZ:III} for the development of a low Mach
+  hydrodynamics method for stratified astrophysical flows).
 
 \item {\em Nodal projection}: instead of discretizing the final projection
   using a cell-centered $\phi$, ABS use a node-centered $\phi$.  While
