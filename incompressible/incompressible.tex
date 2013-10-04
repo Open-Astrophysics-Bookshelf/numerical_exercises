@@ -12,11 +12,15 @@ acoustic/shock waves).  The Lagrangian derivative of the density
 captures the changes in the fluid, and is a measure of its compressiblity.
 From the continuity equation, we see:
 \begin{equation}
-\frac{1}{\rho}\frac{D\rho}{Dt} = - \nabla \cdot U
+-\frac{1}{\rho}\frac{D\rho}{Dt} = \nabla \cdot U
 \end{equation}
+Note that for $\nabla \cdot U > 0$, we have $-(1/\rho) (D\rho/Dt) > 0$,
+which means that $\rho$ gets smaller---this is expansion of the Lagrangian
+fluid element.
+
 A fluid in which the density (and therefore volume) of a fluid element is not
 allowed to change is called {\em incompressible}.  An incompressible
-fluid objects the velocity constraint:
+fluid obeys the velocity constraint:
 \begin{equation}
 \nabla \cdot U = 0
 \end{equation}
