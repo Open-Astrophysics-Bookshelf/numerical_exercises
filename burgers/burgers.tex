@@ -39,9 +39,56 @@ characteristic lines intersect, then there it is not possible to trace
 backward from time to learn where the flow originated.  This is the 
 condition for a {\em shock}.
 
-Shock speed from jump conditions
+\begin{figure}[t]
+\centering
+\includegraphics[width=4in]{rh}
+\caption[Rankine-Hugoniot conditions]{\label{fig:rh} A rightward moving shock in the $x$-$t$
+   plane separating two states: $u_l$ and $u_r$.}
+\end{figure}
 
-Riemann problem
+The shock speed is computed through the {\em Rankine-Hugoniot} jump
+conditions.  For a scalar equation, these are easy to construct.
+We'll follow the method of \cite{leveque:2002}.  Figure~\ref{fig:rh}
+shows two states separated by a rightward moving shock in the $x$-$t$
+plane.  At time $t^n$, the state in our interval ($x \in [x_l,x_r]$)
+is entirely $u_r$, and at the later time, $t^{n+1}$ it is entirely
+$u_l$.  The shock moves with a speed $S = \Delta x/\Delta t$ in this
+figure.  To determine the speed, we integrate our conservation law over
+both space and time (and normalize by $\Delta x = x_r - x_l$):
+\begin{equation}
+\frac{1}{\Delta x} \int_{x_l}^{x_r} dx \int_{t^n}^{t^{n+1}} dt u_t = 
+  - \frac{1}{\Delta x} \int_{x_l}^{x_r} dx \int_{t^n}^{t^{n+1}} dt \left [ f(u) \right ]_x
+\end{equation}
+Doing the $t$ integral on the left and $x$ integral on the right, we have
+\begin{equation}
+\frac{1}{\Delta x} \int_{x_l}^{x_r}\left \{ u(t^{n+1}) - u(t^n) \right \} dx = 
+  - \frac{1}{\Delta x} \int_{t^n}^{t^{n+1}} \left \{ f(u) |_{x=x_r} - f(u) |_{x=x_l} \right \} dt
+\end{equation}
+Recognizing that at $t=t^n$, $u = u_r$ and at $t=t^{n+1}$, $u = u_l$,
+$\{ u(t^{n+1}) - u(t^n) \}$ in the left side becomes $\{ u_l -u_r \}$.
+For the right size, we see that all along $x=x_l$ the flux is $f =
+f(u_l)$ for $t\in [t^n, t^{n+1}]$.  Likewise, all along $x=x_r$, the
+flux is $f = f(u_r)$ in the same time interval (see the figure).
+Therefore, our expression becomes:
+\begin{equation}
+(u_l - u_r) = -\frac{\Delta t}{\Delta x} (f(u_r) - f(u_l)
+\end{equation}
+and using $S = \Delta x/\Delta t$, we see
+\begin{equation}
+S = \frac{f(u_r) - f(u_l)}{u_r - u_l}
+\end{equation}
+
+For Burgers' equation, substituting in $f(u) = u^2/2$, we get
+\begin{equation}
+S = \frac{1}{2}(u_l + u_r)
+\end{equation}
+
+With the shock speed known, the Riemann problem is straightforward.  If there
+is a shock (compression, so $u_l > u_r$) then we compute the shock speed and
+check whether the shock is moving to the left or right, and then use the appropriate
+state.  If there is no shock, then we can simply use upwinding, as there is no
+ambiguity as to how to trace backwards in time to the correct state.
+Putting this together, we have:
 \begin{eqnarray}
 \mathrm{if~} u_l > u_r:&& u_s = \left \{ \begin{array}{cl}
                 u_l & \mathrm{if~} S > 0 \\ 
@@ -90,3 +137,14 @@ reconstruction and the MC limiter.
 
 
 \section{Going further}
+
+\begin{itemize}
+\item The equation we've been dealing with here is the {\em inviscid} Burgers' equation. 
+The full Burgers' equation includes viscosity (a velocity diffusion):
+\begin{equation}
+u_t + u u_x = \epsilon u_{xx}
+\end{equation}
+To solve this, we need to first learn about techniques for diffusion, and then how to
+solve equations with multiple PDE types.  This will be described later.
+
+\end{itemize}
