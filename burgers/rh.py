@@ -58,8 +58,8 @@ def rh():
 
     pylab.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
 
-    pylab.xlim(-0.1,1.7*dx)
-    pylab.ylim(-0.1,1.7*dx)
+    pylab.xlim(-0.1,1.4*dx)
+    pylab.ylim(-0.1,1.4*dx)
 
     f = pylab.gcf()
     f.set_size_inches(8.0,8.0)
