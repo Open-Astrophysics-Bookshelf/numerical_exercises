@@ -14,8 +14,24 @@
 \usepackage{mathpazo}
 %\usepackage{helvet}
 
-% margins -- this needs to come before fncychap
-\usepackage[top=1.0in,bottom=1.0in,inner=1.0in,outer=1.0in]{geometry} 
+% margins and paper size -- this needs to come before fncychap
+% see http://stackoverflow.com/questions/3729099/latex-paper-size
+\usepackage[top=0.75in,
+            bottom=0.75in,
+            inner=1.0in,
+            outer=0.75in]{geometry} 
+\geometry{papersize={7in,10in}}
+
+% crop marks (for printing)
+%\usepackage[
+%  noinfo,
+%  cam,
+%  cross,                % crosses as marks
+%  width=7.25in,         % the width of the galley
+%  height=10.25in,        % the height of the galley
+%  center                % actual page is centered on the galley
+%]{crop}
+
 
 % this needs to be done before the fncychap style, since that will 
 % redo the chapter stuff
