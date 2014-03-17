@@ -13,7 +13,7 @@ divide these methods into grid-based and gridless methods.
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=6in]{discretizations}
+\includegraphics[width=\linewidth]{discretizations}
 \caption{\label{fig:disc} Taxonomy of different discretizations.}
 \end{figure}
 
@@ -95,9 +95,9 @@ is the same as in the cell-centered finite-difference case.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=5.5in]{fd_grid} \\
-\includegraphics[width=5.5in]{ccfd_grid} \\
-\includegraphics[width=5.5in]{fv_grid}
+\includegraphics[width=\linewidth]{fd_grid} \\
+\includegraphics[width=\linewidth]{ccfd_grid} \\
+\includegraphics[width=\linewidth]{fv_grid}
 \caption[Types of structured grids.]{\label{fig:grids} Different types of structured grids.  Top:
   a finite-difference grid---the discrete data are associated with a
   specific point in space.  Middle: a cell-centered finite-difference
@@ -134,7 +134,7 @@ a_i = \frac{1}{\Delta x} \int_{x_{i-1/2}}^{x_{i+1/2}} a(x) dx
 The figure below shows the grid, with the half-integer indices.
 \begin{figure}[h]
 \centering
-\includegraphics[width=6.0in]{simplegrid2}
+\includegraphics[width=\linewidth]{simplegrid2}
 \caption[A simple 1-d finite-volume grid]{A simple 1-d finite-volume
   grid with the zone-centered and zone-edge indexes.  Here we show
   only the data associated with zone $i$.}
@@ -227,7 +227,7 @@ for all zones in the domain.
 
 \begin{figure}[h]
 \centering
-\includegraphics[width=6.0in]{simplegrid_gc}
+\includegraphics[width=\linewidth]{simplegrid_gc}
 \caption[A simple 1-d finite-volume grid with ghost cells.]{A simple
   1-d finite-volume grid with a single ghost cell at each end of the
   domain.  The domain boundaries are indicated by the heavy vertical
@@ -265,7 +265,7 @@ a_{\mathrm{lo}-1} &=& a_\mathrm{hi}
 
  \begin{figure}
  \centering
- \includegraphics{domain}
+ \includegraphics[width=\linewidth]{domain}
  \caption[Domain decomposition example.]{\label{fig:domain} Domain
    decomposition of the computational domain into 6 separate
    sub-domains.  Each sub-domain here has $5\times 5$ zones.  For one

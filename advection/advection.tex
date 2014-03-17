@@ -5,7 +5,7 @@ numerical methods for dealing with advection, using finite-volume techniques.}
 \end{quote}
 
 
-\section{First-order advection in one-dimension via finite-differences}
+\section{First-order advection in 1-d and finite-differences}
 
 The linear advection equation is simply:
 \begin{equation}
@@ -69,7 +69,7 @@ presence of the ghost points allow us to use the same update equation
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=7.0in]{fd_ghost}
+\includegraphics[width=\linewidth]{fd_ghost}
 \caption[A simple finite-difference grid]{\label{fig:fdgrid} A simple
   finite-difference grid.  The solution is stored at each of the
   labeled points.  The dotted lines show the ghost points used to
@@ -203,7 +203,7 @@ one must not confuse stability with accuracy---the most accurate solutions
 with this method will still have a small $C$).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Second-order advection in one-dimension and the finite-volume method}
+\section{Second-order advection in 1-d and the finite-volume method}
 
 We will typically use a {\em finite-volume} discretization of the
 advection equation.  First we rewrite the advection equation in {\em
@@ -218,7 +218,7 @@ its flux.
 
 \begin{figure}
 \centering
-\includegraphics[width=6.4in]{fv_ghost}
+\includegraphics[width=\linewidth]{fv_ghost}
 \caption[A finite-volume grid with valid cells
   labelled]{\label{fig:fvghost} A finite-volume grid running from
   $\mathrm{lo}, \ldots, \mathrm{hi}$, with two ghost cells at each
@@ -393,23 +393,23 @@ limit.
 
 \begin{figure}[p!]
 \centering
-\includegraphics[width=3.0in]{rea-nolimit-start_001}\hspace{1em}
-\includegraphics[width=3.0in]{rea-nolimit-start_005} \\
-\includegraphics[width=3.0in]{rea-nolimit-start_002}\hspace{1em}
-\includegraphics[width=3.0in]{rea-nolimit-start_006} \\
-\includegraphics[width=3.0in]{rea-nolimit-start_003}\hspace{1em}
-\includegraphics[width=3.0in]{rea-nolimit-start_007} \\
-\includegraphics[width=3.0in]{rea-nolimit-start_004}\hspace{1em}
-\includegraphics[width=3.0in]{rea-nolimit-start_008} \\
+\includegraphics[width=0.49\linewidth]{rea-nolimit-start_001}\hspace{0.2em}
+\includegraphics[width=0.49\linewidth]{rea-nolimit-start_005} \\
+\includegraphics[width=0.49\linewidth]{rea-nolimit-start_002}\hspace{0.2em}
+\includegraphics[width=0.49\linewidth]{rea-nolimit-start_006} \\
+\includegraphics[width=0.49\linewidth]{rea-nolimit-start_003}\hspace{0.2em}
+\includegraphics[width=0.49\linewidth]{rea-nolimit-start_007} \\
+\includegraphics[width=0.49\linewidth]{rea-nolimit-start_004}\hspace{0.2em}
+\includegraphics[width=0.49\linewidth]{rea-nolimit-start_008} \\
 \vskip 0.5in
-\includegraphics[width=3.0in]{rea-start_001}\hspace{1em}
-\includegraphics[width=3.0in]{rea-start_005} \\
-\includegraphics[width=3.0in]{rea-start_002}\hspace{1em}
-\includegraphics[width=3.0in]{rea-start_006} \\
-\includegraphics[width=3.0in]{rea-start_003}\hspace{1em}
-\includegraphics[width=3.0in]{rea-start_007} \\
-\includegraphics[width=3.0in]{rea-start_004}\hspace{1em}
-\includegraphics[width=3.0in]{rea-start_008} \\
+\includegraphics[width=0.49\linewidth]{rea-start_001}\hspace{0.2em}
+\includegraphics[width=0.49\linewidth]{rea-start_005} \\
+\includegraphics[width=0.49\linewidth]{rea-start_002}\hspace{0.2em}
+\includegraphics[width=0.49\linewidth]{rea-start_006} \\
+\includegraphics[width=0.49\linewidth]{rea-start_003}\hspace{0.2em}
+\includegraphics[width=0.49\linewidth]{rea-start_007} \\
+\includegraphics[width=0.49\linewidth]{rea-start_004}\hspace{0.2em}
+\includegraphics[width=0.49\linewidth]{rea-start_008} \\
 \caption[The effect of limiters on initially discontinuous data.]{\label{fig:limitingex}Initially discontinuous data evolved for several steps with
   no limiting (top sequence) and limiting (bottom sequence).  Note
   that without limiting, there are overshoots and undershoots
@@ -449,7 +449,7 @@ can be found in \cite{toro:1997,leveque:2002}.
 
 \begin{figure}
 \centering
-\includegraphics[width=6.0in]{generalgrid}
+\includegraphics[width=\linewidth]{generalgrid}
 \caption[Piecewise linear slopes with an without
   limiting.]{\label{fig:limit} A finite-volume grid showing the cell
   averages (gray horizontal lines), unlimited center-difference slopes
@@ -544,11 +544,11 @@ conservative flux update.
 
 \begin{figure}
 \centering
-\includegraphics[width=6.0in]{rea-start} \\
-\includegraphics[width=6.0in]{rea-reconstruction.eps} \\
-\includegraphics[width=6.0in]{rea-trace.eps} \\
-\includegraphics[width=6.0in]{rea-evolve.eps} \\
-\includegraphics[width=6.0in]{rea-final.eps}
+\includegraphics[width=\linewidth]{rea-start} \\
+\includegraphics[width=\linewidth]{rea-reconstruction.eps} \\
+\includegraphics[width=\linewidth]{rea-trace.eps} \\
+\includegraphics[width=\linewidth]{rea-evolve.eps} \\
+\includegraphics[width=\linewidth]{rea-final.eps}
 \caption[The Reconstruct-Evolve-Average procedure.]{\label{fig:rea}
   Reconstruct-Evolve-Average.  The top panel shows the origina
   cell-average data.  The second panel shows the (limited) piecewise
@@ -803,8 +803,8 @@ the construction of the $a_{i+1/2,j,L}^{n+1/2}$ state.
 %
 \begin{figure}
 \centering
-\includegraphics[width=3.0in]{2dgrid-hat}
-\includegraphics[width=3.0in]{2dgrid-transverse}
+\includegraphics[width=0.495\linewidth]{2dgrid-hat}
+\includegraphics[width=0.495\linewidth]{2dgrid-transverse}
 \caption[The construction of an interface state with the transverse
   component.]{\label{fig:unsplitstates} The construction of the
   $a_{i+1/2,j,L}^{n+1/2}$ state.  Left: first we compute the
