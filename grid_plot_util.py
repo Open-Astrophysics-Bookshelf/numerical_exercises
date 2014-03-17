@@ -171,11 +171,11 @@ def drawGrid(gr, centerOnly=0, drawGhost=0, emphasizeEnd=0, edgeTicks=1, color="
             n += 1
 
 
-def labelCenter(gr, idx, string):
+def labelCenter(gr, idx, string, fontsize="small"):
 
     pylab.text(gr.xc[idx], gr.voff-0.1, string, 
                horizontalalignment='center', verticalalignment='top', 
-               fontsize="small")
+               fontsize=fontsize)
 
 
 def labelEdge(gr, idx, string):
@@ -198,11 +198,11 @@ def labelCellCenter(gr, idx, string):
                fontsize="large")
 
 
-def labelFD(gr, idx, value, string, color="k"):
+def labelFD(gr, idx, value, string, color="k", fontsize="large"):
 
     pylab.text(gr.xc[idx], gr.voff+value+0.1, string,
                horizontalalignment='center', verticalalignment='bottom',
-               fontsize="large", color=color)
+               fontsize=fontsize, color=color)
 
 
 #-----------------------------------------------------------------------------

@@ -26,7 +26,7 @@ i = gr.ilo-gr.ng
 while (i < gr.ng+gr.nx+1):
 
     if not labels[i] == "":
-        gpu.labelCenter(gr, i,   r"$%s$" % (labels[i]))
+        gpu.labelCenter(gr, i,   r"$%s$" % (labels[i]), fontsize="medium")
     i += 1
 
     
@@ -43,17 +43,19 @@ gpu.labelFD(gr, gr.ilo+4, a[gr.ilo+4-gr.ng], r"$a_i$", color="r")
 pylab.plot([gr.xc[gr.ng+nzones/2-1], gr.xc[gr.ng+nzones/2-1]], [-0.35,-0.25], color="k")
 pylab.plot([gr.xc[gr.ng+nzones/2], gr.xc[gr.ng+nzones/2]], [-0.35,-0.25], color="k")
 pylab.plot([gr.xc[gr.ng+nzones/2-1], gr.xc[gr.ng+nzones/2]], [-0.3,-0.3], color="k")
-pylab.text(0.5*(gr.xc[gr.ng+nzones/2-1] + gr.xc[gr.ng+nzones/2]), -0.45, r"$\Delta x$", 
-           horizontalalignment="center")
+pylab.text(0.5*(gr.xc[gr.ng+nzones/2-1] + gr.xc[gr.ng+nzones/2]), -0.45, 
+           r"$\Delta x$", 
+           horizontalalignment="center", fontsize=16)
 
 
-pylab.axis([gr.xmin-1.5*gr.dx,gr.xmax+1.5*gr.dx, -0.5, 1.5])
+pylab.axis([gr.xmin-1.1*gr.dx,gr.xmax+1.1*gr.dx, -0.5, 1.3])
 pylab.axis("off")
 
 pylab.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
 
 f = pylab.gcf()
 f.set_size_inches(10.0,3.0)
+
 
 pylab.savefig("fd_ghost.png")
 pylab.savefig("fd_ghost.eps")
