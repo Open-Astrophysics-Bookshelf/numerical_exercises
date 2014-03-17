@@ -25,11 +25,11 @@ def evolve(gr, a, C, num, nolimit=1):
 
     gpu.drawGrid(gr)
 
-    gpu.labelCenter(gr, gr.ng + nzones/2,   r"$i$")
-    gpu.labelCenter(gr, gr.ng + nzones/2-1, r"$i-1$")
-    gpu.labelCenter(gr, gr.ng + nzones/2+1, r"$i+1$")
-    gpu.labelCenter(gr, gr.ng + nzones/2-2, r"$i-2$")
-    gpu.labelCenter(gr, gr.ng + nzones/2+2, r"$i+2$")
+    gpu.labelCenter(gr, gr.ng + nzones/2,   r"$i$", fontsize="medium")
+    gpu.labelCenter(gr, gr.ng + nzones/2-1, r"$i-1$", fontsize="medium")
+    gpu.labelCenter(gr, gr.ng + nzones/2+1, r"$i+1$", fontsize="medium")
+    gpu.labelCenter(gr, gr.ng + nzones/2-2, r"$i-2$", fontsize="medium")
+    gpu.labelCenter(gr, gr.ng + nzones/2+2, r"$i+2$", fontsize="medium")
 
 
     # draw cell averages
@@ -66,11 +66,11 @@ def evolve(gr, a, C, num, nolimit=1):
 
     gpu.drawGrid(gr)
 
-    gpu.labelCenter(gr, gr.ng + nzones/2,   r"$i$")
-    gpu.labelCenter(gr, gr.ng + nzones/2-1, r"$i-1$")
-    gpu.labelCenter(gr, gr.ng + nzones/2+1, r"$i+1$")
-    gpu.labelCenter(gr, gr.ng + nzones/2-2, r"$i-2$")
-    gpu.labelCenter(gr, gr.ng + nzones/2+2, r"$i+2$")
+    gpu.labelCenter(gr, gr.ng + nzones/2,   r"$i$", fontsize="medium")
+    gpu.labelCenter(gr, gr.ng + nzones/2-1, r"$i-1$", fontsize="medium")
+    gpu.labelCenter(gr, gr.ng + nzones/2+1, r"$i+1$", fontsize="medium")
+    gpu.labelCenter(gr, gr.ng + nzones/2-2, r"$i-2$", fontsize="medium")
+    gpu.labelCenter(gr, gr.ng + nzones/2+2, r"$i+2$", fontsize="medium")
 
 
     # draw cell averages
@@ -110,11 +110,11 @@ def evolve(gr, a, C, num, nolimit=1):
 
     gpu.drawGrid(gr)
 
-    gpu.labelCenter(gr, gr.ng + nzones/2,   r"$i$")
-    gpu.labelCenter(gr, gr.ng + nzones/2-1, r"$i-1$")
-    gpu.labelCenter(gr, gr.ng + nzones/2+1, r"$i+1$")
-    gpu.labelCenter(gr, gr.ng + nzones/2-2, r"$i-2$")
-    gpu.labelCenter(gr, gr.ng + nzones/2+2, r"$i+2$")
+    gpu.labelCenter(gr, gr.ng + nzones/2,   r"$i$", fontsize="medium")
+    gpu.labelCenter(gr, gr.ng + nzones/2-1, r"$i-1$", fontsize="medium")
+    gpu.labelCenter(gr, gr.ng + nzones/2+1, r"$i+1$", fontsize="medium")
+    gpu.labelCenter(gr, gr.ng + nzones/2-2, r"$i-2$", fontsize="medium")
+    gpu.labelCenter(gr, gr.ng + nzones/2+2, r"$i+2$", fontsize="medium")
 
 
     # draw cell slopes
@@ -172,11 +172,11 @@ def evolve(gr, a, C, num, nolimit=1):
 
     gpu.drawGrid(gr)
 
-    gpu.labelCenter(gr, gr.ng + nzones/2,   r"$i$")
-    gpu.labelCenter(gr, gr.ng + nzones/2-1, r"$i-1$")
-    gpu.labelCenter(gr, gr.ng + nzones/2+1, r"$i+1$")
-    gpu.labelCenter(gr, gr.ng + nzones/2-2, r"$i-2$")
-    gpu.labelCenter(gr, gr.ng + nzones/2+2, r"$i+2$")
+    gpu.labelCenter(gr, gr.ng + nzones/2,   r"$i$", fontsize="medium")
+    gpu.labelCenter(gr, gr.ng + nzones/2-1, r"$i-1$", fontsize="medium")
+    gpu.labelCenter(gr, gr.ng + nzones/2+1, r"$i+1$", fontsize="medium")
+    gpu.labelCenter(gr, gr.ng + nzones/2-2, r"$i-2$", fontsize="medium")
+    gpu.labelCenter(gr, gr.ng + nzones/2+2, r"$i+2$", fontsize="medium")
 
 
     # show the evolved profiles from the old time
@@ -230,7 +230,7 @@ for i in range(1,9):
 
     fillgc(gr, a)
 
-    anew = evolve(gr, a, C, i, nolimit=1)
+    anew = evolve(gr, a, C, i, nolimit=0)
 
     a[:] = anew[:]
 
