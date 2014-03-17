@@ -2,17 +2,21 @@ EPStoPDF = epstopdf
 
 ALL: CompHydroTutorial.pdf
 
-TEXS := intro/intro.tex \
-        finite-volume/finite-volume.tex \
-        advection/advection.tex \
-	burgers/burgers.tex \
-        Euler/Euler.tex \
-        multigrid/multigrid.tex \
-        diffusion/diffusion.tex \
-        multiphysics/multiphysics.tex \
-        incompressible/incompressible.tex 
+DIRS := intro \
+        finite-volume \
+        advection \
+        burgers \
+        Euler \
+        multigrid \
+        diffusion \
+        multiphysics \
+        incompressible
 
-CompHydroTutorial.pdf: CompHydroTutorial.tex $(TEXS) refs.bib
+TEXS := $(foreach dir, $(DIRS), $(wildcard $(dir)/*.tex))
+EPSS := $(foreach dir, $(DIRS), $(wildcard $(dir)/*.eps))
+
+
+CompHydroTutorial.pdf: CompHydroTutorial.tex $(TEXS) $(EPSS) refs.bib
 	pdflatex CompHydroTutorial  < /dev/null
 	bibtex CompHydroTutorial.aux
 	pdflatex CompHydroTutorial  < /dev/null
