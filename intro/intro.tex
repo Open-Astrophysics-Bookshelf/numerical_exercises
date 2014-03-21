@@ -208,14 +208,28 @@ value of the dependent variables in the evaluation of $f$---the resulting
 implicit system is usually solved using, for example, Newton-Raphson iteration
 A first-order implicit update (called {\em backward Euler}) is:
 \begin{equation}
-y^{n+1}_k = y^n_k + \Delta t f(t^{+1}, y^{n+1}_k)
+y^{n+1}_k = y^n_k + \Delta t f(t^{n+1}, y^{n+1}_k)
 \end{equation}
 
 Explicit methods are easier to program and run faster (for a given $
 Delta t$, but implicit methods work better for {\em stiff} problems.
 
 Perhaps the most popular explicit method for ODEs is the 4th-order
-Runge-Kutta method.
+Runge-Kutta method (RK4).  This is a multistep method where several
+extrapolations to the midpoint and endpoint of the interval are
+made to estimate slopes and then a weighted average of these slopes
+are used to advance the solution.  The overall procedure looks like:
+\begin{equation}
+y_k^{n+1} = y_k^n + \frac{\Delta t}{6} (k_1 + 2 k_2 + 2 k_3 + k_4)
+\end{equation}
+where the slopes are:
+\begin{align}
+k_1 &= f(t^n, y_k^n) \\
+k_2 &= f(t^n + \tfrac{\Delta t}{2}, y_k^n + \tfrac{\Delta t}{2} k_1) \\
+k_3 &= f(t^n + \tfrac{\Delta t}{2}, y_k^n + \tfrac{\Delta t}{2} k_2) \\
+k_4 &= f(t^n + \Delta t, y_k^n + \Delta t k_3)
+\end{align}
+This is fourth-order accurate overall.
 
 \begin{figure}[t]
 \centering
@@ -228,6 +242,20 @@ Runge-Kutta method.
 \caption{\label{fig:rk} A graphical illustration of the four steps in the $4^\mathrm{th}$-order
 Runge-Kutta method.}
 \end{figure}
+
+\begin{exercise}[ODE accuracy]
+Consider the orbit of Earth around the Sun.  If we work in the units
+of astronomical units, years, and solar masses, then Newton's gravitational
+constant and the solar mass together are simply $G M = 4\pi^2$.  We 
+can write the ODE system describing the motion of Earth as:
+\begin{align}
+\dot{\bf x} &= {\bf v} \\
+\dot{\bf v} &= -\frac{G M {\bf r}}{r^3}
+\end{align}
+
+Integrate this system with the first-order Euler and the RK4 method
+and measure the convergence by integrating at a number of different $\Delta t$s.
+\end{exercise}
 
 \section{A Sample of Public Codes}
 

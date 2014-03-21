@@ -5,7 +5,6 @@ functions, $f(x,t)$ and their derivatives in space and time.  To
 represent this continuous system on a computer we must discretize
 it---convert the continuous function into a discrete number of points
 in space at one or more discrete instances in time.
-
 There are many different discretization methods used throughout the
 physical sciences, engineering, and applied mathematics fields, each
 with their own strenghts and weaknesses.  Broadly speaking, we can
@@ -23,15 +22,15 @@ This is the fundamental idea behind {\em spectral methods}.  A different
 class of methods are those that use discrete particles to represent the
 mass distribution and produce continuous functions by integrating
 over these particles with a suitable kernel---this is the basis of
-{\em smoothed particle hydrodynamics} (SPH).  SPH is a very popular
+{\em smoothed particle hydrodynamics} (SPH)~\cite{SPH}.  SPH is a very popular
 method in astrophysics.
 
 Grid-based methods include the finite-difference, finite-volume, and
 finite-element methods.  Finite element methods are widely used in
 engineering together with unstructure grids.  A type of finite-element
-method called a {\em galerkin method} can be formed by integrating the
+method called a {\em Galerkin method} can be formed by integrating the
 continuous function agains a compact basis set represented by
-tetrahedra.  These methods work will with the irregular geometries
+tetrahedra.  These methods work well with the irregular geometries
 that arise in engineering.  Finite-difference and finite-volume
 methods can both be applied to {\em structured grids} (each zone can
 be referenced simply by an integer index for each spatial dimension).
@@ -129,25 +128,26 @@ half-integer indexes denote the zone edges (i.e.\ $x_{i-1/2} = x_i -
 \Delta x/2$):
 \begin{equation}
 \label{eq:fv_cc-a}
-a_i = \frac{1}{\Delta x} \int_{x_{i-1/2}}^{x_{i+1/2}} a(x) dx 
+\langle a\rangle_i = \frac{1}{\Delta x} \int_{x_{i-1/2}}^{x_{i+1/2}} a(x) dx 
 \end{equation}
-The figure below shows the grid, with the half-integer indices.
-\begin{figure}[h]
+Figure~\ref{fig:simplefv} shows the grid, with the half-integer indices.
+%
+\begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{simplegrid2}
-\caption[A simple 1-d finite-volume grid]{A simple 1-d finite-volume
+\caption[A simple 1-d finite-volume grid]{\label{fig:simplefv} A simple 1-d finite-volume
   grid with the zone-centered and zone-edge indexes.  Here we show
   only the data associated with zone $i$.}
 \end{figure}
 %
-Here we've drawn $a_i$ as a horizontal line spanning the entire zone---this 
+Here we've drawn $\langle a\rangle_i$ as a horizontal line spanning the entire zone---this 
 is to represent that it is an average within the volume defined by the zone
 edges.
 %
 To second-order accuracy,
 \begin{equation}
 \label{eq:fv_cc}
-a_i = \frac{1}{\Delta x} \int_{x_{i-1/2}}^{x_{i+1/2}} a(x) dx \sim a(x_i) 
+\langle a\rangle_i = \frac{1}{\Delta x} \int_{x_{i-1/2}}^{x_{i+1/2}} a(x) dx \sim a(x_i) 
 \end{equation}
 This means that we can treat the average of $a$ over a zone as simply $a(x)$
 evaluated at the zone center if we only want second-order accuracy.
@@ -155,6 +155,39 @@ evaluated at the zone center if we only want second-order accuracy.
 \begin{exercise}[Finite-volume vs.\ finite-difference centering]
 {Show that Eq.~\ref{eq:fv_cc} is true to $O(\Delta x^2)$ by expanding
 $a(x)$ as a Taylor series in the integral.}
+\end{exercise}
+
+\begin{exercise}[Conservative interpolation]
+{A conservative interpolant is used to reconstruct a continuous
+  functional form, $f(x)$, from a collection of cell-averages.  A key
+  requirement is that when $f(x)$ is averaged over a cell, it returns
+  the cell-average.
+
+Consider three cell averages: $\langle a \rangle_{i-1}$, $\langle a \rangle_{i}$, $\langle a \rangle_{i+1}$.  Fit a quadratic polynomial through these points,
+ \begin{equation}
+ a(x) = A (x - x_i)^2 + B (x - x_i) + C
+ \end{equation}
+ where the coefficients, $A$, $B$, and $C$ are found by applying the constraints:
+ \begin{align}
+ \langle f\rangle_{i-1} &= \frac{1}{\Delta x}
+      \int_{x_{i-3/2}}^{x_{i-1/2}} a(x) dx \\
+ \langle f\rangle_{i} &= \frac{1}{\Delta x}
+      \int_{x_{i-1/2}}^{x_{i+1/2}} a(x) dx \\
+ \langle f\rangle_{i+1} &= \frac{1}{\Delta x}
+      \int_{x_{i+1/2}}^{x_{i+3/2}} a(x) dx 
+ \end{align}
+
+Show that the conservative interpolant is:
+\begin{align}
+a(x) = &\frac{\langle f\rangle_{i-1} - 2 \langle f\rangle_i +
+             \langle f\rangle_{i+1}}{2\Delta x^2} (x-x_i)^2 + \nonumber \\
+       &\frac{\langle f\rangle_{i+1} - \langle f\rangle_{i-1}}
+            {2\Delta x} (x-x_i) + \nonumber \\
+       &\frac{-\langle f\rangle_{i-1} + 26 \langle f\rangle_i
+             -\langle f\rangle_{i+1}}{24}
+\end{align}
+}
+
 \end{exercise}
 
 \subsection{Differences and order of accuracy}
@@ -185,16 +218,17 @@ and energy.
 Consider one-dimension.  
 Integrating this system over a zone, and normalizing by $\Delta x$, we have:
 \begin{equation}
-\frac{\partial U_i}{\partial t} = 
+\frac{\partial \langle U\rangle_i}{\partial t} = 
   -\frac{1}{\Delta x} \int_{x_{i-1/2}}^{x_{i+1/2}} \frac{\partial F}{\partial x} dx =
   - \frac{1}{\Delta x} \left \{ \left . F(U) \right |_{x_{i+1/2}} -
                                 \left . F(U) \right |_{x_{i-1/2}} \right \}
 \end{equation}
-Independent of how we discretize in time, notice that the righthand side
+Independent of how we discretize in time, notice that we have the cell-average
+on the left and that the righthand side
 is simply a difference of fluxes through the interfaces of the zone.
 For the $i+1$ zone, the update would be:
 \begin{equation}
-\frac{\partial U_{i+1}}{\partial t} = 
+\frac{\partial \langle U\rangle_{i+1}}{\partial t} = 
   - \frac{1}{\Delta x} \left \{ \left . F(U) \right |_{x_{i+3/2}} -
                                 \left . F(U) \right |_{x_{i+1/2}} \right \}
 \end{equation}
@@ -204,7 +238,7 @@ boundary adds to one zone and subtracts from its neighbor, exactly conserving
 (to round-off error) the quantity $U$.  This cancellation of the sums
 is an example of a {\em telescoping property}, and is the main reason
 why finite-volume methods are attractive---conserved quantities are 
-conserved.
+conserved to machine (roundoff) precision.
 
 \subsection{Boundary conditions with finite-volume grids}
 
@@ -221,7 +255,7 @@ where boundary conditions for our grid come into play.
 
 We implement boundary conditions by extending the computational grid
 beyond the physical domain.  These additional zones are called {\em
-  ghost cells}.  The exist solely to handle the boundary conditions
+  ghost cells}.  They exist solely to handle the boundary conditions
 and allow us to use the same update equation (e.g.\ Eq.~\ref{eq:onesideddiff})
 for all zones in the domain.
 
@@ -284,4 +318,9 @@ a_{\mathrm{lo}-1} &=& a_\mathrm{hi}
   At coarse-fine interfaces, corrections are done to ensure
   consistency.
 
+\item {\em Voronoi grids}: a hybrid of particle and grid methods is 
+  provided by methods that move particles in a Lagrangian fashion and
+  use a Voronoi tessellation of these particles to define the grid
+  that finite-volume methods are applied to.  See, for example, 
+  the Arepo code paper~\cite{arepo}.
 \end{itemize}
