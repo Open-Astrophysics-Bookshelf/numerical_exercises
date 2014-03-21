@@ -216,7 +216,7 @@ where $f(a) = ua$ is the flux of the quantity $a$.  In conservation form,
 the time derivative of a quantity is related to the divergence of 
 its flux.
 
-\begin{figure}
+\begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{fv_ghost}
 \caption[A finite-volume grid with valid cells
@@ -383,7 +383,7 @@ Use this slope in your second-order advection code and notice that the
 oscillations go away }
 \end{exercise}
 
-Figure~\ref{fig:limitingex} shows the evolution
+Figures~\ref{fig:limitingex} and \ref{fig:limitingexb} show the evolution
 of an initial discontinuity with and without limiting.  See the text
 by LeVeque~\cite{leveque:2002} for alternate choices of
 limiters. Note: most limiters will have some sort of test on the product
@@ -391,31 +391,37 @@ of a left-sided and right-sided difference ($a\cdot
 b$ above)---this is $< 0$ at an extremum, which is precisely where we want to
 limit. 
 
-\begin{figure}[p!]
+\begin{figure}[h]
 \centering
-\includegraphics[width=0.495\linewidth]{rea-nolimit-start_001}\hspace{0.02em}
-\includegraphics[width=0.495\linewidth]{rea-nolimit-start_005} \\
-\includegraphics[width=0.495\linewidth]{rea-nolimit-start_002}\hspace{0.02em}
-\includegraphics[width=0.495\linewidth]{rea-nolimit-start_006} \\
-\includegraphics[width=0.495\linewidth]{rea-nolimit-start_003}\hspace{0.02em}
-\includegraphics[width=0.495\linewidth]{rea-nolimit-start_007} \\
-\includegraphics[width=0.495\linewidth]{rea-nolimit-start_004}\hspace{0.02em}
-\includegraphics[width=0.495\linewidth]{rea-nolimit-start_008} \\
-\vskip 0.5in
-\includegraphics[width=0.495\linewidth]{rea-start_001}\hspace{0.02em}
-\includegraphics[width=0.495\linewidth]{rea-start_005} \\
-\includegraphics[width=0.495\linewidth]{rea-start_002}\hspace{0.02em}
-\includegraphics[width=0.495\linewidth]{rea-start_006} \\
-\includegraphics[width=0.495\linewidth]{rea-start_003}\hspace{0.02em}
-\includegraphics[width=0.495\linewidth]{rea-start_007} \\
-\includegraphics[width=0.495\linewidth]{rea-start_004}\hspace{0.02em}
-\includegraphics[width=0.495\linewidth]{rea-start_008} \\
-\caption[The effect of limiters on initially discontinuous data.]{\label{fig:limitingex}Initially discontinuous data evolved for several steps with
-  no limiting (top sequence) and limiting (bottom sequence).  Note
-  that without limiting, there are overshoots and undershoots
-  surrounding the discontinuity, and that the discontinuity remains
-  sharper with limiting.}
-\clearpage
+\includegraphics[width=0.55\linewidth]{rea-nolimit-start_001} \\
+\includegraphics[width=0.55\linewidth]{rea-nolimit-start_005} \\
+\includegraphics[width=0.55\linewidth]{rea-nolimit-start_002} \\
+\includegraphics[width=0.55\linewidth]{rea-nolimit-start_006} \\
+\includegraphics[width=0.55\linewidth]{rea-nolimit-start_003} \\
+\includegraphics[width=0.55\linewidth]{rea-nolimit-start_007} \\
+\includegraphics[width=0.55\linewidth]{rea-nolimit-start_004} \\
+\includegraphics[width=0.55\linewidth]{rea-nolimit-start_008} \\
+\caption[The effect of no limiting on initially discontinuous data.]{\label{fig:limitingex}Initially discontinuous data evolved for several steps with
+  no limiting.  Notice that there are overshoots and undershoots
+  surrounding the discontinuity.}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.55\linewidth]{rea-start_001}\hspace{0.02em}
+\includegraphics[width=0.55\linewidth]{rea-start_005} \\
+\includegraphics[width=0.55\linewidth]{rea-start_002}\hspace{0.02em}
+\includegraphics[width=0.55\linewidth]{rea-start_006} \\
+\includegraphics[width=0.55\linewidth]{rea-start_003}\hspace{0.02em}
+\includegraphics[width=0.55\linewidth]{rea-start_007} \\
+\includegraphics[width=0.55\linewidth]{rea-start_004}\hspace{0.02em}
+\includegraphics[width=0.55\linewidth]{rea-start_008} \\
+\caption[The effect of limiters on initially discontinuous
+  data.]{\label{fig:limitingexb}Initially discontinuous data evolved
+  for several steps with limiting.  Note that unlike the sequence
+  without limiting (Figure~\ref{fig:limitingex}), the
+  discontinuity remains sharper with limiting and there are no over-
+  or undershoots.}
 \end{figure}
 
 A slightly more complex limiter is the MC limiter (monotonized central
