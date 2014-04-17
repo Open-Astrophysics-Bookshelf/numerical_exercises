@@ -217,7 +217,7 @@ ainit = numpy.array([1.0, 1.0, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1])
 nzones = len(ainit)
 
 # CFL number
-C = 0.9
+C = 0.7
 
 gr = gpu.grid(nzones, ng=4)
 

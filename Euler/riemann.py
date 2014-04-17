@@ -93,8 +93,7 @@ def riemann():
     f.set_size_inches(8.0,2.5)
 
 
-    pylab.savefig("riemann.png")
-    pylab.savefig("riemann.eps")
+    pylab.savefig("riemann_comp.eps")
 
 
 if __name__== "__main__":

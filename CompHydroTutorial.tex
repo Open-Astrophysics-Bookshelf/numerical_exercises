@@ -6,6 +6,12 @@
 % include figures
 \usepackage{epsfig}
 
+% prefer PDF to PNG
+\DeclareGraphicsExtensions{%
+  .pdf, .png}
+
+\graphicspath{{intro/}{finite-volume/}{advection/}{burgers/}{diffusion/}{Euler/}{incompressible/}{multigrid/}{multiphysics/}}
+
 % AMS symbols
 \usepackage{amsmath,amssymb}
 
@@ -63,7 +69,7 @@
 \newcommand{\HRule}{\rule{\linewidth}{0.125mm}}
 
 
-\graphicspath{{intro/}{finite-volume/}{advection/}{burgers/}{diffusion/}{Euler/}{incompressible/}{multigrid/}{multiphysics/}}
+
 
 
 % footer
