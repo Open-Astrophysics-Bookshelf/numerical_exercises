@@ -306,7 +306,7 @@ interface.  Note that for each interface, there are two possible
 interface states we can construct---one using the data to the left of
 the interface (which we will denote with a ``L'' subscript) and the
 other using the data to the right of the interface (denoted with an
-``R'' subscript)---see Figure~\ref{fig:riemann}.  These states are:
+``R'' subscript)---see Figure~\ref{fig:riemann_adv}.  These states are:
 \begin{eqnarray}
 a_{i+1/2,L}^{n+1/2} &=& a_i^n + \frac{\Delta x}{2} \left .\frac{\partial a}{\partial x} \right |_i + \frac{\Delta t}{2} \left .\frac{\partial a}{\partial t} \right |_i + \mathcal{O}(\Delta x^2) + \mathcal{O}(\Delta t^2) \nonumber \\
     &=& a_i^n + \frac{\Delta x}{2} \left .\frac{\partial a}{\partial x} \right |_i +  \frac{\Delta t}{2} \left ( - u \left .\frac{\partial a}{\partial x} \right |_i \right ) + \ldots \nonumber \\
@@ -319,7 +319,7 @@ a_{i+1/2,R}^{n+1/2} &=& a_{i+1}^n - \frac{\Delta x}{2} \left .\frac{\partial a}{
 \begin{figure}[t]
 \centering
 \includegraphics[width=5.0in]{riemann}
-\caption[The input state to the Riemann problem]{\label{fig:riemann} The left and right interface state at the
+\caption[The input state to the Riemann problem]{\label{fig:riemann_adv} The left and right interface state at the
   $i+1/2$ interface.  Here, the left state, $a_{i+1/2,L}^{n+1/2}$, was
   predicted to the interface from the zone to the left of the
   interface, using $a_i$, and the right state, $a_{i+1/2,R}^{n+1/2}$,
