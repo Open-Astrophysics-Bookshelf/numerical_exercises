@@ -204,7 +204,7 @@ We can write this as a linear system with coupled equations:
 \begin{equation}
 -C a^{n+1}_{i-1} + (1 + C) a^{n+1}_i = a_i^n
 \end{equation}
-In matrix form, this is:
+In matrix form, solving for the points $1, \ldots, N-1$, this is:
 \begin{equation}
 \renewcommand{\arraystretch}{1.5}
 \left ( \begin{array}{ccccccc} 
@@ -219,10 +219,10 @@ In matrix form, this is:
 \right )
 %
 \left ( \begin{array}{c}
-u_0^{n+1} \\
 u_1^{n+1} \\
 u_2^{n+1} \\
 u_3^{n+1} \\
+u_4^{n+1} \\
 \vdots \\
 u_{N-2}^{n+1} \\
 u_{N-1}^{n+1} 
@@ -230,10 +230,10 @@ u_{N-1}^{n+1}
 \right )
 =
 \left ( \begin{array}{c}
-u_0^{n} \\
 u_1^{n} \\
 u_2^{n} \\
 u_3^{n} \\
+u_4^{n} \\
 \vdots \\
 u_{N-2}^{n} \\
 u_{N-1}^{n} 

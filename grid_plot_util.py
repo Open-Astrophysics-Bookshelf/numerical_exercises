@@ -206,20 +206,22 @@ def labelFD(gr, idx, value, string, color="k", fontsize="large"):
 
 
 #-----------------------------------------------------------------------------
-def markCellLeftState(gr, idx, string, color="k"):
+def markCellLeftState(gr, idx, string, color="k", value=0.5, 
+                      vertical="center"):
 
-    pylab.scatter(gr.xl[idx]+0.05*gr.dx, gr.voff+0.5, marker="x", color=color)
+    pylab.scatter(gr.xl[idx]+0.05*gr.dx, gr.voff+value, marker="x", color=color)
 
-    pylab.text(gr.xl[idx]+0.075*gr.dx, gr.voff+0.5, string,
-               horizontalalignment='left', verticalalignment='center', color=color)
+    pylab.text(gr.xl[idx]+0.075*gr.dx, gr.voff+value, string,
+               horizontalalignment='left', verticalalignment=vertical, color=color)
 
 
-def markCellRightState(gr, idx, string, color="k"):
+def markCellRightState(gr, idx, string, color="k", value=0.5,
+                       vertical="center"):
 
-    pylab.scatter(gr.xr[idx]-0.05*gr.dx, gr.voff+0.5, marker="x", color=color)
+    pylab.scatter(gr.xr[idx]-0.05*gr.dx, gr.voff+value, marker="x", color=color)
 
-    pylab.text(gr.xr[idx]-0.075*gr.dx, gr.voff+0.5, string,
-               horizontalalignment='right', verticalalignment='center', color=color)
+    pylab.text(gr.xr[idx]-0.075*gr.dx, gr.voff+value, string,
+               horizontalalignment='right', verticalalignment=vertical, color=color)
 
 
 
