@@ -405,12 +405,13 @@ needed the data in zone $\mathrm{lo}-2$ to construct a centered-difference.}
     \end{itemize}
   \end{itemize}
 Use both the top-hat and Gaussian initial conditions and periodic boundary
-conditions and compare to the first-order method.
+conditions and compare to the first-order method.  See Figure~\ref{fig:fvadvect}.
 }
 \end{exercise}
 
 \begin{figure}
 \centering
+% figure from codes/advection/fv_advection.py
 \includegraphics[width=0.8\linewidth]{fv-advect}
 \caption[Second-order finite-volume advection]
 {\label{fig:fvadvect} Second-order finite volume advection showing the
@@ -452,9 +453,10 @@ with
   \right .
 \end{equation}
 Use this slope in your second-order advection code and notice that the
-oscillations go away }
+oscillations go away---see Figure~\ref{fig:fvadvect}.}
 \end{exercise}
 
+We can get a feel for what happens with and without limiting pictorially.
 Figures~\ref{fig:limitingex} and \ref{fig:limitingexb} show the evolution
 of an initial discontinuity with and without limiting.  See the text
 by LeVeque~\cite{leveque:2002} for alternate choices of
@@ -521,7 +523,7 @@ The main goal of a limiter is to reduce the slope near extrema.
 Figure~\ref{fig:limit} shows a finite-volume grid with the original
 data, cell-centered slopes, and MC limited slopes.  Note that near the
 strong gradients is where the limiting kicks in.  The different limiters
-are all constructed by enforcing a conditions requiring the method to be
+are all constructed by enforcing a condition requiring the method to be
 {\em total variation diminishing}, or TVD.  More details on TVD limiters
 can be found in \cite{toro:1997,leveque:2002}.
 
