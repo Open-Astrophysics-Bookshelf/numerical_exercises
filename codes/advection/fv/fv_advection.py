@@ -263,3 +263,43 @@ pylab.ylabel(r"$a$")
 pylab.savefig("fv-advect.eps")
 
 
+#-----------------------------------------------------------------------------
+# convergence test
+problem = "gaussian"
+N = [32, 64, 128, 256, 512]
+u = 1.0
+C = 0.8
+
+err = []
+
+for nx in N:
+
+    g = evolve(nx, C, u, 5, problem)
+
+    # compute the error
+    err.append(g.norm(g.a - g.ainit))
+    print g.dx, nx, err[-1]
+
+
+pylab.clf()
+
+N = numpy.array(N, dtype=numpy.float64)
+err = numpy.array(err)
+
+pylab.scatter(N, err, color="r")
+pylab.plot(N, err[len(N)-1]*(N[len(N)-1]/N)**2, color="k", label=r"$\mathcal{O}(\Delta x^2)$")
+
+ax = pylab.gca()
+ax.set_xscale('log')
+ax.set_yscale('log')
+
+pylab.xlim(20,600)
+
+pylab.xlabel("number of zones", fontsize=16)
+pylab.ylabel(r"$\|\| a^\mathrm{final} - a^\mathrm{init} \|\|_2$", fontsize=16)
+
+pylab.legend(frameon=False, loc="best")
+
+pylab.savefig("plm-converge.eps")
+
+
