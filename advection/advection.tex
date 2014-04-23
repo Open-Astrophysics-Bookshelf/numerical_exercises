@@ -569,15 +569,15 @@ If we take $u > 0$, then the Riemann problem will always choose the
 left state, so we can write this as:
 \begin{equation}
 a_i^{n+1} = a_i^n + 
-     C \left [\left (a_{i-1}^n + \frac{1}{2} (1-C) \Delta a_{i-1} \right ) -
-              \left (a_{i}^n + \frac{1}{2} (1-C) \Delta a_{i} \right ) 
-       \right ] \label{eq:rea_orig}
+     C \biggl [\underbrace{\left (a_{i-1}^n + \frac{1}{2} (1-C) \Delta a_{i-1} \right )}_{a_{i-1/2,L}} -
+              \underbrace{\left (a_{i}^n + \frac{1}{2} (1-C) \Delta a_{i} \right )}_{a_{i+1/2,L}}
+       \biggr ] \label{eq:rea_orig}
 \end{equation}
 
 If we instead look at this via the R-E-A procedure, we write the reconstructed
 $a$ in each zone in the form of a piecewise linear polynomial
 \begin{equation}
-a_i(x) = a_i + \frac{\Delta a}{\Delta x} (x - x_i)
+a_i(x) = a_i + \frac{\Delta a_i}{\Delta x} (x - x_i)
 \end{equation}
 Consider zone $i$.  
 If we are advecting with a CFL number $C$, then that means that the fraction
@@ -612,7 +612,7 @@ is
 
 The final part of the R-E-A procedure is to average the over the 
 advected profiles in the new cell.  The weighted average of the
-average brought in from the left of the interface and that that remains
+amount brought in from the left of the interface and that that remains
 in the cell is
 \begin{equation}
 a_i^{n+1} = C \mathcal{I}_< + (1 - C) \mathcal{I}_> 
@@ -647,13 +647,12 @@ conservative flux update.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Errors and convergence rate}
 
-For the advection problem, the analytic solution is to simply propagate
-the initial profile to the right.  This means that with periodic boundary
-condition, after advecting for one period, our numerical solution should
-be identical to the initial conditions.  Any differences are our
-numerical error.  We can quantify the error by taking the norm of error as:
-This is the {\em L2-norm} of the relative error.  Sometimes we instead look
-at the norm of the absolute error:
+For the advection problem (with $u>0$), the analytic solution is to
+simply propagate the initial profile to the right.  This means that
+with periodic boundary conditions, after advecting for one period, our
+numerical solution should be identical to the initial conditions.  Any
+differences are our numerical error.  We can quantify the error by
+taking the norm of error as: 
 \begin{equation}
 \epsilon^\mathrm{abs} = \| a^\mathrm{final} - a^\mathrm{init} \|_2 \equiv
    \left [ \frac{1}{N} \sum_{i=1}^N 
@@ -673,12 +672,23 @@ of zones, $N$, otherwise our error will be resolution-dependent.
 { Run the first-order solver for several different $\Delta x$s,
 each a factor of 2 smaller than the previous.  Compute $\epsilon$ for
 each resolution and observe that it converges in a first-order fashion
-(i.e.\ $\epsilon$ decreases by 2 when we decrease $\Delta x$ by a factor of 2). \\
+(i.e.\ $\epsilon$ decreases by 2 when we decrease $\Delta x$ by a factor of 2).
 
-\noindent Do the same with the second-order solver and observe that it converges
-as second-order.
-}
+\noindent Do the same with the second-order solver and observe that it
+converges as second-order. {\em However:} you may find less than second-order
+is your initial conditions have discontinuities and you are limiting. 
+Figure~\ref{fig:advnorm} shows the convergence of the method with minmod
+limiting, $C = 0.8$, and a Gaussian initial condition.}
 \end{exercise}
+
+\begin{figure}[t]
+\centering
+% figure from codes/advection/fv/fv_advection.py
+\includegraphics[width=0.8\linewidth]{plm-converge}
+\caption[Convergence of second-order finite-volume advection]
+{Convergence for the second-order finite-volume method with minmod
+limiting advecting a Gaussian initial profile with $C = 0.8$.}
+\end{figure}
 
 \section{Multi-dimensional advection}
 
@@ -724,20 +734,31 @@ Integrating Eq.~\ref{eq:advect2d} over $x$ and $y$, we have:
 \end{eqnarray}
 or
 \begin{eqnarray}
- \frac{\partial a_{i,j}}{\partial t} &=&
-  - \frac{1}{\Delta x} \left \{ (u a)_{i+1/2,j} - (u a)_{i-1/2,j} \right \}
-  - \frac{1}{\Delta y} \left \{ (v a)_{i,j+1/2} - (v a)_{i,j-1/2} \right \}
+ \frac{\partial a_{i,j}}{\partial t} =
+  &-& \frac{1}{\Delta x\Delta y} \int_{y_{j-1/2}}^{y_{j+1/2}}
+     \left \{ (u a)_{i+1/2,j} - (u a)_{i-1/2,j} \right \} dy \nonumber \\
+  &-& \frac{1}{\Delta x\Delta y} \int_{x_{i-1/2}}^{x_{i+1/2}}
+     \left \{ (v a)_{i,j+1/2} - (v a)_{i,j-1/2} \right \} dx
 \end{eqnarray}
 
-Discretizing in time by evaluating the interface states at $n+1/2$ 
-(to achieve second-order accuracy), we have:
-\begin{equation}
- \frac{a_{i,j}^{n+1} - a_{i,j}^n}{\Delta t} =
-  - \frac{ (u a)_{i+1/2,j}^{n+1/2} - (u a)_{i-1/2,j}^{n+1/2} }{\Delta x}
-  - \frac{ (v a)_{i,j+1/2}^{n+1/2} - (v a)_{i,j-1/2}^{n+1/2} }{\Delta y}
+Now we integrate over time---the left side of our expression becomes
+just the different between the new and old state.
+\begin{eqnarray}
+ a_{i,j}^{n+1} - a_{i,j}^n = 
+  &-& \frac{1}{\Delta x\Delta y} \int_{t^n}^{t^{n+1}} \int_{y_{j-1/2}}^{y_{j+1/2}}
+     \left \{ (u a)_{i+1/2,j} - (u a)_{i-1/2,j} \right \} dy dt \nonumber \\
+  &-& \frac{1}{\Delta x\Delta y} \int_{t^n}^{t^{n+1}} \int_{x_{i-1/2}}^{x_{i+1/2}}
+     \left \{ (v a)_{i,j+1/2} - (v a)_{i,j-1/2} \right \} dx dt
 \label{eq:update2du}
-\end{equation}
-
+\end{eqnarray}
+We define the flux through the interface as the average over the face
+of that interface and time:
+\begin{eqnarray}
+F^{(x)}_{i+1/2,j} &=& \frac{1}{\Delta y \Delta t}
+    \int_{t^n}^{t^{n+1}} \int_{y_{j-1/2}}^{y_{j+1/2}} (ua)_{i+1/2,j} dy dt  \\
+F^{(y)}_{i,j+1/2} &=& \frac{1}{\Delta x \Delta t}
+    \int_{t^n}^{t^{n+1}} \int_{x_{i-1/2}}^{x_{i+1/2}} (va)_{i,j+1/2} dx dt 
+\end{eqnarray}
 There are two methods for computing the interface states:
 dimensionally split and unsplit.  Dimensionally split methods are
 easier to code, since each dimension is operated on independent of the
