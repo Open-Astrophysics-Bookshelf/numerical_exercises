@@ -6,7 +6,7 @@
 
 \section{Burgers' equation}
 
-The inviscid Burgers' equation is the simplest nonlinear hyperbolic
+The inviscid Burgers' equation is the simplest {\em nonlinear} hyperbolic
 equation:
 \begin{equation}
 u_t + u u_x = 0
@@ -21,11 +21,17 @@ u_t + \left [\tfrac{1}{2} u^2 \right ]_x = 0
 The solution of this follows the same methodology as outlined above.
 The interface states are predicted as:
 \begin{eqnarray}
-u^{n+1}_{i+1/2,L} &=& u^n_i + \frac{\Delta x}{2} \frac{\partial u}{\partial x}
-                        + \frac{\Delta t}{2} \frac{\partial u}{\partial t} + \ldots \\
-                &=& u^n_i + \frac{\Delta x}{2} \frac{\partial u}{\partial x}
-                        + \frac{\Delta t}{2} \left (-u_i \frac{\partial u}{\partial x} \right ) + \ldots \\
-                &=& u^n_i + \frac{\Delta x}{2} \left ( 1 - \frac{\Delta t}{\Delta x}u_i \right ) \frac{\partial u}{\partial x} + \ldots
+u^{n+1}_{i+1/2,L} 
+ &=& u^n_i + \frac{\Delta x}{2} \frac{\partial u}{\partial x}
+    + \frac{\Delta t}{2} \left . \frac{\partial u}{\partial t} \right |_i
+    + \ldots \\
+ &=& u^n_i + \frac{\Delta x}{2} \frac{\partial u}{\partial x}
+    + \frac{\Delta t}{2} \left . \left (-u_i \frac{\partial u}{\partial x} 
+         \right ) \right |_i 
+    + \ldots \\
+ &=& u^n_i + \frac{\Delta x}{2} 
+   \left ( 1 - \frac{\Delta t}{\Delta x} u_i \right ) 
+   \left . \frac{\partial u}{\partial x} \right |_i + \ldots
 \end{eqnarray}
 The only difference with the linear advection equation is that now
 $u_i \Delta t/\Delta x$ varies from zone to zone, whereas with linear
@@ -66,7 +72,7 @@ Doing the $t$ integral on the left and $x$ integral on the right, we have
 \end{equation}
 Recognizing that at $t=t^n$, $u = u_r$ and at $t=t^{n+1}$, $u = u_l$,
 $\{ u(t^{n+1}) - u(t^n) \}$ in the left side becomes $\{ u_l -u_r \}$.
-For the right size, we see that all along $x=x_l$ the flux is $f =
+For the right side, we see that all along $x=x_l$ the flux is $f =
 f(u_l)$ for $t\in [t^n, t^{n+1}]$.  Likewise, all along $x=x_r$, the
 flux is $f = f(u_r)$ in the same time interval (see the figure).
 Therefore, our expression becomes:
@@ -90,7 +96,7 @@ state.  If there is no shock, then we can simply use upwinding, as there is no
 ambiguity as to how to trace backwards in time to the correct state.
 Putting this together, we have:
 \begin{eqnarray}
-\mathrm{if~} u_l > u_r:&& u_s = \left \{ \begin{array}{cl}
+\mathrm{if~} \underset{\text{(shock)}}{u_l > u_r}:&& u_s = \left \{ \begin{array}{cl}
                 u_l & \mathrm{if~} S > 0 \\ 
                 u_r & \mathrm{if~} S < 0 \\
                 0   & \mathrm{if~} S = 0 \end{array} \right .   \\[1em]
@@ -120,8 +126,8 @@ condition over all the zones:
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=3.0in]{fv-burger-rarefaction}
-\includegraphics[width=3.0in]{fv-burger-sine}
+\includegraphics[width=0.475\linewidth]{fv-burger-rarefaction}
+\includegraphics[width=0.475\linewidth]{fv-burger-sine}
 \caption[Solutions to the inviscid Burgers'
   equation.]{\label{fig:burgers} Solution to the inviscid Burgers'
   equation with 256 zones and a Courant number, $C = 0.8$.  On the
@@ -135,6 +141,11 @@ Figure~\ref{fig:burgers} shows the solution for two cases: a rarefaction
 and a sine-wave steepening into a shock, using a piecewise linear
 reconstruction and the MC limiter.
 
+\begin{exercise}[Simple Burgers' solver]
+{Extend your 1-d finite-volume solver for advection (from Exercise~\ref{adv:ex:fv}) to solver Burgers' equation.  You will need to change the Riemann solver
+and use the local velocity in the construction of the interface states.  Run
+the examples shown in Figure~\ref{fig:burgers}}.
+\end{exercise}
 
 \section{Going further}
 
