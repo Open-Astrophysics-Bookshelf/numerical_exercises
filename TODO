@@ -44,4 +44,12 @@ Chapter 2:
 
 
 
-  
+=======================
+
+Chapter 3:
+
+ -- add a notebook showing FTCS and upwind on a simple FV grid
+ 
+ pyro exercises:
+
+ -- try out different limiters

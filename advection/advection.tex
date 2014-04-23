@@ -754,12 +754,22 @@ just the different between the new and old state.
 We define the flux through the interface as the average over the face
 of that interface and time:
 \begin{eqnarray}
-F^{(x)}_{i+1/2,j} &=& \frac{1}{\Delta y \Delta t}
+(ua)_{i+1/2,j} &=& \frac{1}{\Delta y \Delta t}
     \int_{t^n}^{t^{n+1}} \int_{y_{j-1/2}}^{y_{j+1/2}} (ua)_{i+1/2,j} dy dt  \\
-F^{(y)}_{i,j+1/2} &=& \frac{1}{\Delta x \Delta t}
+(va)_{i,j+1/2} &=& \frac{1}{\Delta x \Delta t}
     \int_{t^n}^{t^{n+1}} \int_{x_{i-1/2}}^{x_{i+1/2}} (va)_{i,j+1/2} dx dt 
 \end{eqnarray}
-There are two methods for computing the interface states:
+For a second-order accurate method in time, we replace the integration in
+time with the flux at the midpoint in time, and in space, we replace
+the integration with the center of the interface.  Then we have:
+\begin{equation}
+a_{i,j}^{n+1} = a_{i,j}^n - 
+   \frac{(ua)_{i+1/2,j}^{n+1/2} - (ua)_{i-1/2,j}^{n+1/2}}{\Delta x} -
+   \frac{(va)_{i,j+1/2}^{n+1/2} - (va)_{i,j-1/2}^{n+1/2}}{\Delta y}
+\end{equation}
+
+There are two methods for computing the multidimensional interface states, 
+$(ua)_{i\pm1/2,j}^{n+1/2}$, $(va)_{i,j\pm1/2}^{n+1/2}$:
 dimensionally split and unsplit.  Dimensionally split methods are
 easier to code, since each dimension is operated on independent of the
 others, so you can simply call a one-dimensional method for each
@@ -768,12 +778,12 @@ susceptible to grid effects.
 
 \subsection{Dimensionally split}
 
-In a split method, we update the
-state in each coordinate direction independently.  This is simple and
-a straightforward way to use one-dimensional methods in multi-d.  To
-be second-order accurate in time, we do {\em Strang splitting}, where
-we alternate the order of the dimensional updates each timestep.  An update
-through $\Delta t$ consists of $x$ and $y$ sweeps and appears as:
+In a split method, we update the state in each coordinate direction
+independently.  This is simple and a straightforward way to use
+one-dimensional methods in multi-d.  To be second-order accurate in
+time, we do {\em Strang splitting}~\cite{strang}, where we alternate
+the order of the dimensional updates each timestep.  An update through
+$\Delta t$ consists of $x$ and $y$ sweeps and appears as:
 \begin{eqnarray}
  \frac{a_{i,j}^\star - a_{i,j}^n}{\Delta t} &=&
   - \frac{ u a_{i+1/2,j}^{n+1/2} - u a_{i-1/2,j}^{n+1/2} }{\Delta x} \label{eq:splitx}\\
@@ -836,10 +846,12 @@ Furthermore, this pair of sweeps should use the same timestep, $\Delta t$.
 
 \subsection{Unsplit multi-dimensional advection}
 
-The unsplit case differs from the dimensionally split case in two ways:
-(1) in predicting the interface states, we use knowledge of the transverse
-direction, and (2), only a single conservative update is done per timestep,
-with all directions updating simultaneously.
+The unsplit case differs from the dimensionally split case in two
+ways: (1) in predicting the interface states, we use knowledge of the
+flow in the transverse direction, and (2), only a single conservative
+update is done per timestep, with all directions updating
+simultaneously.  See \cite{colella1990} for more details.  This idea
+is sometimes called the ``corner transport upwind'' or CTU method.
 
 The construction of the $a_{i+1/2,j,L}^{n+1/2}$ interface state appears as
 \begin{eqnarray}
@@ -867,23 +879,27 @@ a_{i+1/2,j,L}^{n+1/2} = \hat{a}_{i+1/2,j,L}^{n+1/2}
    - \frac{\Delta t}{2} v \left .\frac{\partial a}{\partial y} \right |_{i,j}
 \end{equation}
 Here, the $\hat{a}_{i+1/2,j,L}^{n+1/2}$ term is just the normal
-prediction without considering the transverse direction---this is
-constructed identically to the one-dimensional and split method.  We
+prediction without considering the transverse direction.  The basic
+update procedure is:
+\begin{itemize}
+\item Construct the normal predictor term, $\hat{a}_{i+1/2,j,L}^{n+1/2}$,
+in a fashion identical to the one-dimensional and split method.  We
 compute these one-dimensional $\hat{a}$'s at the left and right every
 interface in both coordinate directions.  Note that these states are
 still one-dimensional, since we have not used any information from the
 transverse direction in their computation.  
 
-We then solve a Riemann problem at each of these interfaces:
+\item Solve a Riemann problem at each of these interfaces:
 \begin{eqnarray}
 a^T_{i+1/2,j} &=& \mathcal{R}(\hat{a}_{i+1/2,j,L}^{n+1/2},
                               \hat{a}_{i+1/2,j,R}^{n+1/2}) \\
 a^T_{i,j+1/2} &=& \mathcal{R}(\hat{a}_{i,j+1/2,L}^{n+1/2},
                               \hat{a}_{i,j+1/2,R}^{n+1/2}) \\
 \end{eqnarray}
-These states are given the $^T$ superscript since they are the states
-that are used in computing the transverse flux difference.  Once we
-have the transverse state at every interface, we can correct the 
+These states are given the `$^T$' superscript since they are the states
+that are used in computing the transverse flux difference.  
+
+\item Correct the 
 previously computed normal interface states (the $\hat{a}$'s) with
 the transverse flux difference:
 \begin{equation}
@@ -899,6 +915,8 @@ of the interface:
 a_{i+1/2,j,R}^{n+1/2} = \hat{a}_{i+1/2,j,R}^{n+1/2} 
    - \frac{\Delta t}{2} v \frac{a^T_{i+1,j+1/2} - a^T_{i+1,j-1/2}}{\Delta y}
 \end{equation}
+\end{itemize}
+
 Figure~\ref{fig:unsplitstates} illustrates the steps involved in
 the construction of the $a_{i+1/2,j,L}^{n+1/2}$ state.
 %
