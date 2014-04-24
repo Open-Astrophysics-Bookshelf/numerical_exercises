@@ -10,7 +10,8 @@ DIRS := intro \
         multigrid \
         diffusion \
         multiphysics \
-        incompressible
+        incompressible \
+        software-engineering
 
 TEXS := $(foreach dir, $(DIRS), $(wildcard $(dir)/*.tex))
 EPSS := $(foreach dir, $(DIRS), $(wildcard $(dir)/*.eps))
