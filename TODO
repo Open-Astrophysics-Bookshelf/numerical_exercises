@@ -63,3 +63,50 @@ Chapter 4:
     condition for a shock
 
  -- exercise: notebook showing burgers' solution
+
+
+=======================
+
+Chapter 5:
+
+ -- add a figure for section 5.2.1, showing piecewise constant
+    reconstruction
+
+ -- add a discussion (interlude) motivating how limiters are derived
+
+ -- bulletted list on different Riemann solvers
+
+ -- derive the jump conditions and the entropy conditions for the 
+    Riemann problem and show the function we zero.
+
+ examples:
+
+   -- 1-d Riemann solver
+   -- 1-d Godunov
+
+ pyro...
+
+
+=======================
+
+Chapter 6:
+
+ examples:
+
+   -- 1-d relaxation
+   -- 1-d MG
+
+
+=======================
+
+Chapter 7:
+
+  -- show the output from diffusion
+  -- show the problems with C-N discretization (from 688 notes)
+
+  examples:
+    
+    -- 1-d diffusion solver
+    
+  pyro
+

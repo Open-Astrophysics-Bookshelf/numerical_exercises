@@ -1,7 +1,8 @@
 
 \begin{quote}
-\noindent {\em These notes describe how to do a piecewise linear or piecewise
-  parabolic method for the Euler equations.}
+\noindent {\em These notes describe how to do a piecewise linear or
+  piecewise parabolic method for the Euler equations.  These are the
+  basis for some of the most popular methods in astrophysics.}
 \end{quote}
 
 %-----------------------------------------------------------------------------
@@ -31,7 +32,13 @@ choice is the gamma-law EOS:
 p = \rho e(\gamma - 1)
 \end{equation}
 where $\gamma$ is the ratio of specific heats for the gas/fluid (for
-an ideal, monatomic gas, $\gamma = 5/3$).
+an ideal, monatomic gas, $\gamma = 5/3$), but any relation of the form
+$p = p(\rho, e)$ will work.  
+
+One thing that we can notice immediately is that there is no need for
+temperature in this equation set, although often, when source terms
+are present, we will need to obtain temperature from the equation of
+state.
 
 In this form, the equations are said to be in {\em conservative form}.  They
 can be written as:
@@ -70,8 +77,9 @@ system can be written as:
 \begin{equation}
 U_t + A(U) U_x = 0
 \end{equation}
-This matrix is quite complex and difficult to work with.  The eigenvectors
-of this matrix can be found in a variety of sources (e.g. \cite{toro:1997,athena}).
+This matrix is quite complex and difficult to work with.  The
+eigenvectors of this matrix can be found in a variety of sources
+(e.g. \cite{toro:1997,athena}).
 
 
 An alternate way to express these equations is using the {\em
@@ -90,6 +98,7 @@ q = \left ( \begin{array}{c} \rho \\ u \\ p \end{array} \right )
 A(q) = \left ( \begin{array}{ccc} u  & \rho     & 0 \\
                                   0  &  u       & 1/\rho \\
                                   0  & \gamma p & u \end{array} \right )
+\label{eq:primitivesystem}
 \end{equation}
 }
 \end{exercise}
@@ -101,9 +110,25 @@ where $|\ldots|$ indicates the determinant and $\lambda$ are the eigenvalues.
 Show that the eigenvalues of $A$ are $\lambda^\evm = u -c$, $\lambda^\evz = u$, $\lambda^\evp = u+c$.
 }
 \end{exercise}
-Note that both the conserved Jacobian matrix ($A(U)$) and the primitive 
-variable matrix, ($A(q)$) have the same eigenvalues---as expected since
-they represent the same physics.
+Note that both the conserved Jacobian matrix, $A(U)$, and the
+primitive variable matrix, $A(q)$, have the same eigenvalues---as
+expected, since they represent the same physics.  Also note that in
+Eq.~\ref{eq:primitivesystem}, we used the algebraic gamma-law equation
+of state to replace $e$ with $p$, however, for a general equation of state,
+we can get the appropriate expression by writing $p = p(\rho, s)$:
+\begin{equation}
+\frac{Dp}{Dt} = \left . \frac{\partial p}{\partial \rho} \right |_s
+     \frac{D\rho}{Dt} +
+     \left . \frac{\partial p}{\partial s} \right |_\rho
+     \cancelto{0}{\frac{Ds}{Dt}}
+\end{equation}
+where $Ds/Dt$ is $0$ when no entropy sources are present.  Recognizing
+that $\Gamma_1 \equiv \partial \log p/\partial \log \rho |_s$, we have:
+\begin{equation}
+\frac{\partial p}{\partial t} + u \frac{\partial p}{\partial x} 
+  + \Gamma_1 p \frac{\partial u}{\partial x} = 0
+\end{equation}
+as the generalization of the pressure equation.
 
 We'll use the symbols $\{-,\circ,+\}$ to denote the eigenvalues and their
 corresponding eigenvectors thoughout these notes.
@@ -958,6 +983,15 @@ F^{(x)}(U) = \left ( \begin{array}{c} \rho u \\ \rho uu + p \\ \rho v u \\ \rho 
 \qquad
 F^{(y)}(U) = \left ( \begin{array}{c} \rho v \\ \rho vu     \\ \rho v v + p \\ \rho v E + vp \end{array} \right )
 \end{equation}
+
+We note that there is no transformation that can convert the multidimensional
+system into characteristic variables, since we cannot simultaneously 
+diagonalize the Jacobians corresponding to $F^{(x)}$ and $F^{(y)}$.  Related
+to this is that when limiting, we limit one-dimensional slopes instead of
+doing a full multidimensional reconstruction and limiting (see \cite{BDS} 
+for a multidimensional limiting procedure for linear advection.  For
+the Euler equations, since we cannot write the multidimensional system
+in a characteristic form, we cannot use this type of method).
 
 For a directionally-unsplit discretization, we predict the
 cell-centered quantities to the edges by Taylor expanding the
