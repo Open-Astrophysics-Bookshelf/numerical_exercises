@@ -40,8 +40,8 @@ temperature in this equation set, although often, when source terms
 are present, we will need to obtain temperature from the equation of
 state.
 
-In this form, the equations are said to be in {\em conservative form}.  They
-can be written as:
+In this form, the equations are said to be in {\em conservative form},
+i.e.\ they can be written as:
 \begin{equation}
 U_t + \left [F(U) \right ]_x = 0
 \end{equation}
@@ -54,7 +54,7 @@ U = \left ( \begin{array}{c} \rho \\ \rho u \\ \rho E \end{array} \right )
 F(U) = \left ( \begin{array}{c} \rho u \\ \rho uu + p \\ \rho u E + up \end{array} \right )
 \end{equation}
 %
-We can write this in quasi-linear form by first expressing the flux
+We can write this in {\em quasi-linear} form by first expressing the flux
 vector in terms of the conserved variables directly.  Taking $u_1 =
 \rho, u_2 = \rho u, u_3 = \rho E$, we have
 \begin{equation}
@@ -63,7 +63,7 @@ F(U) = \left ( \begin{array}{c}
       \frac{u_2^2}{u_1} \left (1 - \frac{\hat{\gamma}}{2} \right ) + u_3 \hat{\gamma} \\
       \frac{u_3 u_2}{u_1}(1 + \hat{\gamma}) - \frac{1}{2} \frac{u_2^3}{u_1^2} \hat{\gamma} \end{array} \right )
 \end{equation}
-where $\hat{\gamma} = \gamma - 1$, and $p = \rho e \hat{\gamma} = (\rho E - (1/2) \rho u^2)\hat{\gamma}$.  The Jacobian of this flux vector is $A = \partial F/\partial U$:
+where $\hat{\gamma} = \gamma - 1$, and $p = \rho e \hat{\gamma} = (\rho E - \rho u^2/2)\hat{\gamma}$.  The Jacobian of this flux vector is $A = \partial F/\partial U$:
 \begin{equation}
 A(U) = \left ( \begin{array}{ccc} 
    0  & 1 & 0 \\
@@ -132,8 +132,8 @@ as the generalization of the pressure equation.
 
 We'll use the symbols $\{-,\circ,+\}$ to denote the eigenvalues and their
 corresponding eigenvectors thoughout these notes.
-These eigenvalues are the speeds at which information propagates for the
-fluid equations.
+These eigenvalues are the speeds at which information propagates through
+the fluid.
 Since the eigenvalues are real, this system (the Euler equations) is said
 to be {\em hyperbolic}.  Additionally, since $A = A(q)$, the system is
 said to be {\em quasi-linear}.  
@@ -160,16 +160,16 @@ r^\evz = \left ( \begin{array}{c} 1 \\ 0 \\ 0  \end{array} \right )
 r^\evp = \left ( \begin{array}{c} 1 \\ c/\rho \\ c^2 \end{array} \right )
 \end{equation}
 and the left eigenvectors are:
-\begin{equation}
-l^\evm = \left ( \begin{array}{ccc} 0 & -\frac{\rho}{2c} & \frac{1}{2c^2} 
-                  \end{array} \right )
+\begin{align}
+l^\evm &= \left ( \begin{array}{ccc} 0 & -\frac{\rho}{2c} & \frac{1}{2c^2} 
+                  \end{array} \right ) \\
 %
 \qquad
-l^\evz = \left ( \begin{array}{ccc} 1 & 0 & -\frac{1}{c^2}  \end{array} \right )
+l^\evz &= \left ( \begin{array}{ccc} 1 & 0 & -\frac{1}{c^2}  \end{array} \right ) \\
 %
 \qquad
-l^\evp = \left ( \begin{array}{ccc} 0 & \frac{\rho}{2c} & \frac{1}{2c^2} \end{array} \right )
-\end{equation}
+l^\evp &= \left ( \begin{array}{ccc} 0 & \phantom{+}\frac{\rho}{2c} & \frac{1}{2c^2} \end{array} \right )
+\end{align}
 Note that in general, there can be an arbitrary constant in front of each
 eigenvector.  Here they are normalized such that 
 $l^{(i)} \cdot r^{(j)} = \delta_{ij}$.
