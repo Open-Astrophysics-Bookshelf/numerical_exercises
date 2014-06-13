@@ -436,15 +436,20 @@ of V-cycle number, illustrating the expected performance.
 \item {\em Red-black ordering}: When using domain decomposition to
   spread the problem across parallel processors, the smoothing is
   often done as {\em red-black Gauss-Seidel}.  In this ordering, you
-  imagine the grid to be a checkerboard.  In the first Gauss-Seidel
-  pass you update the red squares and in the second, the black
-  squares.  The advantage is that when updating the red, you can be
-  sure that none of the zones you depend on (the neighboring black
-  zones) will change.  This makes the decomposition parallel.  Note:
-  this works for the standard 5-point Laplacian.  If you are doing
-  some other operator with a different stencil, then this
-  decomposition may no longer hold.
+  imagine the grid to be a checkerboard (see Figure~\ref{fig:rb}).  In
+  the first Gauss-Seidel pass you update the red squares and in the
+  second, the black squares.  The advantage is that when updating the
+  red, you can be sure that none of the zones you depend on (the
+  neighboring black zones) will change.  This makes the decomposition
+  parallel.  Note: this works for the standard 5-point Laplacian.  If
+  you are doing some other operator with a different stencil, then
+  this decomposition may no longer hold.
 
+  \begin{figure}[t]
+    \centering
+    \includegraphics[width=0.6\linewidth]{rb}
+    \caption{\label{fig:rb} The red-black ordering of zones}
+  \end{figure}
 
 \item {\em Solvability}: For $\nabla^2 \phi = f$ with periodic or
   Neumann boundaries all around, the sum of $f$ must equal $0$
