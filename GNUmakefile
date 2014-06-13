@@ -11,6 +11,7 @@ DIRS := intro \
         diffusion \
         multiphysics \
         incompressible \
+        pyro \
         software-engineering
 
 TEXS := $(foreach dir, $(DIRS), $(wildcard $(dir)/*.tex))
