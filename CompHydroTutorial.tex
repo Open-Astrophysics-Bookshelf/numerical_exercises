@@ -184,6 +184,8 @@
 % license
 \usepackage{ccicons}
 
+% computer keyboard symbol
+\usepackage{marvosym}
 
 \newcommand{\evm}{{(-)}}
 \newcommand{\evz}{{(\circ)}}
@@ -222,7 +224,7 @@
 
 
 \newcommand{\hydroex}{{\sf hydro\_examples}}
-
+\newcommand{\hydroexdoit}[1]{{\Large \Keyboard}\/ \hydroex: {\tt #1}}
 \begin{document}
 
 \frontmatter
@@ -309,12 +311,19 @@ go along with these notes.
   You can get this set of scripts from github at:\\
   \url{https://github.com/zingale/hydro_examples/}
 
+  References to the scripts in \hydroex\ are shown throughout
+  the text as: \\[0.5em]
+  \hydroexdoit{scriptname}
+
 \item  The {\sf pyro} code is a 2-d program that has
   solvers for advection, diffusion, compressible and incompressible
   hydrodynamcs.  It is designed to make 
-  experimentation easy.  You can download {\sf pyro} at: \\
-  \url{https://github.com/zingale/pyro2/} \\
-  and more information can be found at \\
+  experimentation easy.  
+
+  You can download {\sf pyro} at: \\
+  \url{https://github.com/zingale/pyro2/} 
+
+  and more information can be found at: \\
 \url{http://bender.astro.sunysb.edu/hydro_by_example/}
 \end{enumerate}
 
