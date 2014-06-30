@@ -80,15 +80,19 @@ Defining:
 \end{equation}
 we can write this as:
 \begin{equation}
+\label{eq:diff:implicit}
 -\alpha \phi_{i+1}^{n+1} + (1 + 2\alpha) \phi_{i}^{n+1} - \alpha \phi_{i-1}^{n+1} = \phi_i^n
 \end{equation}
 This is a set of coupled algebraic equations.  We can write this in
-matrix form.  Using a cell-centered grid, spanning
-$[\mathrm{lo},\mathrm{hi}]$, and Neumann BCs on the left:
+matrix form.  Using a cell-centered grid, we will solve for the values
+$[\mathrm{lo},\mathrm{hi}]$.  
+
+We specify boundary conditions by modifying the stencil (Eq.~\ref{eq:diff:implicit})
+for the updates to $\mathrm{lo}$ and $\mathrm{hi}$.  For example, Neumann BCs on the left mean:
 \begin{equation}
 \phi_\mathrm{lo-1} = \phi_\mathrm{lo}
 \end{equation}
-the update for the leftmost cell is:
+and substituting this into Eq~\ref{eq:diff:implicit}, the update for the leftmost cell is:
 \begin{equation}
  (1 + \alpha) \phi_\mathrm{lo}^{n+1} -\alpha \phi_\mathrm{lo+1}^{n+1}  = 
   \phi_\mathrm{lo}^n
@@ -97,7 +101,7 @@ If we choose Dirichlet BCs on the right ($\phi |_{x=x_l} = A$), then:
 \begin{equation}
 \phi_\mathrm{hi+1} = 2 A - \phi_\mathrm{hi}
 \end{equation}
-and the update for the rightmost cell is:
+Substituting this into Eq~\ref{eq:diff:implicit} the update for the rightmost cell is:
 \begin{equation}
 - \alpha \phi_\mathrm{hi-1}^{n+1} + (1 + 3\alpha) \phi_\mathrm{hi}^{n+1}  =
   \phi_\mathrm{hi}^n + \alpha 2 A
@@ -145,6 +149,83 @@ matrix.
 This can be solved by standard matrix operations, using a tridiagonal
 solvers (for example).
 
+A second-order in time discretization requires us to center the righthand side in time.  We
+do this as:
+\begin{equation}
+\frac{\phi_i^{n+1} - \phi_i^n}{\Delta t} = 
+  \frac{k}{2} \left ( \frac{\phi_{i+1}^{n} - 2\phi_i^{n} + \phi_{i-1}^{n}}{\Delta x^2} +
+                      \frac{\phi_{i+1}^{n+1} - 2\phi_i^{n+1} + \phi_{i-1}^{n+1}}{\Delta x^2} \right )
+\end{equation}
+This time-discretization is called  {\em Crank-Nicolson}.
+Again, using $\alpha \equiv k\Delta t / \Delta x^2$, and grouping all the $n+1$ terms on the left
+we have:
+\begin{equation}
+\phi^{n+1}_i - \frac{\alpha}{2} \left ( \phi^{n+1}_{i+1} - 2\phi^{n+1}_i + \phi^{n+1}_{i-1} \right )
+  = \phi^n_i + \frac{\alpha}{2} \left ( \phi^{n}_{i+1} - 2\phi^{n}_i + \phi^{n}_{i-1} \right )
+\end{equation}
+and grouping together the the $n+1$ terms by zone, we have:
+\begin{equation}
+-\frac{\alpha}{2} \phi^{n+1}_{i+1} + (1 + \alpha)\phi^{n+1}_i - \frac{\alpha}{2} \phi^{n+1}_{i-1}
+  = \phi^n_i + \frac{\alpha}{2} \left ( \phi^n_{i+1} - 2 \phi^n_i + \phi^n_{i-1} \right )
+\end{equation}
+
+Considering Neumann boundary conditions on the left, we again have
+$\phi^{n+1}_\mathrm{lo-1} = \phi^{n+1}_\mathrm{lo}$, and our stencil at the boundary 
+becomes
+\begin{equation}
+-\frac{\alpha}{2} \phi^{n+1}_\mathrm{lo+1} + \left (1 + \frac{\alpha}{2} \right ) \phi^{n+1}_\mathrm{lo} =
+    \phi^n_\mathrm{lo} + \frac{\alpha}{2} \left ( \phi^{n}_\mathrm{lo+1} - 2\phi^{n}_\mathrm{lo} + \phi^{n}_\mathrm{lo-1} \right )
+\end{equation}
+
+The matrix form of this system is:
+\newcommand{\atwo}{\frac{\alpha}{2}}
+\begin{equation}
+\renewcommand\arraystretch{1.5}
+\left (
+\begin{array}{ccccccc}
+1+\atwo &   -\atwo &          &        &        &           &          \\
+-\atwo  & 1+\alpha & -\atwo   &        &        &           &          \\
+        &   -\atwo & 1+\alpha & -\atwo &        &           &          \\
+        &          & \ddots   & \ddots & \ddots &           &          \\
+        &          &          & \ddots & \ddots & \ddots    &          \\
+        &          &          &        & -\atwo & 1+\alpha  &-\atwo   \\
+        &          &          &        &        & -\atwo    &1+\atwo \\
+\end{array}
+\right )
+\left (
+\begin{array}{c}
+\phi_\mathrm{lo}^{n+1} \\
+\phi_\mathrm{lo+1}^{n+1} \\
+\phi_\mathrm{lo+2}^{n+1} \\
+\vdots \\
+\vdots \\
+\phi_\mathrm{hi-1}^{n+1} \\
+\phi_\mathrm{hi}^{n+1} \\
+\end{array}
+\right )
+=
+\left (
+\begin{array}{c}
+\phi_\mathrm{lo}^{n}  + \frac{k\Delta t}{2} [\nabla^2 \phi]^n_\mathrm{lo}\\
+\phi_\mathrm{lo+1}^{n} + \frac{k\Delta t}{2} [\nabla^2 \phi]^n_\mathrm{lo+1} \\
+\phi_\mathrm{lo+2}^{n} + \frac{k\Delta t}{2} [\nabla^2 \phi]^n_\mathrm{lo+2}\\
+\vdots \\
+\vdots \\
+\phi_\mathrm{hi-1}^{n} + \frac{k\Delta t}{2} [\nabla^2 \phi]^n_\mathrm{hi-1}\\
+\phi_\mathrm{hi}^{n} + \frac{k\Delta t}{2} [\nabla^2 \phi]^n_\mathrm{hi}\\
+\end{array}
+\right )
+\end{equation}
+
+Figure~\ref{fig:diffuse} shows the result of using $\alpha = 0.8$ and $\alpha = 8.0$.  We 
+see that they are both stable, but that the smaller timestep is closer to the analytic
+solution (especially at early times).
+
+\begin{figure}
+\centering
+\includegraphics[width=0.495
+\end{figure}
+
 \begin{exercise}[1-d implicit diffusion]
 {Write a one-dimensional implicit diffusion solver for the
   domain $[0,1]$ with Neumann boundary conditions at each end and $k = 1$.
@@ -173,7 +254,7 @@ the RHS is centered in time), for the multi-dimensional diffusion equation:
 \frac{\phi^{n+1}_i - \phi^n_i}{\Delta t} = 
    \frac{1}{2} \left ( k \nabla^2 \phi^n_i + k \nabla^2 \phi^{n+1}_i \right )
 \end{equation}
-This time-discretization is sometimes called {\em Crank-Nicolson}.  Grouping all the 
+This time-discretization is sometimes called.  Grouping all the 
 $n+1$ terms on the left, we find:
 \begin{equation}
 \phi^{n+1}_i - \frac{\Delta t}{2} k \nabla^2 \phi^{n+1}_i = 
