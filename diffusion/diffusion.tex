@@ -47,6 +47,7 @@ Stability requires that $|A^{n+1}/A^n| \le 1$, which can only be true
 if $2k\Delta t/\Delta x^2 \le 1$.  Therefore, our timestep
 constraint in this case is
 \begin{equation}
+\label{eq:diff:dt}
 \Delta t < \frac{1}{2} \frac{\Delta x^2}{k}
 \end{equation}
 Note the $\Delta x^2$ dependence---this constraint can become really
@@ -87,8 +88,16 @@ This is a set of coupled algebraic equations.  We can write this in
 matrix form.  Using a cell-centered grid, we will solve for the values
 $[\mathrm{lo},\mathrm{hi}]$.  
 
-We specify boundary conditions by modifying the stencil (Eq.~\ref{eq:diff:implicit})
-for the updates to $\mathrm{lo}$ and $\mathrm{hi}$.  For example, Neumann BCs on the left mean:
+We can define a diffusive CFL number, $C$, as the ratio of $\Delta t$ to the 
+maximum explicit timestep (Eq.~\ref{eq:diff:dt}), and we see:
+\begin{equation}
+C \equiv \frac{\Delta t}{\frac{\Delta x^2}{2 k}} = 2\alpha
+\end{equation}
+The implicit method can use any $C > 0$.
+
+We specify boundary conditions by modifying the stencil
+(Eq.~\ref{eq:diff:implicit}) for the updates to $\mathrm{lo}$ and
+$\mathrm{hi}$.  For example, Neumann BCs on the left mean:
 \begin{equation}
 \phi_\mathrm{lo-1} = \phi_\mathrm{lo}
 \end{equation}
@@ -226,7 +235,7 @@ solution (especially at early times).
 \includegraphics[width=0.495\linewidth]{diff-implicit-128-CFL_0_8}
 \includegraphics[width=0.495\linewidth]{diff-implicit-128-CFL_8_0}
 \caption[Implicit diffusion of a Gaussian]{\label{fig:diffuse} Implicit diffusion of a Gaussian (with Crank-Nicolson discretization)
-  with $\alpha = 0.8$ and $\alpha = 8.0$.  The exact solution at each time is shown as the dotted
+  with $C = 0.8$ and $C = 8.0$.  The exact solution at each time is shown as the dotted
   line. \\
   \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/diffusion/diffusion-implicit.py}{diffusion-implicit.py}}}
 \end{figure}
