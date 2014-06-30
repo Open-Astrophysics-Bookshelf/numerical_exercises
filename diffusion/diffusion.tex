@@ -225,8 +225,10 @@ solution (especially at early times).
 \centering
 \includegraphics[width=0.495\linewidth]{diff-implicit-128-CFL_0_8}
 \includegraphics[width=0.495\linewidth]{diff-implicit-128-CFL_8_0}
-\caption{\label{fig:diffuse} Implicit diffusion (with Crank-Nicolson discretization)
-  with $\alpha = 0.8$ and $\alpha = 8.0$.}
+\caption{\label{fig:diffuse} Implicit diffusion of a Gaussian (with Crank-Nicolson discretization)
+  with $\alpha = 0.8$ and $\alpha = 8.0$.  The exact solution at each time is shown as the dotted
+  line. \\
+  \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/diffusion/diffusion-implicit.py}{diffusion-implicit.py}}}
 \end{figure}
 
 \begin{exercise}[1-d implicit diffusion]
@@ -251,13 +253,14 @@ solution (especially at early times).
 
 \section{Implicit multi-dimensional diffusion via multigrid}
 
-Consider a second-order accurate time discretization (this means that
-the RHS is centered in time), for the multi-dimensional diffusion equation:
+Instead of doing a direct solve of the matrix form of the system, we 
+can use multigrid techniques.  Consider the Crank-Nicolson system we just 
+looked at:
 \begin{equation}
 \frac{\phi^{n+1}_i - \phi^n_i}{\Delta t} = 
    \frac{1}{2} \left ( k \nabla^2 \phi^n_i + k \nabla^2 \phi^{n+1}_i \right )
 \end{equation}
-This time-discretization is sometimes called.  Grouping all the 
+Grouping all the 
 $n+1$ terms on the left, we find:
 \begin{equation}
 \phi^{n+1}_i - \frac{\Delta t}{2} k \nabla^2 \phi^{n+1}_i = 
