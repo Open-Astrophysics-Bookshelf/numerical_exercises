@@ -425,7 +425,23 @@ of V-cycle number, illustrating the expected performance.
   model problem ($\phi_{xx} = \sin(x)$) as a function of V-cycle.  We
   see that the true error, $\|e\|$ stalls at truncation error while
   the residual error, $\|r\|$ reaches roundoff error, the same
-  behavior as seen with smoothing alone (as expected).}
+  behavior as seen with smoothing alone (as expected). \\
+  \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/multigrid/mg_test.py}{mg\_test.py}}}
+\end{figure}
+
+The overall convergence of the multigrid algorithm is limited by the
+discretization of the Laplacian operator used and the implementation
+of the boundary conditions.  Figure~\ref{fig:mg:convergence} shows
+the error in the solution as the number of zones is increased---demonstrating
+second-order convergence for our implementation.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{mg-converge}
+\caption[Convergence of the multigrid
+  algorithm]{\label{fig:mg:convergence} Convergence of the multigrid
+  algorithm. \\ 
+  \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/multigrid/mg_converge.py}{mg\_converge.py}}}
 \end{figure}
 
 
