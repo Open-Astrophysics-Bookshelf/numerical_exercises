@@ -184,6 +184,8 @@
 % license
 \usepackage{ccicons}
 
+% computer keyboard symbol
+\usepackage{marvosym}
 
 \newcommand{\evm}{{(-)}}
 \newcommand{\evz}{{(\circ)}}
@@ -221,6 +223,8 @@
 \renewcommand\textfraction{.1}   
 
 
+\newcommand{\hydroex}{{\sf hydro\_examples}}
+\newcommand{\hydroexdoit}[1]{{\color{red} \LARGE \Keyboard}\/ \hydroex: {\tt #1}}
 \begin{document}
 
 \frontmatter
@@ -295,9 +299,33 @@ intervals, usually when I have a new student working with me, or if
 I am using them for a course.
 
 The best way to understand the methods described here is to run
-them for yourself.  The {\sf pyro} code is designed to make such
-experimentation easy.  You can download {\sf pyro} at: 
+them for yourself.  There are two sets of example codes that
+go along with these notes.
+
+\begin{enumerate}
+\item \hydroex\ is a set of simple 1-d, standalone python scripts
+  the illustrate some of the basic solvers.  Many of the figures
+  in these notes were created using these codes---the relevant
+  script will be noted in the figure caption.  
+
+  You can get this set of scripts from github at:\\
+  \url{https://github.com/zingale/hydro_examples/}
+
+  References to the scripts in \hydroex\ are shown throughout
+  the text as: \\[0.5em]
+  \hydroexdoit{scriptname}
+
+\item  The {\sf pyro} code is a 2-d program that has
+  solvers for advection, diffusion, compressible and incompressible
+  hydrodynamcs.  It is designed to make 
+  experimentation easy.  
+
+  You can download {\sf pyro} at: \\
+  \url{https://github.com/zingale/pyro2/} 
+
+  and more information can be found at: \\
 \url{http://bender.astro.sunysb.edu/hydro_by_example/}
+\end{enumerate}
 
 These notes benefited from numerous conversations with Ann Almgren,
 John Bell, Alan Calder, Chris Malone, \& Andy Nonaka.
@@ -353,15 +381,15 @@ If you find errors, please e-mail me at Michael.Zingale@stonybrook.edu
 
 \input incompressible/incompressible.tex
 
-\appendix
+%% \appendix
 
-\chapter{Using \pyro}
+%% \chapter{Using \pyro}
 
-\input pyro/pyro.tex
+%% \input pyro/pyro.tex
 
-\chapter{Software Engineering Practices}
+%% \chapter{Software Engineering Practices}
 
-\input software-engineering/software-engineering.tex
+%% \input software-engineering/software-engineering.tex
 
 \backmatter
 
