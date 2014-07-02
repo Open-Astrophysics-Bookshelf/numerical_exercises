@@ -12,6 +12,7 @@ DIRS := intro \
         multiphysics \
         incompressible \
         pyro \
+        hydro_examples \
         software-engineering
 
 TEXS := $(foreach dir, $(DIRS), $(wildcard $(dir)/*.tex))

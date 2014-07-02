@@ -1,0 +1,127 @@
+
+
+\begin{quote}
+\noindent {\em Here we describe the basic structure and use of the
+\hydroex\ codes that implement standalone, simple 1-d versions of the algorithms described in these
+notes.}
+\end{quote}
+
+The \hydroex\ codes are simple 1-d solvers written in python that illustrate many of the
+ideas in these nodes.  They are used for making many of the figures found throughout
+(wherever the ``\hydroexdoit{}'' note is found).
+
+\section{Getting \hydroex}
+
+The \hydroex\ codes are hosted on github:\\
+\url{https://github.com/zingale/hydro_examples}
+
+There are a few ways to get them.  The simplest way is to just clone
+from github on the commandline:
+
+\begin{verbatim}
+git clone https://github.com/zingale/hydro_examples
+\end{verbatim}
+
+This will create a local git repo on your machine with all of the
+code.  You can then run the scripts, ``as is'' without needing to go
+to github anymore.  Periodically, there may be updates to the scripts,
+which you can obtain by issuing ``{\tt git pull}'' in the {\tt
+  hydro\_examples/} directory.  Note that if you have made any local
+changes to the scripts, \git\ may complain.  The process of merging
+changes is descibed online in various places,
+e.g. ``\href{https://help.github.com/articles/resolving-a-merge-conflict-from-the-command-line}{Resolving
+  a merge conflict from the command line}'' from github.
+
+Alternately, you can use github's web interface to fork it.  Logon to
+github (or create an account) and click on the ``Fork'' icon on the
+\hydroex\ page.  You can then interact with your version of the repo
+as needed.  This method will allow you to push changes back to github,
+and, if you think they should be included in the main \hydroex\ repo,
+issue a pull-request.
+
+\section{\hydroex\ codes}
+
+The codes in \hydroex\ are organized into directories named after the
+chapters in these notes.  Each directory is self-contained.  The
+following scripts are available:
+
+\begin{itemize}
+
+\item {\tt advection/}
+  
+  \begin{itemize}
+  \item {\tt advection.py}: a 1-d second-order linear advection solver
+    with a wide range of limiters.
+
+  \end{itemize}
+
+\item {\tt burgers/}: 
+
+  \begin{itemize}
+  \item {\tt burgers.py}: a 1-d second-order solver for the inviscid
+    Burgers' equation, with initial conditions corresponding to a
+    shock and a rarefaction.
+
+  \end{itemize}
+
+\item {\tt multigrid/}
+
+  \begin{itemize}
+  \item {\tt mg\_converge.py}: a convergence test of the multigrid
+    solver.  A Poisson problem is solved at various resolutions and
+    compared to the exact solution.  This demonstrates second-order
+    accuracy.
+
+  \item {\tt mg\_test.py}: a simple driver for the multigrid solver.
+    This sets up and solves a Poisson problem and plots the behavior 
+    of the solution as a function of V-cycle number.
+
+  \item{\tt multigrid.py}: a multigrid class for cell-centered data.
+    This implements pure V-cycles.  A square domain with $2^N$ zones
+    ($N$ a positive integer) is required.
+
+  \item {\tt patch1d.py}: a class for 1-d cell-centered data that
+    lives on a grid.  This manages the data, handles boundary
+    conditions, and provides routines for prolongation and restriction
+    to other grids.
+
+  \end{itemize}
+
+\item {\tt diffusion/}
+
+  \begin{itemize}
+    \item {\tt diffusion-explicit.py}: solve the constant-diffusivity
+      diffusion equation explicitly.  The method is first-order
+      accurate in time, but second-order in space.  A Gaussian profile
+      is diffused---the analytic solution is also a Gaussian.
+
+    \item {\tt diffusion-implicit.py}: solve the constant-diffusivity
+      diffusion equation implicitly.  Crank-Nicolson time-discretization
+      is used, resulting in a second-order method.  A Gaussian profile
+      is diffused.
+
+  \end{itemize}
+  
+\item {\tt multiphysics/}
+
+  \begin{itemize}
+  \item {\tt burgersvisc.py}: solve the viscous Burgers equation.
+     The advective terms are treated explicitly with a second-order
+     accurate method.  The diffusive term is solved using an 
+     implicit Crank-Nicolson discretization.  The overall coupling
+     is second-order accurate.
+
+  \item {\tt diffusion-reaction.py}: solve a diffusion-reaction
+    equation that propagates a diffusive reacting front (flame).  A
+    simple reaction term is modeled.  The diffusion is solved using
+    a second-order Crank-Nicolson discretization.  The reactions
+    are evolved using the VODE ODE solver (via SciPy).  The two
+    processes are coupled together using Strang-splitting to be
+    second-order accurate in time.
+     
+
+  \end{itemize}
+
+\end{itemize}
+
+
