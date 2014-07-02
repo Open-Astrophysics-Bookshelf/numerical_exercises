@@ -21,3 +21,12 @@
   with these notes.  The latter briefly discusses some of the popular
   extensions done to the core algorithms discussed here, with pointers
   to the relevant papers in the literature.
+
+-- burgers:
+
+http://onlinelibrary.wiley.com/doi/10.1002/fld.1650030302/abstract
+
+Generating exact solutions of the two-dimensional Burgers' equations
+Clive A. J. Fletcher
+
+
