@@ -9,8 +9,36 @@ notes.}
 
 \section{Getting \pyro}
 
-\section{\pyro 's Structure}
+\pyro\ can be downloaded from its github repository, \url{https://github.com/zingale/pyro2} as:
+\begin{verbatim}
+git clone https://github.com/zingale/pyro2
+\end{verbatim}
+
+The structure of the code and descriptions of the various runtime
+parameters is found on the pyro webpage,
+\url{http://bender.astro.sunysb.edu/hydro_by_example/}.
 
 \section{The \pyro\ Solvers}
+
+\pyro\ offers the following 2-d solvers:
+\begin{itemize}
+\item {\em advection}: an unsplit, second-order method for linear advection,
+  following the ideas from Chapter~\ref{ch:advection}.
+
+\item {\em compressible}: an unsplit, second-order compressible hydrodynamics
+  solver using the piecewise linear reconstruction discussed in Chapter~\ref{ch:compressible}.
+
+\item {\em diffusion}: a second-order implicit diffusion solver, based
+  on the ideas from Chapter~\ref{ch:diffusion}.
+
+\item {\em incompressible}: a second-order incompressible hydrodynamics
+  solver using a cell-centered approximate projection, as discussed
+  in Chapter~\ref{ch:incompressible}.
+
+\end{itemize}
+
+\section{\pyro 's Structure}
+
+
 
 
