@@ -1,8 +1,5 @@
 \documentclass[11pt]{book}
 
-% add an exercise environment from here
-% http://www.dickimaw-books.com/latex/novices/html/newenv.html
-
 % include figures
 \usepackage{epsfig}
 
@@ -54,10 +51,15 @@
 
 
 % chapter title styles
-\usepackage[Bjornstrup]{fncychap}
-\ChNumVar{\fontsize{76}{80}\usefont{OT1}{pzc}{m}{n}\selectfont}
-\ChTitleVar{\raggedleft\Large\sffamily\bfseries}
+%\usepackage[Bjornstrup]{fncychap}
+%\ChNumVar{\fontsize{76}{80}\usefont{OT1}{pzc}{m}{n}\selectfont}
+%\ChTitleVar{\raggedleft\Large\sffamily\bfseries}
 
+\usepackage[PetersLenny]{fncychap}
+\ChNameVar{\fontsize{16}{18}\usefont{OT1}{phv}{m}{n}\selectfont}
+\ChNumVar{\fontsize{60}{62}\usefont{OT1}{ptm}{m}{n}\selectfont}
+\ChTitleVar{\Huge\bfseries\sffamily}
+\ChRuleWidth{1pt}
 
 
 % hyperlinks -- load after fncychap
@@ -86,15 +88,16 @@
 %% \renewcommand{\headrulewidth}{0.0pt}
 %% \renewcommand{\footrulewidth}{0.0pt}
 
+
+
 % don't make the chapter/section headings uppercase.  See the fancyhdr
 % documentation (section 9)
 \usepackage{fancyhdr}
 \renewcommand{\chaptermark}[1]{%  
- \markboth{\chaptername
+\markboth{\chaptername
 \ \thechapter.\ #1}{}}
 
 \renewcommand{\sectionmark}[1]{\markright{\thesection---#1}}
-
 
 
 % don't put a header on blank pages, see
@@ -212,8 +215,9 @@
 \renewcommand*\contentsname{\bf\textsf{Table of Contents}}
 
 
+
 % short table of contents
-%\usepackage{shorttoc}
+\usepackage{shorttoc}
 
 
 % pack more figures on a page
@@ -266,7 +270,12 @@ license
 
 \clearpage
 
-%\shorttoc{Chapter Listing}{0}
+\pagestyle{plain}
+
+
+\shorttoc{Chapter Listing}{0}
+
+\clearpage
 
 
 \setcounter{tocdepth}{2}
@@ -337,6 +346,15 @@ John Bell, Alan Calder, Chris Malone, \& Andy Nonaka.
 If you find errors, please e-mail me at Michael.Zingale@stonybrook.edu
 
 \clearpage
+
+\pagestyle{headings}
+
+\renewcommand{\chaptermark}[1]{%  
+\markboth{\chaptername
+\ \thechapter.\ #1}{}}
+
+\renewcommand{\sectionmark}[1]{\markright{\thesection---#1}}
+
 
 \mainmatter
 
