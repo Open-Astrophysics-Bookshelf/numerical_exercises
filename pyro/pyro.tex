@@ -43,6 +43,78 @@ parameters is found on the pyro webpage,
 
 \section{\pyro 's Structure}
 
+The grid structure is managed by the {\tt patch.Grid2d} class.  Data
+is that lives on the grid is contained in a {\tt
+  patch.CellCenterData2d} object.  Methods are available to provide
+access to the data and fill the ghost cells.
+
+Each \pyro\ solver is its own python module.  All but the multigrid
+solver represent time-dependent problems.  Each of these provide a
+{\tt Simulation} class that provides the routines necessary to
+initialize the solver, determine the timestep, and evolve the solution
+in time.  Each solver has one or more sets of initial conditions
+defined in the solver's {\tt problems/} directory.
+
+All time-dependent problems are run through the {\tt pyro.py} script.
+The general form is: \\[0.5em]
+{\tt ./pyro.py} {\em solver problem inputs} \\[0.5em]
+where {\em solver} is one of {\tt advection}, {\tt compressible},
+{\tt diffusion}, {\tt incompressible}, {\em problem} is
+one of the problems defined in the solver's {\tt problems/}
+directory, and {\em inputs} is the name of an input file
+that defines the values of runtime parameter. 
+
+The possible runtime parameters and their defaults are defined in the
+{\tt \_defaults} files in the main directory and each solver and
+problem directory.  Note that the inputs file need not be in the 
+{\tt pyro2/} directory.  The solver's {\tt problems/} directory
+will also be checked.
+
+\section{Running \pyro}
+
+A simple Gaussian advection simulation is provided by the advection
+{\em smooth} problem.  This is run as:
+\begin{verbatim}
+./pyro.py advection smooth inputs.smooth
+\end{verbatim}
+As this is run, the solution will be visualized at each step,
+showing the progression of the simulation.  
+
+
+A list of the problems available for each solver is given in
+Table~\ref{tab:problems}.  For the multigrid solver, there are scripts
+available in the {\tt multigrid/} directory that illustrate its use.
+
+
+
+\begin{table*}[t]
+\centering
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{llp{2.5in}}
+\hline
+{\bf solver} & {\bf problem} & {\bf problem description} \\
+\hline
+\multirow{2}{*}{\tt advection} & {\tt smooth} & advect a smooth Gaussian profile \\
+                               & {\tt tophat} & advect a discontinuous tophat profile \\
+\hline
+\multirow{6}{*}{\tt compressible} & {\tt bubble} & a buoyant bubble in a stratified atmosphere \\
+                                  & {\tt kh} & setup a shear layer to drive Kelvin-Helmholtz instabilities \\
+                                  & {\tt quad} & 2-d Riemann problem based on \cite{schulz-rinne:1993}  \\
+                                  & {\tt rt}  & a simple Rayleigh-Taylor instability\\
+                                  & {\tt sedov} & the classic Sedov-Taylor blast wave \\
+                                  & {\tt sod} & the Sod shock tube problem  \\
+\hline
+{\tt diffusion}& {\tt gaussian} & diffuse an initial Gaussian profile \\
+\hline
+\multirow{2}{*}{\tt incompressible} & {\tt converge} & A simple incompressible problem with known analytic solution.\
+  \\
+                     & {\tt shear} & a doubly-periodic shear layer \\
+\hline
+\end{tabular}
+\caption{\label{tab:problems} Solvers and their distributed problems}
+\renewcommand{\arraystretch}{1.0}
+\end{table*}
+
 
 
 
