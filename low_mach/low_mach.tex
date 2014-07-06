@@ -11,11 +11,11 @@ effects, giving rise to low Mach number methods.
 
 We now need to solve an elliptic equation of the form:
 \begin{equation}
-\nabla \cdot (\alpha \nabla \phi) = f
+\nabla \cdot (\eta \nabla \phi) = f
 \end{equation}
 
 If we denote the discrete divergence and gradient operators as $D$ and $G$,
-then our operator will be $L_\alpha \equiv D \alpha G$.  If we wish to
+then our operator will be $L_\eta \equiv D \eta G$.  If we wish to
 use a cell-centered discretization for $\phi$, then using a standard 
 centered-difference for $D$ and $G$ will result in a stencil that reaches
 two zones on either side of the current zone.  This can lead to an
@@ -27,14 +27,40 @@ discusses issues with cell-centered}
 Instead, we again use an approximate projection.  We discretize the
 variable-coefficient Laplacian as:
 \begin{align}
-(L_\alpha \phi)_{i,j} = 
- & \frac{\alpha_{i+1/2,j} (\phi_{i+1,j} - \phi_{i,j}) -
-        \alpha_{i-1/2,j} (\phi_{i,j} - \phi_{i-1,j})}{\Delta x^2} + \\
- & \frac{\alpha_{i,j+1/2} (\phi_{i,j+1} - \phi_{i,j}) -
-        \alpha_{i,j-1/2} (\phi_{i,j} - \phi_{i,j-1})}{\Delta y^2}
+(L_\eta \phi)_{i,j} = 
+ & \frac{\eta_{i+1/2,j} (\phi_{i+1,j} - \phi_{i,j}) -
+        \eta_{i-1/2,j} (\phi_{i,j} - \phi_{i-1,j})}{\Delta x^2} + \\
+ & \frac{\eta_{i,j+1/2} (\phi_{i,j+1} - \phi_{i,j}) -
+        \eta_{i,j-1/2} (\phi_{i,j} - \phi_{i,j-1})}{\Delta y^2}
 \end{align}
+
+We can define the interface values of $\eta$ as the averages of the cell-centered
+values.
+
 
 \section{Reactive flows}
 
+Our constraint equation is $\nabla \cdot U = S$.  Decomposing the velocity field
+as 
+\begin{equation}
+U^\star = U^d + \frac{1}{\rho} \nabla \phi
+\end{equation}
+our Poisson equation can be defined by taking the divergence, and
+using $\nabla \cdot U^d = S$, giving
+\begin{equation}
+\nabla \cdot \frac{1}{\rho} \nabla \phi = \nabla \cdot U^\star - S
+\end{equation}
+
+
 \section{Atmospheric flows}
 
+Our constraint equation is $\nabla \cdot \beta_0 U = 0$.  Decomposing the velocity field
+as 
+\begin{equation}
+U^\star = U^d + \frac{1}{\rho} \nabla \phi
+\end{equation}
+our Poisson equation can be defined by multiplying by $\beta_0$ and
+taking the divergence, and using $\nabla \cdot \beta_0 U^d = 0$, giving
+\begin{equation}
+\nabla \cdot \frac{\beta_0}{\rho} \nabla \phi = \nabla \cdot \beta_0 U^\star 
+\end{equation}
