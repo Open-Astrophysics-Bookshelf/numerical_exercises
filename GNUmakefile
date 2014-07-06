@@ -11,6 +11,7 @@ DIRS := intro \
         diffusion \
         multiphysics \
         incompressible \
+        low_mach \
         pyro \
         hydro_examples \
         software-engineering

@@ -234,6 +234,12 @@
 \usepackage{multirow}
 
 
+% MarginPars                                                                    
+\setlength{\marginparwidth}{0.75in}
+\newcommand{\MarginPar}[1]{\marginpar{\vskip-\baselineskip\raggedright\tiny\sffamily\hrule\smallskip{\color{red}#1}\par\smallskip\hrule}}
+
+
+
 \begin{document}
 
 \frontmatter
@@ -340,6 +346,7 @@ go along with these notes.
   You can download {\sf pyro} at: \\
   \url{https://github.com/zingale/pyro2/} 
 
+  A brief overview of \pyro\ is given in Appendix~\ref{app:pyro},
   and more information can be found at: \\
 \url{http://bender.astro.sunysb.edu/hydro_by_example/}
 \end{enumerate}
