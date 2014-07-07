@@ -1,9 +1,24 @@
+\newcommand{\teta}{\tilde{\eta}}
+
 Incompressible flow represents the zero-Mach number limit of fluid
 flow---no compressibility effects are modeled.  We can extend the
 ideas of incompressibe flow to allow us to model some compressibility
 effects, giving rise to low Mach number methods.
 
 \section{Low Mach divergence constraints}
+
+The key idea in solvers for low Mach number flows is that, as a fluid
+element advects, its pressure remains the same as the background
+state.  For an atmosphere, this background state is a hydrostatic
+profile.  For a smallscale combustion flow, this background state is a
+spatially constant pressure (and constaint-in-time if the domain is
+open).
+
+We can derive the constraint on the velocity field by considering the
+Lagrangian derivative of the pressure---this captures the change in
+pressure of a fluid element as it moves through the domain.
+
+
 
 \section{Extending the incompressible algorithm}
 
@@ -34,9 +49,23 @@ variable-coefficient Laplacian as:
         \eta_{i,j-1/2} (\phi_{i,j} - \phi_{i,j-1})}{\Delta y^2}
 \end{align}
 
-We can define the interface values of $\eta$ as the averages of the cell-centered
-values.
+We can define the interface values of $\eta$ as the averages of the
+cell-centered values.  Our elliptic equation is then 
+\begin{equation}
+(L_\eta \phi)_{i,j} = f_{i,j}
+\end{equation}
 
+The relaxation method for this operator again relies on isolating
+$\phi_{i,j}$, yielding:
+\begin{equation}
+\phi_{i,j} = \frac{\teta_{i+1/2,j}\phi_{i+1,j} + \teta_{i-1/2,j}\phi_{i-1,j} +
+                   \teta_{i,j+1/2}\phi_{i,j+1} + \teta_{i,j-1/2}\phi_{i,j-1} -
+                   f_{i,j} } 
+                  {\teta_{i+1/2,j} + \teta_{i-1/2,j} + 
+                   \teta_{i,j+1/2} + \teta_{i,j-1/2}}
+\end{equation}
+with the shorthand that $\teta_{i\pm1/2,j} = \teta_{i\pm1/2,j}/\Delta x^2$
+and $\teta_{i,j\pm1/2} = \teta_{i,j\pm1/2}/\Delta y^2$.
 
 \section{Reactive flows}
 
@@ -54,13 +83,13 @@ using $\nabla \cdot U^d = S$, giving
 
 \section{Atmospheric flows}
 
-Our constraint equation is $\nabla \cdot \beta_0 U = 0$.  Decomposing the velocity field
+Our constraint equation is $\nabla \cdot (\beta_0 U) = 0$.  Decomposing the velocity field
 as 
 \begin{equation}
 U^\star = U^d + \frac{1}{\rho} \nabla \phi
 \end{equation}
 our Poisson equation can be defined by multiplying by $\beta_0$ and
-taking the divergence, and using $\nabla \cdot \beta_0 U^d = 0$, giving
+taking the divergence, and using $\nabla \cdot (\beta_0 U^d) = 0$, giving
 \begin{equation}
-\nabla \cdot \frac{\beta_0}{\rho} \nabla \phi = \nabla \cdot \beta_0 U^\star 
+\nabla \cdot \frac{\beta_0}{\rho} \nabla \phi = \nabla \cdot (\beta_0 U^\star)
 \end{equation}

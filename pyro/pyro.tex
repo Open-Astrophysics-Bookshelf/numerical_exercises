@@ -7,6 +7,7 @@ notes.}
 \end{quote}
 
 
+
 \section{Getting \pyro}
 
 \pyro\ can be downloaded from its github repository, \url{https://github.com/zingale/pyro2} as:
@@ -17,6 +18,12 @@ git clone https://github.com/zingale/pyro2
 The structure of the code and descriptions of the various runtime
 parameters is found on the pyro webpage,
 \url{http://bender.astro.sunysb.edu/hydro_by_example/}.
+
+\pyro\ uses the {\sf matplotlib} and {\sf numpy} libraries.
+Several routines are written in Fortran and need to be compiled.  The
+script {\tt mk.sh} will build the packages.  This requires that {\tt
+f2py} is installed.  
+
 
 \section{The \pyro\ Solvers}
 
