@@ -14,7 +14,7 @@ There are two sets of companion codes that go along with these notes:
 
 *pyro*: https://github.com/zingale/pyro2
 
-hydro_examples and simple, standalone, 1-d solvers that illustrate
+hydro_examples are simple, standalone, 1-d solvers that illustrate
 the basic ideas.
 
 pyro is a 2-d full simulation code designed with simplicity in mind
