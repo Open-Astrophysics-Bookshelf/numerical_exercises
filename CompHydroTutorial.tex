@@ -1,13 +1,13 @@
 \documentclass[11pt]{book}
 
 % include figures
-\usepackage{epsfig}
+\usepackage{epsfig,wrapfig}
 
 % prefer PDF to PNG
 \DeclareGraphicsExtensions{%
   .pdf, .png}
 
-\graphicspath{{intro/}{finite-volume/}{advection/}{burgers/}{diffusion/}{Euler/}{incompressible/}{multigrid/}{multiphysics/}}
+\graphicspath{{preface/}{intro/}{finite-volume/}{advection/}{burgers/}{diffusion/}{Euler/}{incompressible/}{multigrid/}{multiphysics/}{pyro/}}
 
 % AMS symbols
 \usepackage{amsmath,amssymb}
@@ -268,6 +268,8 @@ for Astrophysics}}
 
 \end{titlepage}
 
+\pagestyle{plain}
+
 \null \vfill 
 
 \noindent \ccCopy\ 2013, 2014 Michael Zingale \\
@@ -283,8 +285,6 @@ Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
 
 
 \clearpage
-
-\pagestyle{plain}
 
 
 \shorttoc{Chapter Listing}{0}
@@ -311,54 +311,7 @@ Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
 \chaptermark{preface}
 \addcontentsline{toc}{chapter}{preface}
 
-
-These notes are intended to help new students come up to speed on the
-common methods used in computational hydrodynamics for astrophysical
-flows.  They are written at a level appropriate for upper-level
-undergraduates.
-
-These are very much a work in progress, likely not spell-checked, and 
-definitely not complete.  These notes are updated at irregular
-intervals, usually when I have a new student working with me, or if
-I am using them for a course.
-
-The best way to understand the methods described here is to run
-them for yourself.  There are two sets of example codes that
-go along with these notes.
-
-\begin{enumerate}
-\item \hydroex\ is a set of simple 1-d, standalone python scripts
-  the illustrate some of the basic solvers.  Many of the figures
-  in these notes were created using these codes---the relevant
-  script will be noted in the figure caption.  
-
-  You can get this set of scripts from github at:\\
-  \url{https://github.com/zingale/hydro_examples/}
-
-  References to the scripts in \hydroex\ are shown throughout
-  the text as: \\[0.5em]
-  \hydroexdoit{scriptname}
-
-  More details on the codes available in \hydroex\ are described
-  in Appendix~\ref{app:hydroex}.
-
-\item  The {\sf pyro} code is a 2-d program that has
-  solvers for advection, diffusion, compressible and incompressible
-  hydrodynamcs.  It is designed to make 
-  experimentation easy.  
-
-  You can download {\sf pyro} at: \\
-  \url{https://github.com/zingale/pyro2/} 
-
-  A brief overview of \pyro\ is given in Appendix~\ref{app:pyro},
-  and more information can be found at: \\
-\url{http://bender.astro.sunysb.edu/hydro_by_example/}
-\end{enumerate}
-
-These notes benefited from numerous conversations with Ann Almgren,
-John Bell, Alan Calder, Chris Malone, \& Andy Nonaka.
-
-If you find errors, please e-mail me at Michael.Zingale@stonybrook.edu
+\input preface/preface.tex
 
 \clearpage
 

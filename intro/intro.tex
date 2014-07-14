@@ -1,23 +1,23 @@
 \section{What Is Simulation?}
 
-Astronomy is an observational science.
-Unlike in terrestrial physics, we do not have the luxury of being able
-to build a model system and do physical experimentation on it to understand
-the core physics.  We have to take what nature gives us.
-Simulation enables us to build a virtual model of a system and allows us
-to do virtual experiments to understand how this system reacts to a range
-of conditions and assumptions.  
+Astronomy is an observational science.  Unlike in terrestrial physics,
+we do not have the luxury of being able to build a model system and do
+physical experimentation on it to understand the core physics.  We
+have to take what nature gives us.  Simulation enables us to build a
+model of a system and allows us to do virtual experiments to
+understand how this system reacts to a range of conditions and
+assumptions.
 
 It's tempting to think that one can download a simulation code, set a
 few parameters, maybe edit some initial conditions, run, and then have
 a virtual realization of some astrophysical system that you are
-interested in.  Just like that.  In reality, it does not work that
-way.  All simulation codes make approximations.  These start even
-before one turns to the computer, simply by making a choice of what
-equations are to be solved.  Typically, we have a system of PDEs,
-and we need to convert the continuous functional form of our system
-into a discrete form that can be represented in the finite memory of 
-a computer.  This introduces yet more approximation.  
+interested in.  Just like that.  In practice, it is not this simple.
+All simulation codes make approximations---these start even before one
+turns to the computer, simply by making a choice of what equations are
+to be solved.  Typically, we have a system of PDEs, and we need to
+convert the continuous functional form of our system into a discrete
+form that can be represented in the finite memory of a computer.  This
+introduces yet more approximation.
 
 %V\&V
 
@@ -37,9 +37,9 @@ As such its best not to obsess about precise numbers, but rather the
 trends.  To really understand the limits of your simulations, you
 should do parameter and convergence studies.
 
-There is no \"uber-code.  Every algorithm begins with approximations
+There is no ``\"uber-code''.  Every algorithm begins with approximations
 and has limitations.  Comparisons between different codes are
-important and common in our field.  It builds confidence in the
+important and common in our field, and build confidence in the
 results that we are on the right track.
 
 To really understand your simulations, you need to know what the code
@@ -108,12 +108,15 @@ compute the error in our approximation as $\epsilon \equiv \sin(x) - [
 reduces by $2^5$---demonstrating $5^\mathrm{th}$-order accuracy.
 \end{exercise}
 
+This demonstration of measuring the error as we vary the size
+of our small parameter is an example of a {\em convergence test}.
 
 \subsection{Differentiation and Integration}
 
-For both of these processes, there are two cases we might encounter.
-In the first, we have function values at a discrete number of points
-and we want to compute the derivative at a point or integration over a
+For both differentiation and integration, there are two cases we might
+encounter.  In the first, we have function values, $f_0$, $f_1$,
+$\ldots$, at a discrete number of points, $x_0$, $x_1$, $\ldots$, and
+we want to compute the derivative at a point or integration over a
 range of points.  The second case is when we know a function
 analytically and we want to construct a derivative or integral of this
 function numerically.  In these notes, we'll be concerned only with
@@ -157,8 +160,17 @@ terms).  The approximation ${\partial a}/{\partial x} |_i = ({a_{i+1}
 accurate, i.e.\ its truncation error is $\mathcal{O}(\Delta x^2)$.}
 \end{exercise}
 
-Generally speaking, higher-order methods have lower numerical error
-associated with them, and also involve more data points.
+% this figure was created by figures/intro/derivatives.py
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.8\linewidth]{derivs}
+\caption{\label{fig:derivs} A comparison of one-sided and centered
+difference approximations to the derivative.}
+\end{figure}
+
+Figure~\ref{fig:derivs} show Generally speaking, higher-order methods
+have lower numerical error associated with them, and also involve more
+data points.
 
 
 \subsection{Root Finding}

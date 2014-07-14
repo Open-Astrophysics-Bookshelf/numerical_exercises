@@ -2,7 +2,8 @@ EPStoPDF = epstopdf
 
 ALL: CompHydroTutorial.pdf
 
-DIRS := intro \
+DIRS := preface \
+        intro \
         finite-volume \
         advection \
         burgers \
