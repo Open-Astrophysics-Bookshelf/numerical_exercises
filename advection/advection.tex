@@ -1005,3 +1005,30 @@ See \cite{colella:1990} for more details on this unsplit method.
 
 \end{itemize}
 
+
+\section{\pyro\ experimentation}
+
+To gain some experiences with these ideas, we can use the advection 
+solver in \pyro\ (see Appendix~\ref{app:pyro} to get started).
+The \pyro\ advection solver implements the second-order unsplit
+advection algorithm described in the previous sections.  To run
+this solver on the Gaussian advection problem, do:
+\begin{verbatim}
+./pyro.py advection smooth inputs.smooth
+\end{verbatim}
+By default, this will advect a Gaussian profile diagonally across the
+domain for a single period.
+
+To get a feel for the advection algorithm, here are some suggested
+exercises:
+\begin{itemize}
+\item Implement a tophat initial profile and run with and without limiters
+  (this is controled by the {\tt advection.limiter} runtime paramter.
+
+\item Look at the solution when you advect purely in the $x$- or $y$-direction
+and compare to the diagonal case---notice how the direction affects the
+error in the solution.
+
+\item Implement a dimensionally-split version of the advection algorithm
+and compare the results to the unsplit version.
+\end{itemize}
