@@ -95,7 +95,8 @@ equation $\nabla \cdot ( \eta \nabla \phi ) = f$, the following
 provide a well-posed test problem:
 \begin{align}
 \phi^\mathrm{true} &= \sin(2 \pi x) \sin(2\pi y) \nonumber \\
-\eta &= 2 + \cos(2\pi x) \cos(2\pi y)  \\
+\eta &= 2 + \cos(2\pi x) \cos(2\pi y)  \label{eq:vc:lap}
+\\
 f &= -16.0 \pi^2 \left [ \cos(2\pi x)\cos(2\pi y) + 1 \right ] \sin(2\pi x)\sin(2 \pi y) \nonumber
 \end{align}
 
@@ -118,7 +119,23 @@ where
 \end{equation}
 As discussed in \S~\ref{sec:multigrid:other}, this can arise if
 the discrete form the righthand side, $f_{i,j}$ does not sum exactly
-to zero.
+to zero.  Figure~\ref{fig:mg_vc} shows the solution to this problem
+with a $512^2$ grid. and the convergence of the solver described
+here is shown in Figure~\ref{fig:mg_vc_converge}.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{mg_vc_periodic_test}
+\caption{\label{fig:mg_vc} Solution and error to the variable-coefficient 
+Poisson problem defined in Eq.~\ref{eq:vc:lap}}.
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.8\linewidth]{mg_vc_converge}
+\caption{\label{fig:mg_vc_converge} Convergence of the variable-coefficient
+multigrid solver for the test problem defined in Eq.~\ref{eq:vc:lap}}.
+\end{figure}
 
 \subsubsection{Dirichlet}
 
