@@ -44,9 +44,10 @@ variable-coefficient Laplacian as:
 \begin{align}
 (L_\eta \phi)_{i,j} = 
  & \frac{\eta_{i+1/2,j} (\phi_{i+1,j} - \phi_{i,j}) -
-        \eta_{i-1/2,j} (\phi_{i,j} - \phi_{i-1,j})}{\Delta x^2} + \\
+        \eta_{i-1/2,j} (\phi_{i,j} - \phi_{i-1,j})}{\Delta x^2} + \nonumber \\
  & \frac{\eta_{i,j+1/2} (\phi_{i,j+1} - \phi_{i,j}) -
         \eta_{i,j-1/2} (\phi_{i,j} - \phi_{i,j-1})}{\Delta y^2}
+\label{lm:eq:lap}
 \end{align}
 
 We can define the interface values of $\eta$ as the averages of the
@@ -63,14 +64,73 @@ $\phi_{i,j}$, yielding:
                    f_{i,j} } 
                   {\teta_{i+1/2,j} + \teta_{i-1/2,j} + 
                    \teta_{i,j+1/2} + \teta_{i,j-1/2}}
+\label{lm:eq:smooth}
 \end{equation}
 with the shorthand that $\teta_{i\pm1/2,j} = \teta_{i\pm1/2,j}/\Delta x^2$
 and $\teta_{i,j\pm1/2} = \teta_{i,j\pm1/2}/\Delta y^2$.
 
+To put this into our multigrid framework, there are three changes we
+need to make:
+\begin{itemize}
+\item The smoothing function needs to implement the more general smoothing
+described by Eq.~\ref{lm:eq:smooth}.
+
+\item The residual function needs to compute $(L_\eta \phi)_{i,j}$ according
+to Eq.~\ref{lm:eq:lap}, and then $r_{i,j} = f_{i,j} - (L_\eta \phi)_{i,j}$.
+
+\item The coefficients, $\eta$ should be averaged to the edges on the fine
+grid and then restricted down the multigrid hierarchy as edge-based 
+quantities.
+\end{itemize}
+
+\subsection{Test problem}
+
+\subsubsection{Periodic}
+
+To test the solver, we need to devise a problem with a known analytic
+solution.  The easiest way to do this is to pick an $\eta(x)$ and
+$\phi$ and then do the divergence and gradients to find the required
+righthand side, $f$.  We'll use periodic BCs, and for our
+equation $\nabla \cdot ( \eta \nabla \phi ) = f$, the following
+provide a well-posed test problem:
+\begin{align}
+\phi^\mathrm{true} &= \sin(2 \pi x) \sin(2\pi y) \nonumber \\
+\eta &= 2 + \cos(2\pi x) \cos(2\pi y)  \\
+f &= -16.0 \pi^2 \left [ \cos(2\pi x)\cos(2\pi y) + 1 \right ] \sin(2\pi x)\sin(2 \pi y) \nonumber
+\end{align}
+
+There is an important caveat when dealing with a purely-periodic
+problem.  Since there is no boundary values to ``anchor'' the solution,
+it is free to float.  Solving the elliptic problem will give use the
+correct $\nabla \phi$, but the average of $\phi$ over the domain is 
+unconstrained.  For our algorithms, it is $\nabla \phi$ that matters
+(that is the forcing term that enters into the momentum equation).
+
+When for checking convergence, we want to compare to the exact solution.
+We therefore normalize $\phi$ by subtracting off its average value before
+computing the norm of the error with respect to the exact solution:
+\begin{equation}
+\epsilon = \| \phi_{i,j} - \bar{\phi} - \phi^\mathrm{true}_{i,j} \|
+\end{equation}.
+where
+\begin{equation}
+\bar{\phi} = \frac{1}{N_x N_y} \sum_{i,j} \phi_{i,j}
+\end{equation}
+As discussed in \S~\ref{sec:multigrid:other}, this can arise if
+the discrete form the righthand side, $f_{i,j}$ does not sum exactly
+to zero.
+
+\subsubsection{Dirichlet}
+
+We can run the same problem with Dirichlet boundary conditions on $\phi$,
+and we are free to pick different boundary conditions for $\eta$, since
+it represents a different physical quantity.  Since we only have homogeneous
+Dirichlet or Neumann BCs implemented, we'll run with Neumann BCson $\eta$.
+
 \section{Reactive flows}
 
-Our constraint equation is $\nabla \cdot U = S$.  Decomposing the velocity field
-as 
+Our constraint equation is $\nabla \cdot U = S$.  Decomposing the
+velocity field as
 \begin{equation}
 U^\star = U^d + \frac{1}{\rho} \nabla \phi
 \end{equation}
