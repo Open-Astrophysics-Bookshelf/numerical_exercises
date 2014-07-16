@@ -17,8 +17,53 @@ open).
 We can derive the constraint on the velocity field by considering the
 Lagrangian derivative of the pressure---this captures the change in
 pressure of a fluid element as it moves through the domain.
+\begin{equation}
+\frac{Dp}{Dt} = \left . \frac{\partial p}{\partial \rho} \right |_s
+     \frac{D\rho}{Dt} +
+     \left . \frac{\partial p}{\partial s} \right |_\rho
+     \frac{Ds}{Dt}
+\end{equation}
+we recognize that $\Gamma_1 \equiv \partial \log p/\partial \log \rho |_s$.
+The Maxwell relations tell us that
+\begin{equation}
+\partial p/\partial s |_\rho = \rho^2 \partial T/\partial \rho |_s
+\end{equation}
+and $\partial T/\partial \rho |_s$ can be derived from the first law
+of thermodynamics, giving:
+\begin{equation}
+\left . \frac{\partial p}{\partial s} \right |_\rho 
+= \sigma \Gamma_1 p T
+\end{equation}
+with 
+\begin{equation}
+\sigma = \frac{\partial p/\partial T |_\rho}{\rho c_p \partial p/\partial \rho |_T}
+\end{equation}
 
-
+From the first law of thermodynamics, we see
+\begin{equation}
+T \frac{Ds}{Dt} = \frac{De}{Dt} + p \frac{D(1/\rho)}{Dt}
+\end{equation}
+which is our internal energy evolution equation.  The internal
+energy in a fluid parcel can change due to local heat release and 
+diffusion, so we can write:
+\begin{equation}
+T \frac{Ds}{Dt} = \frac{De}{Dt} + p \frac{D(1/\rho)}{Dt} = H + \nabla \cdot (k \nabla T)
+\end{equation}
+where $H$ is the specific energy generation rate and $k$ is the 
+thermal conductivity.  Putting this all together, we have:
+\begin{equation}
+\frac{Dp}{Dt} = \frac{\Gamma_1 p}{\rho} \frac{D\rho}{Dt}
+   + \sigma \Gamma_1 p \left [ H + \nabla \cdot k \nabla T \right ]
+\end{equation}
+The continuity equation gives us:
+\begin{equation}
+\frac{D\rho}{Dt} = -\rho \nabla \cdot U
+\end{equation}
+and we finally have:
+\begin{equation}
+\nabla \cdot U + \frac{1}{\Gamma_1 p}\frac{Dp}{Dt} = \sigma (H + \nabla \cdot k  \nabla T)
+\end{equation}
+This is the general constraint equation for low Mach flow.  
 
 \section{Extending the incompressible algorithm}
 
@@ -111,8 +156,8 @@ When for checking convergence, we want to compare to the exact solution.
 We therefore normalize $\phi$ by subtracting off its average value before
 computing the norm of the error with respect to the exact solution:
 \begin{equation}
-\epsilon = \| \phi_{i,j} - \bar{\phi} - \phi^\mathrm{true}_{i,j} \|
-\end{equation}.
+\epsilon = \| \phi_{i,j} - \bar{\phi} - \phi^\mathrm{true}_{i,j} \| \enskip ,
+\end{equation}
 where
 \begin{equation}
 \bar{\phi} = \frac{1}{N_x N_y} \sum_{i,j} \phi_{i,j}
@@ -144,7 +189,7 @@ run with \pyro\ {\tt lowmach/mg\_vc\_periodic\_test.py}.}
 We can run the same problem with Dirichlet boundary conditions on $\phi$,
 and we are free to pick different boundary conditions for $\eta$, since
 it represents a different physical quantity.  Since we only have homogeneous
-Dirichlet or Neumann BCs implemented, we'll run with Neumann BCson $\eta$.
+Dirichlet or Neumann BCs implemented, we'll run with Neumann BCs on $\eta$.
 
 \section{Reactive flows}
 
