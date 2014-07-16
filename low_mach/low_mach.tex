@@ -12,48 +12,49 @@ element advects, its pressure remains the same as the background
 state.  For an atmosphere, this background state is a hydrostatic
 profile.  For a smallscale combustion flow, this background state is a
 spatially constant pressure (and constaint-in-time if the domain is
-open).
+open).  We'll denote this background pressure as $p_0(r,t)$, where 
+$r$ is a radial coordinate.
 
 We can derive the constraint on the velocity field by considering the
 Lagrangian derivative of the pressure---this captures the change in
 pressure of a fluid element as it moves through the domain.
 \begin{equation}
-\frac{Dp}{Dt} = \left . \frac{\partial p}{\partial \rho} \right |_s
+\frac{Dp_0}{Dt} = \left . \frac{\partial p_0}{\partial \rho} \right |_s
      \frac{D\rho}{Dt} +
-     \left . \frac{\partial p}{\partial s} \right |_\rho
+     \left . \frac{\partial p_0}{\partial s} \right |_\rho
      \frac{Ds}{Dt}
 \end{equation}
-we recognize that $\Gamma_1 \equiv \partial \log p/\partial \log \rho |_s$.
+we recognize that $\Gamma_1 \equiv \partial \log p_0/\partial \log \rho |_s$.
 The Maxwell relations tell us that
 \begin{equation}
-\partial p/\partial s |_\rho = \rho^2 \partial T/\partial \rho |_s
+\partial p_0/\partial s |_\rho = \rho^2 \partial T/\partial \rho |_s
 \end{equation}
 and $\partial T/\partial \rho |_s$ can be derived from the first law
 of thermodynamics, giving:
 \begin{equation}
-\left . \frac{\partial p}{\partial s} \right |_\rho 
-= \sigma \Gamma_1 p T
+\left . \frac{\partial p_0}{\partial s} \right |_\rho 
+= \sigma \Gamma_1 p_0 T
 \end{equation}
 with 
 \begin{equation}
-\sigma = \frac{\partial p/\partial T |_\rho}{\rho c_p \partial p/\partial \rho |_T}
+\sigma = \frac{\partial p_0/\partial T |_\rho}{\rho c_p \partial p_0/\partial \rho |_T}
 \end{equation}
 
 From the first law of thermodynamics, we see
 \begin{equation}
-T \frac{Ds}{Dt} = \frac{De}{Dt} + p \frac{D(1/\rho)}{Dt}
+T \frac{Ds}{Dt} = \frac{De}{Dt} + p_0 \frac{D(1/\rho)}{Dt}
 \end{equation}
 which is our internal energy evolution equation.  The internal
 energy in a fluid parcel can change due to local heat release and 
 diffusion, so we can write:
 \begin{equation}
-T \frac{Ds}{Dt} = \frac{De}{Dt} + p \frac{D(1/\rho)}{Dt} = H + \nabla \cdot (k \nabla T)
+T \frac{Ds}{Dt} = \frac{De}{Dt} + p_0 \frac{D(1/\rho)}{Dt} = H + \nabla \cdot (k \nabla T)
 \end{equation}
 where $H$ is the specific energy generation rate and $k$ is the 
 thermal conductivity.  Putting this all together, we have:
 \begin{equation}
-\frac{Dp}{Dt} = \frac{\Gamma_1 p}{\rho} \frac{D\rho}{Dt}
-   + \sigma \Gamma_1 p \left [ H + \nabla \cdot k \nabla T \right ]
+\frac{Dp_0}{Dt} = \frac{\Gamma_1 p_0}{\rho} \frac{D\rho}{Dt}
+   + \sigma \Gamma_1 p_0 \left [ H + \nabla \cdot k \nabla T \right ]
 \end{equation}
 The continuity equation gives us:
 \begin{equation}
@@ -61,11 +62,90 @@ The continuity equation gives us:
 \end{equation}
 and we finally have:
 \begin{equation}
-\nabla \cdot U + \frac{1}{\Gamma_1 p}\frac{Dp}{Dt} = \sigma (H + \nabla \cdot k  \nabla T)
+\nabla \cdot U + \frac{1}{\Gamma_1 p_0}\frac{Dp_0}{Dt} = \sigma (H + \nabla \cdot k  \nabla T) \equiv S
 \end{equation}
-This is the general constraint equation for low Mach flow.  
+This is the general constraint equation for low Mach flow.  Note that the
+only approximation we made is $p \rightarrow p_0$.
+
+A useful limit is smallscale combustion.  In an open domain, we can take
+$p_0$ as constant, so $Dp_0/Dt = 0$, and we are left with
+\begin{equation}
+\nabla \cdot U = S
+\end{equation}
+This looks like the constraint for incompressible flow, but with a source
+to the divergence.  This source captures the compressible effects due
+to local heat release---as a fluid parcel moves, the only changes to
+its density will come through local heat release.
+
+Another interesting case is that of an atmosphere.  If we consider an
+ideal gas, then $\Gamma_1 = \gamma = \mathrm{constant}$.  A second
+appromation we take is that $p_0 = p_0(r)$---i.e., no time
+dependence to the atmosphere.  Finally, we'll consider the case
+with no local heat sources ($S = 0$).  Then we have
+\begin{equation}
+\nabla \cdot U + \frac{1}{\gamma p_0} U \cdot \nabla p_0 = 0
+\end{equation}
+which is equivalent to
+\begin{equation}
+\nabla \cdot \left ( p_0^{1/\gamma} U \right ) = 0
+\end{equation}
+This constraint captures the changes in compressibilty due to the 
+background stratification of an atmosphere.  If the structure of the
+atmosphere is isentropic, then we know that $d\log p_0 = \gamma d\log \rho_0$,
+where we use $\rho_0$ to represent the density corresponding to $p_0$, and
+we can write this constraint as:
+\begin{equation}
+\nabla \cdot (\rho_0 U) = 0
+\end{equation}
+This is the traditional anelastic constraint.
 
 \section{Extending the incompressible algorithm}
+
+The solution methodology for these low Mach number systems follows 
+that of the incompressible flow, but with two additions.  First,
+we need to incorporate a density (mass continuity) evolution equation.
+
+Next, we need to be able to enforce more general forms of the 
+divergence constraint, which as we'll see in a moment, require
+us to solve a variable-coefficient elliptic equation.  Our
+multigrid technique will need to be suitably modified.
+
+\subsection{Density evolution}
+
+We need to solve the continuity equation.  We use the same techniques
+that were used for advection.  Our equation is:
+\begin{equation}
+\rho_t + (\rho u)_x + (\rho v)_y = 0
+\end{equation}
+The $x$-interface left state would be:
+\begin{align}
+\rho_{i+1/2,j,L}^{n+1/2} &= \rho_{i,j}^n + 
+   \frac{\Delta x}{2} \frac{\partial \rho}{\partial x} +
+   \frac{\Delta t}{2} \frac{\partial \rho}{\partial t} + \ldots \nonumber \\
+%
+ &= \rho_{i,j}^n + 
+    \frac{\Delta x}{2} \frac{\partial \rho}{\partial x} +
+    \frac{\Delta t}{2} \left [ -(\rho u)_x -(\rho v)_y \right ]_{i,j} \nonumber\\
+%
+ &= \rho_{i,j}^n + 
+   \frac{\Delta x}{2} \left ( 1 - \frac{\Delta t}{\Delta x} u_{i,j} \right )
+        \frac{\partial \rho}{\partial x}
+   - \frac{\Delta t}{2} \rho u_x - \frac{\Delta t}{2} (\rho v)_y 
+\end{align}
+A similar construction would yield the right state at that interface. 
+The Riemann problem is just upwinding:
+\begin{equation}
+u_{i+1/2,j}^{n+1/2} = \mathcal{R}(u_{i+1/2,j,L}^{n+1/2},
+                                  u_{i+1/2,j,R}^{n+1/2}) =
+  \left \{
+  \begin{array}{cl}
+     u_{i+1/2,j,L}^{n+1/2} & u_{i,j} > 0 \\
+     u_{i+1/2,j,R}^{n+1/2} & u_{i,j} < 0 
+  \end{array} \right .
+\end{equation}
+     
+
+
 
 \subsection{Variable-coefficient elliptic equation}
 
