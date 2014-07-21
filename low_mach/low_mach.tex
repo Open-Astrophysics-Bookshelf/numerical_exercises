@@ -135,12 +135,12 @@ The $x$-interface left state would be:
 A similar construction would yield the right state at that interface. 
 The Riemann problem is just upwinding:
 \begin{equation}
-u_{i+1/2,j}^{n+1/2} = \mathcal{R}(u_{i+1/2,j,L}^{n+1/2},
-                                  u_{i+1/2,j,R}^{n+1/2}) =
+\rho_{i+1/2,j}^{n+1/2} = \mathcal{R}(\rho_{i+1/2,j,L}^{n+1/2},
+                                     \rho_{i+1/2,j,R}^{n+1/2}) =
   \left \{
   \begin{array}{cl}
-     u_{i+1/2,j,L}^{n+1/2} & u_{i,j} > 0 \\
-     u_{i+1/2,j,R}^{n+1/2} & u_{i,j} < 0 
+     \rho_{i+1/2,j,L}^{n+1/2} & u_{i,j} > 0 \\
+     \rho_{i+1/2,j,R}^{n+1/2} & u_{i,j} < 0 
   \end{array} \right .
 \end{equation}
      
