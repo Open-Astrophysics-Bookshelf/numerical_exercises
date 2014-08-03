@@ -219,11 +219,14 @@ righthand side, $f$.  We'll use periodic BCs, and for our
 equation $\nabla \cdot ( \eta \nabla \phi ) = f$, the following
 provide a well-posed test problem:
 \begin{align}
-\phi^\mathrm{true} &= \sin(2 \pi x) \sin(2\pi y) \nonumber \\
 \eta &= 2 + \cos(2\pi x) \cos(2\pi y)  \label{eq:vc:lap}
 \\
 f &= -16.0 \pi^2 \left [ \cos(2\pi x)\cos(2\pi y) + 1 \right ] \sin(2\pi x)\sin(2 \pi y) \nonumber
 \end{align}
+with the solution:
+\begin{equation}
+\phi^\mathrm{true} = \sin(2 \pi x) \sin(2\pi y) \nonumber \\
+\end{equation}
 
 There is an important caveat when dealing with a purely-periodic
 problem.  Since there is no boundary values to ``anchor'' the solution,
