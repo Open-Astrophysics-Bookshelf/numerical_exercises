@@ -274,7 +274,7 @@ and we are free to pick different boundary conditions for $\eta$, since
 it represents a different physical quantity.  Since we only have homogeneous
 Dirichlet or Neumann BCs implemented, we'll run with Neumann BCs on $\eta$.
 
-\section{Reactive flows}
+\section{Combustion}
 
 Our constraint equation is $\nabla \cdot U = S$.  Decomposing the
 velocity field as
@@ -287,11 +287,36 @@ using $\nabla \cdot U^d = S$, giving
 \nabla \cdot \frac{1}{\rho} \nabla \phi = \nabla \cdot U^\star - S
 \end{equation}
 
+The general solution procedure is for a single step is:
+\begin{itemize}
+
+  \item React for $\Delta t/2$
+
+  \item Do the hydrodynamcis for $\Delta t$
+
+    \begin{itemize}
+    \item Predict $U$ to the interfaces 
+    \item Enforce the divergence constraint on the interface $U$'s (the
+      MAC projection) to get $U^\mathrm{adv}$.
+    \item Predict $\rho$ to the interfaces
+    \item Do the conservative update of $\rho$
+    \item Update $U^n$ to $U^{n+1}$
+    \item Enforce the divergence constraint on $U^{n+1}$
+    \end{itemize}
+
+  \item React for $\Delta t/2$
+
+\end{itemize}
 
 \section{Atmospheric flows}
 
-Our constraint equation is $\nabla \cdot (\beta_0 U) = 0$.  Decomposing the velocity field
-as 
+\subsection{Base State}
+
+
+\subsection{Constraint}
+
+Our constraint equation is $\nabla \cdot (\beta_0 U) = 0$.
+Decomposing the velocity field as
 \begin{equation}
 U^\star = U^d + \frac{1}{\rho} \nabla \phi
 \end{equation}
