@@ -99,6 +99,11 @@ we can write this constraint as:
 \end{equation}
 This is the traditional anelastic constraint.
 
+
+\section{Asymptotics}
+
+
+
 \section{Extending the incompressible algorithm}
 
 The solution methodology for these low Mach number systems follows 
@@ -276,6 +281,20 @@ Dirichlet or Neumann BCs implemented, we'll run with Neumann BCs on $\eta$.
 
 \section{Combustion}
 
+
+Taking $p = p_0 + \pi$, with $p_0 = \mathrm{constant}$, the system 
+becomes:
+\begin{align}
+\frac{\partial \rho}{\partial t} + \nabla \cdot (\rho U) &= 0 \\
+\frac{\partial \rho U}{\partial t} + \nabla \cdot (\rho U U) + \nabla \pi &= 0 \\
+\nabla \cdot U &= S
+\end{align}
+
+\subsection{Species}
+
+
+\subsection{Constraint}
+
 Our constraint equation is $\nabla \cdot U = S$.  Decomposing the
 velocity field as
 \begin{equation}
@@ -286,6 +305,9 @@ using $\nabla \cdot U^d = S$, giving
 \begin{equation}
 \nabla \cdot \frac{1}{\rho} \nabla \phi = \nabla \cdot U^\star - S
 \end{equation}
+
+
+\subsection{Solution Procedure}
 
 The general solution procedure is for a single step is:
 \begin{itemize}
