@@ -535,6 +535,18 @@ converge in all norms.
 
 For reference, the BoxLib library uses $L_\infty$ in its multigrid solvers.
 
+\item {\em Variable-coefficient equations}: solving a variable coefficient
+ elliptic equation, like:
+ \begin{equation}
+ \nabla \cdot (\eta \nabla \phi) = f
+ \end{equation}
+ % 
+ follows directly from the methodology here.  The main change is that
+ the smoothing algorithm and the construction of the residual will
+ need to discretize the variable-coefficient operator, and these
+ coefficients will need to be restricted to the coarser grids.  This
+ is explored in \S~\ref{sec:lm:vcelliptic}.
+
 \end{itemize}
 
 

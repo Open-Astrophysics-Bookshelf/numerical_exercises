@@ -154,6 +154,8 @@ The Riemann problem is just upwinding:
 
 \subsection{Variable-coefficient elliptic equation}
 
+\label{sec:lm:vcelliptic}
+
 We now need to solve an elliptic equation of the form:
 \begin{equation}
 \nabla \cdot (\eta \nabla \phi) = f
@@ -261,7 +263,7 @@ here is shown in Figure~\ref{fig:mg_vc_converge}.
 \includegraphics[width=\linewidth]{mg_vc_periodic_test}
 \caption{\label{fig:mg_vc} Solution and error to the variable-coefficient 
 Poisson problem defined in Eq.~\ref{eq:vc:lap}.  This test can be
-run with \pyro\ {\tt lowmach/mg\_vc\_periodic\_test.py}.}
+run with \pyro\ {\tt multigrid/mg\_vc\_periodic\_test.py}.}
 \end{figure}
 
 \begin{figure}[t]
@@ -269,7 +271,7 @@ run with \pyro\ {\tt lowmach/mg\_vc\_periodic\_test.py}.}
 \includegraphics[width=0.8\linewidth]{mg_vc_converge}
 \caption{\label{fig:mg_vc_converge} Convergence of the variable-coefficient
 multigrid solver for the test problem defined in Eq.~\ref{eq:vc:lap}.  This test can be
-run with \pyro\ {\tt lowmach/mg\_vc\_periodic\_test.py}.}
+run with \pyro\ {\tt multigrid/mg\_vc\_periodic\_test.py}.}
 \end{figure}
 
 \subsubsection{Dirichlet}
