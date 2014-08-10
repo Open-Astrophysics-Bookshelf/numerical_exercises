@@ -408,7 +408,7 @@ taking the divergence, and using $\nabla \cdot (\beta_0 U^d) = 0$, giving
 \begin{equation}
 \nabla \cdot \frac{\beta_0^2}{\rho} \nabla \phi = \nabla \cdot (\beta_0 U^\star)
 \end{equation}
-
+Note that when written like this, $\phi$ has units of $p^\prime/\beta_0$.
 
 \subsection{Solution Procedure}
 
@@ -424,3 +424,10 @@ The general solution procedure is for a single step is:
 \item Enforce the divergence constraint on $U^{n+1}$
 
 \end{itemize}
+
+
+\subsection{Bootstrapping}
+
+First we need to make sure that the initial velocity field satisfies our constraint
+
+Next we need to find $\nabla \pi^{n-1/2}$ for the first step.

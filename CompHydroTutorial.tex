@@ -61,6 +61,18 @@
 \ChTitleVar{\Huge\bfseries\sffamily}
 \ChRuleWidth{1pt}
 
+% part page style                                                                                  
+% see http://tex.stackexchange.com/questions/6609/problems-with-part-labels-using-titlesec         
+\usepackage{titlesec}
+
+\titleformat{\part}[display]
+   {\bfseries\sffamily\Huge\filcenter}
+   {{\partname{}} \thepart}
+   {0em}
+   {\hrule}
+
+
+
 
 % hyperlinks -- load after fncychap
 \usepackage{hyperref}
@@ -326,6 +338,7 @@ Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
 
 \mainmatter
 
+%\part{Basics}
 
 \chapter{Simulation Overview}
 
@@ -335,6 +348,8 @@ Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
 \chapter{Finite-Volume Grids}
 
 \input finite-volume/finite-volume.tex
+
+%\part{Hyperbolic Problems}
 
 %\addtocontents{exc}{\protect\addvspace{10pt}}%
 \chapter{Advection}
@@ -351,6 +366,9 @@ Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
 
 \input Euler/Euler.tex
 
+
+%\part{Elliptic, Parabolic Problems, and Mixed-Type Problems}
+
 %\addtocontents{exc}{\protect\addvspace{10pt}}%
 \chapter{Multigrid and Elliptic Equations}
 
@@ -366,6 +384,9 @@ Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
 
 \input multiphysics/multiphysics.tex
 
+
+%\part{Low Speed Hydrodynamics}
+
 %\addtocontents{exc}{\protect\addvspace{10pt}}%
 \chapter{Incompressible Flow and Projection Methods}
 
@@ -374,6 +395,9 @@ Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
 \chapter{Low Mach Number Methods}
 
 \input low_mach/low_mach.tex
+
+
+%\part{Appendices}
 
 \appendix
 
