@@ -1,27 +1,15 @@
 new chapters:
   
-  -- low Mach
-
   -- MHD
 
   -- relativisitc
 
+  -- radiation hydro
 
-add an overview of codes to the preface section:
+  -- higher-order
 
-  -- explain how to get the codes 
- 
-  -- two different code resources: 1-d codes (hydro_examples/) and pyro
+  -- AMR
 
-  -- hydro_examples/
-
-    o grid
-    o advection
-    o burger
-    o Euler
-    o multigrid
-    o diffusion
-    o multiphysics
 
 
 sample of public codes
