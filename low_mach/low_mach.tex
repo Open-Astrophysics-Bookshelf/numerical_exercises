@@ -132,23 +132,60 @@ The $x$-interface left state would be:
     \frac{\Delta x}{2} \frac{\partial \rho}{\partial x} +
     \frac{\Delta t}{2} \left [ -(\rho u)_x -(\rho v)_y \right ]_{i,j} \nonumber\\
 %
- &= \rho_{i,j}^n + 
+ &= \underbrace{\rho_{i,j}^n + 
    \frac{\Delta x}{2} \left ( 1 - \frac{\Delta t}{\Delta x} u_{i,j} \right )
-        \frac{\partial \rho}{\partial x}
+        \frac{\partial \rho}{\partial x}}_{\hat{\rho}_{i+1/2,j,L}^{n+1/2}}
    - \frac{\Delta t}{2} \rho u_x - \frac{\Delta t}{2} (\rho v)_y 
 \end{align}
-A similar construction would yield the right state at that interface. 
-The Riemann problem is just upwinding:
+A similar construction would yield the right state at that interface, and the
+$y$-interface states.
+
+Since we already have the MAC-projected advected velocities at this point, we can 
+use them in the construction of the interface states and the upwinding.  
+As before, we split this into a normal part (the $\hat{\rho}$ term)
+and ``transverse'' part (which here includes the non-advective part of
+the divergence).  We first construct the normal parts as
 \begin{equation}
-\rho_{i+1/2,j}^{n+1/2} = \mathcal{R}(\rho_{i+1/2,j,L}^{n+1/2},
+\hat{\rho}_{i+1/2,j,L}^{n+1/2} = \rho_{i,j}^n + 
+   \frac{1}{2} \left ( 1 - \frac{\Delta t}{\Delta x} u^\mathrm{adv}_{i+1/2,j} \right )
+   \overline{\Delta \rho}^{(x)}_{i,j}
+\end{equation}
+and then solve the Riemann problem (upwinding) for these:
+\begin{equation}
+\hat{\rho}_{i+1/2,j}^{n+1/2} = 
+   \mathcal{U}[u^\mathrm{adv}_{i,j}](\hat{\rho}_{i+1/2,j,L}^{n+1/2},
+                                     \hat{\rho}_{i+1/2,j,R}^{n+1/2}) =
+  \left \{
+  \begin{array}{cl}
+     \hat{\rho}_{i+1/2,j,L}^{n+1/2} & u^\mathrm{adv}_{i+1/2,j} > 0 \\
+     \hat{\rho}_{i+1/2,j,R}^{n+1/2} & u^\mathrm{adv}_{i+1/2,j} < 0 
+  \end{array} \right .
+\end{equation}
+The same procedure is done for the $y$-interfaces.
+
+The full states are then constructed using these ``hat'' states.  For example,
+\begin{align}
+\rho_{i+1/2,j,L}^{n+1/2} = \hat{\rho}_{i+1/2,j,L}^{n+1/2} 
+   &- \frac{\Delta t}{2} \rho_{i,j} 
+     \frac{u^\mathrm{adv}_{i+1/2,j} - u^\mathrm{adv}_{i-1/2,j}}{\Delta x} \\
+   &- \frac{\Delta t}{2} 
+        \frac{\hat{\rho}_{i,j+1/2}^{n+1/2} v^\mathrm{adv}_{i,j+1/2} -
+              \hat{\rho}_{i,j-1/2}^{n+1/2} v^\mathrm{adv}_{i,j-1/2}}{\Delta y}
+\end{align}
+Once the new states on both the $x$- and $y$-interfaces are constructed, we
+again upwind to find the final $\rho$ state on each interface:
+\begin{equation}
+\rho_{i+1/2,j}^{n+1/2} = 
+   \mathcal{U}[u^\mathrm{adv}_{i,j}](\rho_{i+1/2,j,L}^{n+1/2},
                                      \rho_{i+1/2,j,R}^{n+1/2}) =
   \left \{
   \begin{array}{cl}
-     \rho_{i+1/2,j,L}^{n+1/2} & u_{i,j} > 0 \\
-     \rho_{i+1/2,j,R}^{n+1/2} & u_{i,j} < 0 
+     \rho_{i+1/2,j,L}^{n+1/2} & u^\mathrm{adv}_{i+1/2,j} > 0 \\
+     \rho_{i+1/2,j,R}^{n+1/2} & u^\mathrm{adv}_{i+1/2,j} < 0 
   \end{array} \right .
 \end{equation}
-     
+
+
 
 
 
