@@ -167,7 +167,7 @@ The full states are then constructed using these ``hat'' states.  For example,
 \begin{align}
 \rho_{i+1/2,j,L}^{n+1/2} = \hat{\rho}_{i+1/2,j,L}^{n+1/2} 
    &- \frac{\Delta t}{2} \rho_{i,j} 
-     \frac{u^\mathrm{adv}_{i+1/2,j} - u^\mathrm{adv}_{i-1/2,j}}{\Delta x} \\
+     \frac{u^\mathrm{adv}_{i+1/2,j} - u^\mathrm{adv}_{i-1/2,j}}{\Delta x} \nonumber \\
    &- \frac{\Delta t}{2} 
         \frac{\hat{\rho}_{i,j+1/2}^{n+1/2} v^\mathrm{adv}_{i,j+1/2} -
               \hat{\rho}_{i,j-1/2}^{n+1/2} v^\mathrm{adv}_{i,j-1/2}}{\Delta y}
@@ -185,9 +185,17 @@ again upwind to find the final $\rho$ state on each interface:
   \end{array} \right .
 \end{equation}
 
-
-
-
+Once the interface states are found, we can conservatively-difference
+the continuity equation:
+\begin{align}
+\rho^{n+1}_{i,j} = \rho^n_{i,j} 
+   &- \frac{\Delta t}{\Delta x} 
+      \left (\rho_{i+1/2,j}^{n+1/2} u^\mathrm{adv}_{i+1/2,j} -
+             \rho_{i-1/2,j}^{n+1/2} u^\mathrm{adv}_{i-1/2,j} \right ) \nonumber \\
+   &- \frac{\Delta t}{\Delta y}
+      \left (\rho_{i,j+1/2}^{n+1/2} v^\mathrm{adv}_{i,j+1/2} -
+             \rho_{i,j-1/2}^{n+1/2} v^\mathrm{adv}_{i,j-1/2} \right )
+\end{align}
 
 \subsection{Variable-coefficient elliptic equation}
 
