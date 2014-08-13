@@ -190,7 +190,7 @@ x$, where $\Dux_{i,j}$ is the limited slope of $u$ in the
 $x$-direction in zone $i,j$.  Our interface state is then:
 \begin{equation}
 u_{i+1/2,j,L}^{n+1/2} 
-    = \underbrace{\frac{1}{2} \left ( 1 - \frac{\Delta t}{\Delta x} u \right ) \Dux_{i,j}}_{\equiv \hat{u}_{i+1/2,j,L}^{n+1/2}}
+    = \underbrace{u_{i,j} + \frac{1}{2} \left ( 1 - \frac{\Delta t}{\Delta x} u \right ) \Dux_{i,j}}_{\equiv \hat{u}_{i+1/2,j,L}^{n+1/2}}
     - \underbrace{\frac{\Delta t}{2} \left ( v \frac{\partial u}{\partial y} \right )_{i,j}}_{\mathrm{transverse~term}}
     - \frac{\Delta t}{2} \left . \frac{\partial p}{\partial x} \right |_{i,j}
 \label{eq:uMAC_l}
@@ -200,7 +200,7 @@ u_{i+1/2,j,L}^{n+1/2}
 Similarly, for $v$ through the $y$ faces, we find:
 \begin{equation}
 v_{i,j+1/2,L}^{n+1/2} 
-    = \underbrace{\frac{1}{2} \left ( 1 - \frac{\Delta t}{\Delta x} v \right ) \Dvy_{i,j}}_{\equiv \hat{v}_{i,j+1/2,L}^{n+1/2}}
+    = \underbrace{v_{i,j} + \frac{1}{2} \left ( 1 - \frac{\Delta t}{\Delta x} v \right ) \Dvy_{i,j}}_{\equiv \hat{v}_{i,j+1/2,L}^{n+1/2}}
     - \underbrace{\frac{\Delta t}{2} \left ( u \frac{\partial v}{\partial x} \right )_{i,j}}_{\mathrm{transverse~term}}
     - \frac{\Delta t}{2} \left . \frac{\partial p}{\partial y} \right |_{i,j}
 \label{eq:vMAC_l}
