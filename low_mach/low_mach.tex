@@ -153,7 +153,7 @@ the divergence).  We first construct the normal parts as
 and then solve the Riemann problem (upwinding) for these:
 \begin{equation}
 \hat{\rho}_{i+1/2,j}^{n+1/2} = 
-   \mathcal{U}[u^\mathrm{adv}_{i,j}](\hat{\rho}_{i+1/2,j,L}^{n+1/2},
+   \mathcal{U}[u^\mathrm{adv}_{i+1/2,j}](\hat{\rho}_{i+1/2,j,L}^{n+1/2},
                                      \hat{\rho}_{i+1/2,j,R}^{n+1/2}) =
   \left \{
   \begin{array}{cl}
@@ -176,7 +176,7 @@ Once the new states on both the $x$- and $y$-interfaces are constructed, we
 again upwind to find the final $\rho$ state on each interface:
 \begin{equation}
 \rho_{i+1/2,j}^{n+1/2} = 
-   \mathcal{U}[u^\mathrm{adv}_{i,j}](\rho_{i+1/2,j,L}^{n+1/2},
+   \mathcal{U}[u^\mathrm{adv}_{i+1/2,j}](\rho_{i+1/2,j,L}^{n+1/2},
                                      \rho_{i+1/2,j,R}^{n+1/2}) =
   \left \{
   \begin{array}{cl}
