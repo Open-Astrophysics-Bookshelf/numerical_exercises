@@ -135,16 +135,18 @@ The $x$-interface left state would be:
  &= \underbrace{\rho_{i,j}^n + 
    \frac{\Delta x}{2} \left ( 1 - \frac{\Delta t}{\Delta x} u_{i,j} \right )
         \frac{\partial \rho}{\partial x}}_{\hat{\rho}_{i+1/2,j,L}^{n+1/2}}
-   - \frac{\Delta t}{2} \rho u_x - \frac{\Delta t}{2} (\rho v)_y 
+   - \frac{\Delta t}{2} \left [\rho u_x \right ]_{i,j} 
+   - \frac{\Delta t}{2} \left [ (\rho v)_y \right ]_{i,j}
 \end{align}
 A similar construction would yield the right state at that interface, and the
 $y$-interface states.
 
-Since we already have the MAC-projected advected velocities at this point, we can 
-use them in the construction of the interface states and the upwinding.  
-As before, we split this into a normal part (the $\hat{\rho}$ term)
-and ``transverse'' part (which here includes the non-advective part of
-the divergence).  We first construct the normal parts as
+Since we already have the MAC-projected advected velocities at this
+point, we can use them in the construction of the interface states and
+the upwinding.  As before, we split this into a normal part (the
+$\hat{\rho}$ term) and ``transverse'' part (which here includes the
+non-advective part of the divergence).  We first construct the normal
+parts as
 \begin{equation}
 \hat{\rho}_{i+1/2,j,L}^{n+1/2} = \rho_{i,j}^n + 
    \frac{1}{2} \left ( 1 - \frac{\Delta t}{\Delta x} u^\mathrm{adv}_{i+1/2,j} \right )
@@ -454,6 +456,40 @@ taking the divergence, and using $\nabla \cdot (\beta_0 U^d) = 0$, giving
 \nabla \cdot \frac{\beta_0^2}{\rho} \nabla \phi = \nabla \cdot (\beta_0 U^\star)
 \end{equation}
 Note that when written like this, $\phi$ has units of $p^\prime/\beta_0$.
+
+\subsubsection{MAC Projection}
+
+For the MAC projection, we have edge-centered velocities (in their
+respective coordinate direction).  We define an edge-centered $\beta_0$ as
+\begin{equation}
+{\beta_0}_{j+1/2} = \frac{1}{2} ( {\beta_0}_j + {\beta_0}_{j+1} )
+\end{equation}
+and then the divergence term as:
+\begin{equation}
+\left [ \nabla \cdot (\beta_0 U) \right ]_{i,j}^\mathrm{adv} =
+   {\beta_0}_j \frac{u^\mathrm{adv}_{i+1/2,j} - 
+                     u^\mathrm{adv}_{i-1/2,j}}{\Delta x} +
+   \frac{{\beta_0}_{j+1/2} v^\mathrm{adv}_{i,j+1/2} - 
+         {\beta_0}_{j-1/2} v^\mathrm{adv}_{i,j-1/2} }{\Delta y}
+\end{equation}
+
+We define the coefficient, $\eta$, in the Poisson equation as:
+\begin{equation}
+\eta_{i,j} = \frac{{\beta_0}_j^2}{\rho_{i,j}}
+\end{equation}
+and bring it to edges simply through averaging.
+
+\subsubsection{Final Projection}
+  
+For the final projection, we have cell-centered velocties.  We 
+define the divergence term as:
+\begin{equation}
+\left [ \nabla \cdot (\beta_0 U) \right ]_{i,j}^\star =
+   {\beta_0}_j \frac{u^\star_{i+1,j} - 
+                     u^\star_{i-1,j}}{2\Delta x} +
+   \frac{{\beta_0}_{j+1} v^\star_{i,j+1} - 
+         {\beta_0}_{j-1} v^\star_{i,j-1} }{2\Delta y}
+\end{equation}
 
 \subsection{Solution Procedure}
 
