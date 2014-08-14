@@ -171,11 +171,11 @@ def simplegrid():
     #------------------------------------------------------------------------
     # label
     pylab.text(g.xc[g.nx/2], g.yc[g.ny/2]+0.1*g.dy, 
-               r"$[L\phi]_{i,j}$", fontsize="15",
+               r"$(DG\phi)_{i,j}$", fontsize="15",
                horizontalalignment='center', verticalalignment='center')
 
     pylab.text(g.xc[g.nx/2], g.yc[g.ny/2]-0.1*g.dy, 
-               r"$[DU^\mathrm{\,adv}]_{i,j}$", fontsize="15",
+               r"$(DU^\mathrm{adv})_{i,j}$", fontsize="15",
                horizontalalignment='center', verticalalignment='center')
 
 
