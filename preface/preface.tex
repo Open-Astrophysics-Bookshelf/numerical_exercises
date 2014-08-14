@@ -3,10 +3,17 @@
 These notes are intended to help new students come up to speed on the
 common methods used in computational hydrodynamics for astrophysical
 flows.  They are written at a level appropriate for upper-level
-undergraduates.
+undergraduates.  The focus is on discussing the {\em practical issues}
+that arise when implementing these methods, with less emphasis on the
+underlying theory---references are provided to fill in details where
+necessary.
 
-These are very much a work in progress, likely not spell-checked, and 
-definitely not complete.  Contributions are welcomed.  The \LaTeX\ source
+These are very much a work in progress, likely not spell-checked, and
+definitely not complete.  The page size is formatted for easy reading
+on a tablet or for 2-up printing in a landscape orientation on
+letter-sized paper.  
+
+Contributions to these notes are welcomed.  The \LaTeX\ source
 for these notes is available online on github at: \\[0.25em]
 %
 \url{https://github.com/zingale/numerical_exercises/} \\[0.25em]
@@ -22,7 +29,7 @@ new student working with me, or if I am using them for a course.
 
 The best way to understand the methods described here is to run
 them for yourself.  There are two sets of example codes that
-go along with these notes.
+go along with these notes:
 
 \begin{enumerate}
 \item \hydroex\ is a set of simple 1-d, standalone python scripts
@@ -41,12 +48,13 @@ go along with these notes.
   in Appendix~\ref{app:hydroex}.
 
 \item  
-  The {\sf pyro} code is a 2-d program that has
+  The \pyro\ code is a 2-d simulation code that has
   solvers for advection, diffusion, compressible and incompressible
-  hydrodynamcs, as well as multigrid.  It is designed to make 
+  hydrodynamcs, as well as multigrid.  Low Mach solvers are 
+  in development.  \pyro\ is designed to make 
   experimentation easy.  
 
-  You can download {\sf pyro} at: \\
+  You can download \pyro\ at: \\
   \url{https://github.com/zingale/pyro2/} 
 
   A brief overview of \pyro\ is given in Appendix~\ref{app:pyro},
@@ -54,7 +62,9 @@ go along with these notes.
 \url{http://bender.astro.sunysb.edu/hydro_by_example/}
 \end{enumerate}
 
-These notes benefited from numerous conversations with Ann Almgren,
-John Bell, Alan Calder, Chris Malone, \& Andy Nonaka.
+These notes benefited from numerous conversations and an ongoing
+collaboration with Ann Almgren, John Bell, Alan Calder, Chris
+Malone, \& Andy Nonaka.
 
-If you find errors, please e-mail me at Michael.Zingale@stonybrook.edu
+If you find errors, please e-mail me at Michael.Zingale@stonybrook.edu,
+or issue a pull request to the git repo noted above.
