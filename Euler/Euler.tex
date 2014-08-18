@@ -10,16 +10,16 @@
 \section{Euler equation properties}
 
 The Euler equations in one dimension appear as:
-\begin{eqnarray}
+\begin{align}
 \frac{\partial \rho}{\partial t} + 
-    \frac{\partial (\rho u)}{\partial x} &=& 0 \\
+    \frac{\partial (\rho u)}{\partial x} &= 0 \\
 %
 \frac{\partial(\rho u)}{\partial t} +
-    \frac{\partial (\rho uu + p)}{\partial x} &=& 0 \\
+    \frac{\partial (\rho uu + p)}{\partial x} &= 0 \\
 %
 \frac{\partial(\rho E)}{\partial t} + 
-    \frac{\partial(\rho u E + u p)}{\partial x} &=& 0
-\end{eqnarray}
+    \frac{\partial(\rho u E + u p)}{\partial x} &= 0
+\end{align}
 These represent conservation of mass, momentum, and energy.  Here $\rho$ is the
 density, $u$ is the one-dimensional velocity, $p$ is the pressure, and $E$
 is the total energy / mass, and can be expressed in terms of the
@@ -266,10 +266,10 @@ Instead of approximating the flux itself on the interface, we find an
 approximation to the state on the interface, $U_{i-1/2}^{n+1/2}$ and
 $U_{i+1/2}^{n+1/2}$ and use this with the flux function to define the
 flux through the interface:
-\begin{eqnarray}
-F_{i-1/2}^{n+1/2} &=& F(U_{i-1/2}^{n+1/2}) \\
-F_{i+1/2}^{n+1/2} &=& F(U_{i+1/2}^{n+1/2})
-\end{eqnarray}
+\begin{align}
+F_{i-1/2}^{n+1/2} &= F(U_{i-1/2}^{n+1/2}) \\
+F_{i+1/2}^{n+1/2} &= F(U_{i+1/2}^{n+1/2})
+\end{align}
 To find this interface state, we predict left and right states at each
 interface (centered in time), which are the input to the Riemann
 solver.  The Riemann solver will then look at the characteristic wave
@@ -310,10 +310,10 @@ of these ideas below.
 The simplest possible reconstruction of the data is piecewise constant.
 This is what was done in the original Godunov method.  For the interface
 marked by $i+1/2$, the left and right states on the interface are simply:
-\begin{eqnarray}
-U_{i+1/2,L} &=& U_i \\
-U_{i+1/2,R} &=& U_{i+1}
-\end{eqnarray}
+\begin{align}
+U_{i+1/2,L} &= U_i \\
+U_{i+1/2,R} &= U_{i+1}
+\end{align}
 This does not take into account in any way how the state $U$ may be changing
 through the cell.  As a result, it is first-order accurate in space, and since
 no attempt was made to center it in time, it is first-order accurate in time.
@@ -343,14 +343,14 @@ do a Taylor expansion through $\Delta x/2$ to bring us to the
 interface, and $\Delta t/2$ to bring us to the midpoint in time.
 Starting with $q_i$, the cell-centered primitive variable, expanding
 to the right interface (to create the left state there) gives:
-\begin{eqnarray}
-q_{i+1/2,L}^{n+1/2} &=& q_i^n + 
+\begin{align}
+q_{i+1/2,L}^{n+1/2} &= q_i^n + 
     \left . \frac{\Delta x}{2} \frac{\partial q}{\partial x} \right |_i +
     \frac{\Delta t}{2} \underbrace{\left .\frac{\partial q}{\partial t} \right |_i}_{= -A \partial q / \partial x} + \ldots \\
-&=& q_i^n + \frac{\Delta x}{2} \left . \frac{\partial q}{\partial x} \right |_i
+&= q_i^n + \frac{\Delta x}{2} \left . \frac{\partial q}{\partial x} \right |_i
           - \frac{\Delta t}{2} \left ( A \frac{\partial q}{\partial x} \right )_i\\
-&=& q_i^n + \frac{1}{2} \left [ 1 - \frac{\Delta t}{\Delta x} A_i \right ] \Delta q_i \label{eq:taylorstate}
-\end{eqnarray}
+&= q_i^n + \frac{1}{2} \left [ 1 - \frac{\Delta t}{\Delta x} A_i \right ] \Delta q_i \label{eq:taylorstate}
+\end{align}
 where $\Delta q_i$ is the reconstructed slope of the primitive
 variable in that cell (similar to how we compute it for the advection
 equation).  We note that the terms truncated in the first line are
@@ -544,14 +544,14 @@ q_{i+1/2,L}^{n+1/2} - \tilde{q}_{i,L} = \frac{1}{2} \frac{\Delta t}{\Delta x}
 \end{equation}
 and projecting this RHS (see Colella \& Glaz Eq. 43; Miller \& Colella Eq. 87),
 and isolating the interface state, we have
-\begin{eqnarray}
-q_{i+1/2,L}^{n+1/2} &=& \tilde{q}_{i,L} + \frac{1}{2} \frac{\Delta t}{\Delta x}
+\begin{align}
+q_{i+1/2,L}^{n+1/2} &= \tilde{q}_{i,L} + \frac{1}{2} \frac{\Delta t}{\Delta x}
        \sum_{\nu; \lambda^{(\nu)} \ge 0} l_i^{(\nu)} \cdot \left [ \max(\lambda_i^\evp,0) - A_i \right ]
                                            \overline{\Delta q}_i \, r_i^{(\nu)} \\
-                    &=& \tilde{q}_{i,L} + \frac{1}{2} \frac{\Delta t}{\Delta x}
+                    &= \tilde{q}_{i,L} + \frac{1}{2} \frac{\Delta t}{\Delta x}
        \sum_{\nu; \lambda^{(\nu)} \ge 0} \left [ \max(\lambda_i^\evp,0) - \lambda_i^{(\nu)} \right ]
                                           (l_i^{(\nu)} \cdot \overline{\Delta q}_i) \, r_i^{(\nu)}
-\end{eqnarray}
+\end{align}
 This is equivalent to the expression in Saltzman~\cite{saltzman:1994}
 (p.\ 161, first column, second-to-last equation) and
 Colella~\cite{colella:1990} (p.\ 191, the group of expressions at the
@@ -751,9 +751,9 @@ the row corresponding to $u$ in the $q$ vector (in our case, the
 second row).  
 
 Putting in the eigenvectors and writing out the sum, we have:
-\begin{eqnarray}
+\begin{align}
  u_{i+1/2,L}^{n+1/2} =
-     \tilde{u}_+ &-& 
+     \tilde{u}_+ &- 
        \left ( \begin{array}{ccc} 
                   0 & -\frac{\rho}{2c} & \frac{1}{2c^2} \end{array} 
        \right ) 
@@ -768,7 +768,7 @@ Putting in the eigenvectors and writing out the sum, we have:
            c^2
     \end{array} \right ) } \nonumber \\
 %
-     &-&\left ( \begin{array}{ccc} 
+     &-\left ( \begin{array}{ccc} 
                   1 & 0 & -\frac{1}{c^2} \end{array} 
        \right ) 
     \left ( \begin{array}{c} 
@@ -782,7 +782,7 @@ Putting in the eigenvectors and writing out the sum, we have:
            0
     \end{array} \right ) } \nonumber \\
 %
-    &-&\left ( \begin{array}{ccc} 
+    &-\left ( \begin{array}{ccc} 
                   0 & \frac{\rho}{2c} & \frac{1}{2c^2} \end{array} 
        \right ) 
     \left ( \begin{array}{c} 
@@ -796,7 +796,7 @@ Putting in the eigenvectors and writing out the sum, we have:
            c^2
     \end{array} \right ) } 
 %
-\end{eqnarray}
+\end{align}
 Here again we show the entire right eigenvector for illustration, but
 only the element that comes into play is drawn in black.  This shows
 that the second term is $0$---the contact wave does not carry a jump
@@ -815,17 +815,17 @@ u_{i+1/2,L}^{n+1/2} =
 \end{align}
 where $C$ is the Lagrangian sound speed ($C = \sqrt{\gamma p \rho}$).
 Defining 
-\begin{eqnarray}
-\beta^{+} &=& - \frac{1}{2C}
+\begin{align}
+\beta^{+} &= - \frac{1}{2C}
   \left [
       (\tilde{u}_+ - \mathcal{I}_+^\evp(u) ) +
        \frac{\tilde{p}_+ - \mathcal{I}_+^\evp(p)}{C} \right ] \\
 %
-\beta^{-} &=& + \frac{1}{2C}
+\beta^{-} &= + \frac{1}{2C}
   \left [
       (\tilde{u}_+ - \mathcal{I}_+^\evm(u) ) -
        \frac{\tilde{p}_+ - \mathcal{I}_+^\evm(p)}{C} \right ]
-\end{eqnarray}
+\end{align}
 we can write our left state as:
 \begin{equation}
 u_{i+1/2,L}^{n+1/2} =
@@ -1018,25 +1018,25 @@ conservative state, $U$, in space and time.  Now, when replacing the
 time derivative ($\partial U/\partial t$) with the divergence of the
 fluxes, we gain a transverse flux derivative term.  For example,
 predicting to the upper $x$ edge of zone $i,j$, we have:
-\begin{eqnarray}
-U_{i+1/2,j,L}^{n+1/2} &=& U_{i,j}^n + \frac{\Delta x}{2} \frac{\partial U}{\partial x} 
+\begin{align}
+U_{i+1/2,j,L}^{n+1/2} &= U_{i,j}^n + \frac{\Delta x}{2} \frac{\partial U}{\partial x} 
                             + \frac{\Delta t}{2} \frac{\partial U}{\partial t} + \ldots \\
-&=& U_{i,j}^n + \frac{\Delta x}{2} \frac{\partial U}{\partial x} 
+&= U_{i,j}^n + \frac{\Delta x}{2} \frac{\partial U}{\partial x} 
                             - \frac{\Delta t}{2} \frac{\partial F^{(x)}}{\partial x} 
                             - \frac{\Delta t}{2} \frac{\partial F^{(y)}}{\partial y} \\
-&=& U_{i,j}^n + \frac{1}{2} \left [ 1 - \frac{\Delta t}{\Delta x} A^{(x)}(U) \right ] \Delta U 
+&= U_{i,j}^n + \frac{1}{2} \left [ 1 - \frac{\Delta t}{\Delta x} A^{(x)}(U) \right ] \Delta U 
                             - \frac{\Delta t}{2} \frac{\partial F^{(y)}}{\partial y} \label{eq:Utaylorstate}
-\end{eqnarray}
+\end{align}
 where $A^{(x)}(U) \equiv \partial F^{(x)} / \partial U$.  We decompose
 this into a {\em normal state} and a {\em transverse flux difference}.
 Adopting the notation from Colella (1990), we use $\hat{U}$ to denote
 the normal state:
-\begin{eqnarray}
-\hat{U}_{i+1/2,j,L}^{n+1/2} &\equiv& U_{i,j}^n 
+\begin{align}
+\hat{U}_{i+1/2,j,L}^{n+1/2} &\equiv U_{i,j}^n 
       + \frac{1}{2} \left [ 1 - \frac{\Delta t}{\Delta x} A^{(x)}(U) \right ] \Delta U \\
-U_{i+1/2,j,L}^{n+1/2} &=& \hat{U}_{i+1/2,j,L}^{n+1/2}
+U_{i+1/2,j,L}^{n+1/2} &= \hat{U}_{i+1/2,j,L}^{n+1/2}
                             - \frac{\Delta t}{2} \frac{\partial F^{(y)}}{\partial y}  \label{eq:fullleftstate}
-\end{eqnarray}
+\end{align}
 
 The primitive variable form for this system is
 \begin{equation}
@@ -1093,12 +1093,12 @@ $\hat{U}$'s) (Eq. 2.15).  In both cases, we need to solve a {\em
 interface.  This latter approach is what we prefer.  In particular, 
 for computing the full $x$-interface left state, $U_{i+1/2,j,L}^{n+1/2}$, we need the 
 transverse ($y$) states, which we define as
-\begin{eqnarray}
-U^T_{i,j+1/2} = \mathcal{R}(\hat{U}^{n+1/2}_{i,j+1/2,L}, 
+\begin{align}
+U^T_{i,j+1/2} &= \mathcal{R}(\hat{U}^{n+1/2}_{i,j+1/2,L}, 
                             \hat{U}^{n+1/2}_{i,j+1/2,R}) \\
-U^T_{i,j-1/2} = \mathcal{R}(\hat{U}^{n+1/2}_{i,j-1/2,L}, 
+U^T_{i,j-1/2} &= \mathcal{R}(\hat{U}^{n+1/2}_{i,j-1/2,L}, 
                             \hat{U}^{n+1/2}_{i,j-1/2,R})
-\end{eqnarray}
+\end{align}
 
 Taken together, the full interface state is now:
 \begin{equation}
@@ -1344,20 +1344,20 @@ U_t + [F^{(x)}(U)]_x + [F^{(y)}(U)]_y = H
 we predict to the edges in the same fashion as described above, but now
 when we replace $\partial U/\partial t$ with the divergence of the
 fluxes, we also pick up the source term.  This appears as:
-\begin{eqnarray}
-U_{i+1/2,j,L}^{n+1/2} &=& U_{i,j}^n 
+\begin{align}
+U_{i+1/2,j,L}^{n+1/2} &= U_{i,j}^n 
             + \frac{\Delta x}{2} \frac{\partial U}{\partial x} 
             + \frac{\Delta t}{2} \frac{\partial U}{\partial t} + \ldots \\
-&=& U_{i,j}^n + \frac{\Delta x}{2} \frac{\partial U}{\partial x} 
+&= U_{i,j}^n + \frac{\Delta x}{2} \frac{\partial U}{\partial x} 
               - \frac{\Delta t}{2} \frac{\partial F^{(x)}}{\partial x} 
               - \frac{\Delta t}{2} \frac{\partial F^{(y)}}{\partial y} 
               + \frac{\Delta t}{2} H_{i,j} \\
-&=& U_{i,j}^n 
+&= U_{i,j}^n 
  + \frac{1}{2} \left [1 -\frac{\Delta t}{\Delta x} A^{(x)}(U)\right ] \Delta U 
  - \frac{\Delta t}{2} \frac{\partial F^{(y)}}{\partial y}
  + \frac{\Delta t}{2} H_{i,j}
   \label{eq:Utaylorstatesource}
-\end{eqnarray}
+\end{align}
 We can compute things as above, but simply add the source term to the
 $\hat{U}$'s and carry it through.  
 
@@ -1387,16 +1387,16 @@ for the left state, and
 for the right state.  Since $G$ is only non-zero for velocity, only
 the velocity changes.  Writing out the sum (and performing the vector products), we
 get:
-\begin{eqnarray}
+\begin{align}
 u_{i+1/2,L}^{n+1/2} =
    \tilde{u}_+ 
-  &-& \frac{1}{2} \left [
+  &- \frac{1}{2} \left [
       \left (\tilde{u}_+ - \mathcal{I}_+^\evm(u) - \frac{\Delta t}{2} \mathcal{I}^\evm_+(g) \right ) - 
        \frac{\tilde{p}_+ - \mathcal{I}_+^\evm(p)}{C} \right ] \nonumber \\
-  &-& \frac{1}{2} \left [
+  &- \frac{1}{2} \left [
       \left (\tilde{u}_+ - \mathcal{I}_+^\evp(u) - \frac{\Delta t}{2} \mathcal{I}^\evp_+(g) \right ) +
        \frac{\tilde{p}_+ - \mathcal{I}_+^\evp(p)}{C} \right ]
-\end{eqnarray}
+\end{align}
 where the only change from Eq.~\ref{eq:ufull} are the
 $\mathcal{I}^\evm_+(g)$ and $\mathcal{I}^\evp_+(g)$ terms.  
 
@@ -1500,20 +1500,20 @@ these three waves.
 
 Working through the sum for the $(\rho e)$ state, and using a $\sim$ to
 denote the reference states, we arrive at:
-\begin{eqnarray}
-(\rho e)_{i+1/2,L}^{n+1/2} = \widetilde{(\rho e)} &-&
+\begin{align}
+(\rho e)_{i+1/2,L}^{n+1/2} = \widetilde{(\rho e)} &-
    \frac{1}{2} \left [ -\frac{\rho}{c} \left (\tilde{u} - \mathcal{I}^{(1)}_+(u) \right )
                        +\frac{1}{c^2} \left (\tilde{p} - \mathcal{I}^{(1)}_+(p) \right )
                \right ] h \nonumber \\
-  &-&
+  &-
     \left [ -\frac{h}{c^2} \left (\tilde{p} - \mathcal{I}^{(3)}_+(p) \right )
                        + \left (\widetilde{(\rho e)} - \mathcal{I}^{(3)}_+(\rho e) \right )
                \right ] \nonumber \\
-  &-&
+  &-
    \frac{1}{2} \left [ \frac{\rho}{c} \left (\tilde{u} - \mathcal{I}^{(4)}_+(u) \right )
                        +\frac{1}{c^2} \left (\tilde{p} - \mathcal{I}^{(4)}_+(p) \right )
                \right ] h 
-\end{eqnarray}
+\end{align}
 This is the expression that is found in the Castro code.
 
 
