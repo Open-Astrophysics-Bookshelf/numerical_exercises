@@ -903,6 +903,23 @@ We typically work in terms of primitive variables.  The states in the
 $L$ and $R$ regions are simply the left and right input states---the
 waves have not had time to reach here, so they are unmodified.
 
+The left and right states are connected to the state in the star
+region by a Hugoniot curve---this is a curve in the $u$-$p$
+plane that shows all of the possible states one can reach from 
+the current state through either a shock or rarefaction.  There
+are two such curves, one corresponding to the left and one to the right
+state, and the solution to the Riemann problem is the point in
+the $u$-$p$ plane where these two curves intersect.  Figure~\ref{fig:euler:riemann-curve}
+shows the Hugoniot curves for the Sod problem.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.6\linewidth]{riemann-phase}
+\caption{\label{fig:euler:riemann-curve} The Hugoniot curves corresponding
+to the Sod problem.  The shock and rarefaction curves are shown.  The
+solution to the Riemann problem is the point where the curves intersect.}
+\end{figure}
+
 We are interested in the state at the interface.  To
 determine this, we need to determine which region we are in.  That
 requires an estimation of the wave speeds.  Since these are nonlinear
