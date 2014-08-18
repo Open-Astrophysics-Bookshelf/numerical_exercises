@@ -379,7 +379,16 @@ velocities.  This involves projecting the velocity field onto the
 space that is divergence free.  This projection is usually called the
 MAC projection.  Once the MAC-projected advective velocities are
 computed, we can reconstruct the interface states using this
-divergence-free velocity field.
+divergence-free velocity field.  Figure~\ref{fig:incomp:MACsolve}
+shows the location of the various quantities that participate
+it the MAC projection.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{MAC_solve}
+\caption{\label{fig:incomp:MACsolve} The centerings of the various
+components that make up the MAC projection.}
+\end{figure}
 
 The divergence of the MAC velocities is cell-centered and constructed as:
 \begin{equation}
