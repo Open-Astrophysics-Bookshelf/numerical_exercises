@@ -26,11 +26,11 @@ This will create a local git repo on your machine with all of the
 code.  You can then run the scripts, ``as is'' without needing to go
 to github anymore.  Periodically, there may be updates to the scripts,
 which you can obtain by issuing ``{\tt git pull}'' in the {\tt
-  hydro\_examples/} directory.  Note that if you have made any local
+hydro\_examples/} directory.  Note that if you have made any local
 changes to the scripts, \git\ may complain.  The process of merging
 changes is descibed online in various places,
 e.g. ``\href{https://help.github.com/articles/resolving-a-merge-conflict-from-the-command-line}{Resolving
-  a merge conflict from the command line}'' from github.
+a merge conflict from the command line}'' from github.
 
 Alternately, you can use github's web interface to fork it.  Logon to
 github (or create an account) and click on the ``Fork'' icon on the
@@ -70,6 +70,13 @@ following scripts are available:
     Burgers' equation, with initial conditions corresponding to a
     shock and a rarefaction.
 
+  \end{itemize}
+
+\item {\tt compressible/}
+
+  \begin{itemize}
+  \item {\tt riemann-phase.py}: draw the Hugoniot curves in the $u$-$p$ plane
+     for a pair of states that comprise a Riemann problem.
   \end{itemize}
 
 \item {\tt multigrid/}
