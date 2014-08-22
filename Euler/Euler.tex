@@ -127,7 +127,7 @@ where $Ds/Dt$ is $0$ when no entropy sources are present.  Recognizing
 that $\Gamma_1 \equiv \partial \log p/\partial \log \rho |_s$, we have:
 \begin{equation}
 \frac{\partial p}{\partial t} + u \frac{\partial p}{\partial x} 
-  + \Gamma_1 p \frac{\partial u}{\partial x} = 0
+  + \Gamma_1 p \frac{\partial u}{\partial x} = 0  \label{eq:euler:pgeneral}
 \end{equation}
 as the generalization of the pressure equation.
 
@@ -245,6 +245,30 @@ emanating from an initial discontinuity.
   reached the far left and far right yet, the conditions there are the
   same as the initial conditions.}
 \end{figure}
+
+
+%-----------------------------------------------------------------------------
+\section{Other Thermodynamic Equations}
+
+At times we will want to use alternate forms of the energy equation.  The
+internal energy is governed by the first law of thermodynamics.  In the
+absense of any heat sources, we have:
+\begin{equation}
+dq = 0 = de + pd(1/\rho)
+\end{equation}
+where $e$ is the specific internal energy.
+Applying this to a Lagrangian fluid element, we have:
+\begin{align}
+\frac{De}{Dt} + p \frac{D(1/\rho)}{Dt} &= 0 \\
+\frac{De}{Dt} - \frac{1}{\rho^2} \frac{D\rho}{Dt} &= 0 \\
+\rho \frac{De}{Dt} + p \nabla \cdot U &= 0
+\end{align}
+where we used the continuity equation in the last step to eliminate
+$D\rho/Dt$.  This can be rewritten by adding $e \times$ the continuity
+equation to give:
+\begin{equation}
+\frac{\partial (\rho e)}{\partial t} + \nabla \cdot (\rho U e) + p \nabla \cdot U = 0 \label{eq:euler:econs}
+\end{equation}
 
 
 %-----------------------------------------------------------------------------
@@ -1419,27 +1443,34 @@ Glaz~\cite{colellaglaz:1985}.  They construct a thermodynamic index,
 \begin{equation}
 \gamma_e = \frac{p}{\rho e} + 1
 \end{equation}
-and derive an evolution equation for $\gamma_e$ (C\&G, Eq.\ 26).  This
-evolution equation is used to predict $\gamma_e$ to interfaces, and
-these interface values of $\gamma_e$ are used in the Riemann solver 
-presented there to find the fluxes through the interface.  A different
-adiabatic index (they call $\Gamma$, others call $\gamma_c$) appears in
-the definition of the sound speed.  They argue that this can be brought
-to interfaces in a piecewise constant fashion while still making the
-overall method second order, since $\gamma_c$ does not explicitly
-appear in the fluxes (see the discussion at the top of page 277).
+and derive an evolution equation for $\gamma_e$ (C\&G, Eq.\ 26).  
+We can derive a similar expression as
+\begin{align}
+\frac{D\gamma_e}{Dt} &= \frac{D}{Dt} \left ( \frac{p}{\rho e} + 1 \right )
+   = - \frac{p}{(\rho e)^2} \frac{D(\rho e)}{Dt} + \frac{1}{\rho e} \frac{Dp}{Dt} \nonumber \\
+   &= (\gamma_e + 1) (\gamma_e  - \Gamma_1) \nabla \cdot U \label{eq:gammae}
+\end{align}
+where we used Eqs.~\ref{eq:euler:pgeneral} and \ref{eq:euler:econs}, and the definition
+of the sound speed.
 
-Extending this to an unsplit formulation is not obvious, since the
-evolution equation for $\gamma_e$ is not a conservation law, and it
-is not obvious what sort of transverse term needs to be incorporated.
+This evolution equation is used to predict $\gamma_e$ to interfaces,
+and these interface values of $\gamma_e$ are used in the Riemann
+solver presented there to find the fluxes through the interface.  A
+different adiabatic index (they call $\Gamma$, we call $\Gamma_1$)
+appears in the definition of the sound speed.  They argue that this
+can be brought to interfaces in a piecewise constant fashion while
+still making the overall method second order, since $\Gamma_1$ does
+not explicitly appear in the fluxes (see the discussion at the top of
+page 277).
 
 Alternately, the Castro paper~\cite{almgren:2010} relies on an idea
 from an unpublished manuscript by Colella, Glaz, and Ferguson that
 predicts $\rho e$ to edges in addition to $\rho$, $u$, and $p$.  Since
-$\rho e$ comes from a conservation-like equation, predicting it to the
-interface in the unsplit formulation is straightforward.  This
-over-specifies the thermodynamics, but eliminates the need for
-$\gamma_e$.
+$\rho e$ comes from a conservation-like equation
+(Eq.~\ref{eq:euler:econs}, predicting it to the interface in the
+unsplit formulation is straightforward.  This over-specifies the
+thermodynamics, but eliminates the need for $\gamma_e$.
+
 
 With the addition of $\rho e$, our system becomes:
 \begin{equation}
@@ -1519,6 +1550,14 @@ This is the expression that is found in the Castro code.
 
 All of these methods are designed to avoid EOS calls where possible,
 since general equations of state can be expensive.
+
+Extending these to an unsplit formulation requires carrying an additional
+auxillary variable from the primitive state back to the conserved state
+and adding the transverse gradients to its interface state.  Castro
+deals with a conserved state of $U = (\rho, \rho U, \rho E, p)$, and
+explicitly adds the transverse terms found in the multi-dimensional form
+of Eq.~\ref{eq:euler:pgeneral}
+to the normal states of $p$.  
 
 
 \item {\em Axisymmetry}: it is common to so 2-d axisymmetric models---here
