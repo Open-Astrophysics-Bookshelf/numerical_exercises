@@ -1013,6 +1013,36 @@ See \cite{colella:1990} for more details on this unsplit method.
   undershoots.  An example of a method that considers the limiting
   in multidimensions is \cite{BDS,quadBDS}.
 
+\item {\em Spatially-varying velocity field}: if we consider a spatially
+  varying velocity field, $u(x,y)$ and $v(x,y)$ that is specified externally,
+  then we can describe the advection of a quantity $\phi$ as:
+  \begin{equation}
+  \phi_t + (\phi u)_x + (\phi v)_y = 0
+  \end{equation}
+  The solution procedure is largely the same as described above.  We write:
+\begin{align}
+\phi_{i+1/2,j,L}^{n+1/2} &= \phi_{i,j}^n + 
+   \frac{\Delta x}{2} \frac{\partial \phi}{\partial x} +
+   \frac{\Delta t}{2} \frac{\partial \phi}{\partial t} + \ldots \nonumber \\
+%
+ &= \phi_{i,j}^n + 
+    \frac{\Delta x}{2} \frac{\partial \phi}{\partial x} +
+    \frac{\Delta t}{2} \left [ -(\phi u)_x -(\phi v)_y \right ]_{i,j} \nonumber\\
+%
+ &= \underbrace{\phi_{i,j}^n + 
+   \frac{\Delta x}{2} \left ( 1 - \frac{\Delta t}{\Delta x} u_{i,j} \right )
+        \frac{\partial \phi}{\partial x}}_{\hat{\phi}_{i+1/2,j,L}^{n+1/2}}
+   - \frac{\Delta t}{2} \left [\phi u_x \right ]_{i,j} 
+   - \frac{\Delta t}{2} \left [ (\phi v)_y \right ]_{i,j}
+\end{align}
+  and upwinding is used to resolve the Riemann problem for both the transverse
+  and normal interface states.
+  
+  For compressible hydrodynamics, we often have density-weighted quantities
+  that we advect.  This extension is described in \S~\ref{sec:euler:further}.
+  For low Mach number flows, the density can be advected according to
+  the velocity field in much the fashion shown here, as described in \S~\ref{sec:lm:density}.
+
 \end{itemize}
 
 
