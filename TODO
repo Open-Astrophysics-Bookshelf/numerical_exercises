@@ -8,6 +8,16 @@ new chapters:
 
   -- higher-order
 
+     o method of lines integration with RK3/4 and high-order reconstruction
+
+  -- implicit hydro
+
+  -- general quadralateral grids
+
+  -- moving grids
+
+     o 1-d moving grid showing 
+
   -- AMR
 
 
