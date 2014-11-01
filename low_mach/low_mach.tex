@@ -65,7 +65,8 @@ and we finally have:
 \nabla \cdot U + \frac{1}{\Gamma_1 p_0}\frac{Dp_0}{Dt} = \sigma (H + \nabla \cdot k  \nabla T) \equiv S
 \end{equation}
 This is the general constraint equation for low Mach flow.  Note that the
-only approximation we made is $p \rightarrow p_0$.
+only approximation we made is $p \rightarrow p_0$.  This form of the constraint,
+for a general equation of state, was originally derived in \cite{ABRZ:I}.  
 
 A useful limit is smallscale combustion.  In an open domain, we can take
 $p_0$ as constant, so $Dp_0/Dt = 0$, and we are left with
@@ -75,7 +76,8 @@ $p_0$ as constant, so $Dp_0/Dt = 0$, and we are left with
 This looks like the constraint for incompressible flow, but with a source
 to the divergence.  This source captures the compressible effects due
 to local heat release---as a fluid parcel moves, the only changes to
-its density will come through local heat release.
+its density will come through local heat release.  Methods for this
+type of constraint are discussed in \cite{pember-flame,DayBell:2000,SNpaper}.
 
 Another interesting case is that of an atmosphere.  If we consider an
 ideal gas, then $\Gamma_1 = \gamma = \mathrm{constant}$.  A second
@@ -90,7 +92,9 @@ which is equivalent to
 \nabla \cdot \left ( p_0^{1/\gamma} U \right ) = 0
 \end{equation}
 This constraint captures the changes in compressibilty due to the 
-background stratification of an atmosphere.  If the structure of the
+background stratification of an atmosphere.  This form was originally
+derived for atmospheric flows by \cite{durran:1989} and generalized to
+stellar flows in \cite{ABRZ:I}.  If the structure of the
 atmosphere is isentropic, then we know that $d\log p_0 = \gamma d\log \rho_0$,
 where we use $\rho_0$ to represent the density corresponding to $p_0$, and
 we can write this constraint as:
