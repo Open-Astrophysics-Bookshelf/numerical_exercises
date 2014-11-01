@@ -76,6 +76,20 @@
 
 % hyperlinks -- load after fncychap
 \usepackage{hyperref}
+\usepackage[hyperpageref]{backref}
+\renewcommand*{\backref}[1]{}% for backref < 1.33 necessary
+\renewcommand*{\backrefalt}[4]{%
+\ifcase #1 %
+  No citations.%
+\or
+  (Cited on page #2)%
+\else
+  (Cited on pages #2)%
+\fi
+}
+
+% back references
+
 
 % color package
 \usepackage{color}
