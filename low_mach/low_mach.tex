@@ -513,6 +513,19 @@ The general solution procedure is for a single step is:
 \end{itemize}
 
 
+\subsection{Timestep constraint}
+
+In addition to the advective timestep constraint, an additional constraint
+is needed if the velocity field is initialially zero.  In \cite{ABNZ:III},
+a constraint based on the buoyancy forcing is used:
+\begin{equation}
+\Delta t_\mathrm{force} = \min \left \{ \left ( 2 \Delta x \frac{\rho}{\rho^\prime g} \right )^{1/2} \right \}
+\end{equation}
+This is based simply on $\Delta x = (1/2) g_\mathrm{eff} t^2$---the
+time it takes for the buoyant force to accelerate a fluid element
+across a zone width.
+
+
 \subsection{Bootstrapping}
 
 First we need to make sure that the initial velocity field satisfies our constraint
