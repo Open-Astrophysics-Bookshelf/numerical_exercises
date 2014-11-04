@@ -456,12 +456,19 @@ Decomposing the velocity field as
 \begin{equation}
 U^\star = U^d + \frac{\beta_0}{\rho} \nabla \phi
 \end{equation}
+as suggested from the form of the momentum equation,
 our Poisson equation can be defined by multiplying by $\beta_0$ and
 taking the divergence, and using $\nabla \cdot (\beta_0 U^d) = 0$, giving
 \begin{equation}
 \nabla \cdot \frac{\beta_0^2}{\rho} \nabla \phi = \nabla \cdot (\beta_0 U^\star)
 \end{equation}
 Note that when written like this, $\phi$ has units of $p^\prime/\beta_0$.
+
+Once we solve for $\phi$, we correct the velocity as:
+\begin{equation}
+U^\mathrm{new} = U^\star - \frac{\beta_0}{\rho} \nabla \phi
+\end{equation}
+
 
 \subsubsection{MAC Projection}
 
