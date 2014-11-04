@@ -524,11 +524,16 @@ The general solution procedure is for a single step is:
 
 In addition to the advective timestep constraint, an additional constraint
 is needed if the velocity field is initialially zero.  In \cite{ABNZ:III},
-a constraint based on the buoyancy forcing is used:
+a constraint based on the buoyancy forcing is used.  First, we compute
+the maxiumum buoyancy acceleration,
 \begin{equation}
-\Delta t_\mathrm{force} = \min \left \{ \left ( 2 \Delta x \frac{\rho}{\rho^\prime g} \right )^{1/2} \right \}
+a_\mathrm{max} = \max \left \{ \left |\frac{\rho'g}{\rho} \right | \right \}
 \end{equation}
-This is based simply on $\Delta x = (1/2) g_\mathrm{eff} t^2$---the
+and then 
+\begin{equation}
+\Delta t_\mathrm{force} = \left ( \frac{2 \Delta x}{a_\mathrm{max}} \right )^{1/2} 
+\end{equation}
+This is based simply on $\Delta x = (1/2) a t^2$---the
 time it takes for the buoyant force to accelerate a fluid element
 across a zone width.
 
