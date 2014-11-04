@@ -139,6 +139,17 @@
 \makeatother
 
 
+% put the git hash on the first page of each chapter -- see section
+% 7 of the fancyhdr docs to see how to override the plain
+% style
+\fancypagestyle{plain}{%
+\fancyhf{} % clear all header and footer fields
+\fancyfoot[C]{\thepage} % except the center
+\fancyfoot[L]{\scriptsize git version: \input git_info.tex $\ldots$}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}}
+
+
 % skip a bit of space between paragraphs, to enhance readability
 \usepackage{parskip}
 
@@ -299,7 +310,7 @@ for Astrophysics}}
 \null \vfill 
 
 \noindent \ccCopy\ 2013, 2014 Michael Zingale \\
-\noindent document git version: \input git_info.tex
+\noindent document git version: \input git_info.tex $\ldots$
 
 \noindent the source for these notes are available online (via \git): 
 \url{https://github.com/zingale/numerical_exercises}

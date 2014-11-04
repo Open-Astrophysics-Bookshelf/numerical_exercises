@@ -26,7 +26,7 @@ EPSS := $(foreach dir, $(DIRS), $(wildcard $(dir)/*.eps))
 
 
 CompHydroTutorial.pdf: CompHydroTutorial.tex $(TEXS) $(EPSS) refs.bib
-	git rev-parse HEAD > git_info.tex
+	git rev-parse --short=12 HEAD > git_info.tex
 	pdflatex CompHydroTutorial  < /dev/null
 	bibtex CompHydroTutorial.aux
 	pdflatex CompHydroTutorial  < /dev/null
