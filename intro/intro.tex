@@ -185,8 +185,8 @@ An optimal value for $\delta x$ requires a balance of truncation error
 when $\delta x$ is close to machine $\epsilon$).  A nice discussion of
 this is given in \cite{yak}.  Comparing the result with different choices
 of $\delta x$ allows for error estimation and an improvement of the result
-by combining the results with $\delta x$ and $\delta x/2$ (this is the
-basis for a method called {\em Richardson extrapolation}.
+by combining the estimates using $\delta x$ and $\delta x/2$ (this is the
+basis for a method called {\em Richardson extrapolation}).
 
 Second- and higher-order derivatives can be constructed in the same fashion.
 
@@ -295,7 +295,8 @@ Perhaps the most popular explicit method for ODEs is the 4th-order
 Runge-Kutta method (RK4).  This is a multistep method where several
 extrapolations to the midpoint and endpoint of the interval are
 made to estimate slopes and then a weighted average of these slopes
-are used to advance the solution.  The overall procedure looks like:
+are used to advance the solution.  The various slopes
+are illustrated in Figure~\ref{fig:rk} and the overall procedure looks like:
 \begin{equation}
 y_k^{n+1} = y_k^n + \frac{\Delta t}{6} (k_1 + 2 k_2 + 2 k_3 + k_4)
 \end{equation}
