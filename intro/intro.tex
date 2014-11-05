@@ -76,7 +76,7 @@ single- vs.\ double-precision floating point arithmetic.
 Some reorganization of algorithms can help minimize roundoff,
 e.g.\ avoiding the subtraction of two very large numbers by factoring as:
 \begin{equation}
-x^3 - y^3 = (x - y)(x^2 + xy + y^2)
+x^3 - y^3 = (x - y)(x^2 + xy + y^2) \enskip ,
 \end{equation}
 but roundoff error will always be present at some level.
 
@@ -122,7 +122,7 @@ analytically and we want to construct a derivative or integral of this
 function numerically.  In these notes, we'll be concerned only with
 the first case.
 
-\subsubsection{Differentiation}
+\subsection{Differentiation}
 \label{ch:intro:diff}
 Consider a collection of equally spaced points, labelled with an index
 $i$, with the physical spacing between them denoted $\Delta x$.  We
@@ -165,14 +165,48 @@ accurate, i.e.\ its truncation error is $\mathcal{O}(\Delta x^2)$.}
 \centering
 \includegraphics[width=0.8\linewidth]{derivs}
 \caption{\label{fig:derivs} A comparison of one-sided and centered
-difference approximations to the derivative of $sin(x)$.}
+difference approximations to the derivative of $\sin(x)$.}
 \end{figure}
 
-Figure~\ref{fig:derivs} show Generally speaking, higher-order methods
-have lower numerical error associated with them, and also involve a
-wider range of data points.
+Figure~\ref{fig:derivs} shows the left- and right-sided first-order
+differences and the central difference as approximations to
+$\sin(x)$. Generally speaking, higher-order methods have lower
+numerical error associated with them, and also involve a wider range
+of data points.
 
-\subsubsection{Integration}
+An alternate scenario is when you know the analytic form of the
+function, $f(x)$, and are free to choose the points where you evaluate
+it.  Here you can pick a $\delta x$ and evaluate the derivative as
+\begin{equation}
+\frac{df}{dx} = \frac{f(x+\delta x) - f(x)}{\delta x}
+\end{equation}
+An optimal value for $\delta x$ requires a balance of truncation error
+(which wants a small $\delta x$)  and roundoff error (which becomes large
+when $\delta x$ is close to machine $\epsilon$).  A nice discussion of
+this is given in \cite{yak}.  Comparing the result with different choices
+of $\delta x$ allows for error estimation and an improvement of the result
+by combining the results with $\delta x$ and $\delta x/2$ (this is the
+basis for a method called {\em Richardson extrapolation}.
+
+Second- and higher-order derivatives can be constructed in the same fashion.
+
+
+\subsection{Integration}
+
+Midpoint rule
+
+Trapezoid rule
+
+Simpsons rule (exercise, derive Simpson's rule by fitting to a parabola)
+
+compound integration
+
+As with differentiation, if you are free to pick the points where you
+evaluate $f(x)$, you can get a much higher-order accurate result.
+{\em Gaussian quadrature} is a very powerful technique that uses the
+zeros of different polynomials as the evaluation points for the
+function to give extremely accurate results.  See the text by
+Garcia~\cite{garcia} for a nice introduction to these methods.
 
 
 \subsection{Root Finding}
@@ -203,6 +237,9 @@ The {\em secant method} for root finding is essentially
 Newton-Raphson, but instead of using an analytic derivative,
 $f^\prime$ is estimated as a numerical difference.
 
+Many other root finding methods exist, including bisection, which
+iteratively halves an interval known to contain a root by looking for
+the change in sign of the funciton $f(x)$.
 
 \subsection{ODEs}
 
@@ -250,15 +287,24 @@ This is fourth-order accurate overall.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.495\linewidth]{rk4_k1.eps} 
-\includegraphics[width=0.495\linewidth]{rk4_k2} \\
+\includegraphics[width=0.65\linewidth]{rk4_k1.eps} \\
+\includegraphics[width=0.65\linewidth]{rk4_k2.eps} \\
+\includegraphics[width=0.65\linewidth]{rk4_k3.eps} \\
 %
-\includegraphics[width=0.495\linewidth]{rk4_k3.eps} 
-\includegraphics[width=0.495\linewidth]{rk4_final.eps} \\
+\caption[The $4^\mathrm{th}$-order Runge-Kutta method] {\label{fig:rk}
+  A graphical illustration of the four steps in the
+  $4^\mathrm{th}$-order Runge-Kutta method.}
+\end{figure}
+
+\begin{figure}[t]
+\ContinuedFloat
+\centering
+\includegraphics[width=0.65\linewidth]{rk4_k4.eps} \\
+\includegraphics[width=0.7\linewidth]{rk4_final.eps} \\
 %
-\caption[The $4^\mathrm{th}$-order Runge-Kutta method]
-{\label{fig:rk} A graphical illustration of the four steps in the $4^\mathrm{th}$-order
-Runge-Kutta method.}
+\caption[The $4^\mathrm{th}$-order Runge-Kutta method] {\label{fig:rk}
+  (continued) A graphical illustration of the four steps in the
+  $4^\mathrm{th}$-order Runge-Kutta method.}
 \end{figure}
 
 \begin{exercise}[ODE accuracy]
