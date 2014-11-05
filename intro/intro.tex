@@ -245,28 +245,51 @@ the change in sign of the funciton $f(x)$.
 
 Consider a system 
 \begin{equation}
-\dot{y}_k = f(t, y_k(t))
+\dot{y}_k = f_k(t, {\bf y}(t))
 \end{equation}
+We want to solve for the vector ${\bf y}$ as a function of time.
 Broadly speaking, methods for integrating ODEs can be broken down into
 explicit and implicit methods.  Explicit methods difference the system
 to form an update that uses only the current (and perhaps previous)
 values of the dependent variables in evaluating $f$.  For example, a
 first-order explicit update ({\em Euler's method}) appears as:
 \begin{equation}
-y^{n+1}_k = y^n_k + \Delta t f(t^n, y^n_k)
+y^{n+1}_k = y^n_k + \Delta t f_k(t^n, {\bf y}^n)
 \end{equation}
 where $\Delta t$ is the stepsize. 
 
 Implicit methods different the system in a way that includes the new
-value of the dependent variables in the evaluation of $f$---the resulting
+value of the dependent variables in the evaluation of $f_k$---the resulting
 implicit system is usually solved using, for example, Newton-Raphson iteration
 A first-order implicit update (called {\em backward Euler}) is:
 \begin{equation}
-y^{n+1}_k = y^n_k + \Delta t f(t^{n+1}, y^{n+1}_k)
+{\bf y}^{n+1} = {\bf y}^n + \Delta t {\bf f}(t^{n+1}, {\bf y}^{n+1})
 \end{equation}
+Expanding the righthand side vector,
+\begin{equation}
+{\bf f}(t^{n+1},{\bf y}^{n+1}) = {\bf f}(t^n, {\bf y}^n) +
+     \left . \frac{\partial {\bf f}}{\partial t} \right |_n \Delta t + 
+     \left . \frac{\partial {\bf f}}{\partial {\bf y}} \right |_n \Delta {\bf y} + \ldots 
+\end{equation} 
+Here we recognize the Jaobian matrix, ${\bf J} \equiv \partial {\bf
+  f}/\partial {\bf y}$ and since $\Delta {\bf y} = {\bf y}^{n+1} - {\bf y}^n$,
+our method becomes:
+\begin{equation}
+{\bf y}^{n+1} = {\bf y}^n + \Delta t \left [
+  {\bf f}(t^n, {\bf y}^n) +
+     \left . \frac{\partial {\bf f}}{\partial t} \right |_n \Delta t + 
+     {\bf J} ({\bf y}^{n+1} - {\bf y}^n) \right ]
+\end{equation}
+Keeping to order $\Delta t$, we have:
+\begin{equation}
+({\bf I} - \Delta t {\bf J}) {\bf y}^{n+1} = ({\bf I} - \Delta t {\bf J}) {\bf y}^n + \Delta t {\bf f}(t^n, {\bf y}^n)
+\end{equation}
+This is a linear system that can be solved using standard matrix techniques.
 
 Explicit methods are easier to program and run faster (for a given $
-\Delta t$), but implicit methods work better for {\em stiff} problems~\cite{byrnehindmarsh}.
+\Delta t$), but implicit methods work better for {\em stiff}
+problems---those characterized by widely disparate timescales over
+which the solution changes~\cite{byrnehindmarsh}.
 
 Perhaps the most popular explicit method for ODEs is the 4th-order
 Runge-Kutta method (RK4).  This is a multistep method where several
