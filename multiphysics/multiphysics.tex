@@ -6,7 +6,41 @@
 
 \section{Integrating Multiphysics}
 
-Method of lines vs.\ operator splitting
+Consider an equation whose evolution depends on several different
+physical processes, represented by the operators $A$, $D$,
+$R$ (these may represent, e.g., advection, diffusion, reactions,
+etc.).  
+\begin{equation}
+\phi_t = -A(\phi) + D(\phi) + R(\phi)
+\end{equation}
+One way to solve this system is to discretize each of the operators in
+space.  For instance the discrete advection operator, $[A(\phi)]_i$
+might use the ideas on piecewise linear reconstruction techniques
+discussed in chapter~\ref{ch:advection}, $[D(\phi)]_i$ can use the
+discrete form of the Laplacian from chapter~\ref{ch:diffusion}, and
+$[R(\phi)]_i$ may be an algebraic relation.  This leaves us with an ordinary differential equation for the time-evolution of $\phi$,
+\begin{equation}
+\frac{d\phi_i}{dt} = -[A(\phi)]_i + [D(\phi)]_i + [R(\phi)]_i
+\end{equation}
+which can be solve using standard ODE techniques.  This technique
+is called the {\em method of lines}, and can be a powerful technique
+to solve PDEs or systems of PDEs with multiple physics operators.
+
+A difficulty arises if these processes each have different timescales
+associated with them.  For instance, reactions may be vigorous and
+require a small timestep to accurately capture the changes, but
+the advection is slow.  Therefore, we don't want to use the same 
+timestep for all the processes, since that will needlessly make things
+computationally expensive.  {\em Operator splitting} solves for the
+effects of each operator separately, using whichever timestep (and
+time-discretization, e.g., explicit or implict) is most suited to the
+operation.  The result of one operation is used as the input to the
+next.  The downside of this approach is that the operations may
+not be well coupled.
+
+A final technique, {\em spectral deferred corrections} combines the 
+best features of the method of lines approach and operator splitting.
+
 
 \section{Ex: diffusion-reaction}
 
