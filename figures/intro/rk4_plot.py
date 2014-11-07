@@ -99,7 +99,8 @@ k1 = rhs(y0)
 tSlope = numpy.linspace(t0-0.2*dt, t0+0.2*dt, 2)
 ySlope = y0 + k1*(tSlope - t0)
 
-pylab.plot(tSlope, ySlope, label=r"slope", color="g", ls="--", lw=2)
+pylab.plot(tSlope, ySlope, label=r"slope", color="g", ls="--", lw=2, zorder=10)
+pylab.text(t0-0.1*dt, y0, r"$k_1$", color="g")
 
 leg = pylab.legend()
 ltext = leg.get_texts()
@@ -128,6 +129,7 @@ tSlope = numpy.linspace(t0+0.5*dt-0.2*dt, t0+0.5*dt+0.2*dt, 2)
 ySlope = ytmp + k2*(tSlope - (t0 + 0.5*dt))
 
 pylab.plot(tSlope, ySlope, color="g", ls="--", lw=2)
+pylab.text(t0+0.5*dt-0.1*dt, ytmp, r"$k_2$", color="g", verticalalignment="top")
 
 leg = pylab.legend()
 ltext = leg.get_texts()
@@ -152,7 +154,7 @@ pylab.scatter(t0+0.5*dt, ytmp, color="c")
 # draw slope there
 ySlope = ytmp + k3*(tSlope - (t0 + 0.5*dt))
 pylab.plot(tSlope, ySlope, color="g", ls="--", lw=2)
-
+pylab.text(t0+0.5*dt+0.05*dt, ytmp, r"$k_3$", color="g", verticalalignment="bottom")
 
 leg = pylab.legend()
 ltext = leg.get_texts()
@@ -178,7 +180,7 @@ pylab.scatter(t0+dt, ytmp, color="0.5")
 tSlope2 = numpy.linspace(t0+dt-0.2*dt, t0+dt+0.2*dt, 2)
 ySlope = ytmp + k4*(tSlope2 - (t0 + dt))
 pylab.plot(tSlope2, ySlope, color="g", ls="--", lw=2)
-
+pylab.text(t0+dt-0.1*dt, ytmp, r"$k_4$", color="g", verticalalignment="top")
 
 leg = pylab.legend()
 ltext = leg.get_texts()
