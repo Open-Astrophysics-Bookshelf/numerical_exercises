@@ -991,7 +991,10 @@ F_{i+1/2}^{n+1/2} = \left ( \begin{array}{c}
 
 Note that instead of returning an approximate state at the interface,
 some Riemann solvers (e.g.\ the HLL(C) solvers) instead approximate the
-fluxes directly.
+fluxes directly.  These use estimates of the wave speeds together with
+the Rankine-Hugonoit jump conditions to give the fluxes.
+
+
 
 %-----------------------------------------------------------------------------
 \section{Conservative update}
