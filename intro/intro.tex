@@ -193,6 +193,39 @@ Second- and higher-order derivatives can be constructed in the same fashion.
 
 \subsection{Integration}
 
+If we have a function sampled at a number of equally-spaced points,
+$x_0 \equiv a, x_1, \ldots, x_N \equiv b$, we can construct a discrete
+approximation to an integral as:
+\begin{equation}
+I \equiv \int_a^b f(x) dx \approx \Delta x \sum_{i = 0}^{N-1} f(x_i)
+\end{equation}
+where $\Delta x \equiv (b-a)/N$ is the width of the intervals.  This
+is a very crude method, but in the limit that $\Delta x \rightarrow 0$
+(or $N \rightarrow \infty$), this will converge to the true integral.
+This method is called the {\em rectangle rule}.
+
+If our sample points are fixed, however, then we can get a more accurate
+answer for $I$ by interpolating between the points.  The simplest 
+case is to connect the sampled function values, $f(x_0), f(x_1), \ldots, f(x_N)$ with a line, creating a trapezoid in each interval, and then simply add
+up the area of all of the trapezoids:
+\begin{equation}
+I \equiv \int_a^b f(x) dx \approx 
+  \Delta x \sum_{i = 0}^{N-1} \frac{f(x_i) + f(x_{i+1})}{2}
+\end{equation}
+This is called the {\em trapezoid rule}.
+
+One can keep going, but practically speaking, a quadratic interpolation
+is as high as one usually encounters.  Fitting a quadratic polynomial 
+requires three points, so in doing the integral from $[a,b]$, we will
+consider every two intervals together.  The resulting expression is:
+\begin{align}
+I \equiv \int_a^b f(x) dx &\approx 
+  \frac{\Delta x}{3} \sum_{i = 0}^{(N-2)/2} (f(x_{2i}) + 4 f(x_{2i+1}) + f(x_{2i+2}) ) \\
+&= f(x_0) + 4f(x_1) + 2f(x_2) + 4f(x_3) + 2f(x_4) + \ldots + \nonumber \\
+&\phantom{=} 2f(x_{N-2}) + 4f(x_{N-1}) + f(x_N)
+\end{align}
+This method is called {\em Simpson's rule}.  Figure~\ref{fig:integration} shows
+these different approximations for the case of two intervals (three points).
 
 \begin{figure}
 \centering
@@ -200,19 +233,25 @@ Second- and higher-order derivatives can be constructed in the same fashion.
 \includegraphics[width=0.49\linewidth]{trapezoid} \\
 \includegraphics[width=0.49\linewidth]{simpsons}
 \begin{minipage}[b]{0.49\linewidth}
-\caption[Integration rules]{\label{fig:integration} The midpoint rule (top left),
-  trapezoid rule (top right) and Simpson's rule (left) for
+\caption[Integration rules]{\label{fig:integration} The rectangle rule
+  (top left), trapezoid rule (top right) and Simpson's rule (left) for
   integration.}
 \end{minipage}
 \end{figure}
 
-Midpoint rule
+\begin{exercise}[Simpson's rule for integration]
+Consider a function, $f(x)$, sampled at three equally-spaced points,
+$a, b, c$, with corresponding function values $f_a, f_b, f_c$.  Derive
+the expression for Simpson's rule by fitting a quadratic $\hat{f}(x) =
+A(x - a)^2 + B(x - a) + C$ to the three points, and then analytically
+integrating $\hat{f}(x)$ in the interval $[a,c]$.  You should find
+\begin{equation}
+I = \frac{c-a}{6} (f_a + 4f_b + f_c)
+\end{equation}
+Note that $(c-a)/6 = \Delta x/3$
+\end{exercise}
 
-Trapezoid rule
-
-Simpsons rule (exercise, derive Simpson's rule by fitting to a parabola)
-
-compound integration
+Analogous expressions exist for the case of unequal points.
 
 As with differentiation, if you are free to pick the points where you
 evaluate $f(x)$, you can get a much higher-order accurate result.
