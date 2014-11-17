@@ -267,8 +267,42 @@
 \newcommand{\MarginPar}[1]{\marginpar{\vskip-\baselineskip\raggedright\tiny\sffamily\hrule\smallskip{\color{red}#1}\par\smallskip\hrule}}
 
 
+\usepackage{eso-pic}
+\newcommand\BackgroundPic{%
+\put(-100,0){%
+\parbox[b][\paperheight]{\paperwidth}{%
+\vfill
+\centering
+\includegraphics[width=\paperwidth,height=\paperheight,%
+keepaspectratio]{images/cover.png}%
+\vfill
+}}}
+
+
+\usepackage[many]{tcolorbox}
+
+\newtcolorbox{mybox}[1][]{
+    width=\textwidth,
+    arc=0mm,
+%    auto outer arc,
+    boxsep=0cm,
+    toprule=1pt,
+    leftrule=1pt,
+    bottomrule=1pt,
+    rightrule=1pt,
+    colframe=blue,
+    fontupper=\centering\fontsize{40pt}{40pt}\sffamily,
+    breakable,
+    nobeforeafter,
+    enhanced jigsaw,
+    opacityframe=0.5,
+    opacityback=0.7
+}
+
 
 \begin{document}
+
+\AddToShipoutPicture*{\BackgroundPic}
 
 \frontmatter
 
@@ -276,16 +310,25 @@
 
 \ \\[2.5in]
 \begin{center}
-\HRule\\[0.5em]
-{\Huge \textsf{{
-Lecture Notes on\\[0.1em]
-Computational Hydrodynamics\\[0.3em]
-for Astrophysics}}
-}
-\HRule
-\\[2em]
+%% \HRule\\[0.5em]
+%% {\Huge \textsf{{
+%% Lecture Notes on\\[0.1em]
+%% Computational Hydrodynamics\\[0.3em]
+%% for Astrophysics}}
+%% }
+%% \HRule
+%% \\[2em]
 
-{\Large \sf Michael Zingale} \\ {\sf Stony Brook University}
+%% {\Large \sf Michael Zingale} \\ {\sf Stony Brook University}
+
+\begin{mybox}[]
+\vskip 3mm
+Lecture Notes on \\[-0.35em]
+Computational Hydrodynamics \\[-0.35em]
+for Astrophysics \\[0.5em]
+{\Large Michael Zingale\\[-1.5em]
+Stony Brook University}
+\end{mybox}
 \end{center}
 
 \vfill
