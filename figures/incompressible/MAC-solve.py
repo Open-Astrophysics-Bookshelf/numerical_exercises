@@ -226,9 +226,10 @@ def simplegrid():
     f = pylab.gcf()
     f.set_size_inches(12.0,6.0)
 
+    pylab.tight_layout()
 
     pylab.savefig("MAC_solve.png")
-    pylab.savefig("MAC_solve.eps")
+    pylab.savefig("MAC_solve.eps", bbox_inches="tight")
                
 
 if __name__== "__main__":
