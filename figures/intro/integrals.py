@@ -33,7 +33,7 @@ b = 1.5
 
 
 #---------------------------------------------------------------------
-# midpoint method
+# rectangle method
 #---------------------------------------------------------------------
 plt.plot(x, f(x), "r", linewidth=2)
 plt.ylim(ymin = 0)
@@ -44,9 +44,9 @@ ax = plt.gca()
 for x1, x2 in [(a, (a+b)/2), ((a+b)/2, b)]:
 
     # shade region
-    fmid = f((x1+x2)/2)
+    fl = f(x1)
 
-    verts = [(x1, 0), (x1, fmid), (x2, fmid), (x2, 0)]
+    verts = [(x1, 0), (x1, fl), (x2, fl), (x2, 0)]
     ax.add_patch(Polygon(verts, facecolor="0.8"))
 
 
@@ -70,7 +70,7 @@ ax.set_yticks([])
 
 plt.xlim(xmin, 1.05*xmax)
 
-plt.savefig("midpoint.eps", bbox_inches="tight")
+plt.savefig("rectangle.eps", bbox_inches="tight")
 
 
 #---------------------------------------------------------------------
