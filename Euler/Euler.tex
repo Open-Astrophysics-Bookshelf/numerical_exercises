@@ -1238,13 +1238,78 @@ of the first valid zone in the domain (just inside the left boundary).
 
 
 %-----------------------------------------------------------------------------
+\section{Higher Order}
+
+In the methods above, we predicted a time-centered interface state and
+used this to evaluate the fluxes through the interface.  There are
+alternate techniques however.  For instance, we could do a method of
+lines approach where we discretize the system in space, leading to a
+system of ODEs in time, and the we can use a Runge-Kutta integrator to
+evolve the system in time. 
+
+Discretizing our system in space leads to the following system:
+\begin{equation}
+\frac{dU_{i,j}}{dt} = -\frac{F^{(x)}(U_{i+1/2,j}) - F^{(x)}(U_{i-1/2,j})}{\Delta x}
+                      -\frac{F^{(y)}(U_{i,j+1/2}) - F^{(y)}(U_{i,j-1/2})}{\Delta y}
+\end{equation}
+Note that there is no time superscript in the $U$ used to evaluate the
+fluxes on the righthand side---we have not done any time
+discretization yet.  Now we can use an ODE integrator to solve this system.  Consider
+second-order Runge-Kutta.  We evaluate two slopes,
+\begin{alignat}{3}
+k_1 &= \Delta t \bigg [ &-&\frac{F^{(x)}(U^n_{i+1/2,j}) 
+                               - F^{(x)}(U^n_{i-1/2,j})}{\Delta x} \nonumber \\
+    &\,                 &-&\frac{F^{(y)}(U^n_{i,j+1/2}) 
+                               - F^{(y)}(U^n_{i,j-1/2})}{\Delta y} \bigg ] \\
+k_2 &= \Delta t \bigg [ &-&\frac{F^{(x)}([U^n + k_1/2]_{i+1/2,j}) 
+                               - F^{(x)}([U^n + k_1/2]_{i-1/2,j})}{\Delta x} \nonumber \\
+    &\,                 &-&\frac{F^{(y)}([U^n + k_1/2]_{i,j+1/2}) 
+                               - F^{(y)}([U^n + k_1/2]_{i,j-1/2})}{\Delta y} \bigg ]  
+\end{alignat}
+and then
+\begin{equation}
+U^{n+1}_{i,j} = U^n_{i,j} + k_2 
+\end{equation}
+In the construction of the interface states, $U^n_{i+1/2,j}$ or $[U^n
++ k_1/2]_{i+1/2,j}$, there is no explicit transverse term, since that
+arose from Taylor expanding $U^n_{i,j}$ in time through $\Delta t/2$.
+Instead, we simply construct these interface states using a
+one-dimensional reconstruction and solve a Riemann problem at each
+interface.  The evaluation of the second slope, $k_2$, implicitly
+includes the transverse information since we add $k_1/2$ to
+$U^n_{i,j}$ before doing the prediction to the interfaces.  Also note,
+however, that in this construction of the interface states, there is
+no characteristic projection, since that arises from predicting the
+interface states forward in time.  Again, these interface states are
+at a constant time, not predicted into the future.
+
+Generally speaking we want the order of accuracy in time to match that
+in space.  The fourth-order Runge-Kutta method is a popular method for
+integrating ODEs, so it makes sense to couple this with a
+fourth-order-in-space method.  However, going higher-order than
+second-order is more challenging.  The key issue is that we can no
+longer simply approximate the cell average as the cell-center value,
+i.e., $\langle \phi\rangle_i \ne \phi_i$.
+
+
+An additional complexity arises when doing multiphysics.  Often we
+split the different physical processes up and treat them in turn.
+There are standard methods to do this with second-order accuracy in time, 
+but higher-order is more tricky.
+
+
+
+
+
+
+%-----------------------------------------------------------------------------
 \section{Going further}
 
 \label{sec:euler:further}
 
-\begin{itemize}
+\subsection{Flattening and Contact Steepening}
 
-\item {\em Flattening}: shocks are self-steepening (this is how we
+  Shocks are self-steepening (this is how we
   detect them in the Riemann solver---we look for converging characteristics).
   This can cause trouble with the methods here, because the shocks may become
   too steep.  
@@ -1272,18 +1337,7 @@ of the first valid zone in the domain (just inside the left boundary).
   values there) and the second ghost cell (since the flattening procedure
   looks at the coefficients in its immediate upwinded neighbor).
 
-\item {\em Artificial viscosity}: Colella and Woodward argue discuss
-  that behind slow-moving shocks these methods can have oscillations.
-  The fix they propose is to use some artificial viscosity---this is
-  additional dissipation that kicks in at shocks.  (They argue that
-  flattening alone is not enough).  
-
-  We use a multidimensional analog of their artificial viscosity
-  (\cite{colellawoodward:1984}, Eq.\ 4.5) which modifies the fluxes.
-  By design, it only kicks in for converging flows, such that you
-  would find around a shock.
-
-\item {\em Contact steepening}: in contrast to shocks, contact waves
+  In contrast to shocks, contact waves
   do not steepen (they are associated with the middle characteristic
   wave, and the velocity does not change across that, meaning there
   cannot be any convergence).  The original PPM
@@ -1296,7 +1350,24 @@ of the first valid zone in the domain (just inside the left boundary).
   think contact steepening may be necessary, it is more likely that
   the issue is that you do not have enough resolution.
 
-\item {\em Species}: for multifluid flows, the Euler equations are
+
+\subsection{Artificial viscosity}
+
+  Colella and Woodward argue discuss
+  that behind slow-moving shocks these methods can have oscillations.
+  The fix they propose is to use some artificial viscosity---this is
+  additional dissipation that kicks in at shocks.  (They argue that
+  flattening alone is not enough).  
+
+  We use a multidimensional analog of their artificial viscosity
+  (\cite{colellawoodward:1984}, Eq.\ 4.5) which modifies the fluxes.
+  By design, it only kicks in for converging flows, such that you
+  would find around a shock.
+
+
+\subsection{Species}
+
+For multifluid flows, the Euler equations are
 augments with continuity equations for each of the (chemical or nuclear)
 species:
 \begin{equation}
@@ -1366,7 +1437,10 @@ the limited slopes of all the species, and taking the most restrictive
 slope and applying this same slope to all the species.
 \end{itemize}
 
-\item {\em Source terms}: adding source terms is straightforward.  For
+
+\subsection{Source terms}
+
+Adding source terms is straightforward.  For
 a system described by
 \begin{equation}
 U_t + [F^{(x)}(U)]_x + [F^{(y)}(U)]_y = H
@@ -1440,8 +1514,9 @@ t/2) g$ for constant g---this matches the result from the Taylor
 expansion above (Eq.~\ref{eq:Utaylorstatesource}).
 
 
+\subsection{General equation of state} 
 
-\item {\em General equation of state}: The above methods were formulated
+The above methods were formulated
 with a constant gamma equation of state.  A general equation of state
 (such as degenerate electrons) requires a more complex method.  The classic
 prescription for extending this methodology is presented by Colella and 
@@ -1566,7 +1641,9 @@ of Eq.~\ref{eq:euler:pgeneral}
 to the normal states of $p$.  
 
 
-\item {\em Axisymmetry}: it is common to so 2-d axisymmetric models---here
+\subsection{Axisymmetry}
+
+It is common to so 2-d axisymmetric models---here
 the $r$ and $z$ coordinates from a cylindrical geometry are modeled.  This
 appears Cartesian, except there is a volume factor implicit in the 
 divergence that must be accounted for.  Our system in cylindrical
@@ -1589,7 +1666,9 @@ computed, the final update uses the conservative form of the system,
 with the volume factors appearing now in the definition of the
 divergence.
 
-\item {\em Defining temperature}: although not needed for the pure
+\subsection{Defining temperature}
+
+  Although not needed for the pure
   Euler equations, it is sometimes desirable to define the temperature
   for source terms (like reactions) or complex equations of state.
   The temperature can typically be found from the equation of state
@@ -1613,20 +1692,18 @@ divergence.
   internal energy is not a conserved quantity, and switching to it 
   introduces conservation of energy errors.
 
-\item {\em Limiting on characteristic variables}: some authors
-  (see for example, \cite{athena} Eqs.~37, 38) advocate limiting
-  on the characteristic variables rather than the primitive variables.
-  The characteristic slopes for the quantity carried by the wave $\nu$
-  can be found from the primitive variables as:
-  \begin{equation}
-  \Delta w^{(\nu)} = l^{(\nu)} \cdot \Delta q
-  \end{equation}
-  any limiting would then be done to $\Delta w^{(\nu)}$ and the
-  limited primitive variables would be recovered as:
-  \begin{equation}
-  \overline{\Delta q} = \sum_\nu \overline{\Delta w}^{(\nu)} r^{(\nu)}
-  \end{equation}
-  (here we use an overline to indicate limiting). 
+\subsection{Limiting on characteristic variables}
+ 
+  Some authors (see for example, \cite{athena} Eqs.~37, 38) advocate
+  limiting on the characteristic variables rather than the primitive
+  variables.  The characteristic slopes for the quantity carried by
+  the wave $\nu$ can be found from the primitive variables
+  as: \begin{equation} \Delta w^{(\nu)} = l^{(\nu)} \cdot \Delta
+  q \end{equation} any limiting would then be done to $\Delta
+  w^{(\nu)}$ and the limited primitive variables would be recovered
+  as: \begin{equation} \overline{\Delta q} = \sum_\nu \overline{\Delta
+  w}^{(\nu)} r^{(\nu)} \end{equation} (here we use an overline to
+  indicate limiting).
 
   This is attractive because it is more in the spirit of the linear
   advection equation and the formalism that was developed there.  A
@@ -1635,18 +1712,19 @@ divergence.
   may now fall outside of valid physical ranges (for example, negative
   density).
 
-\item {\em New PPM limiters}:
+\subsection{New PPM limiters}
+
 Recent work \cite{colellasekora} has formulated improved limiters for
 PPM that do not clip the profiles at extrema.  This only changes the
 limiting process in defining $q_+$ and $q_i$, and does not affect the
 subsequent parts of the algorithm.
 
 
-\item {\em 3-d unsplit}:
+\subsection{3-d unsplit}
+
 The extension of the unsplit methodology to 3-d is described by
 Saltzman~\cite{saltzman:1994}.  The basic idea is the same as in 2-d,
 except now additional transverse Riemann solve are needed to fully
 couple in the corners.
 
-\end{itemize}
 
