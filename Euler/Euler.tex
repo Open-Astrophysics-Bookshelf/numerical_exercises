@@ -894,6 +894,17 @@ substituting in the parabolic interpolant, giving:
 \end{equation}
 This is equivalent to Eq.~31b in the Castro paper.
 
+\subsubsection{New PPM limiters}
+
+Recent work \cite{colellasekora} has formulated improved limiters for
+PPM that do not clip the profiles at extrema.  This only changes the
+limiting process in defining $q_+$ and $q_i$, and does not affect the
+subsequent parts of the algorithm.
+
+
+
+
+
 %-----------------------------------------------------------------------------
 \section{The Riemann problem}
 
@@ -1711,14 +1722,6 @@ divergence.
   variables and convert back to the primitive, the primitive variables
   may now fall outside of valid physical ranges (for example, negative
   density).
-
-\subsection{New PPM limiters}
-
-Recent work \cite{colellasekora} has formulated improved limiters for
-PPM that do not clip the profiles at extrema.  This only changes the
-limiting process in defining $q_+$ and $q_i$, and does not affect the
-subsequent parts of the algorithm.
-
 
 \subsection{3-d unsplit}
 
