@@ -1265,7 +1265,9 @@ Discretizing our system in space leads to the following system:
 \end{equation}
 Note that there is no time superscript in the $U$ used to evaluate the
 fluxes on the righthand side---we have not done any time
-discretization yet.  Now we can use an ODE integrator to solve this system.  Consider
+discretization yet.  Now we can use an ODE integrator to solve this system.  
+
+Consider
 second-order Runge-Kutta.  We evaluate two slopes,
 \begin{alignat}{3}
 k_1 &= \Delta t \bigg [ &-&\frac{F^{(x)}(U^n_{i+1/2,j}) 
@@ -1300,7 +1302,9 @@ integrating ODEs, so it makes sense to couple this with a
 fourth-order-in-space method.  However, going higher-order than
 second-order is more challenging.  The key issue is that we can no
 longer simply approximate the cell average as the cell-center value,
-i.e., $\langle \phi\rangle_i \ne \phi_i$.
+i.e., $\langle \phi\rangle_i \ne \phi_i$.  This comes into play, for
+instance, in translating between the conserved and primitive variables.
+A fully fourth-order method is presented in ~\cite{mccorquodalecolella}
 
 
 An additional complexity arises when doing multiphysics.  Often we
