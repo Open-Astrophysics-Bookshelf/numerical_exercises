@@ -341,7 +341,9 @@ This is a linear system that can be solved using standard matrix techniques.
 Explicit methods are easier to program and run faster (for a given $
 \Delta t$), but implicit methods work better for {\em stiff}
 problems---those characterized by widely disparate timescales over
-which the solution changes~\cite{byrnehindmarsh}.
+which the solution changes~\cite{byrnehindmarsh}.  A good example
+of this issue in astrophysical problems is with nuclear reaction
+networks (see, e.g., \cite{timmes_networks}).
 
 Perhaps the most popular explicit method for ODEs is the 4th-order
 Runge-Kutta method (RK4).  This is a multistep method where several
