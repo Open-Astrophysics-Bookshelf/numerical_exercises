@@ -25,21 +25,38 @@ over these particles with a suitable kernel---this is the basis of
 {\em smoothed particle hydrodynamics} (SPH)~\cite{SPH}.  SPH is a very popular
 method in astrophysics.
 
-Grid-based methods include the finite-difference, finite-volume, and
-finite-element methods.  Finite element methods are widely used in
-engineering together with unstructure grids.  A type of finite-element
+For grid-based methods, we talk about both the style of the grid
+(structured vs.\ unstructured) and the discretizatin method, e.g.\ the
+finite-difference, finite-volume, and finite-element methods.  
+
+Structured grids are logically Cartesian.  This means that you can
+reference the location of any cell in the computational domain via an
+integer index in each spatial dimension.  From a programming
+standpoint, the grid structure can be represented exactly by a 
+multi-dimensional array.  Unstructured grids don't have
+this simple pattern.  A popular type of unstructured grid is created 
+using triangular cells (in 2-d) or tetrahedra (in 3-d).  The main advantage
+of these grids is that you can easily represent irregularly-shaped domains.
+The disadvantage is that the data structures required to describe the 
+grid are more complicated than a simple array (and tend to have more
+inefficient memory access).
+
+Once a grid is established, the system of PDEs is converted into a 
+system of discrete equations on the grid. 
+Finite element methods are widely used in
+engineering together with unstructured grids.  A type of finite-element
 method called a {\em Galerkin method} can be formed by integrating the
 continuous function agains a compact basis set represented by
 tetrahedra.  These methods work well with the irregular geometries
 that arise in engineering.  Finite-difference and finite-volume
-methods can both be applied to {\em structured grids} (each zone can
-be referenced simply by an integer index for each spatial dimension).
+methods can both be applied to {\em structured grids}. 
 The main difference between these methods is that the
 finite-difference methods build from the differential form of PDEs
 while the finite-volume methods build from the integral form of the
 PDEs.  Both of these methods find wide use in astrophysics.
 
-In these notes, we will focus on grid-based methods.
+In these notes, we will focus on finite-volume techniques on
+structured grids.  
 
 
 \section{Grid basics}
@@ -65,7 +82,7 @@ a control volume.  Nevertheless, these methods can often lead to very
 similar looking discrete equations.
 
 Consider the set of grids show in Figure~\ref{fig:grids}.  On the top
-is a class finite-difference grid.  The discrete data, $f_i$, are
+is a classic finite-difference grid.  The discrete data, $f_i$, are
 stored as points regularly spaced in $x$.  With this discretization,
 the spatial locations of the points are simply $x_i = i \Delta x$,
 where $i = 0, \ldots, N-1$.  Note that for a finite-sized domain, we
@@ -115,33 +132,28 @@ each point is obtains from the continuous function $f(x)$ as:
 \begin{equation}
 f_i = f(x_i)
 \end{equation}
-For the finite-volume discretization, we compute the average value of 
-the function $f(x)$ in each cell as:
-\begin{equation}
-\langle f\rangle_i = \frac{1}{\Delta x} \int_{x_{i-1/2}}^{x_{i+1/2}} f(x) dx
-\end{equation}
 
 
 \section{Finite-volume grids}
 
-In the finite-volume discretization, $a_i$ represents the average of
-$a(x,t)$ over the interval $x_{i-1/2}$ to $x_{i+1/2}$, where the
-half-integer indexes denote the zone edges (i.e.\ $x_{i-1/2} = x_i -
+In the finite-volume discretization, $f_i$ represents the average of
+$f(x,t)$ over the interval $x_{i-1/2}$ to $x_{i+1/2}$, where the
+half-integer indices denote the zone edges (i.e.\ $x_{i-1/2} = x_i -
 \Delta x/2$):
 \begin{equation}
 \label{eq:fv_cc-a}
-\langle a\rangle_i = \frac{1}{\Delta x} \int_{x_{i-1/2}}^{x_{i+1/2}} a(x) dx 
+\langle f\rangle_i = \frac{1}{\Delta x} \int_{x_{i-1/2}}^{x_{i+1/2}} f(x) dx 
 \end{equation}
-Figure~\ref{fig:simplefv} shows the grid, with the half-integer indices.
+The lower panel of Figure~\ref{fig:grids} shows a finite-volume grid, with the half-integer indices bounding zone $i$ marked.
 %
 % figure created with figures/finite-volume/simplegrid2.py
-\begin{figure}[t]
-\centering
-\includegraphics[width=\linewidth]{simplegrid2}
-\caption[A simple 1-d finite-volume grid]{\label{fig:simplefv} A simple 1-d finite-volume
-  grid with the zone-centered and zone-edge indexes.  Here we show
-  only the data associated with zone $i$.}
-\end{figure}
+%% \begin{figure}[t]
+%% \centering
+%% \includegraphics[width=\linewidth]{simplegrid2}
+%% \caption[A simple 1-d finite-volume grid]{\label{fig:simplefv} A simple 1-d finite-volume
+%%   grid with the zone-centered and zone-edge indexes.  Here we show
+%%   only the data associated with zone $i$.}
+%% \end{figure}
 %
 Here we've drawn $\langle a\rangle_i$ as a horizontal line spanning the entire zone---this 
 is to represent that it is an average within the volume defined by the zone
@@ -150,25 +162,25 @@ edges.
 To second-order accuracy,
 \begin{equation}
 \label{eq:fv_cc}
-\langle a\rangle_i = \frac{1}{\Delta x} \int_{x_{i-1/2}}^{x_{i+1/2}} a(x) dx \sim a(x_i) 
+\langle f\rangle_i = \frac{1}{\Delta x} \int_{x_{i-1/2}}^{x_{i+1/2}} f(x) dx \sim f(x_i) 
 \end{equation}
-This means that we can treat the average of $a$ over a zone as simply $a(x)$
+This means that we can treat the average of $f$ over a zone as simply $f(x)$
 evaluated at the zone center if we only want second-order accuracy.
 
 \begin{exercise}[Finite-volume vs.\ finite-difference centering]
 {Show that Eq.~\ref{eq:fv_cc} is true to $O(\Delta x^2)$ by expanding
-$a(x)$ as a Taylor series in the integral.}
+$f(x)$ as a Taylor series in the integral.}
 \end{exercise}
 
 \begin{exercise}[Conservative interpolation]
-{A conservative interpolant is used to reconstruct a continuous
+{\label{ex:consinterp} A conservative interpolant is used to reconstruct a continuous
   functional form, $f(x)$, from a collection of cell-averages.  A key
   requirement is that when $f(x)$ is averaged over a cell, it returns
   the cell-average.
 
-Consider three cell averages: $\langle a \rangle_{i-1}$, $\langle a \rangle_{i}$, $\langle a \rangle_{i+1}$.  Fit a quadratic polynomial through these points,
+Consider three cell averages: $\langle f \rangle_{i-1}$, $\langle f \rangle_{i}$, $\langle f \rangle_{i+1}$.  Fit a quadratic polynomial through these points,
  \begin{equation}
- a(x) = A (x - x_i)^2 + B (x - x_i) + C
+ f(x) = A (x - x_i)^2 + B (x - x_i) + C
  \end{equation}
  where the coefficients, $A$, $B$, and $C$ are found by applying the constraints:
  \begin{align}
@@ -182,7 +194,7 @@ Consider three cell averages: $\langle a \rangle_{i-1}$, $\langle a \rangle_{i}$
 
 Show that the conservative interpolant is:
 \begin{align}
-a(x) = &\frac{\langle f\rangle_{i-1} - 2 \langle f\rangle_i +
+f(x) = &\frac{\langle f\rangle_{i-1} - 2 \langle f\rangle_i +
              \langle f\rangle_{i+1}}{2\Delta x^2} (x-x_i)^2 + \nonumber \\
        &\frac{\langle f\rangle_{i+1} - \langle f\rangle_{i-1}}
             {2\Delta x} (x-x_i) + \nonumber \\
@@ -195,11 +207,13 @@ a(x) = &\frac{\langle f\rangle_{i-1} - 2 \langle f\rangle_i +
 
 \subsection{Differences and order of accuracy}
 
-In practice, we can use the 2nd-order centered difference from
+In practice, when computing derivatives in a finite-volume
+discretization, we can use the second-order centered difference from
 \S~\ref{ch:intro:diff} treating the finite-voume data as living at the
 cell-centers and still be second-order accurate.  For higher accuracy,
-we can fit a {\em conservative interpolant} to a collection of points 
-and then differentiate the interpolant itself.
+we can fit a {\em conservative interpolant} (as illustrated in
+exercise~\ref{ex:consinterp}) to a collection of points and then
+differentiate the interpolant itself.
 
 Notice that the righthand side of all derivative approximations involve
 some linear combinations of $a_i$'s.  We call this the {\em stencil}.
@@ -231,6 +245,7 @@ on the left and that the righthand side
 is simply a difference of fluxes through the interfaces of the zone.
 For the $i+1$ zone, the update would be:
 \begin{equation}
+\label{eq:consup}
 \frac{\partial \langle U\rangle_{i+1}}{\partial t} = 
   - \frac{1}{\Delta x} \left \{ \left . F(U) \right |_{x_{i+3/2}} -
                                 \left . F(U) \right |_{x_{i+1/2}} \right \}
@@ -242,6 +257,10 @@ boundary adds to one zone and subtracts from its neighbor, exactly conserving
 is an example of a {\em telescoping property}, and is the main reason
 why finite-volume methods are attractive---conserved quantities are 
 conserved to machine (roundoff) precision.
+
+Note that conservation is not the same as accuracy.  We can construct the 
+fluxes for Eq.~\ref{eq:consup} by calling a random number generator and we'd
+still be conservative, but not at all accurate.
 
 \subsection{Boundary conditions with finite-volume grids}
 
@@ -257,22 +276,23 @@ of $a$ for zone $\mathrm{lo}-1$, which is outside the domain.  This is
 where boundary conditions for our grid come into play.  
 
 We implement boundary conditions by extending the computational grid
-beyond the physical domain.  These additional zones are called {\em
-  ghost cells}.  They exist solely to handle the boundary conditions
-and allow us to use the same update equation (e.g.\ Eq.~\ref{eq:onesideddiff})
-for all zones in the domain.
+beyond the physical domain (see Figure~\ref{fig:fv_gc}).  These
+additional zones are called {\em ghost cells}.  They exist solely to
+handle the boundary conditions and allow us to use the same update
+equation (e.g.\ Eq.~\ref{eq:onesideddiff}) for all zones in the
+domain.
 
 % figure created with simplegrid-gc.py
-\begin{figure}[h]
+\begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{simplegrid_gc}
-\caption[A simple 1-d finite-volume grid with ghost cells.]{A simple
-  1-d finite-volume grid with a single ghost cell at each end of the
-  domain.  The domain boundaries are indicated by the heavy vertical
-  lines.  Here there are $\mathrm{hi}-\mathrm{lo}+1$ zones used in the
-  discretization of the domain, with the first zone in the domain
-  labelled $\mathrm{lo}$ and the last in the domain labelled
-  $\mathrm{hi}$.}
+\caption[A simple 1-d finite-volume grid with ghost
+  cells.]{\label{fig:fv_gc} A simple 1-d finite-volume grid with a
+  single ghost cell at each end of the domain.  The domain boundaries
+  are indicated by the heavy vertical lines.  Here there are
+  $\mathrm{hi}-\mathrm{lo}+1$ zones used in the discretization of the
+  domain, with the first zone in the domain labelled $\mathrm{lo}$ and
+  the last in the domain labelled $\mathrm{hi}$.}
 \end{figure}
 
 The number of ghostcells needed for the grid depends on how wide the
@@ -283,6 +303,11 @@ Periodic boundary conditions would be implemented as:
 \begin{eqnarray}
 a_{\mathrm{hi}+1} &=& a_\mathrm{lo} \\
 a_{\mathrm{lo}-1} &=& a_\mathrm{hi}
+\end{eqnarray}
+A simple outflow (zero-gradient) boundary condition would be implemented as:
+\begin{eqnarray}
+a_{\mathrm{hi}+1} &=& a_\mathrm{hi} \\
+a_{\mathrm{lo}-1} &=& a_\mathrm{lo}
 \end{eqnarray}
 
 

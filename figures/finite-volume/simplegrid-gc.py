@@ -1,6 +1,6 @@
 import math
 import numpy
-import pylab
+import matplotlib.pyplot as plt
 import grid_plot_util as gpu
 
 def simplegrid():
@@ -26,33 +26,33 @@ def simplegrid():
 
 
     # label dx
-    pylab.plot([gr.xl[ng+nzones/2-2], gr.xl[ng+nzones/2-2]], 
+    plt.plot([gr.xl[ng+nzones/2-2], gr.xl[ng+nzones/2-2]], 
                [-0.35,-0.25], color="k")
 
-    pylab.plot([gr.xr[ng+nzones/2-2], gr.xr[ng+nzones/2-2]], 
+    plt.plot([gr.xr[ng+nzones/2-2], gr.xr[ng+nzones/2-2]], 
                [-0.35,-0.25], color="k")
 
-    pylab.plot([gr.xl[ng+nzones/2-2], gr.xr[ng+nzones/2-2]], 
+    plt.plot([gr.xl[ng+nzones/2-2], gr.xr[ng+nzones/2-2]], 
                [-0.3,-0.3], color="k")
 
-    pylab.text(gr.xc[ng+nzones/2-2], -0.5, r"$\Delta x$", 
+    plt.text(gr.xc[ng+nzones/2-2], -0.5, r"$\Delta x$", 
                horizontalalignment="center")
 
 
-    pylab.xlim(gr.xl[0]-0.5*gr.dx,gr.xr[2*ng+nzones-1]+0.5*gr.dx)
-    pylab.ylim(-0.5, 1.5)
-    pylab.axis("off")
+    plt.xlim(gr.xl[0]-0.05*gr.dx,gr.xr[2*ng+nzones-1]+0.25*gr.dx)
+    plt.ylim(-0.5, 1.5)
+    plt.axis("off")
 
-    pylab.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
+    plt.subplots_adjust(left=0.025,right=0.95,bottom=0.05,top=0.95)
 
-    f = pylab.gcf()
+    f = plt.gcf()
     f.set_size_inches(10.0,2.5)
 
+    plt.tight_layout()
 
-    pylab.savefig("simplegrid_gc.png")
-    pylab.savefig("simplegrid_gc.eps")
+    plt.savefig("simplegrid_gc.png")
+    plt.savefig("simplegrid_gc.eps", bbox_inches="tight")
                
-
 
 
 if __name__== "__main__":
