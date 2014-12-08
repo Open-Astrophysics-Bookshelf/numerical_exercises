@@ -247,29 +247,6 @@ emanating from an initial discontinuity.
 \end{figure}
 
 
-%-----------------------------------------------------------------------------
-\section{Other Thermodynamic Equations}
-
-At times we will want to use alternate forms of the energy equation.  The
-internal energy is governed by the first law of thermodynamics.  In the
-absense of any heat sources, we have:
-\begin{equation}
-dq = 0 = de + pd(1/\rho)
-\end{equation}
-where $e$ is the specific internal energy.
-Applying this to a Lagrangian fluid element, we have:
-\begin{align}
-\frac{De}{Dt} + p \frac{D(1/\rho)}{Dt} &= 0 \\
-\frac{De}{Dt} - \frac{1}{\rho^2} \frac{D\rho}{Dt} &= 0 \\
-\rho \frac{De}{Dt} + p \nabla \cdot U &= 0
-\end{align}
-where we used the continuity equation in the last step to eliminate
-$D\rho/Dt$.  This can be rewritten by adding $e \times$ the continuity
-equation to give:
-\begin{equation}
-\frac{\partial (\rho e)}{\partial t} + \nabla \cdot (\rho U e) + p \nabla \cdot U = 0 \label{eq:euler:econs}
-\end{equation}
-
 
 %-----------------------------------------------------------------------------
 \section{Reconstruction of interface states}
@@ -1020,6 +997,203 @@ wave to cross a single zone:
 \Delta t < \max_i \frac{\Delta x}{|u_i| + c}
 \end{equation}
               
+
+
+%-----------------------------------------------------------------------------
+\section{Other Thermodynamic Equations}
+
+At times we will want to use alternate forms of the energy equation.  The
+internal energy is governed by the first law of thermodynamics.  In the
+absense of any heat sources, we have:
+\begin{equation}
+dq = 0 = de + pd(1/\rho)
+\end{equation}
+where $e$ is the specific internal energy.
+Applying this to a Lagrangian fluid element, we have:
+\begin{align}
+\frac{De}{Dt} + p \frac{D(1/\rho)}{Dt} &= 0 \\
+\frac{De}{Dt} - \frac{1}{\rho^2} \frac{D\rho}{Dt} &= 0 \\
+\rho \frac{De}{Dt} + p \nabla \cdot U &= 0
+\end{align}
+where we used the continuity equation in the last step to eliminate
+$D\rho/Dt$.  This can be rewritten by adding $e \times$ the continuity
+equation to give:
+\begin{equation}
+\frac{\partial (\rho e)}{\partial t} + \nabla \cdot (\rho U e) + p \nabla \cdot U = 0 \label{eq:euler:econs}
+\end{equation}
+
+
+\subsection{Eigensystem with Temperature}
+
+Here we illustrate how the eigensystem changes when we replace pressure with
+temperature in our primitive variable system.
+
+We write this set of variables as $\hat{q} = (\tau, u,
+T)^\intercal$---note that we keep $\tau$ instead of $\rho$ here.  The
+motivation for this comes from the fact that with temperature in the
+mix, the temperature will jump across the contact wave.  Since
+pressure should be constant across the contact, and, even with the
+general EOS, a temperature jump needs a density drop for pressure to
+remain constant, $\tau$ should counteract the behavior of $T$ across
+the contact.
+
+The temperature evolution equation appears as:
+\begin{equation}
+\frac{\partial T}{\partial t} = -u\ddx{T} + 
+  \frac{1}{\rho c_p} \left [ (1 - \rho h_p) \frac{Dp}{Dt} \right ]
+\end{equation}
+(see, e.g.\ \cite{ABRZ:I}) where $c_p$ is the specific heat at
+constant pressure, $c_p = \partial h/\partial T|_p$ and $h_p \equiv
+\partial h / \partial p |_T$, with $h = e + p/\rho$ the specific
+enthalpy.  We can use the standard pressure evolution equation
+(Eq.~\ref{eq:pres}) to eliminate the Lagrangian pressure term,
+resulting in:
+\begin{equation}
+\frac{\partial T}{\partial t} = -u\ddx{T} - \eta \ddx{u}
+\end{equation}
+where we defined
+\begin{equation}
+\eta \equiv \frac{1 - \rho h_p}{c_p} c^2
+\end{equation}
+
+The density equation remains unchanged from the traditional primitive
+variable formulation, but for the velocity, we need to write the
+$\partial p/\partial x$ term in terms of $\hat{q}$.  We do this via
+the chain rule.  We define $p_\rho \equiv {\partial p}/{\partial \rho}
+|_T$ and $p_T \equiv {\partial p}/{\partial T} |_\rho$, then our
+velocity equation is:
+\begin{equation}
+\frac{\partial u}{\partial t} + u \frac{\partial u}{\partial x} - \frac{p_\rho}{\tau} \frac{\partial \tau}{\partial x} + {\tau p_T} \frac{\partial T}{\partial x} = 0
+\end{equation}
+Note that here we neglected any composition dependence in the EOS.
+
+Our primitive variable system in matrix form is then:
+\begin{equation}
+\hat{q}_t + \hat{A} \hat{q}_x = 0
+\end{equation}
+with
+\begin{equation}
+\renewcommand{\arraystretch}{1.5}
+\hat{A}(\hat{q}) = 
+\left (
+\begin{array}{ccc}
+u                   & -\tau & 0 \\
+-\dfrac{p_\rho}{\tau} & u    & \tau p_T \\
+0                   & \eta & u 
+\end{array}
+\right )
+\end{equation}
+The eigenvalues can be found through the characteristic polynomial,
+$|\hat{A} - \lambda I| = 0$:
+\begin{equation}
+(u - \lambda)^3 - (u -\lambda) \left ( {p_T \eta\tau} + p_\rho \right ) = 0
+\end{equation}
+We can simplify the last term in parenthesis:
+\begin{equation}
+{p_T \eta\tau} + p_\rho = \frac{p_T (1 - \rho h_p) c^2}{\rho c_p} + p_\rho 
+                               = \frac{c^2}{c_p}\left ( \frac{p p_T}{\rho^2 p_\rho} - \frac{p_T e_\rho}{p_\rho} \right ) + p_\rho \label{eq:step1}
+\end{equation}
+where we substituted in 
+\begin{equation}
+h_p = \frac{1}{\rho} \left ( 1 - \frac{p}{\rho p_\rho} \right ) + \frac{e_\rho}{p_\rho}
+\end{equation}
+(see \cite{ABRZ:I}, appendix A) where $e_\rho = \partial e/\partial
+\rho |_T$.  The term in parenthesis in Eq.~\ref{eq:step1} is simply
+$c_p - c_v$ (\cite{cg}, Eq.~9.81) where $c_v$ is the specific heat
+at constant volume, and Eq.~\ref{eq:step1} further reduces to:
+\begin{equation}
+{p_T \eta\tau} + p_\rho = \frac{c^2}{c_p} (c_p - c_v) + p_\rho 
+                               = c^2 - c^2 \frac{\chi_p}{\Gamma_1} + p_\rho = c^2 
+\end{equation}
+where we used $c_v/c_p = \chi_p/\Gamma_1$ and $\chi_p = \rho p_\rho /
+p$ (\cite{cg}, Eqs.~9.87, 9.82).  Putting this into our 
+characteristic polynomial, we see that the eigenvalues are, as expected,
+$\lambda = u, u \pm c$.  It is also useful to note that
+\begin{equation}
+\eta = \frac{c^2 - p_\rho}{\tau p_T}
+\end{equation}
+
+
+We construct the left and right eigenvectors such that they are orthonormal,
+and find:
+\begin{equation}
+\renewcommand{\arraystretch}{1.3}
+\hat{R} = \left ( \begin{array}{ccc}
+     1                       & 1                 & 1 \\
+   c/\tau                    & 0                 & -c/\tau \\
+  -(c^2 - p_\rho)/\tau^2 p_T & p_\rho/\tau^2 p_T & -(c^2 - p_\rho)/\tau^2 p_T
+  \end{array} \right )
+%
+\qquad
+%
+\hat{L} = \left ( \begin{array}{ccc}
+      {p_\rho}/{2 c^2}   & {\tau}/{2c}  & -{\tau^2 p_T}/{2 c^2} \\
+      1 - {p_\rho}/{c^2} &0             & {\tau^2 p_T}/{c^2} \\
+      {p_\rho}/{2 c^2}   & -{\tau}/{2c} & -{\tau^2 p_T}/{2 c^2} \end{array} \right )
+\end{equation}
+We note that all
+thermodynamic derivatives are expressed in terms of $\rho$ or $T$ with
+the other quantity held constant.  This is in the form we expect a
+$(T, \rho)$-based EOS to return derivatives.  Notice also that the
+temperature jumps across the $\evz$ wave (the contact discontinuity;
+this is seen from the non-zero value in $\hat{r}^\evz$ for the
+temperature).
+
+We write:
+\begin{eqnarray}
+\hat{\beta}^\evm_s &\equiv& (\hat{l}^\evm \cdot \Delta \hat{q}^\evm ) =
+   \frac{1}{2C} \left (\frac{\rho^2 p_\rho}{C} \Delta \tau^\evm 
+                        + \Delta u^\evm - \frac{p_T}{C}\Delta T^\evm \right ) \\
+%
+\hat{\beta}^\evz_s &\equiv& (\hat{l}^\evz \cdot \Delta \hat{q}^\evz ) =
+    \Delta \tau^\evz + 
+        \frac{1}{C^2} \left (-\rho^2 p_\rho \Delta \tau^\evz 
+                        + {p_T}\Delta T^\evz \right ) \\
+%
+\hat{\beta}^\evp_s &\equiv& (\hat{l}^\evp \cdot \Delta \hat{q}^\evp ) =
+   \frac{1}{2C} \left (\frac{\rho^2 p_\rho}{C} \Delta \tau^\evp 
+                        - \Delta u^\evp - \frac{p_T}{C}\Delta T^\evp \right ) 
+\end{eqnarray}
+Note that since $p_\tau = -\rho^2 p_\rho$, we can form a $\Delta p^\enu$ as
+\begin{equation}
+\Delta p^\enu = p_\tau \Delta \tau^\enu + p_T \Delta T^\enu
+\end{equation}
+and then we see that the $\hat{\beta}^\enu$'s above have the same
+functional form as the $\mathring{\beta}^\enu$ from the $\mathring{q}
+= (\tau, u, p, e)^\intercal$ eigensystem.  This is no surprise, since
+the $l\cdot \Delta q$ are the characteristic variables of the Euler
+equations.  The numerical values will differ though, because the
+$\hat{\beta}^\enu$ and $\mathring{\beta}^\enu$ use different reference
+states and reconstructed variables.
+
+Finally, we can write out the interface states:
+\begin{eqnarray}
+\tau_s &=& \tilde{\tau} - (\hat{\beta}^\evm + \hat{\beta}^\evz + \hat{\beta}^\evp) \\
+%
+u_s &=& \tilde{u} - (C \hat{\beta}^\evm - C \hat{\beta}^\evp) \\
+%
+T_s &=& \tilde{T} - \frac{1}{p_T} \left \{ 
+   \left [ -C^2 \hat{\beta}^\evm - C^2 \hat{\beta}^\evp \right ] +
+   \rho^2 p_\rho \left [ \hat{\beta}^\evm + \hat{\beta}^\evz + \hat{\beta}^\evp \right ] \right \}
+\end{eqnarray}
+For $T_s$, we recognize the first quantity in the square brackets as 
+being the same as $-(p_s - \tilde{p})$ in the $\mathring{q}$ system, and the
+second term in the square brackets being the same as $-(\tau_s - \tilde{\tau})$
+in the $\mathring{q}$ system, then we see
+\begin{equation}
+p_T (T_s - \tilde{T} ) \approx (p_s - \tilde{p} ) - p_\tau (\tau_s - \tilde{\tau})
+\end{equation}
+which is what we would expect for jumps in $p$ when applying the chain
+rule.  Note that this is not a strict equality, since the reference
+states and interpolation between the two eigensystems are different.
+Nevertheless, this demonstrates the connection between the two
+methods.
+
+The above did not consider variations in the composition of the fluid.
+Multiple species complicate things---now the replacement of the
+pressure gradient picks up a composition gradient term. 
+The eigensystem will change with this addition.  We don't explore this here at this
+time.
 
 
 %-----------------------------------------------------------------------------
