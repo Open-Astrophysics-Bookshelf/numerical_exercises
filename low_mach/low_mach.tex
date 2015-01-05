@@ -195,7 +195,11 @@ variable-coefficient Laplacian as:
 \end{align}
 
 We can define the interface values of $\eta$ as the averages of the
-cell-centered values.  Our elliptic equation is then 
+cell-centered values, e.g.,
+\begin{equation}
+  \eta_{i,j+1/2} = \frac{1}{2}(\eta_{i,j} + \eta_{i,j+1})
+\end{equation}
+Our elliptic equation is then 
 \begin{equation}
 (L_\eta \phi)_{i,j} = f_{i,j}
 \end{equation}
@@ -354,22 +358,6 @@ and the constraint,
 \nabla \cdot (\beta_0 U) = 0
 \end{equation}
 with $\beta_0 = p_0^{1/\gamma}$.
-Decomposing the velocity field as
-\begin{equation}
-U^\star = U^d + \frac{\beta_0}{\rho} \nabla \phi
-\end{equation}
-as suggested from the form of the momentum equation,
-our Poisson equation can be defined by multiplying by $\beta_0$ and
-taking the divergence, and using $\nabla \cdot (\beta_0 U^d) = 0$, giving
-\begin{equation}
-\nabla \cdot \frac{\beta_0^2}{\rho} \nabla \phi = \nabla \cdot (\beta_0 U^\star)
-\end{equation}
-Note that when written like this, $\phi$ has units of $p^\prime/\beta_0$. \MarginPar{there is a $\Delta t$ here too}
-
-Once we solve for $\phi$, we correct the velocity as:
-\begin{equation}
-U^\mathrm{new} = U^\star - \frac{\beta_0}{\rho} \nabla \phi
-\end{equation}
 
   
 \subsection{Solution Procedure}
@@ -378,19 +366,32 @@ The general solution procedure is for a single step is:
 \begin{enumerate}
   \renewcommand{\labelenumi}{\Roman{enumi}.}
   
-\item Predict $U$ to the interfaces 
-\item Enforce the divergence constraint on the interface $U$'s (the
-  MAC projection) to get $U^\mathrm{adv}$.
+\item {\em Predict $U$ to the interfaces}
 
+\item {\em Enforce the divergence constraint on the interface $U$'s (the
+  MAC projection) to get $U^\mathrm{adv}$.}
+
+  Decomposing the velocity field as
+  \begin{equation}
+    U^\star = U^d + \frac{\beta_0}{\rho} \nabla \phi
+  \end{equation}
+  as suggested from the form of the momentum equation, our Poisson
+  equation can be defined by multiplying by $\beta_0$ and taking the
+  divergence, and using $\nabla \cdot (\beta_0 U^d) = 0$, giving
+  \begin{equation}
+    \nabla \cdot \frac{\beta_0^2}{\rho} \nabla \phi =
+    \nabla \cdot (\beta_0 U^\star)
+  \end{equation}
+  Note that when written like this, $\phi$ has units of
+  $p^\prime/\beta_0$. \MarginPar{there is a $\Delta t$ here too}
+  
   For the MAC projection, we have edge-centered velocities (in their
   respective coordinate direction).  We define an edge-centered $\beta_0$ as
   \begin{equation}
     {\beta_0}_{j+1/2} = \frac{1}{2} ( {\beta_0}_j + {\beta_0}_{j+1} )
   \end{equation}
-  (note that, since $\beta_0$ is one-dimensional, we only average in the
-  vertical direction)
-
-  The divergence term is then:
+  (note that, since $\beta_0$ is one-dimensional, we only average in
+  the vertical direction).  The divergence term is then:
   \begin{equation}
     \left [ \nabla \cdot (\beta_0 U) \right ]_{i,j}^\mathrm{adv} =
           {\beta_0}_j \frac{u^\mathrm{adv}_{i+1/2,j} - 
@@ -403,9 +404,30 @@ The general solution procedure is for a single step is:
   \begin{equation}
     \eta_{i,j} = \frac{{\beta_0}_j^2}{\rho_{i,j}}
   \end{equation}
-  and bring it to edges simply through averaging.
+  and bring it to edges simply through averaging.  Multigrid is
+  used to solve for $\phi_{i,j}$.
 
-\item Predict $\rho$ to the interfaces
+  We then solve
+  \begin{equation}
+    (L_\eta\phi)_{i,j} =
+    \left [ \nabla \cdot (\beta_0 U) \right ]_{i,j}^\mathrm{adv}
+  \end{equation}
+  Once we solve for $\phi$, we correct the velocity as:
+  \begin{equation}
+    U^\mathrm{new} = U^\star - \frac{\beta_0}{\rho} \nabla \phi
+  \end{equation}
+  Since the MAC velocities are edge-centered, our correction appears as:
+  \begin{align}
+    u^\mathrm{adv}_{i+1/2,j} &= u^\mathrm{adv}_{i+1/2,j} -
+    \left (\frac{\beta_0}{\rho}\right )_{i+1/2,j}
+    \frac{\phi_{i+1,j} - \phi_{i,j}}{\Delta x} \\
+    %
+    v^\mathrm{adv}_{i,j+1/2} &= v^\mathrm{adv}_{i,j+1/2} -
+    \left (\frac{\beta_0}{\rho}\right )_{i,j+1/2}
+    \frac{\phi_{i,j+1} - \phi_{i,j}}{\Delta y} 
+  \end{align}
+  
+\item {\em Predict $\rho$ to the interfaces}
 
 \label{sec:lm:density}
 
@@ -481,7 +503,7 @@ again upwind to find the final $\rho$ state on each interface:
 
 
   
-\item Do the conservative update of $\rho$
+\item {\em Do the conservative update of $\rho$}
 
   Once the interface states are found, we can conservatively-difference
 the continuity equation:
@@ -496,9 +518,9 @@ the continuity equation:
 \end{align}
 
 
-\item Update $U^n$ to $U^{n+1}$
+\item {\em Update $U^n$ to $U^{n+1,\star}$}
   
-\item Enforce the divergence constraint on $U^{n+1}$
+\item {\em Enforce the divergence constraint on $U^{n+1}$}
 
   For the final projection, we have cell-centered velocties.  We 
   define the divergence term as:
