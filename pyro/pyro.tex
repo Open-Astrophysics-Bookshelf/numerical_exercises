@@ -47,6 +47,9 @@ f2py} is installed.
   solver using a cell-centered approximate projection, as discussed
   in Chapter~\ref{ch:incompressible}.
 
+\item {\em lm\_atm}: a low-Mach number hydrodynamics solver for
+  atmospheric flows, as discussed in S~\ref{sec:lm:atm}
+  
 \item {\em multigrid}: a multigrid solver for constant-coefficient Helmholtz
   elliptic equations.  This follows the ideas from Chapter~\ref{ch:multigrid},
   and is used by the diffusion and incompressible solvers.
@@ -104,23 +107,36 @@ available in the {\tt multigrid/} directory that illustrate its use.
 \renewcommand{\arraystretch}{1.2}
 \begin{tabular}{llp{2.5in}}
 \hline
-{\bf solver} & {\bf problem} & {\bf problem description} \\
+{\bf solver} & {\bf problem} 
+   & {\bf problem description} \\
 \hline
-\multirow{2}{*}{\tt advection} & {\tt smooth} & advect a smooth Gaussian profile \\
-                               & {\tt tophat} & advect a discontinuous tophat profile \\
+%
+\multirow{2}{*}{\tt advection}
+   & {\tt smooth} & advect a smooth Gaussian profile \\
+   & {\tt tophat} & advect a discontinuous tophat profile \\
 \hline
-\multirow{6}{*}{\tt compressible} & {\tt bubble} & a buoyant bubble in a stratified atmosphere \\
-                                  & {\tt kh} & setup a shear layer to drive Kelvin-Helmholtz instabilities \\
-                                  & {\tt quad} & 2-d Riemann problem based on \cite{schulz-rinne:1993}  \\
-                                  & {\tt rt}  & a simple Rayleigh-Taylor instability\\
-                                  & {\tt sedov} & the classic Sedov-Taylor blast wave \\
-                                  & {\tt sod} & the Sod shock tube problem  \\
+%
+\multirow{6}{*}{\tt compressible}
+   & {\tt bubble} & a buoyant bubble in a stratified atmosphere \\
+   & {\tt kh} & setup a shear layer to drive Kelvin-Helmholtz instabilities \\
+   & {\tt quad} & 2-d Riemann problem based on \cite{schulz-rinne:1993}  \\
+   & {\tt rt}  & a simple Rayleigh-Taylor instability\\
+   & {\tt sedov} & the classic Sedov-Taylor blast wave \\
+   & {\tt sod} & the Sod shock tube problem  \\
 \hline
-{\tt diffusion}& {\tt gaussian} & diffuse an initial Gaussian profile \\
+%
+{\tt diffusion}& {\tt gaussian}
+   & diffuse an initial Gaussian profile \\
 \hline
-\multirow{2}{*}{\tt incompressible} & {\tt converge} & A simple incompressible problem with known analytic solution.\
-  \\
-                     & {\tt shear} & a doubly-periodic shear layer \\
+%
+\multirow{2}{*}{\tt incompressible}
+   & {\tt converge} & A simple incompressible problem with known
+                      analytic solution.\\
+   & {\tt shear} & a doubly-periodic shear layer \\
+\hline
+%
+\multirow{2}{*}{\tt lm\_atm}
+   & {\tt bubble} & a buoyant bubble in a stratified atmosphere \\
 \hline
 \end{tabular}
 \caption{\label{tab:problems} Solvers and their distributed problems}
