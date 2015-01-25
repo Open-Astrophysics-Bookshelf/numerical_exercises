@@ -1,5 +1,4 @@
-numerical_exercises
-===================
+# astro_hydro
 
 Notes on numerical methods for computational astrophysical hydrodynamics.
 
