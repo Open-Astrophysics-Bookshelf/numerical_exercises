@@ -1,5 +1,7 @@
 # numerical_exercises
 
+*part of the Open Astrophysics Bookshelf*
+
 Notes on numerical methods for computational astrophysical hydrodynamics.
 
 These notes describe the way I think about the numerical methods commonly
