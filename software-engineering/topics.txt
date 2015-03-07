@@ -1,0 +1,18 @@
+
+
+-- git & github
+
+-- diff
+
+-- gnuplot
+
+-- awk
+
+-- grep / ack
+
+-- basic scripting (for i in ...  [ seq, *.png ]
+
+   . basename
+
+
+-- screen
