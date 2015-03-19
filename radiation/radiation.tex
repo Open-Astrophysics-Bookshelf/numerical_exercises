@@ -1,0 +1,67 @@
+\label{ch:radiation}
+
+\section{Equations of Radiation Hydrodynamics}
+
+\subsection{Reference Frames}
+
+\subsection{Angular Approximations / Moments}
+
+\subsection{Closures}
+
+
+
+\section{Hyperbolic System}
+
+
+
+\section{Parabolic System}
+
+For the gray radiation hydrodynamics system, we need to solve a
+linear system that takes the form:
+\begin{equation}
+  \alpha \phi + \nabla \cdot \beta \nabla \phi + \gamma \cdot \nabla \phi = f
+\end{equation}
+(see Zhang et al., Eq. 45). 
+We can discretize this for a cell-centered $\phi$ to second-order as:
+\begin{align}
+  \alpha_{i,j} \phi_{i,j} &+
+  \frac{(\beta \nabla \phi)_{i+1/2,j} -
+        (\beta \nabla \phi)_{i-1/2,j}}{\Delta x} +
+  \frac{(\beta \nabla \phi)_{i,j+1/2} -
+        (\beta \nabla \phi)_{i,j-1/2}}{\Delta y} \nonumber \\
+  &+
+  \gamma^{(x)}_{i,j} \frac{\phi_{i+1,j} - \phi_{i-1,j}}{\Delta x} +
+  \gamma^{(y)}_{i,j} \frac{\phi_{i,j+1} - \phi_{i,j-1}}{\Delta y} = f_{i,j}
+\end{align}
+and expanding the gradients:
+\begin{align}
+  \alpha_{i,j} \phi_{i,j} &+
+  \frac{\beta_{i+1/2,j} (\phi_{i+1,j} - \phi_{i,j}) -
+        \beta_{i-1/2,j} (\phi_{i,j} - \phi_{i-1,j})}{\Delta x^2} \nonumber \\
+ &+
+  \frac{\beta_{i,j+1/2} (\phi_{i,j+1} - \phi_{i,j}) -
+        \beta_{i,j-1/2} (\phi_{i,j} - \phi_{i,j-1})}{\Delta y^2} \nonumber \\
+  &+
+  \gamma^{(x)}_{i,j} \frac{\phi_{i+1,j} - \phi_{i-1,j}}{\Delta x} +
+  \gamma^{(y)}_{i,j} \frac{\phi_{i,j+1} - \phi_{i,j-1}}{\Delta y} = f_{i,j}
+\end{align}
+Defining $\tilde{\beta}_{i\pm1/2,j} \equiv \beta_{i\pm1/2,j}/\Delta x^2$,
+$\tilde{\beta}_{i,j\pm1/2} \equiv \beta_{i,j\pm1/2}/\Delta y^2$,
+$\tilde{\gamma}^{(x)}_{i,j} = \gamma^{(x)}_{i,j}/\Delta x$,
+and $\tilde{\gamma}^{(y)}_{i,j} = \gamma^{(y)}_{i,j}/\Delta y$, we have
+as an update to $\phi_{i,j}$,
+\begin{align}
+\phi_{i,j} = \frac{1}{D_{i,j}} \bigg [
+  &-(\tilde{\beta}_{i+1/2,j} + \tilde{\gamma}^{(x)}_{i,j}) \phi_{i+1,j}
+   -(\tilde{\beta}_{i-1/2,j} - \tilde{\gamma}^{(x)}_{i,j}) \phi_{i-1,j}
+  \nonumber \\
+  &-(\tilde{\beta}_{i,j+1/2} + \tilde{\gamma}^{(y)}_{i,j}) \phi_{i,j+1}
+   -(\tilde{\beta}_{i,j-1/2} - \tilde{\gamma}^{(y)}_{i,j}) \phi_{i,j-1}
+   \bigg ]
+\end{align}
+with
+\begin{equation}
+D_{i,j} = \alpha_{i,j} - \tilde{\beta}_{i+1/2,j} - \tilde{\beta}_{i-1/2,j}
+                       - \tilde{\beta}_{i,j+1/2} - \tilde{\beta}_{i,j-1/2}
+\end{equation}            
+
