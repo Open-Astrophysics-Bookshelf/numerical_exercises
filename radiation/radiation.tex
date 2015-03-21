@@ -35,9 +35,10 @@ We can discretize this for a cell-centered $\phi$ to second-order as:
   \gamma^{(x)}_{i,j} \frac{\phi_{i+1,j} - \phi_{i-1,j}}{2\Delta x} +
   \gamma^{(y)}_{i,j} \frac{\phi_{i,j+1} - \phi_{i,j-1}}{2\Delta y} = f_{i,j}
 \end{align}
-and expanding the gradients:
+where we decompose the vector, $\gamma$ as $\gamma = \gamma^{(x)}\hat{x} + \gamma^{(y)}\hat{y}$.  Expanding the gradients:
 \begin{align}
-  \alpha_{i,j} \phi_{i,j} &+
+\label{eq:general_L}
+\alpha_{i,j} \phi_{i,j} &+
   \frac{\beta_{i+1/2,j} (\phi_{i+1,j} - \phi_{i,j}) -
         \beta_{i-1/2,j} (\phi_{i,j} - \phi_{i-1,j})}{\Delta x^2} \nonumber \\
  &+
@@ -53,6 +54,7 @@ $\tilde{\gamma}^{(x)}_{i,j} = \gamma^{(x)}_{i,j}/(2\Delta x)$,
 and $\tilde{\gamma}^{(y)}_{i,j} = \gamma^{(y)}_{i,j}/(2\Delta y)$, we have
 as an update to $\phi_{i,j}$,
 \begin{align}
+\label{eq:general_mg_smooth}
 \phi_{i,j} = \frac{1}{D_{i,j}} \bigg [ f_{i,j}
   &-(\tilde{\beta}_{i+1/2,j} + \tilde{\gamma}^{(x)}_{i,j}) \phi_{i+1,j}
    -(\tilde{\beta}_{i-1/2,j} - \tilde{\gamma}^{(x)}_{i,j}) \phi_{i-1,j}
@@ -67,3 +69,28 @@ D_{i,j} = \alpha_{i,j} - \tilde{\beta}_{i+1/2,j} - \tilde{\beta}_{i-1/2,j}
                        - \tilde{\beta}_{i,j+1/2} - \tilde{\beta}_{i,j-1/2}
 \end{equation}            
 
+The remaining details of the multigrid solver are unchanged.  The boundary
+conditions are implemented in the same way as done for Poisson's equation.
+The only changes to the core solver are in the smoothing function, which
+implements Eq.~\ref{eq:general_mg_smooth} and in the residual, which
+constructs our operator as discretized in Eq.~\ref{eq:general_L}.
+
+To test this solver out, we can define a test problem by picking functional
+forms of $\alpha$, $\beta$, and $\gamma$, and a solution, $\phi$, with
+desired boundary conditions and find the resulting $f$.  Here we solve
+\begin{equation}
+\alpha \phi + \nabla \cdot (\beta \nabla \phi) + \gamma \cdot \nabla \phi = f
+\end{equation}
+on $[0,1]\times[0,1]$ with homogeneous Dirichlet boundary conditions.  We
+use
+\begin{align}
+\alpha &= 1 \\
+\beta  &= \cos{(2 \pi x)} \cos{(2 \pi y)} + 2.0 \\
+\gamma &= \sin(2\pi x) \hat{x} + \sin(2\pi y) \hat{y} \\
+f      &= \left\{1-16 \pi^2 \left[\cos{(2 \pi x)} \cos{(2 \pi y)} + 1\right]
+           + 2\pi \left[\cos{(2 \pi x)} + \cos{(2 \pi y)}\right]\right\} \sin{(2 \pi x)} \sin{(2 \pi y)}
+\end{align}
+which has the analytic solution
+\begin{equation}
+\phi = \sin{(2 \pi x)} \sin{(2 \pi y)}
+\end{equation}
