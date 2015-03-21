@@ -16,6 +16,8 @@
 
 \section{Parabolic System}
 
+\subsection{General Elliptic Solver}
+
 For the gray radiation hydrodynamics system, we need to solve a
 linear system that takes the form:
 \begin{equation}
@@ -30,8 +32,8 @@ We can discretize this for a cell-centered $\phi$ to second-order as:
   \frac{(\beta \nabla \phi)_{i,j+1/2} -
         (\beta \nabla \phi)_{i,j-1/2}}{\Delta y} \nonumber \\
   &+
-  \gamma^{(x)}_{i,j} \frac{\phi_{i+1,j} - \phi_{i-1,j}}{\Delta x} +
-  \gamma^{(y)}_{i,j} \frac{\phi_{i,j+1} - \phi_{i,j-1}}{\Delta y} = f_{i,j}
+  \gamma^{(x)}_{i,j} \frac{\phi_{i+1,j} - \phi_{i-1,j}}{2\Delta x} +
+  \gamma^{(y)}_{i,j} \frac{\phi_{i,j+1} - \phi_{i,j-1}}{2\Delta y} = f_{i,j}
 \end{align}
 and expanding the gradients:
 \begin{align}
@@ -42,13 +44,13 @@ and expanding the gradients:
   \frac{\beta_{i,j+1/2} (\phi_{i,j+1} - \phi_{i,j}) -
         \beta_{i,j-1/2} (\phi_{i,j} - \phi_{i,j-1})}{\Delta y^2} \nonumber \\
   &+
-  \gamma^{(x)}_{i,j} \frac{\phi_{i+1,j} - \phi_{i-1,j}}{\Delta x} +
-  \gamma^{(y)}_{i,j} \frac{\phi_{i,j+1} - \phi_{i,j-1}}{\Delta y} = f_{i,j}
+  \gamma^{(x)}_{i,j} \frac{\phi_{i+1,j} - \phi_{i-1,j}}{2\Delta x} +
+  \gamma^{(y)}_{i,j} \frac{\phi_{i,j+1} - \phi_{i,j-1}}{2\Delta y} = f_{i,j}
 \end{align}
 Defining $\tilde{\beta}_{i\pm1/2,j} \equiv \beta_{i\pm1/2,j}/\Delta x^2$,
 $\tilde{\beta}_{i,j\pm1/2} \equiv \beta_{i,j\pm1/2}/\Delta y^2$,
-$\tilde{\gamma}^{(x)}_{i,j} = \gamma^{(x)}_{i,j}/\Delta x$,
-and $\tilde{\gamma}^{(y)}_{i,j} = \gamma^{(y)}_{i,j}/\Delta y$, we have
+$\tilde{\gamma}^{(x)}_{i,j} = \gamma^{(x)}_{i,j}/(2\Delta x)$,
+and $\tilde{\gamma}^{(y)}_{i,j} = \gamma^{(y)}_{i,j}/(2\Delta y)$, we have
 as an update to $\phi_{i,j}$,
 \begin{align}
 \phi_{i,j} = \frac{1}{D_{i,j}} \bigg [ f_{i,j}
