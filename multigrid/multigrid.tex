@@ -142,7 +142,9 @@ slopes for our line.
 \end{figure}
 
 Consider Dirichlet boundary conditions, specifying values $\phi_l$ on
-the left and $\phi_r$ on the right boundaries.  To second order, we can
+the left and $\phi_r$ on the right boundaries.\footnote{If the value, $\phi_l$
+  or $\phi_r$ is zero, we call this a {\em homogeneous boundary condition}.  Otherwise
+  we call it an {\em inhomogeneous boundary condition}}  To second order, we can
 define these via:
 \begin{eqnarray}
 \phi_l &=& \frac{1}{2} ( \phi_\mathrm{lo} + \phi_\mathrm{lo-1} ) \\
@@ -402,6 +404,22 @@ coarsest grid will likely be larger.  For the general case, a linear
 system solver like conjugate gradient (or a variant) is used on the
 coarsest grid.
 
+\subsection{Boundary conditions throughout the hierarchy}
+
+The general inhomogeneous boundary conditions from
+Eqs.~\ref{eq:bc_inhomo_dir} and \ref{eq:bc_inhomo_neum} apply to the
+finest level.  But because we are solving the residual equation of the
+coarsest levels in the multigrid hierarchy, the boundary conditions on
+$Le = r$ are all homogeneous (but of the same type, Dirichlet,
+Neumann, or periodic, as the fine level).
+
+Implementing these boundary conditions in your multigrid solver means
+that you will have separate actions for the fine level (where
+inhomogeneous boundaries may apply) and the coarser levels (where you
+will always be homogeneous).
+
+
+
 \subsection{Stopping criteria}
 
 Repeated V-cycles are done until:
@@ -517,6 +535,11 @@ captures the boundary value.  By modifying the source term, $f$, in the
 multigrid solver to include this charge, we can use the homogeneous 
 ghost cell filling routines throughout the multigrid algorithm.
 This technique is discussed a bit in~\cite{colellanotes}.
+
+Note that the form of the boundary charge will depend on the form of the
+elliptic equation---the expressions derived above apply only for
+$\nabla^2 \phi = f$.
+
 
 \item {\em Norms}: There are several different norms that are typically
 used in defining errors on the grid.  The $L_\infty$ norm (or `inf'-norm)
