@@ -150,6 +150,7 @@ define these via:
 \end{eqnarray}
 This then tells us that the values we need to assign to the ghost cells are:
 \begin{eqnarray}
+\label{eq:bc_inhomo_dir}
 \phi_\mathrm{lo-1} &=& 2 \phi_l - \phi_\mathrm{lo} \\
 \phi_\mathrm{hi+1} &=& 2 \phi_r - \phi_\mathrm{hi}
 \end{eqnarray}
@@ -165,6 +166,7 @@ centered-difference there), so to second-order:
 \end{eqnarray}
 This then tells us that the ghost cells are filled as:
 \begin{eqnarray}
+\label{eq:bc_inhomo_neum}
 \phi_\mathrm{lo-1} &=& \phi_\mathrm{lo} - \Delta x \, \phi_x |_l \\
 \phi_\mathrm{hi+1} &=& \phi_\mathrm{hi} + \Delta x \, \phi_x |_r
 \end{eqnarray}
