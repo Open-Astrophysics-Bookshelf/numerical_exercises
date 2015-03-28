@@ -511,9 +511,13 @@ find the solution increase each V-cycle.  This is seen as follows:
   \int_{\partial \Omega} \nabla \phi \cdot n dS = 0
 \end{equation}
 
-For all Neumann boundaries, we have $\nabla \phi \cdot dS = 0$ by
-construction, so that integral is zero, requiring that the source
-integrate to zero.  For all periodic, we have $\nabla \phi
+For all homogeneous Neumann boundaries, we have $\nabla \phi \cdot dS
+= 0$ by construction, so that integral is zero, requiring that the
+source integrate to zero.  If the Neumann boundaries are inhomogeneous,
+there is still a solvability condition on $f$ based on the sum on
+the boundary values.
+
+For all periodic boundaries, we have $\nabla \phi
 |_\mathrm{left} = -\nabla \phi |_\mathrm{right}$ on the left and right
 boundaries by definition of the periodicity (and similarly for the top
 and bottom).  Again this implies that $f$ must integrate to zero.
