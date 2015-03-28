@@ -382,6 +382,7 @@ work well.
 
 \subsection{Bottom solver}
 
+% this figure can be created with figures/multigrid/mgtower.py
 \begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{mgtower}
@@ -445,6 +446,7 @@ $10^{-4}$ in order for the solver to converge.  Figure~\ref{fig:mgerror}
 shows the true and residual errors for $\phi_{xx} = \sin(x)$ as a function
 of V-cycle number, illustrating the expected performance.
 
+
 \begin{figure}
 \centering
 \includegraphics[width=0.85\linewidth]{mg_error_vs_cycle}
@@ -491,6 +493,7 @@ second-order convergence for our implementation.
   you are doing some other operator with a different stencil, then
   this decomposition may no longer hold.
 
+  % this figure can be created by figures/multigrid/red_black.py
   \begin{figure}[t]
     \centering
     \includegraphics[width=0.6\linewidth]{rb}
