@@ -475,44 +475,59 @@ second-order convergence for our implementation.
 \end{figure}
 
 
-\section{Other notes}
+\section{Going Further}
 
 \label{sec:multigrid:other}
 
-\begin{itemize}
+\subsection{Red-black Ordering}
 
-\item {\em Red-black ordering}: When using domain decomposition to
-  spread the problem across parallel processors, the smoothing is
-  often done as {\em red-black Gauss-Seidel}.  In this ordering, you
-  imagine the grid to be a checkerboard (see Figure~\ref{fig:rb}).  In
-  the first Gauss-Seidel pass you update the red squares and in the
-  second, the black squares.  The advantage is that when updating the
-  red, you can be sure that none of the zones you depend on (the
-  neighboring black zones) will change.  This makes the decomposition
-  parallel.  Note: this works for the standard 5-point Laplacian.  If
-  you are doing some other operator with a different stencil, then
-  this decomposition may no longer hold.
+When using domain decomposition to spread the problem across parallel
+processors, the smoothing is often done as {\em red-black
+  Gauss-Seidel}.  In this ordering, you imagine the grid to be a
+checkerboard (see Figure~\ref{fig:rb}).  In the first Gauss-Seidel
+pass you update the red squares and in the second, the black squares.
+The advantage is that when updating the red, you can be sure that none
+of the zones you depend on (the neighboring black zones) will change.
+This makes the decomposition parallel.  Note: this works for the
+standard 5-point Laplacian.  If you are doing some other operator with
+a different stencil, then this decomposition may no longer hold.
 
-  % this figure can be created by figures/multigrid/red_black.py
-  \begin{figure}[t]
-    \centering
-    \includegraphics[width=0.6\linewidth]{rb}
-    \caption{\label{fig:rb} The red-black ordering of zones}
-  \end{figure}
+% this figure can be created by figures/multigrid/red_black.py
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.6\linewidth]{rb}
+  \caption{\label{fig:rb} The red-black ordering of zones}
+\end{figure}
 
-\item {\em Solvability}: For $\nabla^2 \phi = f$ with periodic or
-  Neumann boundaries all around, the sum of $f$ must equal $0$
-  otherwise the solution will not converge.  Instead, we will simply
-  find the solution increase each V-cycle.  This is seen as follows:
+
+\subsection{Solvability}
+
+For $\nabla^2 \phi = f$ with periodic or
+Neumann boundaries all around, the sum of $f$ must equal $0$
+otherwise the solution will not converge.  Instead, we will simply
+find the solution increase each V-cycle.  This is seen as follows:
 \begin{equation}
-\int_\Omega f d\Omega = \int_\Omega \nabla^2 \phi d\Omega =
-\int_{\partial \Omega} \nabla \phi \cdot n dS = 0
+  \int_\Omega f d\Omega = \int_\Omega \nabla^2 \phi d\Omega =
+  \int_{\partial \Omega} \nabla \phi \cdot n dS = 0
 \end{equation}
 
-\item {\em Boundary charges}: For inhomogeneous boundary conditions,
-{\em boundary charges} can be used to convert the BCs to homogeneous
-BCs.  This has the advantage of allowing the ghost cell filling 
-routines only deal with the homogeneous case.
+For all Neumann boundaries, we have $\nabla \phi \cdot dS = 0$ by
+construction, so that integral is zero, requiring that the source
+integrate to zero.  For all periodic, we have $\nabla \phi
+|_\mathrm{left} = -\nabla \phi |_\mathrm{right}$ on the left and right
+boundaries by definition of the periodicity (and similarly for the top
+and bottom).  Again this implies that $f$ must integrate to zero.
+
+Sometimes, with periodic boundary conditions all around, you need to
+enforce that $f$ integrate to zero numerically to test convergence.
+This is discussed in \S~\ref{sec:lm:periodicbcs}.
+
+\subsection{Boundary charges}
+
+For inhomogeneous boundary conditions, {\em boundary charges} can be
+used to convert the BCs to homogeneous BCs.  This has the advantage of
+allowing the ghost cell filling routines only deal with the
+homogeneous case.
 
 Consider the one-dimensional Poisson equation, near the left boundary
 our discretized equation appears as:
@@ -546,9 +561,11 @@ elliptic equation---the expressions derived above apply only for
 $\nabla^2 \phi = f$.
 
 
-\item {\em Norms}: There are several different norms that are typically
-used in defining errors on the grid.  The $L_\infty$ norm (or `inf'-norm)
-is just the maximum error on the grid:
+\subsection{Norms}
+
+There are several different norms that are typically used in defining
+errors on the grid.  The $L_\infty$ norm (or `inf'-norm) is just the
+maximum error on the grid:
 \begin{equation}
 \|e\|_\infty = \max \{ |e_{i,j}| \}
 \end{equation}
@@ -565,18 +582,26 @@ converge in all norms.
 
 For reference, the BoxLib library uses $L_\infty$ in its multigrid solvers.
 
-\item {\em Variable-coefficient equations}: solving a variable coefficient
- elliptic equation, like:
- \begin{equation}
- \nabla \cdot (\eta \nabla \phi) = f
- \end{equation}
- % 
- follows directly from the methodology here.  The main change is that
- the smoothing algorithm and the construction of the residual will
- need to discretize the variable-coefficient operator, and these
- coefficients will need to be restricted to the coarser grids.  This
- is explored in \S~\ref{sec:lm:vcelliptic}.
 
-\end{itemize}
+
+\subsection{More General Elliptic Equations}
+
+The most general {\em second-order} elliptic equation takes the form:
+\begin{equation}
+  \alpha \phi + \nabla \cdot (\beta \nabla \phi) +
+  \gamma \cdot \nabla \phi + \nabla \cdot (\zeta \phi) = f
+\end{equation}
+Here, $\gamma$ and $\zeta$ are vectors.  Solving a general elliptic
+equation of this form can be accomplished with multigrid using the
+same basic ideas here.  The main change is that the smoothing
+algorithm and the construction of the residual will need to discretize
+the more general operator, and these coefficients will need to
+be restricted to the coarser grids (some on edges).  This is explored in
+\S~\ref{sec:lm:vcelliptic} for a variable-coefficient Poisson equation:
+ \begin{equation}
+ \nabla \cdot (\eta \beta \phi) = f
+ \end{equation}
+and in \S~\ref{sec:rad:generalelliptic} for an equation with $\zeta = 0$.
+
 
 
