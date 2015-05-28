@@ -135,6 +135,7 @@ We test this technique with the source term:
 \begin{align}
 f =\, & 8\pi^2\cos(4\pi y) \left [\cos(4\pi x) - \sin(4\pi x) \right ] - \nonumber \\
     & 16\pi^2 \left [ \sin(4\pi x)\cos(2\pi y)^2 + \sin(2\pi x)^2 \cos(4\pi y) \right ]
+    \label{eq:mg:fftsource}
 \end{align}
 which has the analytic solution\footnote{Note: throughout this
 chapter, we devise test problems by picking a function
@@ -150,7 +151,7 @@ Figure~\ref{fig:mg:fftpoisson} shows the solution.
 \centering
 \includegraphics[width=0.6\linewidth]{poisson_fft}
 \caption[FFT solution to the Poisson equation]{\label{fig:mg:fftpoisson}
-  Solution to the Poisson equation with source}
+  Solution to the Poisson equation with source from Eq.~\ref{eq:mg:fftsource}.  \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/elliptic/poisson_fft.py}{poisson\_fft.py}}}
 \end{figure}
 
 
