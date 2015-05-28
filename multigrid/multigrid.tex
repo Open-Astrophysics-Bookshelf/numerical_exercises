@@ -149,9 +149,15 @@ Figure~\ref{fig:mg:fftpoisson} shows the solution.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.6\linewidth]{poisson_fft}
-\caption[FFT solution to the Poisson equation]{\label{fig:mg:fftpoisson}
-  Solution to the Poisson equation with source from Eq.~\ref{eq:mg:fftsource}.  \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/elliptic/poisson_fft.py}{poisson\_fft.py}}}
+\includegraphics[width=0.53\linewidth]{poisson_fft}
+\includegraphics[width=0.44\linewidth]{fft-poisson-converge}
+\caption[FFT solution to the Poisson
+  equation]{\label{fig:mg:fftpoisson} (left) Solution to the Poisson
+  equation on a $64^2$ grid with source from
+  Eq.~\ref{eq:mg:fftsource}. (right) Error vs.\ the true solution as a
+  function of resolution for the Fourier method, showing second-order
+  convergence.
+  \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/elliptic/poisson_fft.py}{poisson\_fft.py}}}
 \end{figure}
 
 
