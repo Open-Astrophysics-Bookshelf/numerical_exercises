@@ -130,17 +130,45 @@ by doing the inverse transform:
 \phi_{i,j} = \mathcal{F}^{-1}(\Phi_{k_x,k_y})
 \end{equation}
 
+
+We test this technique with the source term:
+\begin{align}
+f =\, & 8\pi^2\cos(4\pi y) \left [\cos(4\pi x) - \sin(4\pi x) \right ] - \nonumber \\
+    & 16\pi^2 \left [ \sin(4\pi x)\cos(2\pi y)^2 + \sin(2\pi x)^2 \cos(4\pi y) \right ]
+\end{align}
+which has the analytic solution\footnote{Note: throughout this
+chapter, we devise test problems by picking a function
+that meets the desired boundary conditions and then inserting
+it into the analytic equation we are solving to find the righthand
+side}:
+\begin{equation}
+\phi = \sin(2\pi x)^2 \cos(4\pi y) + \sin(4\pi x)\cos(2\pi y)^2
+\end{equation}
+Figure~\ref{fig:mg:fftpoisson} shows the solution.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.6\linewidth]{poisson_fft}
+\caption[FFT solution to the Poisson equation]{\label{fig:mg:fftpoisson}
+  Solution to the Poisson equation with source}
+\end{figure}
+
+
 The main downside of this approach is that, because we solve for a
 single component independently (Eq.~\ref{eq:FFTsol}), this only
-works for linear problems with constant coefficients.  For a problem
+works for linear problems with constant coefficients.  This makes
+it an excellent choice for cosmological problems solving the gravitational
+Poisson equation with periodic boundaries on all sides of the domain.
+However, for a problem
 like:
 \begin{equation}
   \nabla \cdot (\beta \nabla \phi) = f
 \end{equation}
-There would be ``cross-talk'' between the Fourier modes of $\beta$
+there would be ``cross-talk'' between the Fourier modes of $\beta$
 and $\phi$, and we would not be able to solve for a single mode
 of $\Phi_{k_x,k_y}$ independently.  We discuss methods for these
 forms next.
+
 
 \section{Relaxation}
 
