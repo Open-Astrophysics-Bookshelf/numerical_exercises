@@ -33,8 +33,88 @@ Notice that there is no time-dependence in any of these equations.
 The quantity $\phi$ is specified instantaneously in the domain subject to
 boundary conditions.
 
+\section{FFTs}
+
+A direct way of solving a constant-coefficient elliptic equation
+is using Fourier transforms.  Using a general Fourier transform
+(which we consider here) works only for periodic boundary conditions,
+but other basis functions can be used for other boundary conditions.
+
+Consider the Poisson equation:
+\begin{equation}
+\nabla^2 \phi = f
+\end{equation}
+We will difference this in a second-order accurate fashion.  Thinking
+of the Laplacian as $\nabla^2 \phi$ = $\nabla \cdot \nabla \phi$, we
+first compute the gradient of $\phi$ on edges:
+\begin{equation}
+[\nabla \phi \cdot \hat{x}]_{i+1/2,j} = \frac{\phi_{i+1,j} - \phi_{i,j}}{\Delta x}
+\end{equation}
+Since this is defined on edges, this represents a centered difference, and is
+therefore second-order accurate.  We then difference the edge-centered
+gradients to the center to get the Laplacian at cell-centers:
+\begin{align}
+[\nabla^2 \phi]_{i,j} &=
+   \frac{[\nabla \phi \cdot \hat{x}]_{i+1/2,j} -
+         [\nabla \phi \cdot \hat{x}]_{i-1/2,j}}{\Delta x} +
+   \frac{[\nabla \phi \cdot \hat{y}]_{i,j+1/2} -
+         [\nabla \phi \cdot \hat{y}]_{i,j-1/2}}{\Delta y} \nonumber\\
+%
+  &= \frac{\phi_{i+1,j} - 2\phi_{i,j} + \phi_{i-1,j}}{\Delta x^2} +
+     \frac{\phi_{i,j+1} - 2\phi_{i,j} + \phi_{i,j-1}}{\Delta y^2} = f_{i,j}
+\end{align}        
+
+We now express $\phi_{i,j}$ and $f_{i,j}$ as sums over their Fourier
+components.  Note, because we are using $i$ as the grid index, we will
+use $\imag$ as the imaginary unit:
+\begin{align}
+\phi_{i,j} &= \frac{1}{MN} \sum_{k_x = 0}^{M-1} \sum_{k_y = 0}^{N-1}
+  \Phi_{k_x,k_y} e^{2\pi\imag i k_x/M} e^{2\pi\imag j k_y/N} \\
+f_{i,j} &= \frac{1}{MN} \sum_{k_x = 0}^{M-1} \sum_{k_y = 0}^{N-1}
+  F_{k_x,k_y} e^{2\pi\imag i k_x/M} e^{2\pi\imag j k_y/N} 
+\end{align}
+Inserting these into the differenced equation (and dropping the sums
+and normalization, to focus on a single mode), we have:
+\begin{align}
+\frac{1}{MN}\sum_{k_x=0}^{M-1}\sum_{k_y=0}^{N-1}
+\biggl \{
+&\frac{\Phi_{k_x,k_y}}{\Delta x^2} e^{2\pi\imag j k_y/N}
+  \left [ e^{2\pi\imag (i+1) k_x/M} -2 e^{2\pi\imag i k_x/M} +
+         e^{2\pi\imag (i-1) k_x/M} \right ] + \nonumber \\
+&\frac{\Phi_{k_x,k_y}}{\Delta y^2} e^{2\pi\imag i k_x/M}
+  \left [ e^{2\pi\imag (j+1) k_y/N} -2 e^{2\pi\imag j k_y/N} +
+         e^{2\pi\imag (j-1) k_y/N} \right ] \biggr \} = \nonumber \\
+\frac{1}{MN}\sum_{k_x=0}^{M-1}\sum_{k_y=0}^{N-1}
+ & F_{k_x,k_y} e^{2\pi\imag i k_x/M} e^{2\pi\imag j k_y/N}
+\end{align}
+
+We can bring the righthand side into the sums on the left, and we can
+then look at just a single term:
+\begin{align}
+  e^{2\pi\imag i k_x/M} e^{2\pi\imag j k_y/N}
+  \biggl \{
+  &\frac{\Phi_{k_x,k_x}}{\Delta x^2}
+  \left [e^{2\pi\imag k_x/M} + e^{-2\pi\imag k_x/M} - 2 \right ] \nonumber \\
+  &\frac{\Phi_{k_x,k_x}}{\Delta y^2}
+  \left [e^{2\pi\imag k_y/N} + e^{-2\pi\imag k_y/N} - 2 \right ] 
+  - F_{k_x,k_y}
+  \biggr \} = 0
+\end{align}
+Simplifying, we have:
+\begin{equation}
+  \Phi_{k_x,k_y} = \frac{1}{2}\frac{F_{k_x,k_y}}
+      {\left [\cos(2\pi k_x/M) - 1 \right ] \Delta x^{-2} +
+       \left [\cos(2\pi k_y/N) - 1 \right ] \Delta y^{-2}}
+\end{equation}
+This is the algebraic solution to the Poisson equation in Fourier (frequency)
+space.  Once we evaluate this, we can get the real-space solution
+by doing the inverse transform.
+
 
 \section{Relaxation}
+
+Relaxation is an iterative technique, and as we will see shortly, it
+provides the basis for the multigrid technique.  
 
 Consider Poisson's equation differenced as:
 \begin{equation}
