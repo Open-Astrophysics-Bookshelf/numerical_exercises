@@ -68,7 +68,7 @@ plt.legend(frameon=False, loc="best")
 
 plt.ylim(-0.1, 1.1)
 
-#plt.tight_layout()
+plt.tight_layout()
 
 
 plt.savefig("derivs.eps")
