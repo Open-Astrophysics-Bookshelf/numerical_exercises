@@ -1,10 +1,22 @@
 new chapters:
-  
+
+  -- self-gravity
+
+  -- radiation hydro
+
+  -- AMR
+
+  -- mapped grids
+
+     * general quadralateral grids
+
+     * moving grids
+
+       - 1-d moving grid showing 
+     
   -- MHD
 
   -- relativisitc
-
-  -- radiation hydro
 
   -- higher-order
 
@@ -12,13 +24,18 @@ new chapters:
 
   -- implicit hydro
 
-  -- general quadralateral grids
+  -- cosmological flows
 
-  -- moving grids
+  -- understanding simulations
 
-     o 1-d moving grid showing 
+     * convergence tests
 
-  -- AMR
+     * sanity checks
+
+     * parameter studies vs. hero calculations
+
+  -- volume of fluid
+
 
 
 
