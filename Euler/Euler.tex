@@ -236,7 +236,7 @@ emanating from an initial discontinuity.
 \begin{figure}
 \centering
 \includegraphics[width=0.85\linewidth]{sod}
-\caption[The Sod problem.]{\label{fig:sod} Evolution following from an initial
+\caption[The Sod problem]{\label{fig:sod} Evolution following from an initial
   discontinuity at $x = 0.5$.  These particular conditions are called
   the {\em Sod problem}, and in general, a setup with two states
   separated by a discontinuity is called a shock-tube problem.  Here
@@ -296,7 +296,7 @@ U_{i+1/2,L}^{n+1/2} = U(q_{i+1/2,L}^{n+1/2})
 \centering
 \includegraphics[width=\linewidth]{riemann_comp}
 \caption[The left and right states for the Riemann
-  problem.]{\label{fig:riemann} The left and right states at interface
+  problem]{\label{fig:riemann} The left and right states at interface
   $i+1/2$.  The arrow indicates the flux through the interface, as
   computed by the Riemann solver using these states as input.}
 \end{figure}
@@ -337,7 +337,7 @@ data.
 \centering
 \includegraphics[width=\linewidth]{piecewise-linear}
 \caption[Piecewise linear reconstruction of cell average
-  data.]{\label{fig:plm} Piecewise linear reconstruction of the cell
+  data]{\label{fig:plm} Piecewise linear reconstruction of the cell
   averages.  The dotted line shows the unlimited center-difference
   slopes and the solid line shows the limited slopes.}
 \end{figure}
@@ -586,7 +586,7 @@ in a loop over the zone centers.
 \begin{figure}
 \centering
 \includegraphics[width=3.5in]{states}
-\caption[The two interface states derived from a cell-center quantity.]{\label{fig:states} The two interface states that are constructed
+\caption[The two interface states derived from a cell-center quantity]{\label{fig:states} The two interface states that are constructed
 using $q_i$ as the starting point.}
 \end{figure}
 
@@ -607,7 +607,7 @@ this method is still only second-order.
 \centering
 \includegraphics[width=\linewidth]{piecewise-parabolic}
 \caption[Piecewise parabolic reconstruction of the cell
-  averages.]{\label{fig:ppm} Piecewise parabolic reconstruction of the
+  averages]{\label{fig:ppm} Piecewise parabolic reconstruction of the
   cell averages.  The dotted line shows the unlimited parabolas---note
   how they touch at each interface, since the interface values come
   from the same interpolant initially.  The solid line shows the
@@ -651,7 +651,7 @@ keep our expressions for the interface states.
 \centering
 \includegraphics[width=3.5in]{ppm-trace}
 \caption[Integration under the parabola profile for to an
-  interface.]{\label{fig:ppm_trace} Integration under the parabolic
+  interface]{\label{fig:ppm_trace} Integration under the parabolic
   profile.  For each of the waves, $\sigma^\enu$ is the fraction of
   the cell that they cross in a timestep, and $\sigma^\enu \Delta x =
   \lambda^\enu \Delta t$ is the distance they can travel.  Here we are
@@ -911,7 +911,7 @@ separating space into 4 regions, marked: $L$, $L^*$, $R^*$, and $R$.
 \centering
 \includegraphics[width=\linewidth]{riemann-waves}
 \caption[The Riemann problem wave struction for the Euler
-  equations.]{The wave structure and 4 distinct regions for the
+  equations]{The wave structure and 4 distinct regions for the
   Riemann problem.  Time can be thought of as the vertical axis here,
   so we see the waves moving outward from the interface.}
 \end{figure} 
@@ -932,7 +932,7 @@ shows the Hugoniot curves for the Sod problem.
 \centering
 \includegraphics[width=0.9\linewidth]{riemann-phase}
 \caption[The Hugoniot curves corresponding
-to the Sod problem.]{\label{fig:euler:riemann-curve} The Hugoniot curves corresponding
+to the Sod problem]{\label{fig:euler:riemann-curve} The Hugoniot curves corresponding
 to the Sod problem.  The shock and rarefaction curves are shown.  The
 solution to the Riemann problem is the point where the curves intersect.\\
 \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/compressible/riemann-phase.py}{riemann-phase.py}}}

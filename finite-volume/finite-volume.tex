@@ -13,7 +13,8 @@ divide these methods into grid-based and gridless methods.
 \begin{figure}[h]
 \centering
 \includegraphics[width=\linewidth]{discretizations}
-\caption{\label{fig:disc} Taxonomy of different discretizations.}
+\caption[Taxonomy of different discretizations]
+   {\label{fig:disc} Taxonomy of different discretizations.}
 \end{figure}
 
 Gridless methods include those which represent the function as a
@@ -116,7 +117,7 @@ is the same as in the cell-centered finite-difference case.
 \includegraphics[width=\linewidth]{fd_grid} \\
 \includegraphics[width=\linewidth]{ccfd_grid} \\
 \includegraphics[width=\linewidth]{fv_grid}
-\caption[Types of structured grids.]{\label{fig:grids} Different types of structured grids.  Top:
+\caption[Types of structured grids]{\label{fig:grids} Different types of structured grids.  Top:
   a finite-difference grid---the discrete data are associated with a
   specific point in space.  Middle: a cell-centered finite-difference
   grid---again the data is at a specific point, but now we imagine the
@@ -288,13 +289,14 @@ domain.
 \begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{simplegrid_gc}
-\caption[A simple 1-d finite-volume grid with ghost
-  cells.]{\label{fig:fv_gc} A simple 1-d finite-volume grid with a
-  single ghost cell at each end of the domain.  The domain boundaries
-  are indicated by the heavy vertical lines.  Here there are
-  $\mathrm{hi}-\mathrm{lo}+1$ zones used in the discretization of the
-  domain, with the first zone in the domain labelled $\mathrm{lo}$ and
-  the last in the domain labelled $\mathrm{hi}$.}
+\caption[A simple 1-d finite-volume grid with ghost cells]
+        {\label{fig:fv_gc} A simple 1-d finite-volume grid with a
+          single ghost cell at each end of the domain.  The domain
+          boundaries are indicated by the heavy vertical lines.  Here
+          there are $\mathrm{hi}-\mathrm{lo}+1$ zones used in the
+          discretization of the domain, with the first zone in the
+          domain labelled $\mathrm{lo}$ and the last in the domain
+          labelled $\mathrm{hi}$.}
 \end{figure}
 
 The number of ghostcells needed for the grid depends on how wide the
@@ -332,7 +334,7 @@ a_{\mathrm{lo}-1} &=& a_\mathrm{lo}
  \begin{figure}
  \centering
  \includegraphics[width=\linewidth]{domain}
- \caption[Domain decomposition example.]{\label{fig:domain} Domain
+ \caption[Domain decomposition example] {\label{fig:domain} Domain
    decomposition of the computational domain into 6 separate
    sub-domains.  Each sub-domain here has $5\times 5$ zones.  For one
    of the sub-domains, the perimeter of ghost cells is illustrated as

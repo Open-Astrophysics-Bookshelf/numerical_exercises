@@ -282,7 +282,7 @@ slopes for our line.
 \centering
 \includegraphics[width=\linewidth]{mg-bcs}
 \caption[The cell-centered grid showing the difference between ghost
-  cells and the physical boundary.]{\label{fig:bcs} The cell-centered
+  cells and the physical boundary]{\label{fig:bcs} The cell-centered
   grid showing the cells (and ghost cells) surrounding the boundaries
   and indicating that the boundary conditions are actually specified
   right at the boundary itself.}
@@ -368,7 +368,7 @@ as the source.
 \begin{figure}
 \centering
 \includegraphics[width=\linewidth]{smooth-error.eps}
-\caption[Convergence as a function of number of iterations using Gauss-Seidel relaxation.]{\label{fig:smootherror} Gauss-Seidel relaxation applied to
+\caption[Convergence as a function of number of iterations using Gauss-Seidel relaxation]{\label{fig:smootherror} Gauss-Seidel relaxation applied to
   $\phi_{xx} = \sin(x)$ with $\phi(0) = \phi(1) = 0$.  Shown are the
   L2 norm of the error compared with the true solution (solid lines)
   and the L2 norm of the residual (dotted lines) for 3 different
@@ -407,7 +407,7 @@ error.
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.8\linewidth]{smooth_error}
-\caption[Smoothing of different wavenumbers.]{\label{fig:smooth} Error
+\caption[Smoothing of different wavenumbers]{\label{fig:smooth} Error
   in the solution to $\phi'' = 0$ given an initial guess with 3
   different wavenumbers of noise.  The different curves are different
   numbers of smoothing iterations.}
@@ -479,7 +479,7 @@ the center coarse cell, and the fine grid cells are marked in red.
 \centering
 \includegraphics[width=4.0in]{2dgrid-prolong}
 \caption[The geometry for 2-d
-  prolongation.]{\label{fig:2dgrid-prolong} Four fine cells and the
+  prolongation]{\label{fig:2dgrid-prolong} Four fine cells and the
   underlying coarse grid.  For prolongation, the fine cells in red are
   initialized from a coarse parent.  The gray coarse cells are used in
   the reconstruction of the coarse data.  For restriction, the fine
@@ -532,7 +532,7 @@ work well.
 \begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{mgtower}
-\caption[A multigrid hierarchy.]{\label{fig:mgtower} Illustration of
+\caption[A multigrid hierarchy]{\label{fig:mgtower} Illustration of
   the hierarchy of grids leading to the coarsest 2-zone grid (in
   one-dimension).  Each grid has a single ghost cell to accomodate
   boundary conditions.}
@@ -597,7 +597,7 @@ of V-cycle number, illustrating the expected performance.
 \centering
 \includegraphics[width=0.85\linewidth]{mg_error_vs_cycle}
 \caption[Error in solution as a function of multigrid V-cycle
-  number.]{\label{fig:mgerror} Error in the multigrid solution to our
+  number]{\label{fig:mgerror} Error in the multigrid solution to our
   model problem ($\phi_{xx} = \sin(x)$) as a function of V-cycle.  We
   see that the true error, $\|e\|$ stalls at truncation error while
   the residual error, $\|r\|$ reaches roundoff error, the same
@@ -642,7 +642,8 @@ a different stencil, then this decomposition may no longer hold.
 \begin{figure}[t]
   \centering
   \includegraphics[width=0.6\linewidth]{rb}
-  \caption{\label{fig:rb} The red-black ordering of zones}
+  \caption[Red-black ordering of zones]
+{\label{fig:rb} The red-black ordering of zones.}
 \end{figure}
 
 
