@@ -54,7 +54,8 @@ key papers for full derivations and details.  A companion python code,
 
 We assume a familiarity with basic numerical methods, which we
 summarize below.  Any book on numerical methods can provide a
-deeper discussion of these methods.
+deeper discussion of these methods.  Some good choices are the
+texts by Garcia~\cite{garcia} and Pang~\cite{pang}.
 
 \subsection{Sources of Error}
 
@@ -67,9 +68,11 @@ excellent introduction to the details of how computers represent
 numbers is provided in \cite{goldberg:1991}.  
 
 \begin{exercise}[Machine epsilon]
-To see roundoff error in action, write a program to find the value
-of $\epsilon$ for which $1 + \epsilon = 1$.  This value of $\epsilon$
-is called {\em machine epsilon}.  You will get a different value for
+To see roundoff error in action, write a program to find the value of
+$\epsilon$ for which $1 + \epsilon = 1$.  Start with $\epsilon = 1$
+and iterate, halving $\epsilon$ each iteration unit $1 + \epsilon =
+1$. This last value of $\epsilon$ for which this was not true is
+the {\em machine epsilon}.  You will get a different value for
 single- vs.\ double-precision floating point arithmetic.
 \end{exercise}
 
@@ -104,7 +107,7 @@ good way to test whether our method is behaving properly is to perform
 a convergence test.  Consider our $5^\mathrm{th}$-order accurate
 approximation to $\sin(x)$ above.  Pick a range of $x$'s ($< 1$), and
 compute the error in our approximation as $\epsilon \equiv \sin(x) - [
-  x - x^3/6 ]$, and show that as you cut $x$ in half, $\epsilon$
+  x - x^3/6 ]$, and show that as you cut $x$ in half, $|\epsilon|$
 reduces by $2^5$---demonstrating $5^\mathrm{th}$-order accuracy.
 \end{exercise}
 
@@ -114,13 +117,15 @@ of our small parameter is an example of a {\em convergence test}.
 \subsection{Differentiation and Integration}
 
 For both differentiation and integration, there are two cases we might
-encounter.  In the first, we have function values, $f_0$, $f_1$,
-$\ldots$, at a discrete number of points, $x_0$, $x_1$, $\ldots$, and
-we want to compute the derivative at a point or integration over a
-range of points.  The second case is when we know a function
-analytically and we want to construct a derivative or integral of this
-function numerically.  In these notes, we'll be concerned only with
-the first case.
+encounter:
+\begin{enumerate}
+\item We have function values, $f_0$, $f_1$, $\ldots$, at a discrete
+  number of points, $x_0$, $x_1$, $\ldots$, and we want to compute the
+  derivative at a point or integration over a range of points.
+\item We know a function analytically and we want to construct a
+  derivative or integral of this function numerically.  In these
+  notes, we'll be concerned only with the first case.
+\end{enumerate}
 
 \subsection{Differentiation}
 \label{ch:intro:diff}
