@@ -188,11 +188,23 @@ it.  Here you can pick a $\delta x$ and evaluate the derivative as
 \end{equation}
 An optimal value for $\delta x$ requires a balance of truncation error
 (which wants a small $\delta x$)  and roundoff error (which becomes large
-when $\delta x$ is close to machine $\epsilon$).  A nice discussion of
+when $\delta x$ is close to machine $\epsilon$).  Figure~\ref{fig:deriv_error}
+shows the error for the numerical derivative of $f(x) = \sin(x)$ at the
+point $x_0 = 1$, as a function of $\delta x$.  A nice discussion of
 this is given in \cite{yak}.  Comparing the result with different choices
 of $\delta x$ allows for error estimation and an improvement of the result
 by combining the estimates using $\delta x$ and $\delta x/2$ (this is the
 basis for a method called {\em Richardson extrapolation}).
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.8\linewidth]{deriv_error}
+  \caption[Error in numerical derivatives] {\label{fig:deriv_error}
+    Error in the numerical approximation of the derivative of $f(x) =
+    sin(x)$ at $x_0 = 1$ as a function of the spacing $\delta x$.  For
+    small $\delta x$, roundoff error dominates the error in the
+    approximation.  For large $\delta x$, truncation error dominates.}
+\end{figure}
 
 Second- and higher-order derivatives can be constructed in the same fashion.
 
