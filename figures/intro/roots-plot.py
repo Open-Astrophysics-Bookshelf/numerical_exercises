@@ -4,17 +4,20 @@
 
 import math
 import numpy
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 from roots import *
 from mpl_toolkits.axes_grid1.inset_locator import zoomed_inset_axes, mark_inset
 
+mpl.rcParams['xtick.labelsize'] = 16
+mpl.rcParams['ytick.labelsize'] = 16
 
 r = root(f, 1.e-5, fprime=fprime)
 
-xmin = 0.0                                                                                                                      
-xmax = 5.0 
+xmin = 0.0
+xmax = 5.0
 
-xfine = numpy.linspace(xmin, xmax, 200)                                                                                        
+xfine = numpy.linspace(xmin, xmax, 200)
 
 #---------------------------------------------------------------------------
 # plot Newton
@@ -27,10 +30,10 @@ for n, x in enumerate(xeval):
     plt.clf()
     plt.plot(xfine, r.f(xfine))
 
-    plt.scatter(numpy.array(xeval[0:n+1]), 
-                  r.f(numpy.array(xeval[0:n+1])), 
+    plt.scatter(numpy.array(xeval[0:n+1]),
+                  r.f(numpy.array(xeval[0:n+1])),
                   marker="x", s=25, color="r")
- 
+
     plt.plot(xfine, r.fprime(x)*(xfine-x) + r.f(x), color="0.5")
 
     xintercept = -r.f(x)/r.fprime(x) + x
@@ -38,15 +41,15 @@ for n, x in enumerate(xeval):
     plt.plot([xintercept, xintercept], [0, r.f(xintercept)], color="0.5", ls=":")
 
     if n%2 == 0:
-        plt.text(x, r.f(x)-0.3, `n`, color="r", fontsize="10",
-                   verticalalignment="top", horizontalalignment="center") 
+        plt.text(x, r.f(x)-0.3, `n`, color="r", fontsize="16",
+                   verticalalignment="top", horizontalalignment="center")
     else:
-        plt.text(x, r.f(x)+0.3, `n`, color="r", fontsize="10",
-                   verticalalignment="bottom", horizontalalignment="center") 
+        plt.text(x, r.f(x)+0.3, `n`, color="r", fontsize="16",
+                   verticalalignment="bottom", horizontalalignment="center")
 
     F = plt.gcf()
     plt.text(0.5, 0.02, "root approx = %s" % (`x`),
-               transform = F.transFigure, color="k")
+               transform = F.transFigure, color="k", fontsize="16")
 
     # axes through origin
     ax = plt.gca()
@@ -59,6 +62,7 @@ for n, x in enumerate(xeval):
     ax.xaxis.set_ticks_position('bottom')
     ax.yaxis.set_ticks_position('left')
 
+    plt.xlim(xmin, 1.1*xmax)
     plt.ylim(-10.0,15)
 
     # inset near the root (x=3)
@@ -72,8 +76,8 @@ for n, x in enumerate(xeval):
 
     axins.plot(xfine, r.f(xfine))
 
-    axins.scatter(numpy.array(xeval[0:n+1]), 
-                  r.f(numpy.array(xeval[0:n+1])), 
+    axins.scatter(numpy.array(xeval[0:n+1]),
+                  r.f(numpy.array(xeval[0:n+1])),
                   marker="x", s=25, color="r")
 
     axins.plot(xfine, r.fprime(x)*(xfine-x) + r.f(x), color="0.5")
@@ -84,17 +88,17 @@ for n, x in enumerate(xeval):
     if n%2 == 0:
         axins.text(x, r.f(x)-0.05, `n`, color="r", fontsize="10",
                    verticalalignment="top", horizontalalignment="center",
-                   clip_on=True) 
+                   clip_on=True)
     else:
         axins.text(x, r.f(x)+0.05, `n`, color="r", fontsize="10",
                    verticalalignment="bottom", horizontalalignment="center",
-                   clip_on=True) 
+                   clip_on=True)
 
     axins.plot(xfine, xfine*0, ls=":", color="0.5")
 
     mark_inset(ax, axins, loc1=3, loc2=4, fc="none", ec="0.5")
 
-    
+
     f = plt.gcf()
     f.set_size_inches(7.20,7.20)
 
@@ -102,6 +106,3 @@ for n, x in enumerate(xeval):
     plt.tight_layout()
 
     plt.savefig("newton_%2.2d.eps" % (n))
-
-
-
