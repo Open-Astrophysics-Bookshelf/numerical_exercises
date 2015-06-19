@@ -87,7 +87,7 @@ Truncation error is a feature of an algorithm---we typically
 approximate an operator or function by expanding about some small
 quantity.  When we throw away higher-order terms, we are truncating
 our expression, and introducing an error in the representation.  If
-the quantity we expand about truely is small, then the error is small.
+the quantity we expand about truly is small, then the error is small.
 A simple example is to consider the Taylor series representation of
 $\sin(x)$:
 \begin{equation}
@@ -129,7 +129,7 @@ encounter:
 
 \subsection{Differentiation}
 \label{ch:intro:diff}
-Consider a collection of equally spaced points, labelled with an index
+Consider a collection of equally spaced points, labeled with an index
 $i$, with the physical spacing between them denoted $\Delta x$.  We
 can express the first derivative of a quantity $a$ at 
 $i$ as:
@@ -159,7 +159,7 @@ arising because our numerical approximation throws away higher order
 terms).  The approximation ${\partial a}/{\partial x} |_i = ({a_{i+1}
   - a_i})/{\Delta x}$ has the same order of accuracy.
 
-\begin{exercise}[Trunction error]
+\begin{exercise}[Truncation error]
 {Show that a centered difference, ${\partial a}/
   {\partial x} |_i = ({a_{i+1} - a_{i-1}})/({2 \Delta x})$, is second order
 accurate, i.e.\ its truncation error is $\mathcal{O}(\Delta x^2)$.}
@@ -351,7 +351,7 @@ where you don't converge but simply pass through the same set of
 root approximations.
 Many other root finding methods exist, including bisection, which
 iteratively halves an interval known to contain a root by looking for
-the change in sign of the funciton $f(x)$.  Brendt's method combines
+the change in sign of the function $f(x)$.  Brendt's method combines
 several different methods to produce a robust procedure for root-finding.
 
 \subsection{ODEs}
@@ -388,7 +388,7 @@ Expanding the righthand side vector,
      \left . \frac{\partial {\bf f}}{\partial t} \right |_n \Delta t + 
      \left . \frac{\partial {\bf f}}{\partial {\bf y}} \right |_n \Delta {\bf y} + \ldots 
 \end{equation} 
-Here we recognize the Jaobian matrix, ${\bf J} \equiv \partial {\bf
+Here we recognize the Jacobin matrix, ${\bf J} \equiv \partial {\bf
   f}/\partial {\bf y}$,
 \begin{equation}
 \renewcommand\arraystretch{1.5}
