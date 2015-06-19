@@ -21,7 +21,7 @@ eps = abs(dfdx(x0, dx) - fprime(x0))
 
 plt.loglog(dx, eps)
 
-plt.xlabel("$\Delta x$")
+plt.xlabel("$\delta x$")
 plt.ylabel("error in difference approximation")
 
 plt.tight_layout()
