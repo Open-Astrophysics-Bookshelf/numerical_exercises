@@ -323,10 +323,10 @@ some tolerance.
 
 \begin{figure}
 \centering
-\includegraphics[width=0.48\linewidth]{newton_00}
-\includegraphics[width=0.48\linewidth]{newton_01} \\[1em]
-\includegraphics[width=0.48\linewidth]{newton_02}
-\includegraphics[width=0.48\linewidth]{newton_03} 
+\includegraphics[width=0.49\linewidth]{newton_00}
+\includegraphics[width=0.49\linewidth]{newton_01} \\[1em]
+\includegraphics[width=0.49\linewidth]{newton_02}
+\includegraphics[width=0.49\linewidth]{newton_03} 
 \caption[Convergence of Newton's method for root finding]{\label{fig:newtonsmethod} The convergence of Newton's method
 for finding the root.  In each pane, the red point is the current guess
 for the root.  The solid gray line is the extrapolation of the slope
@@ -378,6 +378,10 @@ A first-order implicit update (called {\em backward Euler}) is:
 \begin{equation}
 {\bf y}^{n+1} = {\bf y}^n + \Delta t {\bf f}(t^{n+1}, {\bf y}^{n+1})
 \end{equation}
+This is more complicated to solve, and generally will require some linear
+algebra.  If we take $\Delta t$ to be small, then the change in the solution,
+$\Delta {\bf y}$ will be small as well, and we can Taylor-expand the system.
+
 Expanding the righthand side vector,
 \begin{equation}
 {\bf f}(t^{n+1},{\bf y}^{n+1}) = {\bf f}(t^n, {\bf y}^n) +
@@ -385,7 +389,26 @@ Expanding the righthand side vector,
      \left . \frac{\partial {\bf f}}{\partial {\bf y}} \right |_n \Delta {\bf y} + \ldots 
 \end{equation} 
 Here we recognize the Jaobian matrix, ${\bf J} \equiv \partial {\bf
-  f}/\partial {\bf y}$ and since $\Delta {\bf y} = {\bf y}^{n+1} - {\bf y}^n$,
+  f}/\partial {\bf y}$,
+\begin{equation}
+\renewcommand\arraystretch{1.5}
+{\bf J} = \left ( 
+\begin{array}{ccccc}
+\partial f_1/\partial y_1 & \partial f_1/\partial y_2 & 
+\partial f_1/\partial y_3 & \ldots & \partial f_1/\partial y_n \\
+%
+\partial f_2/\partial y_1 & \partial f_2/\partial y_2 & 
+\partial f_2/\partial y_3 & \ldots & \partial f_2/\partial y_n \\
+%
+\vdots  & \vdots & \vdots & \ddots & \vdots \\
+%
+\partial f_n/\partial y_1 & \partial f_n/\partial y_2 & 
+\partial f_n/\partial y_3 & \ldots & \partial f_n/\partial y_n \\
+\end{array}
+\right )
+\end{equation}
+
+ and since $\Delta {\bf y} = {\bf y}^{n+1} - {\bf y}^n$,
 our method becomes:
 \begin{equation}
 {\bf y}^{n+1} = {\bf y}^n + \Delta t \left [
@@ -402,7 +425,7 @@ This is a linear system that can be solved using standard matrix techniques.
 Explicit methods are easier to program and run faster (for a given $
 \Delta t$), but implicit methods work better for {\em stiff}
 problems---those characterized by widely disparate timescales over
-which the solution changes~\cite{byrnehindmarsh}.  A good example
+which the solution changes~\cite{byrnehindmarsh}\footnote{Defining whether a problem is stiff can be tricky.  For a system of ODEs, a large range in the eigenvalues of the Jacobian usually means it is stiff}.  A good example
 of this issue in astrophysical problems is with nuclear reaction
 networks (see, e.g., \cite{timmes_networks}).
 
@@ -422,7 +445,8 @@ k_2 &= f(t^n + \tfrac{\Delta t}{2}, y_k^n + \tfrac{\Delta t}{2} k_1) \\
 k_3 &= f(t^n + \tfrac{\Delta t}{2}, y_k^n + \tfrac{\Delta t}{2} k_2) \\
 k_4 &= f(t^n + \Delta t, y_k^n + \Delta t k_3)
 \end{align}
-This is fourth-order accurate overall.
+Note the similarity to Simpson's method for integration.  This is
+fourth-order accurate overall.
 
 \begin{figure}[t]
 \centering
@@ -432,7 +456,7 @@ This is fourth-order accurate overall.
 %
 \caption[The $4^\mathrm{th}$-order Runge-Kutta method] {\label{fig:rk}
   A graphical illustration of the four steps in the
-  $4^\mathrm{th}$-order Runge-Kutta method.}
+  $4^\mathrm{th}$-order Runge-Kutta method. {\color{red} Annotate this better}}
 \end{figure}
 
 \begin{figure}[t]
@@ -459,6 +483,10 @@ can write the ODE system describing the motion of Earth as:
 Integrate this system with the first-order Euler and the RK4 method
 and measure the convergence by integrating at a number of different $\Delta t$s.
 \end{exercise}
+
+\subsection{FFTs}
+
+
 
 %% \section{A Sample of Public Codes}
 
