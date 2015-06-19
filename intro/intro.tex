@@ -213,7 +213,8 @@ Second- and higher-order derivatives can be constructed in the same fashion.
 \subsection{Integration}
 
 If we have a function sampled at a number of equally-spaced points,
-$x_0 \equiv a, x_1, \ldots, x_N \equiv b$, we can construct a discrete
+$x_0 \equiv a, x_1, \ldots, x_N \equiv b$\footnote{Note that this is $N$ intervals
+and $N+1$ points}, we can construct a discrete
 approximation to an integral as:
 \begin{equation}
 I \equiv \int_a^b f(x) dx \approx \Delta x \sum_{i = 0}^{N-1} f(x_i)
@@ -235,15 +236,36 @@ This is called the {\em trapezoid rule}.
 
 One can keep going, but practically speaking, a quadratic interpolation
 is as high as one usually encounters.  Fitting a quadratic polynomial 
-requires three points, so in doing the integral from $[a,b]$, we will
+requires three points.
+
+\begin{exercise}[Simpson's rule for integration]
+\label{ex:simpsons}
+Consider a function, $f(x)$, sampled at three equally-spaced points,
+$\alpha, \beta, \gamma$, with corresponding function values $f_\alpha,
+f_\beta, f_\gamma$.  Derive the expression for Simpson's rule by
+fitting a quadratic $\hat{f}(x) = A(x - \alpha)^2 + B(x - \alpha) + C$
+to the three points (this gives you $A$, $B$, and $C$), and then
+analytically integrating $\hat{f}(x)$ in the interval
+$[\alpha,\gamma]$.  You should find
+\begin{equation}
+I = \frac{\gamma-\alpha}{6} (f_\alpha + 4f_\beta + f_\gamma)
+\end{equation}
+Note that $(\gamma-\alpha)/6 = \Delta x/3$
+\end{exercise}
+
+For a number of samples, $N$, in $[a,b]$, we will
 consider every two intervals together.  The resulting expression is:
 \begin{align}
-I \equiv \int_a^b f(x) dx &\approx 
-  \frac{\Delta x}{3} \sum_{i = 0}^{(N-2)/2} (f(x_{2i}) + 4 f(x_{2i+1}) + f(x_{2i+2}) ) \\
-&= f(x_0) + 4f(x_1) + 2f(x_2) + 4f(x_3) + 2f(x_4) + \ldots + \nonumber \\
-&\phantom{=} 2f(x_{N-2}) + 4f(x_{N-1}) + f(x_N)
+I &\equiv \int_a^b f(x) dx 
+\approx  \frac{\Delta x}{3} \sum_{i = 0}^{(N-2)/2} \left [f(x_{2i}) + 4 f(x_{2i+1}) + f(x_{2i+2}) \right ] \\
+&= f(x_0) + 4f(x_1) + 2f(x_2) + 4f(x_3) + 2f(x_4) + \ldots + \nonumber 2f(x_{N-2}) + 4f(x_{N-1}) + f(x_N)
 \end{align}
-This method is called {\em Simpson's rule}.  Figure~\ref{fig:integration} shows
+This method is called {\em Simpson's rule}.  Note that for 2 intervals
+/ 3 sample points ($N=2$), we only have 1 term in the sum, $(N-2)/2 =
+0$, and we get the result derived in Exercise~\ref{ex:simpsons}.
+
+
+Figure~\ref{fig:integration} shows
 these different approximations for the case of two intervals (three points).
 
 \begin{figure}
@@ -258,17 +280,6 @@ these different approximations for the case of two intervals (three points).
 \end{minipage}
 \end{figure}
 
-\begin{exercise}[Simpson's rule for integration]
-Consider a function, $f(x)$, sampled at three equally-spaced points,
-$a, b, c$, with corresponding function values $f_a, f_b, f_c$.  Derive
-the expression for Simpson's rule by fitting a quadratic $\hat{f}(x) =
-A(x - a)^2 + B(x - a) + C$ to the three points, and then analytically
-integrating $\hat{f}(x)$ in the interval $[a,c]$.  You should find
-\begin{equation}
-I = \frac{c-a}{6} (f_a + 4f_b + f_c)
-\end{equation}
-Note that $(c-a)/6 = \Delta x/3$
-\end{exercise}
 
 Analogous expressions exist for the case of unequal points.
 
