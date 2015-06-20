@@ -7,7 +7,7 @@ it---convert the continuous function into a discrete number of points
 in space at one or more discrete instances in time.
 There are many different discretization methods used throughout the
 physical sciences, engineering, and applied mathematics fields, each
-with their own strenghts and weaknesses.  Broadly speaking, we can
+with their own strengths and weaknesses.  Broadly speaking, we can
 divide these methods into grid-based and gridless methods.  
 
 \begin{figure}[h]
@@ -27,7 +27,7 @@ over these particles with a suitable kernel---this is the basis of
 method in astrophysics.
 
 For grid-based methods, we talk about both the style of the grid
-(structured vs.\ unstructured) and the discretizatin method, e.g.\ the
+(structured vs.\ unstructured) and the discretization method, e.g.\ the
 finite-difference, finite-volume, and finite-element methods.  
 
 Structured grids are logically Cartesian.  This means that you can
@@ -47,7 +47,7 @@ system of discrete equations on the grid.
 Finite element methods are widely used in
 engineering together with unstructured grids.  A type of finite-element
 method called a {\em Galerkin method} can be formed by integrating the
-continuous function agains a compact basis set represented by
+continuous function against a compact basis set represented by
 tetrahedra.  These methods work well with the irregular geometries
 that arise in engineering.  Finite-difference and finite-volume
 methods can both be applied to {\em structured grids}. 
@@ -62,7 +62,7 @@ structured grids.
 
 \section{Grid basics}
 
-The grid is the fundamental object for representing continous
+The grid is the fundamental object for representing continuous
 functions in a discretized fashion, making them amenable to
 computation.  In astrophysics, we typically use structured
 grids---these are logically Cartesian, meaning that the position of a
@@ -212,7 +212,7 @@ The {\sf IPython} notebook \hydroexdoit{\href{https://github.com/zingale/hydro_e
 
 In practice, when computing derivatives in a finite-volume
 discretization, we can use the second-order centered difference from
-\S~\ref{ch:intro:diff} treating the finite-voume data as living at the
+\S~\ref{ch:intro:diff} treating the finite-volume data as living at the
 cell-centers and still be second-order accurate.  For higher accuracy,
 we can fit a {\em conservative interpolant} (as illustrated in
 exercise~\ref{ex:consinterp}) to a collection of points and then
@@ -295,8 +295,8 @@ domain.
           boundaries are indicated by the heavy vertical lines.  Here
           there are $\mathrm{hi}-\mathrm{lo}+1$ zones used in the
           discretization of the domain, with the first zone in the
-          domain labelled $\mathrm{lo}$ and the last in the domain
-          labelled $\mathrm{hi}$.}
+          domain labeled $\mathrm{lo}$ and the last in the domain
+          labeled $\mathrm{hi}$.}
 \end{figure}
 
 The number of ghostcells needed for the grid depends on how wide the
