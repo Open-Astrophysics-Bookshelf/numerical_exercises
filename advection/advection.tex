@@ -160,7 +160,7 @@ a variety of CFL numbers. \\
 \end{exercise}
 
 The classic method for understanding stability is to consider the growth 
-of a single Fourier mode in our discetization.  That is, substitute in
+of a single Fourier mode in our discretization.  That is, substitute in
 $a_i^n = A^n e^{ji\theta}$, where $j = \sqrt{-1}$, and $\theta$ represents a
 phase.  A method is stable if $|A^{n+1}/A^n| \le 1$.  Performing this
 with FTCS shows that no value of $C$ can make the method stable.
@@ -282,7 +282,7 @@ its flux.
 \centering
 \includegraphics[width=\linewidth]{fv_ghost}
 \caption[A finite-volume grid with valid cells
-  labelled]{\label{fig:fvghost} A finite-volume grid running from
+  labeled]{\label{fig:fvghost} A finite-volume grid running from
   $\mathrm{lo}, \ldots, \mathrm{hi}$, with two ghost cells at each
   end.}
 \end{figure}
@@ -292,7 +292,7 @@ represents the average of $a(x,t)$ over the interval $x_{i-1/2}$ to
 $x_{i+1/2}$, where the half-integer indexes denote the zone edges
 (i.e.\ $x_{i-1/2} = x_i - \Delta x/2$).  Figure~\ref{fig:fvghost}
 shows an example of such a grid with 2 ghost cells at each end.  (For
-simplicitly of notation, we drop the $\langle \rangle$ going forward).
+simplicity of notation, we drop the $\langle \rangle$ going forward).
 To discretize Eq.~\ref{eq:advect-cons}, we integrate it over a zone,
 from ${x_{i-1/2}}$ to ${x_{i+1/2}}$, normalizing by the zone width,
 $\Delta x$:
@@ -654,7 +654,7 @@ conservative flux update.
 \includegraphics[width=\linewidth]{rea-evolve.eps} \\
 \includegraphics[width=\linewidth]{rea-final.eps}
 \caption[The Reconstruct-Evolve-Average procedure]{\label{fig:rea}
-  Reconstruct-Evolve-Average.  The top panel shows the origina
+  Reconstruct-Evolve-Average.  The top panel shows the original
   cell-average data.  The second panel shows the (limited) piecewise
   linear reconstruction of the data.  Assuming a CFL number of 0.6 and
   advection to the right, the shaded regions in the third panel show
@@ -999,16 +999,16 @@ See \cite{colella:1990} for more details on this unsplit method.
 
 \item {\em Slope limiting}: there are a wide variety of slope limiters.
   All of them are designed to reduce oscillations in the presence
-  of discontinuties or extrema, but some are higher-order and can be
+  of discontinuities or extrema, but some are higher-order and can be
   less restrictive when dealing with smooth flows.  Most hydro
   texts (e.g.\ \cite{leveque:2002,toro:1997}) provide an introduction to the design
   of such limiters.
 
 \item {\em Multi-dimensional limiting}: the procedure described above
-  still does the limiting in each dimension indepedent of the other
+  still does the limiting in each dimension independent of the other
   when doing the unsplit reconstruction.  This can lead to overshoots/
   undershoots.  An example of a method that considers the limiting
-  in multidimensions is \cite{BDS,quadBDS}.
+  in multi-dimensions is \cite{BDS,quadBDS}.
 
 \item {\em Spatially-varying velocity field}: if we consider a spatially
   varying velocity field, $u(x,y)$ and $v(x,y)$ that is specified externally,
@@ -1060,7 +1060,7 @@ To get a feel for the advection algorithm, here are some suggested
 exercises:
 \begin{itemize}
 \item Implement a tophat initial profile and run with and without limiters
-  (this is controled by the {\tt advection.limiter} runtime paramter.
+  (this is controlled by the {\tt advection.limiter} runtime parameter.
 
 \item Look at the solution when you advect purely in the $x$- or $y$-direction
 and compare to the diagonal case---notice how the direction affects the
