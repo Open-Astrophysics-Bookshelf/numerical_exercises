@@ -132,7 +132,7 @@ that $\Gamma_1 \equiv \partial \log p/\partial \log \rho |_s$, we have:
 as the generalization of the pressure equation.
 
 We'll use the symbols $\{-,\circ,+\}$ to denote the eigenvalues and their
-corresponding eigenvectors thoughout these notes.
+corresponding eigenvectors throughout these notes.
 These eigenvalues are the speeds at which information propagates through
 the fluid.
 Since the eigenvalues are real, this system (the Euler equations) is said
@@ -910,7 +910,7 @@ separating space into 4 regions, marked: $L$, $L^*$, $R^*$, and $R$.
 \begin{figure}[h]
 \centering
 \includegraphics[width=\linewidth]{riemann-waves}
-\caption[The Riemann problem wave struction for the Euler
+\caption[The Riemann problem wave structure for the Euler
   equations]{The wave structure and 4 distinct regions for the
   Riemann problem.  Time can be thought of as the vertical axis here,
   so we see the waves moving outward from the interface.}
@@ -984,7 +984,7 @@ F_{i+1/2}^{n+1/2} = \left ( \begin{array}{c}
 Note that instead of returning an approximate state at the interface,
 some Riemann solvers (e.g.\ the HLL(C) solvers) instead approximate the
 fluxes directly.  These use estimates of the wave speeds together with
-the Rankine-Hugonoit jump conditions to give the fluxes.
+the Rankine-Hugoniot jump conditions to give the fluxes.
 
 
 
@@ -1008,7 +1008,7 @@ wave to cross a single zone:
 
 At times we will want to use alternate forms of the energy equation.  The
 internal energy is governed by the first law of thermodynamics.  In the
-absense of any heat sources, we have:
+absence of any heat sources, we have:
 \begin{equation}
 dq = 0 = de + pd(1/\rho)
 \end{equation}
@@ -1826,7 +1826,7 @@ All of these methods are designed to avoid EOS calls where possible,
 since general equations of state can be expensive.
 
 Extending these to an unsplit formulation requires carrying an additional
-auxillary variable from the primitive state back to the conserved state
+auxiliary variable from the primitive state back to the conserved state
 and adding the transverse gradients to its interface state.  Castro
 deals with a conserved state of $U = (\rho, \rho U, \rho E, p)$, and
 explicitly adds the transverse terms found in the multi-dimensional form
