@@ -33,7 +33,7 @@ the advection is slow.  Therefore, we don't want to use the same
 timestep for all the processes, since that will needlessly make things
 computationally expensive.  {\em Operator splitting} solves for the
 effects of each operator separately, using whichever timestep (and
-time-discretization, e.g., explicit or implict) is most suited to the
+time-discretization, e.g., explicit or implicit) is most suited to the
 operation.  The result of one operation is used as the input to the
 next.  The downside of this approach is that the operations may
 not be well coupled.
@@ -65,8 +65,8 @@ and $D_{\Delta t}$ represents diffusing for a step of $\Delta t$.  In
 each case, these operators act as if the other were not present, but
 they see the effect of the previous operation on the input $\phi$.  
 
-No explict source terms describing one process appear in the other
-process' update.  The procedure for updating appears as:
+No explicit source terms describing one process appear in the other
+process's update.  The procedure for updating appears as:
 \begin{enumerate}
 \item {\em Evolve reaction ODE system for $\Delta t/2$}
    %

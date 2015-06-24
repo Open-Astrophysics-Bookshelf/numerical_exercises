@@ -11,7 +11,7 @@
 As a fluid parcel advects through a domain, it compresses and expands
 due to a variety of effects (stratification, local heat release,
 acoustic/shock waves).  The Lagrangian derivative of the density
-captures the changes in the fluid, and is a measure of its compressiblity.
+captures the changes in the fluid, and is a measure of its compressibility.
 From the continuity equation, we see:
 \begin{equation}
 -\frac{1}{\rho}\frac{D\rho}{Dt} = \nabla \cdot U
@@ -545,7 +545,7 @@ already be divergence free.  Rider argues that projecting the update
 is not desirable with approximate projections, since any error in
 $U^n$ being divergence-free is carried forward to the new $U^{n+1}$.
 One issue is that a cell-centered approximate projection cannot remove
-all sources of divergence (see Rider and Martin's Phd thesis).
+all sources of divergence (see Rider and Martin's PhD thesis).
 
 When projecting the new velocity, we scale by $\Delta t$ to get a quantity
 that has dimensions of pressure.  The procedure for the projection
@@ -753,7 +753,7 @@ algorithm.
   \nabla \cdot (p_0^{1/\gamma}) = 0
   \end{equation}
   where $p_0(z)$ is the pressure as a function of height,
-  representating the hydrostatic background, and $\gamma$ is the ratio
+  representing the hydrostatic background, and $\gamma$ is the ratio
   of specific heats.  For a general equation of state,
   $p_0^(1/\gamma)$ is replaced with something more complicated (see
   \cite{ABRZ:I,ABRZ:II,ABNZ:III} for the development of a low Mach
