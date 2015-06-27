@@ -495,8 +495,9 @@ we can correct our initial guess:
   {\bf y}^{n+1}_1 = {\bf y}^{n+1}_0 + \Delta {\bf y}_0
 \end{equation}
 
-Written this way, we see that we can iterate, with the solution
-for the $k$-th iteration looking like:
+Written this way, we see that we can iterate.  To kick things off, we need
+a suitable guess---a good choice is ${\bf y}^{n+1}_0 = {\bf y}^n$.   Then
+we correct this guess by iterating, with the $k$-th iteration looking like:
 \begin{align}
   \left ({\bf I} - \Delta t \left . {\bf J} \right |_{k-1} \right ) \Delta {\bf y}_{k-1} &=
         {\bf y}^n - {\bf y}_{k-1}^{n+1} + \Delta t {\bf f}(t^{n+1}, {\bf y}^{n+1}_{k-1}) \\
@@ -504,16 +505,19 @@ for the $k$-th iteration looking like:
 \end{align}
 We will iterate until we find $\Delta {\bf y}_k < \epsilon \| {\bf y} \|$.
 Here $\epsilon$ is a small tolerance, and we use a suitable vector norm on ${\bf y}$
-to produce a reference scale for meaningful comparison.
+to produce a reference scale for meaningful comparison.  
+
 
 Explicit methods are easier to program and run faster (for a given $
 \Delta t$), but implicit methods work better for {\em stiff}
 problems---those characterized by widely disparate timescales over
-which the solution changes~\cite{byrnehindmarsh}\footnote{Defining whether a problem is stiff can be tricky.  For a system of ODEs, a large range in the eigenvalues of the Jacobian usually means it is stiff}.  A good example
-of this issue in astrophysical problems is with nuclear reaction
-networks (see, e.g., \cite{timmes_networks}).  As with the explicit
-case, higher-order methods exist that can provide better accuracy at
-reduced cost.
+which the solution changes~\cite{byrnehindmarsh}\footnote{Defining
+  whether a problem is stiff can be tricky.  For a system of ODEs, a
+  large range in the eigenvalues of the Jacobian usually means it is
+  stiff.}.  A good example of this issue in astrophysical problems is
+with nuclear reaction networks (see, e.g., \cite{timmes_networks}).
+As with the explicit case, higher-order methods exist that can provide
+better accuracy at reduced cost.
 
 
 
