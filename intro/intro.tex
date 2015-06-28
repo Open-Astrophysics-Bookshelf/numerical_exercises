@@ -316,7 +316,8 @@ f(x_0 + \delta x) \sim f(x_0) + f^\prime(x_0) \delta x + \ldots = 0
 \end{equation}
 Keeping only to $\mathcal{O}(\delta x)$, 
 \begin{equation}
-\delta x = -\frac{f(x_0)}{f^\prime(x_0)}
+\label{eq:intro:newtonsmethod}
+  \delta x = -\frac{f(x_0)}{f^\prime(x_0)}
 \end{equation}
 This can be used to correct out guess as $x_0 \leftarrow x_0 + \delta
 x$, and we can iterate on this procedure until $\delta x$ falls below
@@ -507,6 +508,11 @@ We will iterate until we find $\Delta {\bf y}_k < \epsilon \| {\bf y} \|$.
 Here $\epsilon$ is a small tolerance, and we use a suitable vector norm on ${\bf y}$
 to produce a reference scale for meaningful comparison.  
 
+Note that the role of the Jacobian here is the same as the first
+derivative in the scalar Newton's method for root finding
+(Eq.~\ref{eq:intro:newtonsmethod})---it points from the current guess
+to the solution.  Sometimes an approximation to the Jacobian, which is
+cheaper to evaluate, may work well enough for the method to converge.
 
 Explicit methods are easier to program and run faster (for a given $
 \Delta t$), but implicit methods work better for {\em stiff}
