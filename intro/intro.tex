@@ -504,9 +504,10 @@ we correct this guess by iterating, with the $k$-th iteration looking like:
         {\bf y}^n - {\bf y}_{k-1}^{n+1} + \Delta t {\bf f}(t^{n+1}, {\bf y}^{n+1}_{k-1}) \\
   {\bf y}^{n+1}_k &= {\bf y}^{n+1}_{k-1} + \Delta {\bf y}_{k-1}
 \end{align}
-We will iterate until we find $\Delta {\bf y}_k < \epsilon \| {\bf y} \|$.
-Here $\epsilon$ is a small tolerance, and we use a suitable vector norm on ${\bf y}$
-to produce a reference scale for meaningful comparison.  
+We will iterate until we find $\| \Delta {\bf y}_k\| < \epsilon \|
+{\bf y}^n \|$.  Here $\epsilon$ is a small tolerance, and we use ${\bf
+  y}^n$ to produce a reference scale for meaningful comparison.  Note
+that here we use a vector norm to give a single number for comparison.
 
 Note that the role of the Jacobian here is the same as the first
 derivative in the scalar Newton's method for root finding
