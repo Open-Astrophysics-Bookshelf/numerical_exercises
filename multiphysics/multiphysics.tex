@@ -71,23 +71,23 @@ process's update.  The procedure for updating appears as:
 \item {\em Evolve reaction ODE system for $\Delta t/2$}
    %
    \begin{equation}
-   \frac{d\phi^\star}{dt} = \frac{1}{\tau} R(\phi^\star), \qquad 
-   \phi^\star(0) = \phi^n
+     \text{define } \phi^\star: \, \frac{d\phi}{dt} = \frac{1}{\tau} R(\phi), \quad 
+   \phi(t^n) = \phi^n, \quad t \in [t^n, t^{n+1/2}]
    \end{equation}
 
 \item {\em Solve the diffusion equation for $\Delta t$ with an
            implicit Crank-Nicolson discretization}
    %
    \begin{equation}
-   \frac{\phi^{\star\star} - \phi^\star}{\Delta t} =
+     \frac{\phi^{\star\star} - \phi^\star}{\Delta t} =
       \frac{1}{2} (D(\phi^\star) + D(\phi^{\star\star}))
    \end{equation}
 
 \item {\em Evolve reaction ODE system for $\Delta t/2$}
    %
    \begin{equation}
-   \frac{d\phi^{n+1}}{dt} = \frac{1}{\tau} R(\phi^{n+1}), \qquad 
-   \phi^{n+1}(0) = \phi^{\star\star}
+     \text{define } \phi^{n+1}: \, \frac{d\phi}{dt} = \frac{1}{\tau} R(\phi), \quad 
+   \phi(t^{n+1/2}) = \phi^{\star\star}, \quad t \in [t^{n+1/2}, t^{n+1}]
    \end{equation}
 
 \end{enumerate}
