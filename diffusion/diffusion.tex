@@ -363,13 +363,19 @@ distributing the grid across parallel processors.
  A = \rho U \cdot \nabla e + p \nabla \cdot U
  \end{equation}
  Then the advective-diffusive part is solved implicitly.  Expressing
- $e = e(\rho, T)$, and rewriting
+ $e = e(\rho, T)$, and using the chain rule,
  \begin{equation}
- \nabla T = (\nabla e - e_\rho \nabla \rho)/e_T
+   \nabla e = e_T \nabla T + e_\rho \nabla \rho
+ \end{equation}
+ where $e_T = \partial e / \partial T |_\rho \equiv c_v$ is the
+ specific heat at constant volume and $e_\rho = \partial e / \partial
+ \rho |_T$.  Rewriting, we have:
+ \begin{equation}
+ \nabla T = (\nabla e - e_\rho \nabla \rho)/c_v
  \end{equation}
   and then
  \begin{equation}
- \rho \frac{\partial e}{\partial t} = \nabla \cdot (k/e_T) \nabla e - \nabla \cdot (k e_\rho/e_T) \nabla \rho -A + \rho S
+ \rho \frac{\partial e}{\partial t} = \nabla \cdot (k/c_v) \nabla e - \nabla \cdot (k e_\rho/c_v) \nabla \rho -A + \rho S
  \end{equation}
  This is now a diffusion equation for $e$, which can be solved by the
  techniques described above.  This is discussed, for example, in
