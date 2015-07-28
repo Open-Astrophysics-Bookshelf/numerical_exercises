@@ -1,4 +1,4 @@
-## Computational Hydrodynamics for Astrophysics
+# Computational Hydrodynamics for Astrophysics
 
 *part of the Open Astrophysics Bookshelf*
 
@@ -9,7 +9,7 @@ used with grid-based codes in astrophysical hydrodynamics.  The notes
 are written in LaTeX, and should build by typing 'make' in the main
 directory.
 
-# Chapters
+## Chapters
 
 The following chapters are mostly written:
 
@@ -38,7 +38,7 @@ The following are things hopefully will eventually get written:
 - Implicit Hydrodynamics
 
 
-# Getting PDFs and Source
+## Getting PDFs and Source
 
 A PDF version of these notes is available at:
 
