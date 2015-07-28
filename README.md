@@ -9,6 +9,10 @@ used with grid-based codes in astrophysical hydrodynamics.  The notes
 are written in LaTeX, and should build by typing 'make' in the main
 directory.
 
+Working implementations for all of the solvers are contained either in
+the main pyro code or in the set of hydro examples, both referenced
+below.
+
 ## Chapters
 
 The following chapters are mostly written:
