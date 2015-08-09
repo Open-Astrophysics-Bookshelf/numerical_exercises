@@ -83,6 +83,28 @@ following scripts are available:
      for a pair of states that comprise a Riemann problem.
   \end{itemize}
 
+\item {\tt diffusion/}
+
+  \begin{itemize}
+    \item {\tt diffusion-explicit.py}: solve the constant-diffusivity
+      diffusion equation explicitly.  The method is first-order
+      accurate in time, but second-order in space.  A Gaussian profile
+      is diffused---the analytic solution is also a Gaussian.
+
+    \item {\tt diffusion-implicit.py}: solve the constant-diffusivity
+      diffusion equation implicitly.  Crank-Nicolson time-discretization
+      is used, resulting in a second-order method.  A Gaussian profile
+      is diffused.
+
+  \end{itemize}
+  
+\item {\tt elliptic/}
+
+  \begin{itemize}
+    \item {\tt poisson\_fft.py}: an FFT solver for a 2-d Poisson problem
+    with periodic boundaries.
+  \end{itemize}
+
 \item {\tt finite-volume/}
 
   \begin{itemize}
@@ -113,21 +135,6 @@ following scripts are available:
 
   \end{itemize}
 
-\item {\tt diffusion/}
-
-  \begin{itemize}
-    \item {\tt diffusion-explicit.py}: solve the constant-diffusivity
-      diffusion equation explicitly.  The method is first-order
-      accurate in time, but second-order in space.  A Gaussian profile
-      is diffused---the analytic solution is also a Gaussian.
-
-    \item {\tt diffusion-implicit.py}: solve the constant-diffusivity
-      diffusion equation implicitly.  Crank-Nicolson time-discretization
-      is used, resulting in a second-order method.  A Gaussian profile
-      is diffused.
-
-  \end{itemize}
-  
 \item {\tt multiphysics/}
 
   \begin{itemize}
