@@ -94,10 +94,10 @@ The middle grid is also finite-difference, but now we imagine first
 dividing the domain into $N$ cells or zones, and we store the discrete
 data, $f_i$, at the center of the zone.  This is often called a {\em
   cell-centered finite-difference} grid.  The physical coordinate of
-the zone centers (where the data lives) are: $x_i = (i + 1/2)\Delta
+the zone centers (where the data lives) are: $x_i = (i + \myhalf)\Delta
 x$, where $i = 0, \ldots, N-1$.  Note that now for a finite-sized
 domain, the left edge of the first cell will be on the boundary and
-the first data value will be associated at a point $\Delta x/2$ inside
+the first data value will be associated at a point $\mydxh$ inside
 the boundary.  A similar situation arises at the right physical
 boundary.  Some finite-difference schemes stagger the variables,
 e.g., putting velocity on the boundaries and density at the center.
@@ -108,7 +108,7 @@ instead of the discrete data being associated at a single point in
 space, we draw a line to show that it is taken as the average in a
 zone.  We label it as $\langle f\rangle_i$ to indicate the average.
 We label the left and right edges of a zone with half-integer indices
-$i-1/2$ and $i+1/2$.  The physical coordinate of the center of the zone
+$i-\myhalf$ and $i+\myhalf$.  The physical coordinate of the center of the zone
 is the same as in the cell-centered finite-difference case.
 
 
