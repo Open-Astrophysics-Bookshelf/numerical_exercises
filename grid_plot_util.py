@@ -178,11 +178,11 @@ def labelCenter(gr, idx, string, fontsize="small"):
                fontsize=fontsize)
 
 
-def labelEdge(gr, idx, string):
+def labelEdge(gr, idx, string, fontsize="small"):
 
     pylab.text(gr.xl[idx], gr.voff-0.075, string,
                horizontalalignment='center', verticalalignment='top', 
-               fontsize="small")
+               fontsize=fontsize)
 
 
 def labelCellAvg(gr, idx, value, string, color="k"):
