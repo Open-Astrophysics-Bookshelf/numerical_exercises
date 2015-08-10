@@ -15,9 +15,9 @@ def simplegrid():
 
 
     # label a few
-    gpu.labelCenter(gr, ng+nzones/2, r"$i$")
-    gpu.labelCenter(gr, ng+nzones/2-1, r"$i-1$")
-    gpu.labelCenter(gr, ng+nzones/2+1, r"$i+1$")
+    gpu.labelCenter(gr, ng+nzones/2, r"$i$", fontsize="medium")
+    gpu.labelCenter(gr, ng+nzones/2-1, r"$i-1$", fontsize="medium")
+    gpu.labelCenter(gr, ng+nzones/2+1, r"$i+1$", fontsize="medium")
 
     gpu.labelCenter(gr, ng-1, r"$\mathrm{lo}-1$", fontsize="medium")
     gpu.labelCenter(gr, ng, r"$\mathrm{lo}$", fontsize="medium")
