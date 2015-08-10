@@ -1,5 +1,7 @@
 \documentclass[11pt]{book}
 
+%\def\debugmode{}
+
 % include figures
 \usepackage{epsfig,wrapfig}
 
@@ -281,8 +283,8 @@
 
 % MarginPars
 \setlength{\marginparwidth}{0.75in}
-\newcommand{\MarginPar}[1]{\marginpar{\vskip-\baselineskip\raggedright\tiny\sffamily\hrule\smallskip{\color{red}#1}\par\smallskip\hrule}}
-
+\newcommand{\aMarginPar}[1]{\marginpar{\vskip-\baselineskip\raggedright\tiny\sffamily\hrule\smallskip{\color{red}#1}\par\smallskip\hrule}}
+\newcommand{\MarginPar}[1]{\ifdefined\debugmode\aMarginPar{#1}\fi}
 
 \usepackage{eso-pic}
 \newcommand\BackgroundPic{%
