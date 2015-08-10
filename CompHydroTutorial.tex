@@ -30,7 +30,7 @@
 \usepackage[top=0.75in,
             bottom=0.75in,
             inner=0.9in,
-            outer=0.65in]{geometry} 
+            outer=0.65in]{geometry}
 \geometry{papersize={7in,10in}}
 
 % crop marks (for printing)
@@ -44,7 +44,7 @@
 %]{crop}
 
 
-% this needs to be done before the fncychap style, since that will 
+% this needs to be done before the fncychap style, since that will
 % redo the chapter stuff
 \usepackage{sectsty}
 \allsectionsfont{\sffamily}
@@ -61,8 +61,8 @@
 \ChTitleVar{\Huge\bfseries\sffamily}
 \ChRuleWidth{1pt}
 
-% part page style                                                                                  
-% see http://tex.stackexchange.com/questions/6609/problems-with-part-labels-using-titlesec         
+% part page style
+% see http://tex.stackexchange.com/questions/6609/problems-with-part-labels-using-titlesec
 \usepackage{titlesec}
 
 \titleformat{\part}[display]
@@ -104,6 +104,21 @@
 
 \newcommand{\ddx}[1]{{\frac{{\partial#1}}{\partial x}}}
 
+\usepackage{xfrac}
+%% \newcommand{\sfrac}[2]{\mathchoice
+%%   {\kern0em\raise.5ex\hbox{\the\scriptfont0 #1}\kern-.15em/
+%%    \kern-.15em\lower.25ex\hbox{\the\scriptfont0 #2}}
+%%   {\kern0em\raise.5ex\hbox{\the\scriptfont0 #1}\kern-.15em/
+%%    \kern-.15em\lower.25ex\hbox{\the\scriptfont0 #2}}
+%%   {\kern0em\raise.5ex\hbox{\the\scriptscriptfont0 #1}\kern-.2em/
+%%    \kern-.15em\lower.25ex\hbox{\the\scriptscriptfont0 #2}}
+%%   {#1\!/#2}}
+
+
+\newcommand{\myhalf}{\sfrac{1}{2}}
+\newcommand{\mythreehalf}{\sfrac{3}{2}}
+\newcommand{\mydxh}{\sfrac{\Delta x}{2}}
+\newcommand{\mydth}{\sfrac{\Delta t}{2}}
 
 
 % footer
@@ -121,7 +136,7 @@
 % don't make the chapter/section headings uppercase.  See the fancyhdr
 % documentation (section 9)
 \usepackage{fancyhdr}
-\renewcommand{\chaptermark}[1]{%  
+\renewcommand{\chaptermark}[1]{%
 \markboth{\chaptername
 \ \thechapter.\ #1}{}}
 
@@ -164,29 +179,29 @@
 
 % the [chapter] argumenet here means that we reset the numbers each chapter
 % exc is the short name we give to this new list
-\newlistof[chapter]{exercise}{exc}{\listexercisename}  
+\newlistof[chapter]{exercise}{exc}{\listexercisename}
 \usepackage{changepage}   % used to adjust the margins within the environment
 
 % environment name, with optional argument for display in the list of
 % exercises
 \newenvironment{exercise}[1][]
-{% begin code 
+{% begin code
   %
   % this indents our text from the left and right
   \begin{adjustwidth}{1.0cm}{1.0cm}
   %
-  % this skips a line before 
-  \par\vspace{\baselineskip}\noindent 
+  % this skips a line before
+  \par\vspace{\baselineskip}\noindent
   %
   % this increments our counter
   \refstepcounter{exercise}%
   %
   % this displays the exercise number and starts italics
-  \textbf{Exercise \theexercise:}\ \begin{itshape}% 
+  \textbf{Exercise \theexercise:}\ \begin{itshape}%
   %
   % this adds an entry to our custom List of Exercises
   \addcontentsline{exc}{exercise}{\protect\numberline{\theexercise} #1}
-}% 
+}%
 {% end code -- this is done at the end of the environment
   %
   % stop the italics
@@ -196,7 +211,7 @@
   \end{adjustwidth}%
   %
   % this skips a line at the end
-  \vspace{\baselineskip}\ignorespacesafterend 
+  \vspace{\baselineskip}\ignorespacesafterend
 }
 
 % this makes the List of Exercises have a line break before each chapter,
@@ -255,7 +270,7 @@
 \renewcommand\floatpagefraction{.9}
 \renewcommand\topfraction{.9}
 \renewcommand\bottomfraction{.9}
-\renewcommand\textfraction{.1}   
+\renewcommand\textfraction{.1}
 
 
 \newcommand{\hydroex}{{\sf hydro\_examples}}
@@ -264,7 +279,7 @@
 \usepackage{multirow}
 
 
-% MarginPars                                                                    
+% MarginPars
 \setlength{\marginparwidth}{0.75in}
 \newcommand{\MarginPar}[1]{\marginpar{\vskip-\baselineskip\raggedright\tiny\sffamily\hrule\smallskip{\color{red}#1}\par\smallskip\hrule}}
 
@@ -303,7 +318,7 @@ keepaspectratio]{images/cover.png}%
 }
 
 
-\pdfpageattr{/Group <</S /Transparency /I true /CS /DeviceRGB>>} 
+\pdfpageattr{/Group <</S /Transparency /I true /CS /DeviceRGB>>}
 
 \newcommand{\imag}{\mathsf{i}}
 
@@ -348,12 +363,12 @@ part of the Open Astrophysics Bookshelf}
 
 \pagestyle{plain}
 
-\null \vfill 
+\null \vfill
 
 \noindent \ccCopy\ 2013, 2014 Michael Zingale \\
 \noindent document git version: \input git_info.tex $\ldots$
 
-\noindent the source for these notes are available online (via \git): 
+\noindent the source for these notes are available online (via \git):
 \url{https://github.com/Open-Astrophysics-Bookshelf/numerical_exercises}
 
 \noindent \ccbyncsa \\
@@ -395,7 +410,7 @@ Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
 
 \pagestyle{headings}
 
-\renewcommand{\chaptermark}[1]{%  
+\renewcommand{\chaptermark}[1]{%
 \markboth{\chaptername
 \ \thechapter.\ #1}{}}
 

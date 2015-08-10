@@ -20,14 +20,14 @@ pylab.clf()
 
 gpu.drawGrid(gr)
 
-gpu.labelCenter(gr, nzones/2,   r"$i$")
-gpu.labelCenter(gr, nzones/2-1, r"$i-1$")
-gpu.labelCenter(gr, nzones/2+1, r"$i+1$")
-gpu.labelCenter(gr, nzones/2-2, r"$i-2$")
-gpu.labelCenter(gr, nzones/2+2, r"$i+2$")
+gpu.labelCenter(gr, nzones/2,   r"$i$", fontsize="medium")
+gpu.labelCenter(gr, nzones/2-1, r"$i-1$", fontsize="medium")
+gpu.labelCenter(gr, nzones/2+1, r"$i+1$", fontsize="medium")
+gpu.labelCenter(gr, nzones/2-2, r"$i-2$", fontsize="medium")
+gpu.labelCenter(gr, nzones/2+2, r"$i+2$", fontsize="medium")
 
-gpu.labelEdge(gr, nzones/2,   r"$i-1/2$")
-gpu.labelEdge(gr, nzones/2+1,   r"$i+1/2$")
+gpu.labelEdge(gr, nzones/2,   r"$i-1/2$", fontsize="small")
+gpu.labelEdge(gr, nzones/2+1,   r"$i+1/2$", fontsize="small")
 
 # draw the data
 i = 0

@@ -125,3 +125,9 @@ Chapter 7:
     
   pyro
 
+
+----
+
+reference for the choice of epsilon in numerical derivatives as
+\sqrt{machine epsilon} -- this gives some suggestions:
+http://mathoverflow.net/questions/28463/optimum-small-number-for-numerical-differentiation
