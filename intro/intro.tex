@@ -424,10 +424,14 @@ can write the ODE system describing the motion of Earth as:
 \dot{\bf x} &= {\bf v} \\
 \dot{\bf v} &= -\frac{G M {\bf r}}{r^3}
 \end{align}
+If we take the coordinate system such that the Sun is at the origin,
+then, ${\bf x} = (x, y)^\intercal$ is the position of the Earth
+and ${\bf r} = x {\bf \hat{x}} + y {\bf \hat{y}}$ is the radius 
+vector pointing from the Sun to the Earth.
 
 Integrate this system for a single orbital period with the first-order
 Euler and the RK4 method and measure the convergence by integrating at
-a number of different $\Delta t$s.  Note: you'll need to define some
+a number of different $\Delta t$'s.  Note: you'll need to define some
 measure of error, you can consider a number of different metrics, e.g.,
 the change in radius after a single orbit.
 \end{exercise}
