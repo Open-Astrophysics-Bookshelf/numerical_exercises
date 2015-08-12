@@ -417,15 +417,19 @@ fourth-order accurate overall.
 \begin{exercise}[ODE accuracy]
 Consider the orbit of Earth around the Sun.  If we work in the units
 of astronomical units, years, and solar masses, then Newton's gravitational
-constant and the solar mass together are simply $G M = 4\pi^2$.  We 
+constant and the solar mass together are simply $G M = 4\pi^2$ (this
+should look famaliar as Kepler's third law).  We 
 can write the ODE system describing the motion of Earth as:
 \begin{align}
 \dot{\bf x} &= {\bf v} \\
 \dot{\bf v} &= -\frac{G M {\bf r}}{r^3}
 \end{align}
 
-Integrate this system with the first-order Euler and the RK4 method
-and measure the convergence by integrating at a number of different $\Delta t$s.
+Integrate this system for a single orbital period with the first-order
+Euler and the RK4 method and measure the convergence by integrating at
+a number of different $\Delta t$s.  Note: you'll need to define some
+measure of error, you can consider a number of different metrics, e.g.,
+the change in radius after a single orbit.
 \end{exercise}
 
 \subsubsection{Implicit methods}
