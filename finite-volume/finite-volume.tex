@@ -97,7 +97,7 @@ data, $f_i$, at the center of the zone.  This is often called a {\em
 the zone centers (where the data lives) are: $x_i = (i + \myhalf)\Delta
 x$, where $i = 0, \ldots, N-1$.  Note that now for a finite-sized
 domain, the left edge of the first cell will be on the boundary and
-the first data value will be associated at a point $\mydxh$ inside
+the first data value will be associated at a point $\Delta x/2$ inside
 the boundary.  A similar situation arises at the right physical
 boundary.  Some finite-difference schemes stagger the variables,
 e.g., putting velocity on the boundaries and density at the center.
@@ -141,8 +141,9 @@ f_i = f(x_i)
 \section{Finite-volume grids}
 
 In the finite-volume discretization, $f_i$ represents the average of
-$f(x,t)$ over the interval $x_{i-\myhalf}$ to $x_{i+\myhalf}$, where the
-half-integer indices denote the zone edges (i.e.\ $x_{i-\myhalf} = x_i -\mydxh$):
+$f(x,t)$ over the interval $x_{i-\myhalf}$ to $x_{i+\myhalf}$, where
+the half-integer indices denote the zone edges (i.e.\ $x_{i-\myhalf} =
+x_i - \Delta x/2$):
 \begin{equation}
 \label{eq:fv_cc-a}
 \langle f\rangle_i = \frac{1}{\Delta x} \int_{x_{i-\myhalf}}^{x_{i+\myhalf}} f(x) dx
