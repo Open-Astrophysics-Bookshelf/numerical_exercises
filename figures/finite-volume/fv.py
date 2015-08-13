@@ -1,7 +1,16 @@
 import math
 import numpy
+
+import matplotlib
+# Use LaTeX for rendering
+matplotlib.rcParams["text.usetex"] = True
+# load the xfrac package
+matplotlib.rcParams["text.latex.preamble"].append(r'\usepackage{xfrac}')
+
 import pylab
 import grid_plot_util as gpu
+
+
 
 # plot a simple finite-difference grid
 
@@ -26,8 +35,8 @@ gpu.labelCenter(gr, nzones/2+1, r"$i+1$", fontsize="medium")
 gpu.labelCenter(gr, nzones/2-2, r"$i-2$", fontsize="medium")
 gpu.labelCenter(gr, nzones/2+2, r"$i+2$", fontsize="medium")
 
-gpu.labelEdge(gr, nzones/2,   r"$i-1/2$", fontsize="small")
-gpu.labelEdge(gr, nzones/2+1,   r"$i+1/2$", fontsize="small")
+gpu.labelEdge(gr, nzones/2,   r"$i-\sfrac{1}{2}$", fontsize="small")
+gpu.labelEdge(gr, nzones/2+1,   r"$i+\sfrac{1}{2}$", fontsize="small")
 
 # draw the data
 i = 0
@@ -55,5 +64,5 @@ f = pylab.gcf()
 f.set_size_inches(10.0,3.0)
 
 pylab.savefig("fv_grid.png")
-pylab.savefig("fv_grid.eps")
+pylab.savefig("fv_grid.pdf")
 
