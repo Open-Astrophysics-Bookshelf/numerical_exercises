@@ -288,19 +288,19 @@ its flux.
 \end{figure}
 
 Recall that in the finite-volume discretization, $\langle a\rangle_i$
-represents the average of $a(x,t)$ over the interval $x_{i-1/2}$ to
-$x_{i+1/2}$, where the half-integer indexes denote the zone edges
-(i.e.\ $x_{i-1/2} = x_i - \Delta x/2$).  Figure~\ref{fig:fvghost}
+represents the average of $a(x,t)$ over the interval $x_{i-\myhalf}$ to
+$x_{i+\myhalf}$, where the half-integer indexes denote the zone edges
+(i.e.\ $x_{i-\myhalf} = x_i - \Delta x/2$).  Figure~\ref{fig:fvghost}
 shows an example of such a grid with 2 ghost cells at each end.  (For
 simplicity of notation, we drop the $\langle \rangle$ going forward).
 To discretize Eq.~\ref{eq:advect-cons}, we integrate it over a zone,
-from ${x_{i-1/2}}$ to ${x_{i+1/2}}$, normalizing by the zone width,
+from ${x_{i-\myhalf}}$ to ${x_{i+\myhalf}}$, normalizing by the zone width,
 $\Delta x$:
 \begin{eqnarray}
-\frac{1}{\Delta x} \int_{x_{i-1/2}}^{x_{i+1/2}} a_t \, dx &=& 
-   - \frac{1}{\Delta x} \int_{x_{i-1/2}}^{x_{i+1/2}} \frac{\partial}{\partial x} f(a) \, dx \\
+\frac{1}{\Delta x} \int_{x_{i-\myhalf}}^{x_{i+\myhalf}} a_t \, dx &=& 
+   - \frac{1}{\Delta x} \int_{x_{i-\myhalf}}^{x_{i+\myhalf}} \frac{\partial}{\partial x} f(a) \, dx \\
 \frac{\partial}{\partial t} a_i &=& 
-   - \frac{1}{\Delta x} \left \{ \left [f(a) \right ]_{i+1/2} - \left [f(a) \right ]_{i-1/2} \right \}
+   - \frac{1}{\Delta x} \left \{ \left [f(a) \right ]_{i+\myhalf} - \left [f(a) \right ]_{i-\myhalf} \right \}
 \end{eqnarray}
 This is an evolution equation for the zone-average of $a$, and shows
 that it updates in time based on the fluxes through the boundary of
@@ -308,27 +308,27 @@ the zone.  We discretize in time by evaluating the righthand side at
 the midpoint in time---this gives a centered difference in time, which
 is second-order accurate:
 \begin{equation}
-\frac{a_i^{n+1} - a_i^n}{\Delta t} = -\frac{\left [f(a) \right ]_{i+1/2}^{n+1/2} - \left [f(a) \right ]_{i-1/2}^{n+1/2}}{\Delta x}
+\frac{a_i^{n+1} - a_i^n}{\Delta t} = -\frac{\left [f(a) \right ]_{i+\myhalf}^{n+\myhalf} - \left [f(a) \right ]_{i-\myhalf}^{n+\myhalf}}{\Delta x}
 \label{eq:consupdate1d}
 \end{equation}
 To evaluate the fluxes at the half-time, we need the state at the
 half-time, that is, we do :
 \begin{equation}
-\left [f(a) \right ]_{i+1/2}^{n+1/2} = f(a_{i+1/2}^{n+1/2}) \enskip .
+\left [f(a) \right ]_{i+\myhalf}^{n+\myhalf} = f(a_{i+\myhalf}^{n+\myhalf}) \enskip .
 \end{equation}
 We construct a second-order accurate approximation to
-$a_{i+1/2}^{n+1/2}$ by Taylor expanding the data in the cell to the
+$a_{i+\myhalf}^{n+\myhalf}$ by Taylor expanding the data in the cell to the
 interface.  Note that for each interface, there are two possible
 interface states we can construct---one using the data to the left of
 the interface (which we will denote with a ``L'' subscript) and the
 other using the data to the right of the interface (denoted with an
 ``R'' subscript)---see Figure~\ref{fig:riemann_adv}.  These states are:
 \begin{eqnarray}
-a_{i+1/2,L}^{n+1/2} &=& a_i^n + \frac{\Delta x}{2} \left .\frac{\partial a}{\partial x} \right |_i + \frac{\Delta t}{2} \left .\frac{\partial a}{\partial t} \right |_i + \mathcal{O}(\Delta x^2) + \mathcal{O}(\Delta t^2) \nonumber \\
+a_{i+\myhalf,L}^{n+\myhalf} &=& a_i^n + \frac{\Delta x}{2} \left .\frac{\partial a}{\partial x} \right |_i + \frac{\Delta t}{2} \left .\frac{\partial a}{\partial t} \right |_i + \mathcal{O}(\Delta x^2) + \mathcal{O}(\Delta t^2) \nonumber \\
     &=& a_i^n + \frac{\Delta x}{2} \left .\frac{\partial a}{\partial x} \right |_i +  \frac{\Delta t}{2} \left ( - u \left .\frac{\partial a}{\partial x} \right |_i \right ) + \ldots \nonumber \\
     &=& a_i^n + \frac{\Delta x}{2} \left ( 1 - \frac{\Delta t}{\Delta x} u \right ) \left .\frac{\partial a}{\partial x} \right |_i +  \ldots \label{eq:statel}\\
 %%
-a_{i+1/2,R}^{n+1/2} &=& a_{i+1}^n - \frac{\Delta x}{2} \left .\frac{\partial a}{\partial x} \right |_{i+1} + \frac{\Delta t}{2} \left .\frac{\partial a}{\partial t} \right |_{i+1} + \mathcal{O}(\Delta x^2) + \mathcal{O}(\Delta t^2) \nonumber \\
+a_{i+\myhalf,R}^{n+\myhalf} &=& a_{i+1}^n - \frac{\Delta x}{2} \left .\frac{\partial a}{\partial x} \right |_{i+1} + \frac{\Delta t}{2} \left .\frac{\partial a}{\partial t} \right |_{i+1} + \mathcal{O}(\Delta x^2) + \mathcal{O}(\Delta t^2) \nonumber \\
     &=& a_{i+1}^n - \frac{\Delta x}{2} \left .\frac{\partial a}{\partial x} \right |_{i+1} +  \frac{\Delta t}{2} \left ( - u \left .\frac{\partial a}{\partial x} \right |_{i+1} \right ) + \ldots \nonumber \\
     &=& a_{i+1}^n - \frac{\Delta x}{2} \left ( 1 + \frac{\Delta t}{\Delta x} u \right ) \left .\frac{\partial a}{\partial x} \right |_{i+1} +  \ldots \label{eq:stater}
 \end{eqnarray}
@@ -337,9 +337,9 @@ a_{i+1/2,R}^{n+1/2} &=& a_{i+1}^n - \frac{\Delta x}{2} \left .\frac{\partial a}{
 \centering
 \includegraphics[width=5.0in]{riemann}
 \caption[The input state to the Riemann problem]{\label{fig:riemann_adv} The left and right interface state at the
-  $i+1/2$ interface.  Here, the left state, $a_{i+1/2,L}^{n+1/2}$, was
+  $i+\myhalf$ interface.  Here, the left state, $a_{i+\myhalf,L}^{n+\myhalf}$, was
   predicted to the interface from the zone to the left of the
-  interface, using $a_i$, and the right state, $a_{i+1/2,R}^{n+1/2}$,
+  interface, using $a_i$, and the right state, $a_{i+\myhalf,R}^{n+\myhalf}$,
   was predicted to the interface from the zone to the right, using
   $a_{i+1}$.}
 \end{figure}
@@ -355,20 +355,20 @@ We can think of this method as reconstructing the function form of the
 data from the cell-average data in each cell using  a piecewise linear
 polynomial. 
 
-We now have two states, $a_{i+1/2,L}^{n+1/2}$ and
-$a_{i+1/2,R}^{n+1/2}$ separated by an interface---this is called the
+We now have two states, $a_{i+\myhalf,L}^{n+\myhalf}$ and
+$a_{i+\myhalf,R}^{n+\myhalf}$ separated by an interface---this is called the
 {\em Riemann problem}.
 %
 The solution to this will depend on the equation being solved, and
 results in a single state at the interface:
 \begin{equation}
-a_{i+1/2}^{n+1/2} = \mathcal{R}(a_{i+1/2,L}^{n+1/2},a_{i+1/2,R}^{n+1/2})
+a_{i+\myhalf}^{n+\myhalf} = \mathcal{R}(a_{i+\myhalf,L}^{n+\myhalf},a_{i+\myhalf,R}^{n+\myhalf})
 \end{equation}
 In our case, the advection equation simply propagates the state to the
 right (for $u > 0$), so the solution to the Riemann problem is to take
 the left state (this is another example of upwinding).  That is we do:
 \begin{equation}
-\mathcal{R}(a_{i+1/2,L}^{n+1/2},a_{i+1/2,R}^{n+1/2}) = \left \{ \begin{array}{ccc} a_{i+1/2,L}^{n+1/2} & u > 0 \\[2mm] a_{i+1/2,R}^{n+1/2} & u < 0 \end{array} \right .
+\mathcal{R}(a_{i+\myhalf,L}^{n+\myhalf},a_{i+\myhalf,R}^{n+\myhalf}) = \left \{ \begin{array}{ccc} a_{i+\myhalf,L}^{n+\myhalf} & u > 0 \\[2mm] a_{i+\myhalf,R}^{n+\myhalf} & u < 0 \end{array} \right .
 \label{eq:riemannsolve}
 \end{equation}
 To complete the update, we use this interface state to evaluate the flux
@@ -377,9 +377,9 @@ and update the advected quantity via Eq.~\ref{eq:consupdate1d}.
 Boundary conditions are implemented by filling the ghost cells outside
 each end of the domain based on data in the interior.  Note that at
 the very left edge of the domain, the state
-$a^{n+1/2}_{\mathrm{lo}-1/2}$ requires the construction of states on
+$a^{n+\myhalf}_{\mathrm{lo}-\myhalf}$ requires the construction of states on
 the left and right.  The left state at that interface,
-$a^{n+1/2}_{\mathrm{lo}-1/2,L}$ depends on the slope reconstructed in
+$a^{n+\myhalf}_{\mathrm{lo}-\myhalf,L}$ depends on the slope reconstructed in
 the $\mathrm{lo}-1$ ghost cell, $\partial a/\partial x
 |_{\mathrm{lo}-1}$.  This in turn is constructed using a limited
 center-difference that will consider the value in the cell to the
@@ -395,10 +395,10 @@ cells.
 \caption[Reconstruction at the domain boundary]
 {\label{fig:advect_ghost} Reconstruction near the boundary, showing
 the need for two ghostcells.  Here we see the left and right state at the
-left physical boundary of the domain (marked as $\mathrm{lo}-1/2$).  The
+left physical boundary of the domain (marked as $\mathrm{lo}-\myhalf$).  The
 gray dotted lines are the piecewise constant cell averages and the red lines
 are the reconstructed slopes.  Note that we need the slope in $\mathrm{lo}-1$
-to get the left interface state at $\mathrm{lo}-1/2$, and that slope in turn
+to get the left interface state at $\mathrm{lo}-\myhalf$, and that slope in turn
 needed the data in zone $\mathrm{lo}-2$ to construct a centered-difference.}
 \end{figure}
 
@@ -585,15 +585,15 @@ evolve, and average (R-E-A) process (see Figure~\ref{fig:rea}).
 We can write the conservative update as:
 \begin{eqnarray}
 a_i^{n+1} &=& a_i^n + \frac{\Delta t}{\Delta x} 
-    (u a^{n+1/2}_{i-1/2} - u a^{n+1/2}_{i+1/2} ) \\
-          &=& a_i^n + C (a^{n+1/2}_{i-1/2} - a^{n+1/2}_{i+1/2} ) 
+    (u a^{n+\myhalf}_{i-\myhalf} - u a^{n+\myhalf}_{i+\myhalf} ) \\
+          &=& a_i^n + C (a^{n+\myhalf}_{i-\myhalf} - a^{n+\myhalf}_{i+\myhalf} ) 
 \end{eqnarray}
 If we take $u > 0$, then the Riemann problem will always choose the
 left state, so we can write this as:
 \begin{equation}
 a_i^{n+1} = a_i^n + 
-     C \biggl [\underbrace{\left (a_{i-1}^n + \frac{1}{2} (1-C) \Delta a_{i-1} \right )}_{a_{i-1/2,L}} -
-              \underbrace{\left (a_{i}^n + \frac{1}{2} (1-C) \Delta a_{i} \right )}_{a_{i+1/2,L}}
+     C \biggl [\underbrace{\left (a_{i-1}^n + \frac{1}{2} (1-C) \Delta a_{i-1} \right )}_{a_{i-\myhalf,L}} -
+              \underbrace{\left (a_{i}^n + \frac{1}{2} (1-C) \Delta a_{i} \right )}_{a_{i+\myhalf,L}}
        \biggr ] \label{eq:rea_orig}
 \end{equation}
 
@@ -604,7 +604,7 @@ a_i(x) = a_i + \frac{\Delta a_i}{\Delta x} (x - x_i)
 \end{equation}
 Consider zone $i$.  
 If we are advecting with a CFL number $C$, then that means that the fraction
-$C$ of the zone immediately to the left of the $i-1/2$ interface will advect
+$C$ of the zone immediately to the left of the $i-\myhalf$ interface will advect
 into zone $i$ over the timestep.  And only the fraction $1-C$ in zone $i$
 immediately to the right of the interface will stay in that zone.  This 
 is indicated by the shaded regions in Figure~\ref{fig:rea}. 
@@ -613,10 +613,10 @@ The average of the quantity $a$ from zone $i-1$ that will advect into
 zone $i$ is 
 \begin{eqnarray}
 \mathcal{I}_< &=& \frac{1}{C \Delta x} 
-   \int_{x_{i-1/2} - C\Delta x}^{x_{i-1/2}} a_{i-1}(x) dx \\
+   \int_{x_{i-\myhalf} - C\Delta x}^{x_{i-\myhalf}} a_{i-1}(x) dx \\
 %
  &=& \frac{1}{C \Delta x} 
-   \int_{x_{i-1/2} - C\Delta x}^{x_{i-1/2}}
+   \int_{x_{i-\myhalf} - C\Delta x}^{x_{i-\myhalf}}
         \left [ a_{i-1} + \frac{\Delta a_{i-1}}{\Delta x} (x - x_{i-1} ) \right ] dx  \\
  &=& a_{i-1} + \frac{1}{2} \Delta a_{i-1} (1-C)
 \end{eqnarray}
@@ -625,10 +625,10 @@ And the average of the quantity $a$ in zone $i$ that will remain in zone $i$
 is
 \begin{eqnarray}
 \mathcal{I}_> &=& \frac{1}{(1-C) \Delta x} 
-   \int_{x_{i-1/2}}^{x_{i-1/2} + (1-C) \Delta x} a_{i}(x) dx \\
+   \int_{x_{i-\myhalf}}^{x_{i-\myhalf} + (1-C) \Delta x} a_{i}(x) dx \\
 %
  &=& \frac{1}{(1-C) \Delta x} 
-   \int_{x_{i-1/2}}^{x_{i-1/2} + (1-C)\Delta x} 
+   \int_{x_{i-\myhalf}}^{x_{i-\myhalf} + (1-C)\Delta x} 
         \left [ a_{i} + \frac{\Delta a_{i}}{\Delta x} (x - x_{i} ) \right ] dx  \\
  &=& a_{i} - \frac{1}{2} \Delta a_{i} C
 \end{eqnarray}
@@ -681,7 +681,7 @@ taking the norm of error as:
 \epsilon^\mathrm{abs} = \| a^\mathrm{final} - a^\mathrm{init} \|_2 \equiv
    \left [ \frac{1}{N} \sum_{i=1}^N 
    ( a_i^\mathrm{final} - a_i^\mathrm{init} )^2
-  \right ]^{1/2}
+  \right ]^{\myhalf}
 \end{equation}
 It is sometimes useful to compare to the norm of the original solution
 to get a measure of the relative error:
@@ -752,61 +752,61 @@ define the average of $a$ in a zone by integrating it over the
 volume:
 \begin{equation}
 a_{i,j} = \frac{1}{\Delta x \Delta y} 
-   \int_{x_{i-1/2}}^{x_{i+1/2}} \int_{y_{j-1/2}}^{y_{j+1/2}} 
+   \int_{x_{i-\myhalf}}^{x_{i+\myhalf}} \int_{y_{j-\myhalf}}^{y_{j+\myhalf}} 
    a(x,y,t) \, dx \, dy
 \end{equation}
 Integrating Eq.~\ref{eq:advect2d-cons} over $x$ and $y$, we have:
 \begin{align}
 \frac{1}{\Delta x \Delta y} 
-  \int_{x_{i-1/2}}^{x_{i+1/2}} 
-  \int_{y_{j-1/2}}^{y_{j+1/2}} a_t \, dx \, dy =  
+  \int_{x_{i-\myhalf}}^{x_{i+\myhalf}} 
+  \int_{y_{j-\myhalf}}^{y_{j+\myhalf}} a_t \, dx \, dy =  
   &- \frac{1}{\Delta x \Delta y}
-       \int_{x_{i-1/2}}^{x_{i+1/2}} \int_{y_{j-1/2}}^{y_{j+1/2}}
+       \int_{x_{i-\myhalf}}^{x_{i+\myhalf}} \int_{y_{j-\myhalf}}^{y_{j+\myhalf}}
       (u a)_x \, dx \, dy \nonumber \\
   &- \frac{1}{\Delta x \Delta y}
-       \int_{x_{i-1/2}}^{x_{i+1/2}} \int_{y_{j-1/2}}^{y_{j+1/2}}
+       \int_{x_{i-\myhalf}}^{x_{i+\myhalf}} \int_{y_{j-\myhalf}}^{y_{j+\myhalf}}
       (v a)_y \, dx \, dy 
 \end{align}
 or using the divergence theorem,
 \begin{align}
  \frac{\partial a_{i,j}}{\partial t} =
-  &- \frac{1}{\Delta x\Delta y} \int_{y_{j-1/2}}^{y_{j+1/2}}
-     \left \{ (u a)_{i+1/2,j} - (u a)_{i-1/2,j} \right \} dy \nonumber \\
-  &- \frac{1}{\Delta x\Delta y} \int_{x_{i-1/2}}^{x_{i+1/2}}
-     \left \{ (v a)_{i,j+1/2} - (v a)_{i,j-1/2} \right \} dx
+  &- \frac{1}{\Delta x\Delta y} \int_{y_{j-\myhalf}}^{y_{j+\myhalf}}
+     \left \{ (u a)_{i+\myhalf,j} - (u a)_{i-\myhalf,j} \right \} dy \nonumber \\
+  &- \frac{1}{\Delta x\Delta y} \int_{x_{i-\myhalf}}^{x_{i+\myhalf}}
+     \left \{ (v a)_{i,j+\myhalf} - (v a)_{i,j-\myhalf} \right \} dx
 \end{align}
 
 Now we integrate over time---the left side of our expression becomes
 just the different between the new and old state.
 \begin{align}
  a_{i,j}^{n+1} - a_{i,j}^n = 
-  &- \frac{1}{\Delta x\Delta y} \int_{t^n}^{t^{n+1}} \int_{y_{j-1/2}}^{y_{j+1/2}}
-     \left \{ (u a)_{i+1/2,j} - (u a)_{i-1/2,j} \right \} dy dt \nonumber \\
-  &- \frac{1}{\Delta x\Delta y} \int_{t^n}^{t^{n+1}} \int_{x_{i-1/2}}^{x_{i+1/2}}
-     \left \{ (v a)_{i,j+1/2} - (v a)_{i,j-1/2} \right \} dx dt
+  &- \frac{1}{\Delta x\Delta y} \int_{t^n}^{t^{n+1}} \int_{y_{j-\myhalf}}^{y_{j+\myhalf}}
+     \left \{ (u a)_{i+\myhalf,j} - (u a)_{i-\myhalf,j} \right \} dy dt \nonumber \\
+  &- \frac{1}{\Delta x\Delta y} \int_{t^n}^{t^{n+1}} \int_{x_{i-\myhalf}}^{x_{i+\myhalf}}
+     \left \{ (v a)_{i,j+\myhalf} - (v a)_{i,j-\myhalf} \right \} dx dt
 \label{eq:update2du}
 \end{align}
 We define the flux through the interface as the average over the face
 of that interface and time:
 \begin{align}
-(ua)_{i+1/2,j} &= \frac{1}{\Delta y \Delta t}
-    \int_{t^n}^{t^{n+1}} \int_{y_{j-1/2}}^{y_{j+1/2}} (ua)_{i+1/2,j} dy dt  \\
-(va)_{i,j+1/2} &= \frac{1}{\Delta x \Delta t}
-    \int_{t^n}^{t^{n+1}} \int_{x_{i-1/2}}^{x_{i+1/2}} (va)_{i,j+1/2} dx dt 
+(ua)_{i+\myhalf,j} &= \frac{1}{\Delta y \Delta t}
+    \int_{t^n}^{t^{n+1}} \int_{y_{j-\myhalf}}^{y_{j+\myhalf}} (ua)_{i+\myhalf,j} dy dt  \\
+(va)_{i,j+\myhalf} &= \frac{1}{\Delta x \Delta t}
+    \int_{t^n}^{t^{n+1}} \int_{x_{i-\myhalf}}^{x_{i+\myhalf}} (va)_{i,j+\myhalf} dx dt 
 \end{align}
 For a second-order accurate method in time, we replace the integration in
 time with the flux at the midpoint in time, and in space, we replace
 the integration with the center of the interface.  Then we have:
 \begin{equation}
 a_{i,j}^{n+1} = a_{i,j}^n - 
-   \frac{(ua)_{i+1/2,j}^{n+1/2} - (ua)_{i-1/2,j}^{n+1/2}}{\Delta x} -
-   \frac{(va)_{i,j+1/2}^{n+1/2} - (va)_{i,j-1/2}^{n+1/2}}{\Delta y}
+   \frac{(ua)_{i+\myhalf,j}^{n+\myhalf} - (ua)_{i-\myhalf,j}^{n+\myhalf}}{\Delta x} -
+   \frac{(va)_{i,j+\myhalf}^{n+\myhalf} - (va)_{i,j-\myhalf}^{n+\myhalf}}{\Delta y}
 \end{equation}
 
 For the advection problem, since $u$ and $v$ are constant, we need
 to find the interface states of $a$ alone.
 There are two methods for computing these interface states, 
-$a_{i\pm1/2,j}^{n+1/2}$ on $x$-interfaces and  $a_{i,j\pm1/2}^{n+1/2}$ on $y$-interfaces:
+$a_{i\pm\myhalf,j}^{n+\myhalf}$ on $x$-interfaces and  $a_{i,j\pm\myhalf}^{n+\myhalf}$ on $y$-interfaces:
 dimensionally split and unsplit.  Dimensionally split methods are
 easier to code, since each dimension is operated on independent of the
 others, so you can simply call a one-dimensional method for each
@@ -823,13 +823,13 @@ the order of the dimensional updates each timestep.  An update through
 $\Delta t$ consists of $x$ and $y$ sweeps and appears as:
 \begin{eqnarray}
  \frac{a_{i,j}^\star - a_{i,j}^n}{\Delta t} &=&
-  - \frac{ u a_{i+1/2,j}^{n+1/2} - u a_{i-1/2,j}^{n+1/2} }{\Delta x} \label{eq:splitx}\\
+  - \frac{ u a_{i+\myhalf,j}^{n+\myhalf} - u a_{i-\myhalf,j}^{n+\myhalf} }{\Delta x} \label{eq:splitx}\\
  \frac{a_{i,j}^{n+1} - a_{i,j}^\star}{\Delta t} &=&
-  - \frac{ v a_{i,j+1/2}^{\star,n+1/2} - v a_{i,j-1/2}^{\star,n+1/2} }{\Delta y} \label{eq:splity}
+  - \frac{ v a_{i,j+\myhalf}^{\star,n+\myhalf} - v a_{i,j-\myhalf}^{\star,n+\myhalf} }{\Delta y} \label{eq:splity}
 \end{eqnarray}
 Here, Eq.~\ref{eq:splitx} is the update in the $x$-direction.  In
-constructing the interface states, $a_{i+1/2,j}^{n+1/2}$ and
-$a_{i-1/2,j}^{n+1/2}$, we do the exact same procedure as the
+constructing the interface states, $a_{i+\myhalf,j}^{n+\myhalf}$ and
+$a_{i-\myhalf,j}^{n+\myhalf}$, we do the exact same procedure as the
 one-dimensional case, constructing the left and right states at each
 interface and then solving the same Riemann problem to find the unique
 state on the interface.  Each dimensional sweep is done without
@@ -846,9 +846,9 @@ a_t + v a_y = 0
 
 The construction of the interface states largely mimics the one-dimensional
 case (Eq.~\ref{eq:statel} and \ref{eq:stater}).  For example, the
-$a_{i+1/2,j,L}^{n+1/2}$ state is:
+$a_{i+\myhalf,j,L}^{n+\myhalf}$ state is:
 \begin{eqnarray}
-a_{i+1/2,j,L}^{n+1/2} &=& a_{i,j}^n + 
+a_{i+\myhalf,j,L}^{n+\myhalf} &=& a_{i,j}^n + 
   \frac{\Delta x}{2} \left .\frac{\partial a}{\partial x} \right |_{i,j} + 
   \frac{\Delta t}{2} \left .\frac{\partial a}{\partial t} \right |_{i,j} + 
   \mathcal{O}(\Delta x^2) + \mathcal{O}(\Delta t^2) \nonumber \\
@@ -890,9 +890,9 @@ update is done per timestep, with all directions updating
 simultaneously.  See \cite{colella:1990} for more details.  This idea
 is sometimes called the ``corner transport upwind'' or CTU method.
 
-The construction of the $a_{i+1/2,j,L}^{n+1/2}$ interface state appears as
+The construction of the $a_{i+\myhalf,j,L}^{n+\myhalf}$ interface state appears as
 \begin{eqnarray}
-a_{i+1/2,j,L}^{n+1/2} &=& a_{i,j}^n + 
+a_{i+\myhalf,j,L}^{n+\myhalf} &=& a_{i,j}^n + 
   \frac{\Delta x}{2} \left .\frac{\partial a}{\partial x} \right |_{i,j} + 
   \frac{\Delta t}{2} \left .\frac{\partial a}{\partial t} \right |_{i,j} + 
   \mathcal{O}(\Delta x^2) + \mathcal{O}(\Delta t^2) \nonumber \\
@@ -912,14 +912,14 @@ The main difference between the split and unsplit interface states is the
 explicitly appearance of the ``transverse flux difference'' in the unsplit
 interface state.  We rewrite this as:
 \begin{equation}
-a_{i+1/2,j,L}^{n+1/2} = \hat{a}_{i+1/2,j,L}^{n+1/2} 
+a_{i+\myhalf,j,L}^{n+\myhalf} = \hat{a}_{i+\myhalf,j,L}^{n+\myhalf} 
    - \frac{\Delta t}{2} v \left .\frac{\partial a}{\partial y} \right |_{i,j}
 \end{equation}
-Here, the $\hat{a}_{i+1/2,j,L}^{n+1/2}$ term is just the normal
+Here, the $\hat{a}_{i+\myhalf,j,L}^{n+\myhalf}$ term is just the normal
 prediction without considering the transverse direction.  The basic
 update procedure is:
 \begin{itemize}
-\item Construct the normal predictor term, $\hat{a}_{i+1/2,j,L}^{n+1/2}$,
+\item Construct the normal predictor term, $\hat{a}_{i+\myhalf,j,L}^{n+\myhalf}$,
 in a fashion identical to the one-dimensional and split method.  We
 compute these one-dimensional $\hat{a}$'s at the left and right every
 interface in both coordinate directions.  Note that these states are
@@ -928,10 +928,10 @@ transverse direction in their computation.
 
 \item Solve a Riemann problem at each of these interfaces:
 \begin{eqnarray}
-a^T_{i+1/2,j} &=& \mathcal{R}(\hat{a}_{i+1/2,j,L}^{n+1/2},
-                              \hat{a}_{i+1/2,j,R}^{n+1/2}) \\
-a^T_{i,j+1/2} &=& \mathcal{R}(\hat{a}_{i,j+1/2,L}^{n+1/2},
-                              \hat{a}_{i,j+1/2,R}^{n+1/2}) \\
+a^T_{i+\myhalf,j} &=& \mathcal{R}(\hat{a}_{i+\myhalf,j,L}^{n+\myhalf},
+                              \hat{a}_{i+\myhalf,j,R}^{n+\myhalf}) \\
+a^T_{i,j+\myhalf} &=& \mathcal{R}(\hat{a}_{i,j+\myhalf,L}^{n+\myhalf},
+                              \hat{a}_{i,j+\myhalf,R}^{n+\myhalf}) \\
 \end{eqnarray}
 These states are given the `$^T$' superscript since they are the states
 that are used in computing the transverse flux difference.  
@@ -940,8 +940,8 @@ that are used in computing the transverse flux difference.
 previously computed normal interface states (the $\hat{a}$'s) with
 the transverse flux difference:
 \begin{equation}
-a_{i+1/2,j,L}^{n+1/2} = \hat{a}_{i+1/2,j,L}^{n+1/2} 
-   - \frac{\Delta t}{2} v \frac{a^T_{i,j+1/2} - a^T_{i,j-1/2}}{\Delta y}
+a_{i+\myhalf,j,L}^{n+\myhalf} = \hat{a}_{i+\myhalf,j,L}^{n+\myhalf} 
+   - \frac{\Delta t}{2} v \frac{a^T_{i,j+\myhalf} - a^T_{i,j-\myhalf}}{\Delta y}
 \end{equation}
 A similar procedure happens at the $y$-interfaces.  Notice that the
 fluxes that are differenced for the left state are those that are
@@ -949,13 +949,13 @@ transverse, but to the left of the interface.  Similarly, for the
 right state, it would be those that are transverse, but to the right
 of the interface:
 \begin{equation}
-a_{i+1/2,j,R}^{n+1/2} = \hat{a}_{i+1/2,j,R}^{n+1/2} 
-   - \frac{\Delta t}{2} v \frac{a^T_{i+1,j+1/2} - a^T_{i+1,j-1/2}}{\Delta y}
+a_{i+\myhalf,j,R}^{n+\myhalf} = \hat{a}_{i+\myhalf,j,R}^{n+\myhalf} 
+   - \frac{\Delta t}{2} v \frac{a^T_{i+1,j+\myhalf} - a^T_{i+1,j-\myhalf}}{\Delta y}
 \end{equation}
 \end{itemize}
 
 Figure~\ref{fig:unsplitstates} illustrates the steps involved in
-the construction of the $a_{i+1/2,j,L}^{n+1/2}$ state.
+the construction of the $a_{i+\myhalf,j,L}^{n+\myhalf}$ state.
 %
 % this is created by figures/advection/2dgrid-hat.py
 % and                                  2dgrid-transverse.py
@@ -965,13 +965,13 @@ the construction of the $a_{i+1/2,j,L}^{n+1/2}$ state.
 \includegraphics[width=0.7\linewidth]{2dgrid-transverse}
 \caption[The construction of an interface state with the transverse
   component]{\label{fig:unsplitstates} The construction of the
-  $a_{i+1/2,j,L}^{n+1/2}$ state.  Top: first we compute the
+  $a_{i+\myhalf,j,L}^{n+\myhalf}$ state.  Top: first we compute the
   $\hat{a}$'s---here we show all of the $\hat{a}$'s that will be used
-  in computing the full left interface state at $(i+1/2,j)$.  Bottom:
+  in computing the full left interface state at $(i+\myhalf,j)$.  Bottom:
   after the transverse Riemann solves, we have the two transverse
-  states ($a^T_{i,j+1/2}$ and $a^T_{i,j-1/2}$) that will be
-  differenced and used to correct $\hat{a}_{i+1/2,j,L}^{n+1/2}$
-  (illustrated by the dotted lines) to make $a_{i+1/2,j,L}^{n+1/2}$.}
+  states ($a^T_{i,j+\myhalf}$ and $a^T_{i,j-\myhalf}$) that will be
+  differenced and used to correct $\hat{a}_{i+\myhalf,j,L}^{n+\myhalf}$
+  (illustrated by the dotted lines) to make $a_{i+\myhalf,j,L}^{n+\myhalf}$.}
 \end{figure}
 
 Once all of the full states (normal prediction $+$ transverse flux
@@ -979,8 +979,8 @@ difference) are computed to the left and right of all the interfaces
 ($x$ and $y$), we solve another Riemann problem to find the final 
 state on each interface.
 \begin{equation}
-a_{i+1/2,j}^{n+1/2} = \mathcal{R}(a_{i+1/2,j,L}^{n+1/2},
-                                  a_{i+1/2,j,R}^{n+1/2}) \\
+a_{i+\myhalf,j}^{n+\myhalf} = \mathcal{R}(a_{i+\myhalf,j,L}^{n+\myhalf},
+                                  a_{i+\myhalf,j,R}^{n+\myhalf}) \\
 \end{equation}
 The final conservative update is then done via Eq.~\ref{eq:update2du}.
 
@@ -1018,7 +1018,7 @@ See \cite{colella:1990} for more details on this unsplit method.
   \end{equation}
   The solution procedure is largely the same as described above.  We write:
 \begin{align}
-\phi_{i+1/2,j,L}^{n+1/2} &= \phi_{i,j}^n + 
+\phi_{i+\myhalf,j,L}^{n+\myhalf} &= \phi_{i,j}^n + 
    \frac{\Delta x}{2} \frac{\partial \phi}{\partial x} +
    \frac{\Delta t}{2} \frac{\partial \phi}{\partial t} + \ldots \nonumber \\
 %
@@ -1028,7 +1028,7 @@ See \cite{colella:1990} for more details on this unsplit method.
 %
  &= \underbrace{\phi_{i,j}^n + 
    \frac{\Delta x}{2} \left ( 1 - \frac{\Delta t}{\Delta x} u_{i,j} \right )
-        \frac{\partial \phi}{\partial x}}_{\hat{\phi}_{i+1/2,j,L}^{n+1/2}}
+        \frac{\partial \phi}{\partial x}}_{\hat{\phi}_{i+\myhalf,j,L}^{n+\myhalf}}
    - \frac{\Delta t}{2} \left [\phi u_x \right ]_{i,j} 
    - \frac{\Delta t}{2} \left [ (\phi v)_y \right ]_{i,j}
 \end{align}
