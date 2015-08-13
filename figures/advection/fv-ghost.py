@@ -1,5 +1,12 @@
 import math
 import numpy
+
+import matplotlib
+# Use LaTeX for rendering
+matplotlib.rcParams["text.usetex"] = True
+# load the xfrac package
+matplotlib.rcParams["text.latex.preamble"].append(r'\usepackage{xfrac}')
+
 import pylab
 import grid_plot_util as gpu
 
@@ -34,8 +41,8 @@ gpu.labelCenter(gr, gr.ihi, r"$\mathrm{hi}$")
 gpu.labelCenter(gr, gr.ihi+1, r"$\mathrm{hi+1}$")
 gpu.labelCenter(gr, gr.ihi+2, r"$\mathrm{hi+2}$")
 
-gpu.labelEdge(gr, ng+nzones/2,   r"$i-1/2$")
-gpu.labelEdge(gr, ng+nzones/2+1,   r"$i+1/2$")
+gpu.labelEdge(gr, ng+nzones/2,   r"$i-\sfrac{1}{2}$")
+gpu.labelEdge(gr, ng+nzones/2+1,   r"$i+\sfrac{1}{2}$")
 
 # draw the data
 i = 0
@@ -63,5 +70,5 @@ f = pylab.gcf()
 f.set_size_inches(10.0,2.5)
 
 pylab.savefig("fv_ghost.png")
-pylab.savefig("fv_ghost.eps")
+pylab.savefig("fv_ghost.pdf")
 
