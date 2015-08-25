@@ -301,14 +301,32 @@ U_{i+1/2,L}^{n+1/2} = U(q_{i+1/2,L}^{n+1/2})
   computed by the Riemann solver using these states as input.}
 \end{figure}
 
-Constructing these interface states requires reconstructing the
-cell-average data with a piecewise constant, linear, or parabolic
-polynomial and doing characteristic tracing to see how much of each
-characteristic quantity comes to the interface over the timestep.  The
-jump in the primitive variables is projected into the characteristic
-variables, and only jumps moving toward the interface are included in
-our reconstruction.  We look at several methods below that build off
-of these ideas below.
+As we saw with linear advection in \S~\ref{ch:adv:sndorder}, 
+at the start of a timestep, each zones contains cell-averages.
+Consider a cell average quantity, $q_i$.  
+Constructing the interface states requires reconstructing the
+cell-average data as a continuous function, $q(x)$, defined for 
+each cell.  This polynomial is only {\em piecewise} continuous, since
+each cell has its own $q(x)$.  Standard choices are piecewise constant, 
+\begin{equation}
+q(x) = q_i
+\end{equation}
+piecewise linear, 
+\begin{equation}
+q(x) = q_i + \frac{\Delta q_i}{\Delta x}(x - x_i)
+\end{equation}
+or piecewise parabolic,
+\begin{equation}
+q(x) = \alpha (x - x_i)^2 + \beta (x - x_i) + \gamma
+\end{equation}
+where in each case, the average of $q(x)$ over the cell gives $q_i$.
+
+Characteristic tracing is then done under this polynomial to see how
+much of each characteristic quantity comes to the interface over the
+timestep.  The jump in the primitive variables is projected into the
+characteristic variables, and only jumps moving toward the interface
+are included in our reconstruction.  We look at several methods below
+that build off of these ideas below.
 
 \subsection{Piecewise constant}
 
