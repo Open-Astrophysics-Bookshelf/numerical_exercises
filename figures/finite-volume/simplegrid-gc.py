@@ -1,7 +1,7 @@
 import math
-import numpy
+import numpy as np
 import matplotlib.pyplot as plt
-import grid_plot_util as gpu
+import grid_plot as gp
 
 def simplegrid():
 
@@ -9,20 +9,19 @@ def simplegrid():
     nzones = 7
     ng = 1
 
-    gr = gpu.grid(nzones, ng, xmin=0.0, xmax=1.0)
+    gr = gp.FVGrid(nzones, ng, xmin=0.0, xmax=1.0)
 
-    gpu.drawGrid(gr, emphasizeEnd=1, edgeTicks=0, drawGhost=1)
-
+    gr.draw_grid(emphasize_end=1, edge_ticks=0, draw_ghost=1)
 
     # label a few
-    gpu.labelCenter(gr, ng+nzones/2, r"$i$", fontsize="medium")
-    gpu.labelCenter(gr, ng+nzones/2-1, r"$i-1$", fontsize="medium")
-    gpu.labelCenter(gr, ng+nzones/2+1, r"$i+1$", fontsize="medium")
+    gr.label_center(ng+nzones/2, r"$i$", fontsize="medium")
+    gr.label_center(ng+nzones/2-1, r"$i-1$", fontsize="medium")
+    gr.label_center(ng+nzones/2+1, r"$i+1$", fontsize="medium")
 
-    gpu.labelCenter(gr, ng-1, r"$\mathrm{lo}-1$", fontsize="medium")
-    gpu.labelCenter(gr, ng, r"$\mathrm{lo}$", fontsize="medium")
-    gpu.labelCenter(gr, ng+nzones-1, r"$\mathrm{hi}$", fontsize="medium")
-    gpu.labelCenter(gr, ng+nzones, r"$\mathrm{hi+1}$", fontsize="medium")
+    gr.label_center(ng-1, r"$\mathrm{lo}-1$", fontsize="medium")
+    gr.label_center(ng, r"$\mathrm{lo}$", fontsize="medium")
+    gr.label_center(ng+nzones-1, r"$\mathrm{hi}$", fontsize="medium")
+    gr.label_center(ng+nzones, r"$\mathrm{hi+1}$", fontsize="medium")
 
 
     # label dx
@@ -51,9 +50,8 @@ def simplegrid():
     plt.tight_layout()
 
     plt.savefig("simplegrid_gc.png")
-    plt.savefig("simplegrid_gc.eps", bbox_inches="tight")
+    plt.savefig("simplegrid_gc.pdf", bbox_inches="tight")
                
-
 
 if __name__== "__main__":
     simplegrid()
