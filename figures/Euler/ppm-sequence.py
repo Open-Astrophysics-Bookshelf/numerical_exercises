@@ -58,6 +58,10 @@ class RiemannProblem(object):
         
         for n in range(r.nx):
             gpu.drawCellAvg(self.gr, n, q[n], color="r")
+            
+    def clean_axes(self):
+        plt.xlim(self.gr.xmin-0.5*self.gr.dx, self.gr.xmax+0.5*self.gr.dx)
+        plt.axis("off")
 
 
 
@@ -78,21 +82,37 @@ q_r = State(0.1, 0.0, 0.125)
 
 r = RiemannProblem(q_l, q_r)
 
+
+#-----------------------------------------------------------------------------
+#  plot 1: initial state
 plt.clf()
 
 
+# rho
+plt.subplot(311)
 
 r.draw_grid()
 r.draw_var_avg("rho")
+r.clean_axes()
 
+# u
+plt.subplot(312)
 
-plt.axis([r.gr.xmin-0.5*r.gr.dx,r.gr.xmax+0.5*r.gr.dx, -0.25, 1.2])
-plt.axis("off")
+r.draw_grid()
+r.draw_var_avg("u")
+r.clean_axes()
 
-plt.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
+# p
+plt.subplot(313)
+
+r.draw_grid()
+r.draw_var_avg("p")
+r.clean_axes()
 
 f = plt.gcf()
-f.set_size_inches(8.0,2.0)
+f.set_size_inches(8.0,7.0)
+
+plt.tight_layout()
 
 plt.savefig("ppm-seq-1.png")
 
