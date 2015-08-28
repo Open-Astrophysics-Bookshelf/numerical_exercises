@@ -53,11 +53,13 @@ class RiemannProblem(object):
         gpu.labelCenter(self.gr, self.nx/2-2, r"$i-2$")
         gpu.labelCenter(self.gr, self.nx/2+2, r"$i+2$")
         
-    def draw_var_avg(self, var):
+    def draw_var_avg(self, var, scale=1.0):
+        if scale == 0.0: scale = 1.0
+
         q = self.vars[var]        
         
         for n in range(r.nx):
-            gpu.drawCellAvg(self.gr, n, q[n], color="r")
+            gpu.drawCellAvg(self.gr, n, q[n], color="r", scale=scale)
             
     def clean_axes(self):
         plt.xlim(self.gr.xmin-0.5*self.gr.dx, self.gr.xmax+0.5*self.gr.dx)
@@ -82,6 +84,9 @@ q_r = State(0.1, 0.0, 0.125)
 
 r = RiemannProblem(q_l, q_r)
 
+rscale = max(q_l.rho, q_r.rho)
+uscale = max(q_l.u, q_r.u)
+pscale = max(q_l.p, q_r.p)
 
 #-----------------------------------------------------------------------------
 #  plot 1: initial state
@@ -92,22 +97,28 @@ plt.clf()
 plt.subplot(311)
 
 r.draw_grid()
-r.draw_var_avg("rho")
+r.draw_var_avg("rho", scale=rscale)
 r.clean_axes()
+
+plt.title(r"$\rho$")
 
 # u
 plt.subplot(312)
 
 r.draw_grid()
-r.draw_var_avg("u")
+r.draw_var_avg("u", scale=uscale)
 r.clean_axes()
+
+plt.title("$u$")
 
 # p
 plt.subplot(313)
 
 r.draw_grid()
-r.draw_var_avg("p")
+r.draw_var_avg("p", scale=pscale)
 r.clean_axes()
+
+plt.title("$p$")
 
 f = plt.gcf()
 f.set_size_inches(8.0,7.0)
