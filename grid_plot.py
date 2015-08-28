@@ -10,7 +10,7 @@ class FVGrid(object):
 
     def __init__(self, nx, ng = 0, xmin=0.0, xmax=1.0, voff=0.0):
 
-        # finite-volume
+        # finite-volume or cell-centered finite-difference
         self.nx = nx
         self.ng = ng
         self.xmin = xmin
@@ -129,6 +129,24 @@ class FVGrid(object):
         plt.xlim(self.xmin-0.5*self.dx, self.xmax+0.5*self.dx)
         plt.axis("off")
 
+
+class CellCentered(object):
+    def __init__(self, gr, a):
+        if not len(a) == len(gr.xc):
+            sys.exit("ERROR: grid length != data length")
+
+        self.gr = gr
+        self.a = a
+
+    def label_data_point(self, idx, string, color="k", fontsize="large"):
+        plt.text(self.gr.xc[idx], self.gr.voff+self.a[idx]+0.1, string,
+                 horizontalalignment='center', verticalalignment='bottom',
+                 fontsize=fontsize, color=color)
+
+    def draw_data_point(self, idx, color="0.5", marker="o"):
+        plt.scatter([self.gr.xc[idx]], [self.gr.voff+self.a[idx]], 
+                    color=color, marker=marker, zorder=100)
+        
 
 class PiecewiseConstant(object):
     def __init__(self, gr, a):
