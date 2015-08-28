@@ -331,25 +331,21 @@ def evolveToRight(gr, idx, slopes, values, sigma, color="0.5", ls="-"):
 
 
 #-----------------------------------------------------------------------------
-def ppm(a, nolimit=0):
-
-    ap = numpy.zeros(len(a), dtype=numpy.float64)
-    am = numpy.zeros(len(a), dtype=numpy.float64)
-    a6 = numpy.zeros(len(a), dtype=numpy.float64)
-
-    # parabola of form: 
-    #    a(xi) = aminus + xi*(aplus - aminus + a6 * (1-xi) )  
-    # with  xi = (x - xl)/dx
+def ppm_cubic(a, nolimit=0):
+    # this computes the (limited) interface states just from
+    # cubic interpolation through the 4 zones centered on an
+    # interface
+    aint = numpy.zeros(len(a), dtype=numpy.float64)
 
     n = 1
-    while (n < len(a)-2):
+    while n < len(a)-2:
 
         da0 = 0.5*(a[n+1] - a[n-1])
         dap = 0.5*(a[n+2] - a[n])
 
-        if (not nolimit):
+        if not nolimit:
 
-            if ( (a[n+1] - a[n])*(a[n] - a[n-1]) > 0.0):
+            if (a[n+1] - a[n])*(a[n] - a[n-1]) > 0.0:
                 da0 = numpy.sign(da0)*min(math.fabs(da0),
                                           min(2.0*math.fabs(a[n] - a[n-1]),
                                               2.0*math.fabs(a[n+1] - a[n])) )
@@ -366,15 +362,30 @@ def ppm(a, nolimit=0):
 
 
         # cubic
-        ap[n] = 0.5*(a[n] + a[n+1]) - (1.0/6.0)*(dap - da0)
-        am[n+1] = ap[n]
+        aint[n] = 0.5*(a[n] + a[n+1]) - (1.0/6.0)*(dap - da0)
 
         n += 1
 
-    if (not nolimit):
+    return aint
+
+
+def ppm(a, nolimit=0):
+
+    ap = numpy.zeros(len(a), dtype=numpy.float64)
+    am = numpy.zeros(len(a), dtype=numpy.float64)
+    a6 = numpy.zeros(len(a), dtype=numpy.float64)
+
+    # parabola of form: 
+    #    a(xi) = aminus + xi*(aplus - aminus + a6 * (1-xi) )  
+    # with  xi = (x - xl)/dx
+
+    ap[:] = ppm_cubic(a, nolimit=nolimit)
+    am[1:] = ap[:-1]
+
+    if not nolimit:
 
         n = 2
-        while (n < len(a)-2):
+        while n < len(a)-2:
 
             if ( (ap[n] - a[n])*(a[n] - am[n]) <= 0.0):
                 am[n] = a[n]
@@ -389,10 +400,9 @@ def ppm(a, nolimit=0):
                 ap[n] = 3.0*a[n] - 2.0*am[n]
 
             n += 1
-              
 
     n = 2
-    while (n < len(a)-2):
+    while n < len(a)-2:
         a6[n] = 6.0*a[n] - 3.0*(am[n] + ap[n])
         n += 1
 
