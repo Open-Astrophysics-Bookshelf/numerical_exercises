@@ -358,7 +358,7 @@ class PiecewiseParabolic(PiecewiseConstant):
         xx[0:len(x)] = x
         xx[len(x):] = [self.gr.xr[idx], 
                        self.gr.xr[idx]-sigma*self.gr.dx, 
-                       self.gr.xr[idx]-sigma*gr.dx]
+                       self.gr.xr[idx]-sigma*self.gr.dx]
 
         yy[0:len(x)] = a
         yy[len(x):] = [0.0, 0.0, a[0]]
