@@ -166,12 +166,12 @@ class PiecewiseConstant(object):
                  [self.gr.voff+self.a[idx], self.gr.voff+self.a[idx]], color=color, ls=ls)
 
 
-class PLM(PiecewiseConstant):
+class PiecewiseLinear(PiecewiseConstant):
     def __init__(self, gr, a, nolimit=0):
 
         PiecewiseConstant.__init__(self, gr, a)
         
-        self.slope = np.zeroslike(self.a)
+        self.slope = np.zeros_like(self.a)
 
         # calculate the slopes
         for n in range(1, len(self.a)-1):
@@ -195,7 +195,7 @@ class PLM(PiecewiseConstant):
         yl = self.slope[idx]*(self.gr.xl[idx] - self.gr.xc[idx])/self.gr.dx + \
              self.gr.voff+self.a[idx]
         yr = self.slope[idx]*(self.gr.xr[idx] - self.gr.xc[idx])/self.gr.dx + \
-             self.gr.voff+value
+             self.gr.voff+self.a[idx]
 
         plt.plot([self.gr.xl[idx], self.gr.xr[idx]], [yl, yr],
                  color=color, ls=ls, lw=1, zorder=10)
@@ -262,114 +262,105 @@ class PLM(PiecewiseConstant):
         plt.plot(xp, ap, color=color, lw=1, ls=ls, zorder=10)
 
 
+class PiecewiseParabolic(PiecewiseConstant):
+    def __init__(self, gr, a, nolimit=0):
 
-#-----------------------------------------------------------------------------
-def ppm_cubic(a, nolimit=0):
-    # this computes the (limited) interface states just from
-    # cubic interpolation through the 4 zones centered on an
-    # interface
-    aint = np.zeros(len(a), dtype=np.float64)
+        PiecewiseConstant.__init__(self, gr, a)
+        
 
-    n = 1
-    while n < len(a)-2:
+        # this computes the (limited) interface states just from
+        # cubic interpolation through the 4 zones centered on an
+        # interface
+        self.aint = np.zeros_like(a)
 
-        da0 = 0.5*(a[n+1] - a[n-1])
-        dap = 0.5*(a[n+2] - a[n])
+        for n in range(1, len(a)-2):
+
+            da0 = 0.5*(self.a[n+1] - self.a[n-1])
+            dap = 0.5*(self.a[n+2] - self.a[n])
+
+            if not nolimit:
+
+                if (self.a[n+1] - self.a[n])*(self.a[n] - self.a[n-1]) > 0.0:
+                    da0 = np.sign(da0)*min(math.fabs(da0),
+                                           min(2.0*math.fabs(self.a[n] - self.a[n-1]),
+                                               2.0*math.fabs(self.a[n+1] - self.a[n])) )
+                else:
+                    da0 = 0.0
+
+
+                if (self.a[n+2] - self.a[n+1])*(self.a[n+1] - self.a[n]) > 0.0:
+                    dap = np.sign(dap)*min(math.fabs(dap),
+                                           min(2.0*math.fabs(self.a[n+1] - self.a[n]),
+                                               2.0*math.fabs(self.a[n+2] - self.a[n+1])) )
+                else:
+                    dap = 0.0
+
+
+            # cubic
+            self.aint[n] = 0.5*(self.a[n] + self.a[n+1]) - (1.0/6.0)*(dap - da0)
+
+
+        self.ap = np.zeros_like(a)
+        self.am = np.zeros_like(a)
+        self.a6 = np.zeros_like(a)
+
+        # parabola of form:
+        #    a(xi) = aminus + xi*(aplus - aminus + a6 * (1-xi) )
+        # with  xi = (x - xl)/dx
+
+        self.ap[:] = self.aint[:]
+        self.am[1:] = self.ap[:-1]
 
         if not nolimit:
 
-            if (a[n+1] - a[n])*(a[n] - a[n-1]) > 0.0:
-                da0 = np.sign(da0)*min(math.fabs(da0),
-                                          min(2.0*math.fabs(a[n] - a[n-1]),
-                                              2.0*math.fabs(a[n+1] - a[n])) )
-            else:
-                da0 = 0.0
+            for n in range(2, len(self.a)-2):
+
+                if (self.ap[n] - self.a[n])*(self.a[n] - self.am[n]) <= 0.0:
+                    self.am[n] = self.a[n]
+                    self.ap[n] = self.a[n]
+
+                elif ( (self.ap[n] - self.am[n])*(self.a[n] - 0.5*(self.am[n] + self.ap[n])) >
+                       (self.ap[n] - self.am[n])**2/6.0 ):
+                    self.am[n] = 3.0*self.a[n] - 2.0*self.ap[n]
+
+                elif ( -(self.ap[n] - self.am[n])**2/6.0 >
+                       (self.ap[n] - self.am[n])*(self.a[n] - 0.5*(self.am[n] + self.ap[n])) ):
+                    self.ap[n] = 3.0*self.a[n] - 2.0*self.am[n]
+
+        for n in range(2, len(self.a)-2):
+            self.a6[n] = 6.0*self.a[n] - 3.0*(self.am[n] + self.ap[n])
 
 
-            if ( (a[n+2] - a[n+1])*(a[n+1] - a[n]) > 0.0):
-                dap = np.sign(dap)*min(math.fabs(dap),
-                                          min(2.0*math.fabs(a[n+1] - a[n]),
-                                              2.0*math.fabs(a[n+2] - a[n+1])) )
-            else:
-                dap = 0.0
+
+    def draw_parabola(self, idx, color="r", ls="-"):
+
+        x = np.linspace(self.gr.xl[idx], self.gr.xr[idx], 50)
+        xi = (x - self.gr.xl[idx])/self.gr.dx
+
+        a = self.am[idx] + xi*(self.ap[idx] - self.am[idx] + self.a6[idx] * (1.0-xi) )
+
+        plt.plot(x, a, color=color, ls=ls, lw=1, zorder=10)
 
 
-        # cubic
-        aint[n] = 0.5*(a[n] + a[n+1]) - (1.0/6.0)*(dap - da0)
+    def ppm_trace_left(self, idx, sigma, color="0.5"):
 
-        n += 1
+        # sigma is the fraction of the domain from the right interface
+        # (since we are tracing to create the left state there).
 
-    return aint
+        x = np.linspace(self.gr.xr[idx]-sigma*self.gr.dx, self.gr.xr[idx], 50)
+        xi = (x - self.gr.xl[idx])/self.gr.dx
 
+        a = self.am[idx] + xi*(self.ap[idx] - self.am[idx] + self.a6[idx] * (1.0-xi) )
 
-def ppm(a, nolimit=0):
+        xx = np.zeros(len(x) + 3, dtype=np.float64)
+        yy = np.zeros(len(x) + 3, dtype=np.float64)
 
-    ap = np.zeros(len(a), dtype=np.float64)
-    am = np.zeros(len(a), dtype=np.float64)
-    a6 = np.zeros(len(a), dtype=np.float64)
+        xx[0:len(x)] = x
+        xx[len(x):] = [self.gr.xr[idx], 
+                       self.gr.xr[idx]-sigma*self.gr.dx, 
+                       self.gr.xr[idx]-sigma*gr.dx]
 
-    # parabola of form:
-    #    a(xi) = aminus + xi*(aplus - aminus + a6 * (1-xi) )
-    # with  xi = (x - xl)/dx
+        yy[0:len(x)] = a
+        yy[len(x):] = [0.0, 0.0, a[0]]
 
-    ap[:] = ppm_cubic(a, nolimit=nolimit)
-    am[1:] = ap[:-1]
-
-    if not nolimit:
-
-        n = 2
-        while n < len(a)-2:
-
-            if ( (ap[n] - a[n])*(a[n] - am[n]) <= 0.0):
-                am[n] = a[n]
-                ap[n] = a[n]
-
-            elif ( (ap[n] - am[n])*(a[n] - 0.5*(am[n] + ap[n])) >
-                   (ap[n] - am[n])**2/6.0 ):
-                am[n] = 3.0*a[n] - 2.0*ap[n]
-
-            elif ( -(ap[n] - am[n])**2/6.0 >
-                    (ap[n] - am[n])*(a[n] - 0.5*(am[n] + ap[n])) ):
-                ap[n] = 3.0*a[n] - 2.0*am[n]
-
-            n += 1
-
-    n = 2
-    while n < len(a)-2:
-        a6[n] = 6.0*a[n] - 3.0*(am[n] + ap[n])
-        n += 1
-
-    return ap, am, a6
-
-
-def drawParabola(gr, idx, ap, am, a6, color="r", ls="-"):
-
-    x = np.linspace(gr.xl[idx], gr.xr[idx], 50)
-    xi = (x - gr.xl[idx])/gr.dx
-    print xi
-    a = am + xi*(ap - am + a6 * (1.0-xi) )
-
-    plt.plot(x, a,
-               color=color, ls=ls, lw=1, zorder=10)
-
-
-def ppmTraceLeft(gr, idx, ap, am, a6, sigma, color="0.5"):
-
-    # sigma is the fraction of the domain from the right interface
-    # (since we are tracing to create the left state there).
-
-    x = np.linspace(gr.xr[idx]-sigma*gr.dx, gr.xr[idx], 50)
-    xi = (x - gr.xl[idx])/gr.dx
-
-    a = am + xi*(ap - am + a6 * (1.0-xi) )
-
-    xx = np.zeros(len(x) + 3, dtype=np.float64)
-    yy = np.zeros(len(x) + 3, dtype=np.float64)
-
-    xx[0:len(x)] = x
-    xx[len(x):] = [gr.xr[idx], gr.xr[idx]-sigma*gr.dx, gr.xr[idx]-sigma*gr.dx]
-
-    yy[0:len(x)] = a
-    yy[len(x):] = [0.0, 0.0, a[0]]
-
-    plt.fill(xx, yy, color=color, lw=1, zorder=-1)
+        plt.fill(xx, yy, color=color, lw=1, zorder=-1)
