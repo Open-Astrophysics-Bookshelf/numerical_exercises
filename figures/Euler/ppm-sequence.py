@@ -1,14 +1,8 @@
 import math
 import numpy as np
 import matplotlib.pyplot as plt
-import grid_plot_util as gpu
-
-
-class State(object):
-    def __init__(self, rho, u, p):
-        self.rho = rho
-        self.u = u
-        self.p = p
+import grid_plot as gp
+import riemann
 
 class RiemannProblem(object):
     def __init__(self, q_l, q_r, gamma=5./3., N=3):
@@ -17,54 +11,51 @@ class RiemannProblem(object):
         self.q_r = q_r
         self.nx = 2*N
 
-        self.gr = gpu.grid(self.nx)
+        self.gr = gp. FVGrid(self.nx)
 
         # allocate space -- we just care about N zones to the left and
         # right of the interface
         self.vars = {}
 
-        self.vars["rho"] = np.zeros(2*N, dtype=np.float64)
-        self.vars["u"] = np.zeros(2*N, dtype=np.float64)
-        self.vars["p"] = np.zeros(2*N, dtype=np.float64)
+        rho = self.gr.scratch_array()
+        rho[0:N] = q_l.rho
+        rho[N:2**N] = q_r.rho
 
-        self.vars["rho"][0:N] = q_l.rho
-        self.vars["rho"][N:2*N] = q_r.rho
+        u = self.gr.scratch_array()
+        u[0:N] = q_l.u
+        u[N:2*N] = q_r.u
 
-        self.vars["u"][0:N] = q_l.u
-        self.vars["u"][N:2*N] = q_r.u
+        p = self.gr.scratch_array()
+        p[0:N] = q_l.p
+        p[N:2*N] = q_r.p
 
-        self.vars["p"][0:N] = q_l.p
-        self.vars["p"][N:2*N] = q_r.p
+        rscale = max(q_l.rho, q_r.rho)
+        uscale = max(q_l.u, q_r.u)
+        pscale = max(q_l.p, q_r.p)
+
+        # do the ppm reconstruction on all of these variables
+        self.vars["rho"] = gp.PiecewiseParabolic(self.gr, rho, scale=rscale)
+        self.vars["u"] = gp.PiecewiseParabolic(self.gr, u, scale=uscale)
+        self.vars["p"] = gp.PiecewiseParabolic(self.gr, p, scale=pscale)
 
     def get_cubic_points(self, var):
-        q = self.vars[var]
-        return gpu.ppm_cubic(q)
+        return self.vars[var].aint
 
     def get_parabola_coefficients(self, var):
-        q = self.vars[var]
-        return gpu.ppm(q)
-        
+        return self.vars[var].ap, self.vars[var].am, self.vars[var].a6
+
     def draw_grid(self):
-        gpu.drawGrid(self.gr)
+        self.gr.draw_grid()
 
-        gpu.labelCenter(self.gr, self.nx/2,   r"$i$")
-        gpu.labelCenter(self.gr, self.nx/2-1, r"$i-1$")
-        gpu.labelCenter(self.gr, self.nx/2+1, r"$i+1$")
-        gpu.labelCenter(self.gr, self.nx/2-2, r"$i-2$")
-        gpu.labelCenter(self.gr, self.nx/2+2, r"$i+2$")
-        
+        self.gr.label_center(self.nx/2,   r"$i$")
+        self.gr.label_center(self.nx/2-1, r"$i-1$")
+        self.gr.label_center(self.nx/2+1, r"$i+1$")
+        self.gr.label_center(self.nx/2-2, r"$i-2$")
+        self.gr.label_center(self.nx/2+2, r"$i+2$")
+
     def draw_var_avg(self, var, scale=1.0):
-        if scale == 0.0: scale = 1.0
-
-        q = self.vars[var]        
-        
-        for n in range(r.nx):
-            gpu.drawCellAvg(self.gr, n, q[n], color="r", scale=scale)
-            
-    def clean_axes(self):
-        plt.xlim(self.gr.xmin-0.5*self.gr.dx, self.gr.xmax+0.5*self.gr.dx)
-        plt.axis("off")
-
+        for n in range(self.gr.nx):
+            self.vars[var].draw_cell_avg(n, color="r")
 
 
 #-----------------------------------------------------------------------------
@@ -76,17 +67,14 @@ class RiemannProblem(object):
 
 
 # left state
-q_l = State(1.0, 0.0, 0.1)
+q_l = riemann.State(rho=1.0, u=0.0, p=0.1)
 
 # right state
-q_r = State(0.1, 0.0, 0.125)
+q_r = riemann.State(rho=0.1, u=0.0, p=0.125)
 
 
 r = RiemannProblem(q_l, q_r)
 
-rscale = max(q_l.rho, q_r.rho)
-uscale = max(q_l.u, q_r.u)
-pscale = max(q_l.p, q_r.p)
 
 #-----------------------------------------------------------------------------
 #  plot 1: initial state
@@ -97,8 +85,8 @@ plt.clf()
 plt.subplot(311)
 
 r.draw_grid()
-r.draw_var_avg("rho", scale=rscale)
-r.clean_axes()
+r.draw_var_avg("rho")
+r.gr.clean_axes()
 
 plt.title(r"$\rho$")
 
@@ -106,8 +94,8 @@ plt.title(r"$\rho$")
 plt.subplot(312)
 
 r.draw_grid()
-r.draw_var_avg("u", scale=uscale)
-r.clean_axes()
+r.draw_var_avg("u")
+r.gr.clean_axes()
 
 plt.title("$u$")
 
@@ -115,8 +103,8 @@ plt.title("$u$")
 plt.subplot(313)
 
 r.draw_grid()
-r.draw_var_avg("p", scale=pscale)
-r.clean_axes()
+r.draw_var_avg("p")
+r.gr.clean_axes()
 
 plt.title("$p$")
 
@@ -212,7 +200,3 @@ plt.savefig("ppm-seq-1.png")
 
 # plt.savefig("piecewise-parabolic.eps")
 # plt.savefig("piecewise-parabolic.png")
-
-               
-
-
