@@ -38,11 +38,17 @@ class RiemannProblem(object):
         self.vars["u"] = gp.PiecewiseParabolic(self.gr, u, scale=uscale)
         self.vars["p"] = gp.PiecewiseParabolic(self.gr, p, scale=pscale)
 
-    def get_cubic_points(self, var):
-        return self.vars[var].aint
+    def draw_cubic_points(self, var, color="r"):
+        # these are defined on the i+1/2 interface
+        # note that we require 2 zones on either side of the interface, so
+        # we cannot draw points for the first 2 or last 2 zones
+        aint = self.vars[var].aint
+        plt.scatter(self.gr.xr[1:-2], aint[1:-2], marker="x", s=40, color=color, zorder=10)
 
-    def get_parabola_coefficients(self, var):
-        return self.vars[var].ap, self.vars[var].am, self.vars[var].a6
+    def draw_parabola(self, var):
+        ap, am = self.vars[var].ap, self.vars[var].am
+        for n in range(2,self.nx-2):
+            self.vars[var].draw_parabola(n)
 
     def draw_grid(self):
         self.gr.draw_grid()
@@ -102,11 +108,46 @@ plt.savefig("ppm-seq-1.png")
 
 #-----------------------------------------------------------------------------
 #  plot 2: cubic points (three vertical)
+plt.clf()
 
+for n, s in enumerate(states):
+
+    plt.subplot(subidx[n])
+    r.draw_grid()
+    r.draw_var_avg(s)
+    r.draw_cubic_points(s)
+
+    r.gr.clean_axes()
+
+    plt.title(state_labels[n])
+
+f = plt.gcf()
+f.set_size_inches(8.0,7.0)
+plt.tight_layout()
+
+plt.savefig("ppm-seq-2.png")
 
 
 #-----------------------------------------------------------------------------
 #  plot 3: parabola (three vertical)
+plt.clf()
+
+for n, s in enumerate(states):
+
+    plt.subplot(subidx[n])
+    r.draw_grid()
+    r.draw_var_avg(s)
+    r.draw_cubic_points(s)
+    r.draw_parabola(s)
+    r.gr.clean_axes()
+
+    plt.title(state_labels[n])
+
+f = plt.gcf()
+f.set_size_inches(8.0,7.0)
+plt.tight_layout()
+
+plt.savefig("ppm-seq-3.png")
 
 
 
