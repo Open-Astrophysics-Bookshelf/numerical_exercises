@@ -165,13 +165,14 @@ class PiecewiseConstant(object):
         self.scale = scale
 
     def label_cell_avg(self, idx, string, color="k"):
-        plt.text(self.gr.xc[idx], self.gr.voff+self.a[idx]+0.1, string,
+        plt.text(self.gr.xc[idx], self.gr.voff+self.a[idx]/self.scale+0.1, string,
                  horizontalalignment='center', verticalalignment='bottom',
                  fontsize="large", color=color)
 
     def draw_cell_avg(self, idx, color="0.5", ls="-"):
         plt.plot([self.gr.xl[idx], self.gr.xr[idx]],
-                 [self.gr.voff+self.a[idx], self.gr.voff+self.a[idx]], color=color, ls=ls)
+                 [self.gr.voff+self.a[idx]/self.scale, 
+                  self.gr.voff+self.a[idx]/self.scale], color=color, ls=ls)
 
 
 class PiecewiseLinear(PiecewiseConstant):
@@ -205,7 +206,7 @@ class PiecewiseLinear(PiecewiseConstant):
         yr = self.slope[idx]*(self.gr.xr[idx] - self.gr.xc[idx])/self.gr.dx + \
              self.gr.voff+self.a[idx]
 
-        plt.plot([self.gr.xl[idx], self.gr.xr[idx]], [yl, yr],
+        plt.plot([self.gr.xl[idx], self.gr.xr[idx]], [yl/self.scale, yr/self.scale],
                  color=color, ls=ls, lw=1, zorder=10)
 
 
@@ -228,7 +229,7 @@ class PiecewiseLinear(PiecewiseConstant):
         yy[0:len(x)] = a
         yy[len(x):] = [self.gr.voff, self.gr.voff, a[0]]
 
-        plt.fill(xx, yy, color=color, lw=1, zorder=-1)
+        plt.fill(xx, yy/self.scale, color=color, lw=1, zorder=-1)
 
 
     def slope_trace_right(self, idx, slope, color="0.5"):
@@ -250,7 +251,7 @@ class PiecewiseLinear(PiecewiseConstant):
         yy[0:len(x)] = a
         yy[len(x):] = [self.gr.voff, self.gr.voff, a[0]]
 
-        plt.fill(xx, yy, color=color, lw=1, zorder=-1)
+        plt.fill(xx, yy/self.scale, color=color, lw=1, zorder=-1)
 
 
     def evolve_to_right(self, idx, sigma, color="0.5", ls="-"):
@@ -266,8 +267,8 @@ class PiecewiseLinear(PiecewiseConstant):
         ap = self.a[idx] + (self.slopes[idx]/gr.dx) * (xp - gr.xc[idx])
         xp = xp + sigma*self.gr.dx
 
-        plt.plot(xm, am, color=color, lw=1, ls=ls, zorder=10)
-        plt.plot(xp, ap, color=color, lw=1, ls=ls, zorder=10)
+        plt.plot(xm, am/self.scale, color=color, lw=1, ls=ls, zorder=10)
+        plt.plot(xp, ap/self.scale, color=color, lw=1, ls=ls, zorder=10)
 
 
 class PiecewiseParabolic(PiecewiseConstant):
@@ -346,7 +347,7 @@ class PiecewiseParabolic(PiecewiseConstant):
 
         a = self.am[idx] + xi*(self.ap[idx] - self.am[idx] + self.a6[idx] * (1.0-xi) )
 
-        plt.plot(x, a, color=color, ls=ls, lw=1, zorder=10)
+        plt.plot(x, a/self.scale, color=color, ls=ls, lw=1, zorder=10)
 
 
     def ppm_trace_left(self, idx, sigma, color="0.5"):
@@ -370,4 +371,4 @@ class PiecewiseParabolic(PiecewiseConstant):
         yy[0:len(x)] = a
         yy[len(x):] = [0.0, 0.0, a[0]]
 
-        plt.fill(xx, yy, color=color, lw=1, zorder=-1)
+        plt.fill(xx, yy/self.scale, color=color, lw=1, zorder=-1)
