@@ -28,6 +28,8 @@ class FVGrid(object):
         # vertical offset (if we want to stack grids)
         self.voff = voff
 
+    def scratch_array(self):
+        return np.zeros(2*self.ng+self.nx, dtype=np.float64)
 
     def draw_grid(self, center_only=0, draw_ghost=0,
                   emphasize_end=0, edge_ticks=1, color="k"):
@@ -144,17 +146,23 @@ class CellCentered(object):
                  fontsize=fontsize, color=color)
 
     def draw_data_point(self, idx, color="0.5", marker="o"):
-        plt.scatter([self.gr.xc[idx]], [self.gr.voff+self.a[idx]], 
+        plt.scatter([self.gr.xc[idx]], [self.gr.voff+self.a[idx]],
                     color=color, marker=marker, zorder=100)
-        
+
 
 class PiecewiseConstant(object):
-    def __init__(self, gr, a):
+    def __init__(self, gr, a, scale=1.0):
         if not len(a) == len(gr.xc):
             sys.exit("ERROR: grid length != data length")
 
         self.gr = gr
         self.a = a
+
+        # scale is used for plotting only -- it is the normalization
+        # factor for a
+        if scale <= 0.0: scale = 1.0
+
+        self.scale = scale
 
     def label_cell_avg(self, idx, string, color="k"):
         plt.text(self.gr.xc[idx], self.gr.voff+self.a[idx]+0.1, string,
@@ -162,15 +170,15 @@ class PiecewiseConstant(object):
                  fontsize="large", color=color)
 
     def draw_cell_avg(self, idx, color="0.5", ls="-"):
-        plt.plot([self.gr.xl[idx], self.gr.xr[idx]], 
+        plt.plot([self.gr.xl[idx], self.gr.xr[idx]],
                  [self.gr.voff+self.a[idx], self.gr.voff+self.a[idx]], color=color, ls=ls)
 
 
 class PiecewiseLinear(PiecewiseConstant):
-    def __init__(self, gr, a, nolimit=0):
+    def __init__(self, gr, a, nolimit=0, scale=1.0):
 
-        PiecewiseConstant.__init__(self, gr, a)
-        
+        PiecewiseConstant.__init__(self, gr, a, scale=scale)
+
         self.slope = np.zeros_like(self.a)
 
         # calculate the slopes
@@ -180,7 +188,7 @@ class PiecewiseLinear(PiecewiseConstant):
 
             if not nolimit:
                 if test > 0.0:
-                    self.slope[n] = min(math.fabs(da), 
+                    self.slope[n] = min(math.fabs(da),
                                         min(2.0*math.fabs(self.a[n+1] - self.a[n]),
                                             2.0*math.fabs(self.a[n] - self.a[n-1]))) * \
                                             np.sign(self.a[n+1] - self.a[n-1])
@@ -213,8 +221,8 @@ class PiecewiseLinear(PiecewiseConstant):
         yy = np.zeros(len(x) + 3, dtype=np.float64)
 
         xx[0:len(x)] = x
-        xx[len(x):] = [self.gr.xr[idx], 
-                       self.gr.xr[idx]-sigma*self.gr.dx, 
+        xx[len(x):] = [self.gr.xr[idx],
+                       self.gr.xr[idx]-sigma*self.gr.dx,
                        self.gr.xr[idx]-sigma*self.gr.dx]
 
         yy[0:len(x)] = a
@@ -235,8 +243,8 @@ class PiecewiseLinear(PiecewiseConstant):
         yy = np.zeros(len(x) + 3, dtype=np.float64)
 
         xx[0:len(x)] = x
-        xx[len(x):] = [self.gr.xl[idx]+sigma*self.gr.dx, 
-                       self.gr.xl[idx], 
+        xx[len(x):] = [self.gr.xl[idx]+sigma*self.gr.dx,
+                       self.gr.xl[idx],
                        self.gr.xl[idx]]
 
         yy[0:len(x)] = a
@@ -263,10 +271,9 @@ class PiecewiseLinear(PiecewiseConstant):
 
 
 class PiecewiseParabolic(PiecewiseConstant):
-    def __init__(self, gr, a, nolimit=0):
+    def __init__(self, gr, a, nolimit=0, scale=1.0):
 
-        PiecewiseConstant.__init__(self, gr, a)
-        
+        PiecewiseConstant.__init__(self, gr, a, scale=scale)
 
         # this computes the (limited) interface states just from
         # cubic interpolation through the 4 zones centered on an
@@ -356,8 +363,8 @@ class PiecewiseParabolic(PiecewiseConstant):
         yy = np.zeros(len(x) + 3, dtype=np.float64)
 
         xx[0:len(x)] = x
-        xx[len(x):] = [self.gr.xr[idx], 
-                       self.gr.xr[idx]-sigma*self.gr.dx, 
+        xx[len(x):] = [self.gr.xr[idx],
+                       self.gr.xr[idx]-sigma*self.gr.dx,
                        self.gr.xr[idx]-sigma*self.gr.dx]
 
         yy[0:len(x)] = a

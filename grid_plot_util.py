@@ -232,9 +232,9 @@ def drawFDData(gr, idx, value, color="0.5", marker="o"):
 
 
 #-----------------------------------------------------------------------------
-def drawCellAvg(gr, idx, value, color="0.5", ls="-"):
-    print "drawing average: ", idx
-    pylab.plot([gr.xl[idx], gr.xr[idx]], [gr.voff+value, gr.voff+value], color=color, ls=ls)
+def drawCellAvg(gr, idx, value, color="0.5", ls="-", scale=1.0):
+    a = value/scale
+    pylab.plot([gr.xl[idx], gr.xr[idx]], [gr.voff+a, gr.voff+a], color=color, ls=ls)
 
 
 
