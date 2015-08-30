@@ -10,6 +10,8 @@ class State(object):
          self.u = u
          self.rho = rho
 
+    def __str__(self):
+        return "rho: {}; u: {}; p: {}".format(self.rho, self.u, self.p)
 
 class RiemannProblem(object):
     def __init__(self, left_state, right_state, gamma=1.4):
@@ -18,8 +20,6 @@ class RiemannProblem(object):
         self.gamma = gamma
 
     def u_hugoniot(self, p, side):
-
-        print "in u_hugoniot: ", p
 
         if side == "left":
             state = self.left
@@ -42,10 +42,10 @@ class RiemannProblem(object):
 
         return u
 
-    def find_star_state(self):
+    def find_star_state(self, p_min=0.001, p_max=1000.0):
         # we need to root-find on
-        pstar = optimize.brent(lambda p: self.u_hugoniot(p, "left") - self.u_hugoniot(p, "right"),
-                               brack=(0.001, 10.0))
+        pstar = optimize.brentq(lambda p: self.u_hugoniot(p, "left") - self.u_hugoniot(p, "right"),
+                               p_min, p_max)
         ustar = self.u_hugoniot(pstar, "left")
 
         return pstar, ustar
@@ -114,6 +114,6 @@ if __name__ == "__main__":
 
     rp.plot_hugoniot()
 
-    #pstar, ustar = rp.find_star_state()
+    pstar, ustar = rp.find_star_state()
 
     print pstar, ustar
