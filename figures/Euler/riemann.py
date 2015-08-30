@@ -101,7 +101,7 @@ class RiemannProblem(object):
 
         plt.tight_layout()
 
-        plt.savefig("riemann-phase.png")
+        plt.savefig("riemann-phase.pdf")
 
 
 if __name__ == "__main__":
