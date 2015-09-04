@@ -30,6 +30,8 @@ The following chapters are mostly written:
 
 The following are things I'd like to add in the next 1-2 years:
 
+- Fluid Instabilities
+- Rotation and Self-gravity
 - Radiation Hydrodynamics
 - MHD
 - AMR
