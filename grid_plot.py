@@ -10,7 +10,7 @@ class FVGrid(object):
 
     def __init__(self, nx, ng = 0, xmin=0.0, xmax=1.0, voff=0.0):
 
-        # finite-volume
+        # finite-volume or cell-centered finite-difference
         self.nx = nx
         self.ng = ng
         self.xmin = xmin
@@ -28,6 +28,8 @@ class FVGrid(object):
         # vertical offset (if we want to stack grids)
         self.voff = voff
 
+    def scratch_array(self):
+        return np.zeros(2*self.ng+self.nx, dtype=np.float64)
 
     def draw_grid(self, center_only=0, draw_ghost=0,
                   emphasize_end=0, edge_ticks=1, color="k"):
@@ -130,7 +132,7 @@ class FVGrid(object):
         plt.axis("off")
 
 
-class PiecewiseConstant(object):
+class CellCentered(object):
     def __init__(self, gr, a):
         if not len(a) == len(gr.xc):
             sys.exit("ERROR: grid length != data length")
@@ -138,22 +140,47 @@ class PiecewiseConstant(object):
         self.gr = gr
         self.a = a
 
-    def label_cell_avg(self, idx, string, color="k"):
+    def label_data_point(self, idx, string, color="k", fontsize="large"):
         plt.text(self.gr.xc[idx], self.gr.voff+self.a[idx]+0.1, string,
+                 horizontalalignment='center', verticalalignment='bottom',
+                 fontsize=fontsize, color=color)
+
+    def draw_data_point(self, idx, color="0.5", marker="o"):
+        plt.scatter([self.gr.xc[idx]], [self.gr.voff+self.a[idx]],
+                    color=color, marker=marker, zorder=100)
+
+
+class PiecewiseConstant(object):
+    def __init__(self, gr, a, scale=1.0):
+        if not len(a) == len(gr.xc):
+            sys.exit("ERROR: grid length != data length")
+
+        self.gr = gr
+        self.a = a
+
+        # scale is used for plotting only -- it is the normalization
+        # factor for a
+        if scale <= 0.0: scale = 1.0
+
+        self.scale = scale
+
+    def label_cell_avg(self, idx, string, color="k"):
+        plt.text(self.gr.xc[idx], self.gr.voff+self.a[idx]/self.scale+0.1, string,
                  horizontalalignment='center', verticalalignment='bottom',
                  fontsize="large", color=color)
 
     def draw_cell_avg(self, idx, color="0.5", ls="-"):
-        plt.plot([self.gr.xl[idx], self.gr.xr[idx]], 
-                 [self.gr.voff+self.a[idx], self.gr.voff+self.a[idx]], color=color, ls=ls)
+        plt.plot([self.gr.xl[idx], self.gr.xr[idx]],
+                 [self.gr.voff+self.a[idx]/self.scale, 
+                  self.gr.voff+self.a[idx]/self.scale], color=color, ls=ls)
 
 
-class PLM(PiecewiseConstant):
-    def __init__(self, gr, a, nolimit=0):
+class PiecewiseLinear(PiecewiseConstant):
+    def __init__(self, gr, a, nolimit=0, scale=1.0):
 
-        PiecewiseConstant.__init__(self, gr, a)
-        
-        self.slope = np.zeroslike(self.a)
+        PiecewiseConstant.__init__(self, gr, a, scale=scale)
+
+        self.slope = np.zeros_like(self.a)
 
         # calculate the slopes
         for n in range(1, len(self.a)-1):
@@ -162,7 +189,7 @@ class PLM(PiecewiseConstant):
 
             if not nolimit:
                 if test > 0.0:
-                    self.slope[n] = min(math.fabs(da), 
+                    self.slope[n] = min(math.fabs(da),
                                         min(2.0*math.fabs(self.a[n+1] - self.a[n]),
                                             2.0*math.fabs(self.a[n] - self.a[n-1]))) * \
                                             np.sign(self.a[n+1] - self.a[n-1])
@@ -177,9 +204,9 @@ class PLM(PiecewiseConstant):
         yl = self.slope[idx]*(self.gr.xl[idx] - self.gr.xc[idx])/self.gr.dx + \
              self.gr.voff+self.a[idx]
         yr = self.slope[idx]*(self.gr.xr[idx] - self.gr.xc[idx])/self.gr.dx + \
-             self.gr.voff+value
+             self.gr.voff+self.a[idx]
 
-        plt.plot([self.gr.xl[idx], self.gr.xr[idx]], [yl, yr],
+        plt.plot([self.gr.xl[idx], self.gr.xr[idx]], [yl/self.scale, yr/self.scale],
                  color=color, ls=ls, lw=1, zorder=10)
 
 
@@ -195,14 +222,14 @@ class PLM(PiecewiseConstant):
         yy = np.zeros(len(x) + 3, dtype=np.float64)
 
         xx[0:len(x)] = x
-        xx[len(x):] = [self.gr.xr[idx], 
-                       self.gr.xr[idx]-sigma*self.gr.dx, 
+        xx[len(x):] = [self.gr.xr[idx],
+                       self.gr.xr[idx]-sigma*self.gr.dx,
                        self.gr.xr[idx]-sigma*self.gr.dx]
 
         yy[0:len(x)] = a
         yy[len(x):] = [self.gr.voff, self.gr.voff, a[0]]
 
-        plt.fill(xx, yy, color=color, lw=1, zorder=-1)
+        plt.fill(xx, yy/self.scale, color=color, lw=1, zorder=-1)
 
 
     def slope_trace_right(self, idx, slope, color="0.5"):
@@ -217,14 +244,14 @@ class PLM(PiecewiseConstant):
         yy = np.zeros(len(x) + 3, dtype=np.float64)
 
         xx[0:len(x)] = x
-        xx[len(x):] = [self.gr.xl[idx]+sigma*self.gr.dx, 
-                       self.gr.xl[idx], 
+        xx[len(x):] = [self.gr.xl[idx]+sigma*self.gr.dx,
+                       self.gr.xl[idx],
                        self.gr.xl[idx]]
 
         yy[0:len(x)] = a
         yy[len(x):] = [self.gr.voff, self.gr.voff, a[0]]
 
-        plt.fill(xx, yy, color=color, lw=1, zorder=-1)
+        plt.fill(xx, yy/self.scale, color=color, lw=1, zorder=-1)
 
 
     def evolve_to_right(self, idx, sigma, color="0.5", ls="-"):
@@ -240,118 +267,108 @@ class PLM(PiecewiseConstant):
         ap = self.a[idx] + (self.slopes[idx]/gr.dx) * (xp - gr.xc[idx])
         xp = xp + sigma*self.gr.dx
 
-        plt.plot(xm, am, color=color, lw=1, ls=ls, zorder=10)
-        plt.plot(xp, ap, color=color, lw=1, ls=ls, zorder=10)
+        plt.plot(xm, am/self.scale, color=color, lw=1, ls=ls, zorder=10)
+        plt.plot(xp, ap/self.scale, color=color, lw=1, ls=ls, zorder=10)
 
 
+class PiecewiseParabolic(PiecewiseConstant):
+    def __init__(self, gr, a, nolimit=0, scale=1.0):
 
-#-----------------------------------------------------------------------------
-def ppm_cubic(a, nolimit=0):
-    # this computes the (limited) interface states just from
-    # cubic interpolation through the 4 zones centered on an
-    # interface
-    aint = np.zeros(len(a), dtype=np.float64)
+        PiecewiseConstant.__init__(self, gr, a, scale=scale)
 
-    n = 1
-    while n < len(a)-2:
+        # this computes the (limited) interface states just from
+        # cubic interpolation through the 4 zones centered on an
+        # interface
+        self.aint = np.zeros_like(a)
 
-        da0 = 0.5*(a[n+1] - a[n-1])
-        dap = 0.5*(a[n+2] - a[n])
+        for n in range(1, len(a)-2):
+
+            da0 = 0.5*(self.a[n+1] - self.a[n-1])
+            dap = 0.5*(self.a[n+2] - self.a[n])
+
+            if not nolimit:
+
+                if (self.a[n+1] - self.a[n])*(self.a[n] - self.a[n-1]) > 0.0:
+                    da0 = np.sign(da0)*min(math.fabs(da0),
+                                           min(2.0*math.fabs(self.a[n] - self.a[n-1]),
+                                               2.0*math.fabs(self.a[n+1] - self.a[n])) )
+                else:
+                    da0 = 0.0
+
+
+                if (self.a[n+2] - self.a[n+1])*(self.a[n+1] - self.a[n]) > 0.0:
+                    dap = np.sign(dap)*min(math.fabs(dap),
+                                           min(2.0*math.fabs(self.a[n+1] - self.a[n]),
+                                               2.0*math.fabs(self.a[n+2] - self.a[n+1])) )
+                else:
+                    dap = 0.0
+
+
+            # cubic
+            self.aint[n] = 0.5*(self.a[n] + self.a[n+1]) - (1.0/6.0)*(dap - da0)
+
+
+        self.ap = np.zeros_like(a)
+        self.am = np.zeros_like(a)
+        self.a6 = np.zeros_like(a)
+
+        # parabola of form:
+        #    a(xi) = aminus + xi*(aplus - aminus + a6 * (1-xi) )
+        # with  xi = (x - xl)/dx
+
+        self.ap[:] = self.aint[:]
+        self.am[1:] = self.ap[:-1]
 
         if not nolimit:
 
-            if (a[n+1] - a[n])*(a[n] - a[n-1]) > 0.0:
-                da0 = np.sign(da0)*min(math.fabs(da0),
-                                          min(2.0*math.fabs(a[n] - a[n-1]),
-                                              2.0*math.fabs(a[n+1] - a[n])) )
-            else:
-                da0 = 0.0
+            for n in range(2, len(self.a)-2):
+
+                if (self.ap[n] - self.a[n])*(self.a[n] - self.am[n]) <= 0.0:
+                    self.am[n] = self.a[n]
+                    self.ap[n] = self.a[n]
+
+                elif ( (self.ap[n] - self.am[n])*(self.a[n] - 0.5*(self.am[n] + self.ap[n])) >
+                       (self.ap[n] - self.am[n])**2/6.0 ):
+                    self.am[n] = 3.0*self.a[n] - 2.0*self.ap[n]
+
+                elif ( -(self.ap[n] - self.am[n])**2/6.0 >
+                       (self.ap[n] - self.am[n])*(self.a[n] - 0.5*(self.am[n] + self.ap[n])) ):
+                    self.ap[n] = 3.0*self.a[n] - 2.0*self.am[n]
+
+        for n in range(2, len(self.a)-2):
+            self.a6[n] = 6.0*self.a[n] - 3.0*(self.am[n] + self.ap[n])
 
 
-            if ( (a[n+2] - a[n+1])*(a[n+1] - a[n]) > 0.0):
-                dap = np.sign(dap)*min(math.fabs(dap),
-                                          min(2.0*math.fabs(a[n+1] - a[n]),
-                                              2.0*math.fabs(a[n+2] - a[n+1])) )
-            else:
-                dap = 0.0
+
+    def draw_parabola(self, idx, color="r", ls="-"):
+
+        x = np.linspace(self.gr.xl[idx], self.gr.xr[idx], 50)
+        xi = (x - self.gr.xl[idx])/self.gr.dx
+
+        a = self.am[idx] + xi*(self.ap[idx] - self.am[idx] + self.a6[idx] * (1.0-xi) )
+
+        plt.plot(x, a/self.scale, color=color, ls=ls, lw=1, zorder=10)
 
 
-        # cubic
-        aint[n] = 0.5*(a[n] + a[n+1]) - (1.0/6.0)*(dap - da0)
+    def ppm_trace_left(self, idx, sigma, color="0.5"):
 
-        n += 1
+        # sigma is the fraction of the domain from the right interface
+        # (since we are tracing to create the left state there).
 
-    return aint
+        x = np.linspace(self.gr.xr[idx]-sigma*self.gr.dx, self.gr.xr[idx], 50)
+        xi = (x - self.gr.xl[idx])/self.gr.dx
 
+        a = self.am[idx] + xi*(self.ap[idx] - self.am[idx] + self.a6[idx] * (1.0-xi) )
 
-def ppm(a, nolimit=0):
+        xx = np.zeros(len(x) + 3, dtype=np.float64)
+        yy = np.zeros(len(x) + 3, dtype=np.float64)
 
-    ap = np.zeros(len(a), dtype=np.float64)
-    am = np.zeros(len(a), dtype=np.float64)
-    a6 = np.zeros(len(a), dtype=np.float64)
+        xx[0:len(x)] = x
+        xx[len(x):] = [self.gr.xr[idx],
+                       self.gr.xr[idx]-sigma*self.gr.dx,
+                       self.gr.xr[idx]-sigma*self.gr.dx]
 
-    # parabola of form:
-    #    a(xi) = aminus + xi*(aplus - aminus + a6 * (1-xi) )
-    # with  xi = (x - xl)/dx
+        yy[0:len(x)] = a
+        yy[len(x):] = [0.0, 0.0, a[0]]
 
-    ap[:] = ppm_cubic(a, nolimit=nolimit)
-    am[1:] = ap[:-1]
-
-    if not nolimit:
-
-        n = 2
-        while n < len(a)-2:
-
-            if ( (ap[n] - a[n])*(a[n] - am[n]) <= 0.0):
-                am[n] = a[n]
-                ap[n] = a[n]
-
-            elif ( (ap[n] - am[n])*(a[n] - 0.5*(am[n] + ap[n])) >
-                   (ap[n] - am[n])**2/6.0 ):
-                am[n] = 3.0*a[n] - 2.0*ap[n]
-
-            elif ( -(ap[n] - am[n])**2/6.0 >
-                    (ap[n] - am[n])*(a[n] - 0.5*(am[n] + ap[n])) ):
-                ap[n] = 3.0*a[n] - 2.0*am[n]
-
-            n += 1
-
-    n = 2
-    while n < len(a)-2:
-        a6[n] = 6.0*a[n] - 3.0*(am[n] + ap[n])
-        n += 1
-
-    return ap, am, a6
-
-
-def drawParabola(gr, idx, ap, am, a6, color="r", ls="-"):
-
-    x = np.linspace(gr.xl[idx], gr.xr[idx], 50)
-    xi = (x - gr.xl[idx])/gr.dx
-    print xi
-    a = am + xi*(ap - am + a6 * (1.0-xi) )
-
-    plt.plot(x, a,
-               color=color, ls=ls, lw=1, zorder=10)
-
-
-def ppmTraceLeft(gr, idx, ap, am, a6, sigma, color="0.5"):
-
-    # sigma is the fraction of the domain from the right interface
-    # (since we are tracing to create the left state there).
-
-    x = np.linspace(gr.xr[idx]-sigma*gr.dx, gr.xr[idx], 50)
-    xi = (x - gr.xl[idx])/gr.dx
-
-    a = am + xi*(ap - am + a6 * (1.0-xi) )
-
-    xx = np.zeros(len(x) + 3, dtype=np.float64)
-    yy = np.zeros(len(x) + 3, dtype=np.float64)
-
-    xx[0:len(x)] = x
-    xx[len(x):] = [gr.xr[idx], gr.xr[idx]-sigma*gr.dx, gr.xr[idx]-sigma*gr.dx]
-
-    yy[0:len(x)] = a
-    yy[len(x):] = [0.0, 0.0, a[0]]
-
-    plt.fill(xx, yy, color=color, lw=1, zorder=-1)
+        plt.fill(xx, yy/self.scale, color=color, lw=1, zorder=-1)

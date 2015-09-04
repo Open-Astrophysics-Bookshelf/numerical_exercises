@@ -1,14 +1,8 @@
 import math
 import numpy as np
 import matplotlib.pyplot as plt
-import grid_plot_util as gpu
-
-
-class State(object):
-    def __init__(self, rho, u, p):
-        self.rho = rho
-        self.u = u
-        self.p = p
+import grid_plot as gp
+import riemann
 
 class RiemannProblem(object):
     def __init__(self, q_l, q_r, gamma=5./3., N=3):
@@ -17,54 +11,57 @@ class RiemannProblem(object):
         self.q_r = q_r
         self.nx = 2*N
 
-        self.gr = gpu.grid(self.nx)
+        self.gr = gp. FVGrid(self.nx)
 
         # allocate space -- we just care about N zones to the left and
         # right of the interface
         self.vars = {}
 
-        self.vars["rho"] = np.zeros(2*N, dtype=np.float64)
-        self.vars["u"] = np.zeros(2*N, dtype=np.float64)
-        self.vars["p"] = np.zeros(2*N, dtype=np.float64)
+        rho = self.gr.scratch_array()
+        rho[0:N] = q_l.rho
+        rho[N:2**N] = q_r.rho
 
-        self.vars["rho"][0:N] = q_l.rho
-        self.vars["rho"][N:2*N] = q_r.rho
+        u = self.gr.scratch_array()
+        u[0:N] = q_l.u
+        u[N:2*N] = q_r.u
 
-        self.vars["u"][0:N] = q_l.u
-        self.vars["u"][N:2*N] = q_r.u
+        p = self.gr.scratch_array()
+        p[0:N] = q_l.p
+        p[N:2*N] = q_r.p
 
-        self.vars["p"][0:N] = q_l.p
-        self.vars["p"][N:2*N] = q_r.p
+        rscale = max(q_l.rho, q_r.rho)
+        uscale = max(q_l.u, q_r.u)
+        pscale = max(q_l.p, q_r.p)
 
-    def get_cubic_points(self, var):
-        q = self.vars[var]
-        return gpu.ppm_cubic(q)
+        # do the ppm reconstruction on all of these variables
+        self.vars["rho"] = gp.PiecewiseParabolic(self.gr, rho, scale=rscale)
+        self.vars["u"] = gp.PiecewiseParabolic(self.gr, u, scale=uscale)
+        self.vars["p"] = gp.PiecewiseParabolic(self.gr, p, scale=pscale)
 
-    def get_parabola_coefficients(self, var):
-        q = self.vars[var]
-        return gpu.ppm(q)
-        
+    def draw_cubic_points(self, var, color="r"):
+        # these are defined on the i+1/2 interface
+        # note that we require 2 zones on either side of the interface, so
+        # we cannot draw points for the first 2 or last 2 zones
+        aint = self.vars[var].aint
+        plt.scatter(self.gr.xr[1:-2], aint[1:-2], marker="x", s=40, color=color, zorder=10)
+
+    def draw_parabola(self, var):
+        ap, am = self.vars[var].ap, self.vars[var].am
+        for n in range(2,self.nx-2):
+            self.vars[var].draw_parabola(n)
+
     def draw_grid(self):
-        gpu.drawGrid(self.gr)
+        self.gr.draw_grid()
 
-        gpu.labelCenter(self.gr, self.nx/2,   r"$i$")
-        gpu.labelCenter(self.gr, self.nx/2-1, r"$i-1$")
-        gpu.labelCenter(self.gr, self.nx/2+1, r"$i+1$")
-        gpu.labelCenter(self.gr, self.nx/2-2, r"$i-2$")
-        gpu.labelCenter(self.gr, self.nx/2+2, r"$i+2$")
-        
+        self.gr.label_center(self.nx/2,   r"$i$")
+        self.gr.label_center(self.nx/2-1, r"$i-1$")
+        self.gr.label_center(self.nx/2+1, r"$i+1$")
+        self.gr.label_center(self.nx/2-2, r"$i-2$")
+        self.gr.label_center(self.nx/2+2, r"$i+2$")
+
     def draw_var_avg(self, var, scale=1.0):
-        if scale == 0.0: scale = 1.0
-
-        q = self.vars[var]        
-        
-        for n in range(r.nx):
-            gpu.drawCellAvg(self.gr, n, q[n], color="r", scale=scale)
-            
-    def clean_axes(self):
-        plt.xlim(self.gr.xmin-0.5*self.gr.dx, self.gr.xmax+0.5*self.gr.dx)
-        plt.axis("off")
-
+        for n in range(self.gr.nx):
+            self.vars[var].draw_cell_avg(n, color="r")
 
 
 #-----------------------------------------------------------------------------
@@ -76,143 +73,105 @@ class RiemannProblem(object):
 
 
 # left state
-q_l = State(1.0, 0.0, 0.1)
+q_l = riemann.State(rho=1.0, u=0.0, p=1.0)
 
 # right state
-q_r = State(0.1, 0.0, 0.125)
-
+q_r = riemann.State(rho=0.125, u=0.0, p=0.1)
 
 r = RiemannProblem(q_l, q_r)
 
-rscale = max(q_l.rho, q_r.rho)
-uscale = max(q_l.u, q_r.u)
-pscale = max(q_l.p, q_r.p)
+
+subidx = [311, 312, 313]
+states = ["rho", "u", "p"]
+state_labels = [r"$\rho$", r"$u$", r"$p$"]
+
 
 #-----------------------------------------------------------------------------
 #  plot 1: initial state
 plt.clf()
 
+for n, s in enumerate(states):
 
-# rho
-plt.subplot(311)
+    plt.subplot(subidx[n])
+    r.draw_grid()
+    r.draw_var_avg(s)
+    r.gr.clean_axes()
 
-r.draw_grid()
-r.draw_var_avg("rho", scale=rscale)
-r.clean_axes()
-
-plt.title(r"$\rho$")
-
-# u
-plt.subplot(312)
-
-r.draw_grid()
-r.draw_var_avg("u", scale=uscale)
-r.clean_axes()
-
-plt.title("$u$")
-
-# p
-plt.subplot(313)
-
-r.draw_grid()
-r.draw_var_avg("p", scale=pscale)
-r.clean_axes()
-
-plt.title("$p$")
+    plt.title(state_labels[n])
 
 f = plt.gcf()
 f.set_size_inches(8.0,7.0)
-
 plt.tight_layout()
 
 plt.savefig("ppm-seq-1.png")
 
 
+#-----------------------------------------------------------------------------
+#  plot 2: cubic points (three vertical)
+plt.clf()
 
-# #------------- PLM -------------
-# plt.clf()
+for n, s in enumerate(states):
 
-# gpu.drawGrid(gr)
+    plt.subplot(subidx[n])
+    r.draw_grid()
+    r.draw_var_avg(s)
+    r.draw_cubic_points(s)
 
-# gpu.labelCenter(gr, nzones/2,   r"$i$")
-# gpu.labelCenter(gr, nzones/2-1, r"$i-1$")
-# gpu.labelCenter(gr, nzones/2+1, r"$i+1$")
-# gpu.labelCenter(gr, nzones/2-2, r"$i-2$")
-# gpu.labelCenter(gr, nzones/2+2, r"$i+2$")
+    r.gr.clean_axes()
 
+    plt.title(state_labels[n])
 
-# n = 0
-# while (n < nzones):
-#     gpu.drawCellAvg(gr, n, a[n], color="0.5")
-#     n += 1
+f = plt.gcf()
+f.set_size_inches(8.0,7.0)
+plt.tight_layout()
 
-# # compute the slopes
-# da = gpu.lslopes(a, nolimit=1)
-# lda = gpu.lslopes(a)
-
-# n = 2
-# while (n < nzones-2):
-#     gpu.drawSlope(gr, n, da[n], a[n], color="r", ls=":")
-#     gpu.drawSlope(gr, n, lda[n], a[n], color="r")
-#     n += 1
+plt.savefig("ppm-seq-2.png")
 
 
-# plt.axis([gr.xmin-0.5*gr.dx,gr.xmax+0.5*gr.dx, -0.25, 1.2])
-# plt.axis("off")
+#-----------------------------------------------------------------------------
+#  plot 3: parabola (three vertical)
+plt.clf()
 
-# plt.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
+for n, s in enumerate(states):
 
-# f = plt.gcf()
-# f.set_size_inches(8.0,2.0)
+    plt.subplot(subidx[n])
+    r.draw_grid()
+    r.draw_var_avg(s)
+    r.draw_cubic_points(s)
+    r.draw_parabola(s)
+    r.gr.clean_axes()
 
-# plt.savefig("piecewise-linear.eps")
-# plt.savefig("piecewise-linear.png")
+    plt.title(state_labels[n])
 
+f = plt.gcf()
+f.set_size_inches(8.0,7.0)
+plt.tight_layout()
 
-# #------------- PPM -------------
-# plt.clf()
-
-# gpu.drawGrid(gr)
-
-# gpu.labelCenter(gr, nzones/2,   r"$i$")
-# gpu.labelCenter(gr, nzones/2-1, r"$i-1$")
-# gpu.labelCenter(gr, nzones/2+1, r"$i+1$")
-# gpu.labelCenter(gr, nzones/2-2, r"$i-2$")
-# gpu.labelCenter(gr, nzones/2+2, r"$i+2$")
-
-
-# n = 0
-# while (n < nzones):
-#     gpu.drawCellAvg(gr, n, a[n], color="0.5")
-#     n += 1
-
-
-# # compute the parabolic coefficients
-# ap, am, a6 = gpu.ppm(a, nolimit=1)
-# lap, lam, la6 = gpu.ppm(a)
-
-# n = 2
-# while (n < nzones-2):
-#     gpu.drawParabola(gr, n, ap[n], am[n], a6[n], color="r", ls=":")
-#     gpu.drawParabola(gr, n, lap[n], lam[n], la6[n], color="r")
-#     #plt.scatter([gr.xl[n], gr.xr[n]], [am[n], ap[n]])
-#     n += 1
+plt.savefig("ppm-seq-3.png")
 
 
 
-
-# plt.axis([gr.xmin-0.5*gr.dx,gr.xmax+0.5*gr.dx, -0.25, 1.2])
-# plt.axis("off")
-
-# plt.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
-
-# f = plt.gcf()
-# f.set_size_inches(8.0,2.0)
+#-----------------------------------------------------------------------------
+#  plot 4: cell-center Riemann waves to show what hits the interface
 
 
-# plt.savefig("piecewise-parabolic.eps")
-# plt.savefig("piecewise-parabolic.png")
+#-----------------------------------------------------------------------------
+#  plot 5: tracing (zoom in, 3 horizontal)
 
-               
+
+
+#-----------------------------------------------------------------------------
+#  plot 6: final interface state (zoom in, 3 horizontal)
+
+
+
+#-----------------------------------------------------------------------------
+#  plot 7: Riemann phase
+
+
+
+#-----------------------------------------------------------------------------
+#  plot 8: Riemann solution
+
 
 

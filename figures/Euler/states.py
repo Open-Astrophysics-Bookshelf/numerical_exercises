@@ -1,58 +1,57 @@
 import math
-import numpy
-import pylab
-import grid_plot_util as gpu
+import numpy as np
+import matplotlib.pyplot as plt
+import grid_plot as gp
 
 def riemann():
 
-    
     # grid info
     xmin = 0.0
     xmax = 1.0
 
     nzones = 1
     ng = 0
-    
-    gr = gpu.grid(nzones, xmin=xmin, xmax=xmax)
+
+    gr = gp.FVGrid(nzones, xmin=xmin, xmax=xmax)
 
 
     #------------------------------------------------------------------------
     # plot a domain without ghostcells
-    gpu.drawGrid(gr)
+    gr.draw_grid()
 
-    gpu.labelCenter(gr, 0, r"$i$")
+    gr.label_center(0, r"$i$")
 
-    gpu.labelCellCenter(gr, 0, r"$q_i$")
-    
-    gpu.markCellLeftState(gr, 0, r"$q_{i-1/2,R}^{n+1/2}$", color="r")
-    gpu.markCellRightState(gr, 0, r"$q_{i+1/2,L}^{n+1/2}$", color="r")
-    
+    gr.label_cell_center(0, r"$q_i$")
 
-    pylab.arrow(gr.xc[0]-0.05*gr.dx, 0.5, -0.13*gr.dx, 0, 
-                shape='full', head_width=0.075, head_length=0.05, 
+    gr.mark_cell_left_state(0, r"$q_{i-1/2,R}^{n+1/2}$", color="r")
+    gr.mark_cell_right_state(0, r"$q_{i+1/2,L}^{n+1/2}$", color="r")
+
+
+    plt.arrow(gr.xc[0]-0.05*gr.dx, 0.5, -0.13*gr.dx, 0,
+                shape='full', head_width=0.075, head_length=0.05,
                 lw=1, width=0.01,
                 edgecolor="none", facecolor="r",
                 length_includes_head=True, zorder=100)
 
-    pylab.arrow(gr.xc[0]+0.05*gr.dx, 0.5, 0.13*gr.dx, 0, 
-                shape='full', head_width=0.075, head_length=0.05, 
+    plt.arrow(gr.xc[0]+0.05*gr.dx, 0.5, 0.13*gr.dx, 0,
+                shape='full', head_width=0.075, head_length=0.05,
                 lw=1, width=0.01,
                 edgecolor="none", facecolor="r",
                 length_includes_head=True, zorder=100)
-    
 
-    pylab.xlim(gr.xl[0]-0.25*gr.dx,gr.xr[2*ng+nzones-1]+0.25*gr.dx)
-    # pylab.ylim(-0.25, 0.75)
-    pylab.axis("off")
 
-    pylab.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
+    plt.xlim(gr.xl[0]-0.25*gr.dx,gr.xr[2*ng+nzones-1]+0.25*gr.dx)
+    # plt.ylim(-0.25, 0.75)
+    plt.axis("off")
 
-    f = pylab.gcf()
+    plt.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
+
+    f = plt.gcf()
     f.set_size_inches(4.0,2.5)
 
 
-    pylab.savefig("states.png")
-    pylab.savefig("states.eps")
+    plt.savefig("states.png")
+    plt.savefig("states.pdf")
 
 
 if __name__== "__main__":

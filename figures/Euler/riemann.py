@@ -1,100 +1,119 @@
-import math
-import numpy
-import pylab
+# plot the Hugoniot loci for a compressible Riemann problem
 
-def riemann():
+import matplotlib.pyplot as plt
+import numpy as np
+import scipy.optimize as optimize
 
-    # grid info
-    xmin = 0.0
-    xmax = 1.0
+class State(object):
+    def __init__(self, p=1.0, u=0.0, rho=1.0):
+         self.p = p
+         self.u = u
+         self.rho = rho
 
-    nzones = 2
-    ng = 0
-    
-    dx = (xmax - xmin)/float(nzones)
+    def __str__(self):
+        return "rho: {}; u: {}; p: {}".format(self.rho, self.u, self.p)
 
-    xl = (numpy.arange(2*ng+nzones) - ng)*dx
-    xr = (numpy.arange(2*ng+nzones)+1 - ng)*dx
+class RiemannProblem(object):
+    def __init__(self, left_state, right_state, gamma=1.4):
+        self.left = left_state
+        self.right = right_state
+        self.gamma = gamma
 
-    xc = 0.5*(xl + xr)
+    def u_hugoniot(self, p, side):
+
+        if side == "left":
+            state = self.left
+            s = 1.0
+        elif side == "right":
+            state = self.right
+            s = -1.0
+
+        c = np.sqrt(self.gamma*state.p/state.rho)
+
+        if p < state.p:
+            # rarefaction
+            u = state.u + s*(2.0*c/(self.gamma-1.0))* \
+                (1.0 - (p/state.p)**((self.gamma-1.0)/(2.0*self.gamma)))
+        else:
+            # shock
+            beta = (self.gamma+1.0)/(self.gamma-1.0)
+            u = state.u + s*(2.0*c/np.sqrt(2.0*self.gamma*(self.gamma-1.0)))* \
+                (1.0 - p/state.p)/np.sqrt(1.0 + beta*p/state.p)
+
+        return u
+
+    def find_star_state(self, p_min=0.001, p_max=1000.0):
+        # we need to root-find on
+        pstar = optimize.brentq(lambda p: self.u_hugoniot(p, "left") - self.u_hugoniot(p, "right"),
+                               p_min, p_max)
+        ustar = self.u_hugoniot(pstar, "left")
+
+        return pstar, ustar
+
+    def plot_hugoniot(self, p_min = 0.0, p_max=1.5, N=200):
+
+        p = np.linspace(p_min, p_max, num=N)
+        u_left = np.zeros_like(p)
+        u_right = np.zeros_like(p)
+
+        for n in range(N):
+            u_left[n] = self.u_hugoniot(p[n], "left")
+        ish = np.where(p > self.left.p)
+        ir = np.where(p < self.left.p)
+
+        plt.plot(p[ish], u_left[ish], c="b", ls=":", lw=2)
+        plt.plot(p[ir], u_left[ir], c="b", ls="-", lw=2)
+        plt.scatter([self.left.p], [self.left.u], marker="x", c="b", s=40)
+
+        for n in range(N):
+            u_right[n] = self.u_hugoniot(p[n], "right")
+        ish = np.where(p > self.right.p)
+        ir = np.where(p < self.right.p)
+
+        plt.plot(p[ish], u_right[ish], c="r", ls=":", lw=2)
+        plt.plot(p[ir], u_right[ir], c="r", ls="-", lw=2)
+        plt.scatter([self.right.p], [self.right.u], marker="x", c="r", s=40)
+
+        du = 0.025*(max(np.max(u_left), np.max(u_right)) -
+                    min(np.min(u_left), np.min(u_right)))
+
+        plt.text(self.left.p, self.left.u+du, "left",
+                 horizontalalignment="center", color="b")
+
+        plt.text(self.right.p, self.right.u+du, "right",
+                 horizontalalignment="center", color="r")
+
+        plt.xlim(p_min, p_max)
+
+        plt.xlabel(r"$p$", fontsize="large")
+        plt.ylabel(r"$u$", fontsize="large")
+
+        legs = []
+        legnames = []
+
+        legs.append(plt.Line2D((0,1),(0,0), color="k", ls=":", marker=None))
+        legnames.append("shock")
+
+        legs.append(plt.Line2D((0,1),(0,0), color="k", ls="-", marker=None))
+        legnames.append("rarefaction")
+
+        plt.legend(legs, legnames, frameon=False, loc="best")
+
+        plt.tight_layout()
+
+        plt.savefig("riemann-phase.pdf")
 
 
-    #------------------------------------------------------------------------
-    # plot a domain without ghostcells
-    pylab.plot([xmin,xmax], [0,0], color="k", lw=2)
+if __name__ == "__main__":
 
-    # domain left edge
-    pylab.plot([xl[ng], xl[ng]], [0, 0.5], color="k", lw=2)
+    # setup the problem -- Sod
+    left = State(p = 1.0, u = 0.0, rho = 1.0)
+    right = State(p = 0.1, u = 0.0, rho = 0.125)
 
-    n = ng
-    while (n < ng+nzones):
+    rp = RiemannProblem(left, right)
 
-        # draw right edge
-        pylab.plot([xr[n], xr[n]], [0, 0.5], color="k", lw=2)        
+    rp.plot_hugoniot()
 
-        # draw center marker
-        pylab.plot([xc[n], xc[n]], [-0.05, 0], color="k")                
-        n += 1
+    pstar, ustar = rp.find_star_state()
 
-    # domain left edge
-    pylab.plot([xr[ng+nzones-1], xr[ng+nzones-1]], [0, 0.5], color="k", lw=2)
-
-       
-
-    # label a few
-    pylab.text(xc[ng+nzones/2-1], -0.1, r"$i$", 
-               horizontalalignment='center', verticalalignment='top')
-
-    pylab.text(xc[ng+nzones/2], -0.1, r"$i+1$", 
-               horizontalalignment='center', verticalalignment='top')
-
-    pylab.text(xl[ng+nzones/2], -0.1, r"$i+1/2$", 
-               horizontalalignment='center', verticalalignment='top')
-
-
-    # L
-    pylab.scatter(xl[ng+nzones/2]-0.05*dx, 0.25, marker="x")
-
-    pylab.text(xl[ng+nzones/2]-0.075*dx, 0.25, r"$U_{i+1/2,L}^{n+1/2}$", 
-               horizontalalignment='right', verticalalignment='center')
-
-    pylab.text(xc[ng+nzones/2-1], 0.25, r"$U_i$",
-               horizontalalignment='center', verticalalignment='center', fontsize="16")
-
-
-    # R
-    pylab.scatter(xl[ng+nzones/2]+0.05*dx, 0.25, marker="x")
-
-    pylab.text(xl[ng+nzones/2]+0.075*dx, 0.25, r"$U_{i+1/2,R}^{n+1/2}$", 
-               horizontalalignment='left', verticalalignment='center')
-
-    pylab.text(xc[ng+nzones/2], 0.25, r"$U_{i+1}$",
-               horizontalalignment='center', verticalalignment='center', fontsize="16")
-
-
-    # flux
-    pylab.arrow(xl[ng+nzones/2]-0.25*dx, 0.6, 0.5*dx, 0, 
-                shape='full', head_width=0.075, head_length=0.05, 
-                lw=1, width=0.03,
-                edgecolor="none", facecolor="red",
-                length_includes_head=True, zorder=100)
-    
-    pylab.text(xl[ng+nzones/2], 0.68, r"$F(U_{i+1/2}^{n+1/2})$", color="red",
-               horizontalalignment="center")
-
-
-    pylab.xlim(xl[0]-0.5*dx,xr[2*ng+nzones-1]+0.5*dx)
-    pylab.ylim(-0.25, 0.75)
-    pylab.axis("off")
-
-    pylab.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
-
-    f = pylab.gcf()
-    f.set_size_inches(8.0,2.5)
-
-
-    pylab.savefig("riemann_comp.eps")
-
-
-if __name__== "__main__":
-    riemann()
+    print pstar, ustar
