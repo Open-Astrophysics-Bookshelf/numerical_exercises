@@ -30,6 +30,7 @@ The following chapters are mostly written:
 
 The following are things I'd like to add in the next 1-2 years:
 
+- Standard Hydro Test Problems
 - Fluid Instabilities
 - Rotation and Self-gravity
 - Radiation Hydrodynamics
