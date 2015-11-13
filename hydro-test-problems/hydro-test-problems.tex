@@ -1,0 +1,39 @@
+\section{Testing}
+
+There are a large number of standard hydrodynamics test problems that
+should be run on any implementation of an algorithm.  These problems
+uncover strengths and weaknesses in your choice of algorithm and also
+simple coding bugs.
+
+An ideal test problem has an analytic solution that can be compared to
+directly.
+
+Convergence of your results is also an important test.
+
+Recall that for a finite-volume discretization, to second-order, the
+value of a function evaluated at the cell-center is the same as the
+average of that function over the zone.  Usually this means that you
+can simply initialize your test problem using cell-center coordinates.
+But for problems that are not well aligned with your grid, e.g., a
+spherical initial function mapped onto your Cartesian grid, it is
+beneficial to try to initialize the average value in the zone.  A
+common way to do this is to sub-divide a zone into a number of
+sub-zones, initialize each of the sub-zones, and then average the
+sub-zones back to the original zone.  \MarginPar{show figure}
+
+
+\section{Shock tube problems}
+
+
+
+\section{Advection}
+
+
+\section{Sedov}
+
+
+
+\section{Gresho vortex}
+
+
+

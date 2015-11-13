@@ -361,6 +361,13 @@ f_{\mathrm{lo}-1} &=& f_\mathrm{lo}
   At coarse-fine interfaces, corrections are done to ensure
   consistency.
 
+\item {\em Mapped grids}: mapped grids are (usually) logically
+  Cartesian grids that use a function (map) to transform from 
+  a rectangular mesh (that corresponds to the array in memory)
+  to a general curvilinear grid.  These maintain the performance
+  characteristics of structured grids, since any zone can be 
+  directly indexed with an integer for each spatial dimension. \MarginPar{reference the Calhoun paper}
+
 \item {\em Voronoi grids}: a hybrid of particle and grid methods is
   provided by methods that move particles in a Lagrangian fashion and
   use a Voronoi tessellation of these particles to define the grid

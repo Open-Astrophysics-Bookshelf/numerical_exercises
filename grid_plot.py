@@ -341,7 +341,6 @@ class PiecewiseParabolic(PiecewiseConstant):
 
 
     def draw_parabola(self, idx, color="r", ls="-"):
-
         x = np.linspace(self.gr.xl[idx], self.gr.xr[idx], 50)
         xi = (x - self.gr.xl[idx])/self.gr.dx
 

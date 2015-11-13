@@ -437,6 +437,12 @@ Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
 
 \input intro/intro.tex
 
+\ifdefined\debugmode
+\chapter{Classification of PDEs}
+
+\input pde-classes/pde-classes.tex
+\fi
+
 %\addtocontents{exc}{\protect\addvspace{10pt}}%
 \chapter{Finite-Volume Grids}
 
@@ -459,6 +465,12 @@ Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
 
 \input Euler/Euler.tex
 
+
+\ifdefined\debugmode
+\chapter{Hydrodynamics Test Problems}
+
+\input hydro-test-problems/hydro-test-problems.tex
+\fi
 
 %\part{Elliptic, Parabolic Problems, and Mixed-Type Problems}
 
@@ -489,9 +501,11 @@ Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
 
 \input low_mach/low_mach.tex
 
+\ifdefined\debugmode
 \chapter{Radiation Hydrodynamics}
 
 \input radiation/radiation.tex
+\fi
 
 %\part{Appendices}
 

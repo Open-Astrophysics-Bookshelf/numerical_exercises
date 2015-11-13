@@ -2,10 +2,12 @@ ALL: CompHydroTutorial.pdf
 
 DIRS := preface \
         intro \
+	pde-classes \
         finite-volume \
         advection \
         burgers \
         Euler \
+        hydro-test-problems \
         multigrid \
         diffusion \
         multiphysics \
