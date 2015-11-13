@@ -31,8 +31,8 @@ cc = gp.CellCentered(gr, a)
 
 # draw the data
 for i in range(nzones):
-    cc.draw_data_point(i, color="r")    
-    
+    cc.draw_data_point(i, color="r")
+
 
 cc.label_data_point(nzones/2, r"$f_i$", color="r")
 
@@ -40,7 +40,7 @@ cc.label_data_point(nzones/2, r"$f_i$", color="r")
 plt.plot([gr.xc[gr.ng+nzones/2-1], gr.xc[gr.ng+nzones/2-1]], [-0.35,-0.25], color="k")
 plt.plot([gr.xc[gr.ng+nzones/2], gr.xc[gr.ng+nzones/2]], [-0.35,-0.25], color="k")
 plt.plot([gr.xc[gr.ng+nzones/2-1], gr.xc[gr.ng+nzones/2]], [-0.3,-0.3], color="k")
-plt.text(0.5*(gr.xc[gr.ng+nzones/2-1] + gr.xc[gr.ng+nzones/2]), -0.45, r"$\Delta x$", 
+plt.text(0.5*(gr.xc[gr.ng+nzones/2-1] + gr.xc[gr.ng+nzones/2]), -0.45, r"$\Delta x$",
            horizontalalignment="center")
 
 
@@ -53,6 +53,4 @@ plt.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
 f = plt.gcf()
 f.set_size_inches(10.0,3.0)
 
-plt.savefig("ccfd_grid.png")
 plt.savefig("ccfd_grid.pdf")
-

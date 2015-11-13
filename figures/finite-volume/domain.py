@@ -59,6 +59,6 @@ f = pylab.gcf()
 f.set_size_inches(7.0,4.25)
 
 
-pylab.savefig("domain.png")
-pylab.savefig("domain.eps", bbox_inches="tight")
+pylab.savefig("domain.pdf", bbox_inches="tight")
+
 
