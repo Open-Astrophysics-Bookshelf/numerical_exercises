@@ -278,6 +278,7 @@ This method is called {\em Simpson's rule}.  Note that for 2 intervals
 Figure~\ref{fig:integration} shows
 these different approximations for the case of two intervals (three points).
 
+% these figures were created with figures/intro/integrals.py
 \begin{figure}
 \centering
 \includegraphics[width=0.49\linewidth]{rectangle}
@@ -323,6 +324,7 @@ This can be used to correct out guess as $x_0 \leftarrow x_0 + \delta
 x$, and we can iterate on this procedure until $\delta x$ falls below
 some tolerance.
 
+% these figures were made with figures/intro/roots-plot.py
 \begin{figure}
 \centering
 \includegraphics[width=0.49\linewidth]{newton_00}
@@ -392,23 +394,25 @@ k_4 &= f(t^n + \Delta t, y_k^n + \Delta t k_3)
 Note the similarity to Simpson's method for integration.  This is
 fourth-order accurate overall.
 
+
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.65\linewidth]{rk4_k1.eps} \\
-\includegraphics[width=0.65\linewidth]{rk4_k2.eps} \\
-\includegraphics[width=0.65\linewidth]{rk4_k3.eps} \\
+\includegraphics[width=0.65\linewidth]{rk4_k1} \\
+\includegraphics[width=0.65\linewidth]{rk4_k2} \\
+\includegraphics[width=0.65\linewidth]{rk4_k3} \\
 %
 \caption[The $4^\mathrm{th}$-order Runge-Kutta method] {\label{fig:rk}
   A graphical illustration of the four steps in the
-  $4^\mathrm{th}$-order Runge-Kutta method. {\color{red} Annotate this better}}
+  $4^\mathrm{th}$-order Runge-Kutta method.  This example
+  is integrating $dy/dt = -y$.  {\color{red} Annotate this better}}
 \end{figure}
 
 
 \begin{figure}[t]
 \ContinuedFloat
 \centering
-\includegraphics[width=0.65\linewidth]{rk4_k4.eps} \\
-\includegraphics[width=0.7\linewidth]{rk4_final.eps} \\
+\includegraphics[width=0.65\linewidth]{rk4_k4} \\
+\includegraphics[width=0.7\linewidth]{rk4_final} \\
 %
 \caption[$4^\mathrm{th}$-order Runge-Kutta continued] {(continued) A graphical illustration of the four steps in the
   $4^\mathrm{th}$-order Runge-Kutta method.}
