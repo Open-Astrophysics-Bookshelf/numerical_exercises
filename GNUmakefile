@@ -39,7 +39,7 @@ CompHydroTutorial.pdf: CompHydroTutorial.tex $(TEXS) $(EPSS) $(PDFS) refs.bib
 
 
 clean:
-	$(RM) *.aux *.log *.dvi *.bbl *.blg *.lof *.toc *.exc *.out
+	$(RM) *.aux *.log *.dvi *.bbl *.blg *.lof *.toc *.exc *.out *.brf
 	$(RM) *~
 
 realclean: clean
