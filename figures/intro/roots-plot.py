@@ -105,4 +105,4 @@ for n, x in enumerate(xeval):
 
     plt.tight_layout()
 
-    plt.savefig("newton_%2.2d.eps" % (n))
+    plt.savefig("newton_%2.2d.pdf" % (n))

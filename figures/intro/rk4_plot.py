@@ -61,7 +61,7 @@ leg.draw_frame(0)
 pylab.xlim(t0-0.05*dt, t0+2.1*dt)
 
 pylab.tight_layout()
-pylab.savefig("rk4_initial.eps", bbox_inches='tight')
+pylab.savefig("rk4_initial.pdf", bbox_inches='tight')
 
 
 # now draw the solution Euler would get
@@ -85,7 +85,7 @@ leg.draw_frame(0)
 pylab.xlim(t0-0.25*dt, t0+2.1*dt)
 
 pylab.tight_layout()
-pylab.savefig("rk4_Euler.eps", bbox_inches='tight')
+pylab.savefig("rk4_Euler.pdf", bbox_inches='tight')
 
 
 #----------------------------------------------------------------------------
@@ -110,7 +110,7 @@ leg.draw_frame(0)
 pylab.xlim(t0-0.25*dt, t0+2.1*dt)
 
 pylab.tight_layout()
-pylab.savefig("rk4_k1.eps", bbox_inches='tight')
+pylab.savefig("rk4_k1.pdf", bbox_inches='tight')
 
 
 #----------------------------------------------------------------------------
@@ -139,7 +139,7 @@ leg.draw_frame(0)
 pylab.xlim(t0-0.25*dt, t0+2.1*dt)
 
 pylab.tight_layout()
-pylab.savefig("rk4_k2.eps", bbox_inches='tight')
+pylab.savefig("rk4_k2.pdf", bbox_inches='tight')
 
 
 #----------------------------------------------------------------------------
@@ -164,7 +164,7 @@ leg.draw_frame(0)
 pylab.xlim(t0-0.25*dt, t0+2.1*dt)
 
 pylab.tight_layout()
-pylab.savefig("rk4_k3.eps", bbox_inches='tight')
+pylab.savefig("rk4_k3.pdf", bbox_inches='tight')
 
 
 #----------------------------------------------------------------------------
@@ -190,7 +190,7 @@ leg.draw_frame(0)
 pylab.xlim(t0-0.25*dt, t0+2.1*dt)
 
 pylab.tight_layout()
-pylab.savefig("rk4_k4.eps", bbox_inches='tight')
+pylab.savefig("rk4_k4.pdf", bbox_inches='tight')
 
 
 
@@ -214,5 +214,5 @@ leg.draw_frame(0)
 pylab.xlim(t0-0.25*dt, t0+2.1*dt)
 
 pylab.tight_layout()
-pylab.savefig("rk4_final.eps", bbox_inches='tight')
+pylab.savefig("rk4_final.pdf", bbox_inches='tight')
 

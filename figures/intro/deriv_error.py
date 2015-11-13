@@ -26,6 +26,6 @@ plt.ylabel("error in difference approximation")
 
 plt.tight_layout()
 
-plt.savefig("deriv_error.eps")
+plt.savefig("deriv_error.pdf")
 
 

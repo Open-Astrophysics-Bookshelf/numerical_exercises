@@ -8,9 +8,9 @@ def f(x):
     return 1.0 + x*0.25*np.sin(np.pi*x)
 
 
-plt.rcParams.update({'xtick.labelsize': 18,                              
-                     'ytick.labelsize': 18,                              
-                     'text.fontsize': 18})                               
+plt.rcParams.update({'xtick.labelsize': 18,
+                     'ytick.labelsize': 18,
+                     'text.fontsize': 18})
 
 
 
@@ -70,7 +70,7 @@ ax.set_yticks([])
 
 plt.xlim(xmin, 1.05*xmax)
 
-plt.savefig("rectangle.eps", bbox_inches="tight")
+plt.savefig("rectangle.pdf", bbox_inches="tight")
 
 
 #---------------------------------------------------------------------
@@ -116,7 +116,7 @@ ax.set_yticks([])
 
 plt.xlim(xmin, 1.05*xmax)
 
-plt.savefig("trapezoid.eps", bbox_inches="tight")
+plt.savefig("trapezoid.pdf", bbox_inches="tight")
 
 
 #---------------------------------------------------------------------
@@ -169,4 +169,4 @@ ax.set_yticks([])
 
 plt.xlim(xmin, 1.05*xmax)
 
-plt.savefig("simpsons.eps",bbox_inches="tight")
+plt.savefig("simpsons.pdf",bbox_inches="tight")
