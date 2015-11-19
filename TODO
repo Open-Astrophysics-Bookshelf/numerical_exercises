@@ -54,6 +54,8 @@ sample of public codes
 
 Chapter 2:
 
+ -- in "what is a simulation", add a discussion of DNS, LES, and ILES
+
  -- add BC and difference on a grid examples perhaps through a ipython
     notebook.
 
