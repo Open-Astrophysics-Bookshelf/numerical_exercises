@@ -19,7 +19,7 @@ advection equation provides important insight into the methods used
 for these systems.
 %
 \begin{exercise}[Linear advection analytic solution]
-{Show that $a(x - ut)$ is a solution to
+{Show via substitution that $a(x - ut)$ is a solution to
   Eq.~\ref{eq:advect} for any choice of a.  This means that
 the solution is constant along the lines $x = u t$
 (the curves along which the solution is constant are called the
@@ -60,7 +60,7 @@ of derivative results in a stable method.
 Notice that if we use Eq.~\ref{eq:fo} to update the data in the first
 zone inside the boundary, we need data to the left of this
 zone---outside of the domain.  This means that we need a single
-ghost point to implement the boundary conditions for our method.  The
+{\em ghost point} to implement the boundary conditions for our method.  The
 presence of the ghost points allow us to use the same update equation
 (e.g.\ Eq.~\ref{eq:fo}) for all zones in the domain.
 
@@ -150,10 +150,13 @@ finite-difference upwind method for advection, using 65 points and
 a variety of CFL numbers. \\
 \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/advection/fdadvect.py}{fdadvect.py}}}
 \end{figure}
+%
+This method is first-order accurate.  Ultimately we will want higher-order
+accurate methods.
 
 \begin{exercise}[FTCS and stability]
 {You may think that using a centered-difference for
-  the spatial derivative, $u_x \sim (u_{i+1} - u_{i-1})/(2 \Delta x)$
+  the spatial derivative, $a_x \sim (a_{i+1} - a_{i-1})/(2 \Delta x)$
   would be more accurate.  This method is called FTCS (forward-time,
   centered-space).  Try this.  You will find that the solution is
   unconditionally unstable.  }
@@ -162,13 +165,30 @@ a variety of CFL numbers. \\
 The classic method for understanding stability is to consider the growth 
 of a single Fourier mode in our discretization.  That is, substitute in
 $a_i^n = A^n e^{ji\theta}$, where $j = \sqrt{-1}$, and $\theta$ represents a
-phase.  A method is stable if $|A^{n+1}/A^n| \le 1$.  Performing this
-with FTCS shows that no value of $C$ can make the method stable.
-Doing the same analysis for Eq.~\ref{eq:fo} would show that the upwind
-method is stable for $0\le C \le 1$. 
-(Note that this stability analysis only works for linear equations, where
-the difference Fourier modes are decoupled, nevertheless, we use its
-ideas for nonlinear advection problems as well).
+phase.  A method is stable if $|A^{n+1}/A^n| \le 1$.  FTCS appears as:
+\begin{equation}
+  a_i^{n +1} = a_i^n - \frac{C}{2} (a_{i+1}^n - a_{i-1}^n)
+\end{equation}
+Examining a Fourier mode shows that:
+\begin{align}
+  A^{n+1}e^{ji\theta} &= A^n e^{ji\theta} + \frac{C}{2} \left (
+      A^n e^{j(i+1)\theta} - A^n e^{j(i-1)\theta} \right ) \\
+  A^{n+1} &= A^n  + \frac{C}{2} A^n \left ( e^{j\theta} - e^{-j\theta}\right ) \\
+  A^{n+1} &= A^n \left ( 1 + j C \sin\theta \right )
+\end{align}
+so the magnitude of the amplification is
+\begin{equation}
+ \left | \frac{A^{n+1}}{A^n}\right |^2 = 1 + C\sin^2\theta
+\end{equation}
+We see that there is no value of $C$ that can make the method stable
+($|A^{n+1}/A^n| > 1$ always).  Doing the same analysis for
+Eq.~\ref{eq:fo} would show that the upwind method is stable for $0\le
+C \le 1$. 
+
+It is important to note that this stability analysis only works for
+linear equations, where the different Fourier modes are decoupled,
+nevertheless, we use its ideas for nonlinear advection problems as
+well).
 
 \begin{exercise}[Stability analysis]
 {To get an alternate feel for stability, we can ask
@@ -205,7 +225,11 @@ We can write this as a linear system with coupled equations:
 \begin{equation}
 -C a^{n+1}_{i-1} + (1 + C) a^{n+1}_i = a_i^n
 \end{equation}
-In matrix form, solving for the points $1, \ldots, N-1$, this is:
+The only change here is that the righthand side is evaluated at the new timelevel,
+$n+1$.
+
+If we use periodic boundary conditions, then point $0$ and $N-1$ are
+identical, so we only need to update one of these.  Taking $u_0^{n+1} = u_{N-1}^{n+1}$, our system in matrix form appears as:
 \begin{equation}
 \renewcommand{\arraystretch}{1.5}
 \left ( \begin{array}{ccccccc} 
