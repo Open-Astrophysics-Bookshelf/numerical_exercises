@@ -1,65 +1,47 @@
 import math
-import numpy
-import pylab
-import grid_plot_util as gpu
+import numpy as np
+import matplotlib.pyplot as plt
+import grid_plot as gp
 
 
 nzones = 7
 
 # data that lives on the grid
-a = numpy.array([0.3, 1.0, 0.9, 0.8, 0.25, 0.15, 0.5])
+ainit = np.array([0.3, 1.0, 0.9, 0.8, 0.25, 0.15, 0.5])
 
-gr = gpu.grid(nzones)
+gr = gp.FVGrid(nzones)
+a = gr.scratch_array()
+a[gr.ilo:gr.ihi+1] = ainit[:]
 
+pl_nolim = gp.PiecewiseLinear(gr, a, nolimit=1)
+pl = gp.PiecewiseLinear(gr, a)
 
-gpu.drawGrid(gr)
+gr.draw_grid()
 
-gpu.labelCenter(gr, nzones/2,   r"$i$")
-gpu.labelCenter(gr, nzones/2-1, r"$i-1$")
-gpu.labelCenter(gr, nzones/2+1, r"$i+1$")
-gpu.labelCenter(gr, nzones/2-2, r"$i-2$")
-gpu.labelCenter(gr, nzones/2+2, r"$i+2$")
+gr.label_center(nzones/2,   r"$i$")
+gr.label_center(nzones/2-1, r"$i-1$")
+gr.label_center(nzones/2+1, r"$i+1$")
+gr.label_center(nzones/2-2, r"$i-2$")
+gr.label_center(nzones/2+2, r"$i+2$")
 
 #labelEdge(gr, nzones/2,   r"$i-1/2$")
 #labelEdge(gr, nzones/2+1, r"$i+1/2$")
 
-n = 0
-while (n < nzones):
-    gpu.drawCellAvg(gr, n, a[n])
-    n += 1
+for n in range(nzones):
+    pl.draw_cell_avg(n, ls=":", color="0.5")
+    pl_nolim.draw_slope(n, color="0.5")
+    pl.draw_slope(n, color="r")
 
 
-# compute the slopes as simple centered-differences
-da = gpu.lslopes(a, nolimit=1)
+plt.axis([gr.xmin-0.5*gr.dx,gr.xmax+0.5*gr.dx, -0.25, 1.2])
+plt.axis("off")
 
-n = 1
-while (n < nzones-1):
-    gpu.drawSlope(gr, n, da[n], a[n], color="blue")
-    n += 1
+plt.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
 
-
-# compute the limited slopes
-lda = gpu.lslopes(a)
-
-n = 1
-while (n < nzones-1):
-    gpu.drawSlope(gr, n, lda[n], a[n], color="r")
-    n += 1
-
-
-
-
-pylab.axis([gr.xmin-0.5*gr.dx,gr.xmax+0.5*gr.dx, -0.25, 1.2])
-pylab.axis("off")
-
-pylab.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
-
-f = pylab.gcf()
+f = plt.gcf()
 f.set_size_inches(8.0,2.0)
 
-
-pylab.savefig("generalgrid.png")
-pylab.savefig("generalgrid.eps")
+plt.savefig("generalgrid.pdf")
                
 
 
