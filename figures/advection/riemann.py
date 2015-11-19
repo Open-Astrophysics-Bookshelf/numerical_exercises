@@ -59,7 +59,7 @@ def riemann():
 
     plt.tight_layout()
 
-    plt.savefig("riemann.pdf")
+    plt.savefig("riemann-adv.pdf")
 
 if __name__== "__main__":
     riemann()

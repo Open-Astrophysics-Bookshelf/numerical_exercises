@@ -1,7 +1,7 @@
 import math
-import numpy
-import pylab
-import grid_plot_util as gpu
+import numpy as np
+import matplotlib.pyplot as plt
+import grid_plot as gp
 
 def riemann():
 
@@ -12,74 +12,67 @@ def riemann():
     nzones = 4
     ng = 2
 
-    gr = gpu.grid(nzones, ng=ng)
+    gr = gp.FVGrid(nzones, ng=ng, xmin=xmin, xmax=xmax)
+    
+    # interior and ghost cell initialization
+    a = gr.scratch_array()
 
-    # interior
-    atemp = numpy.array([0.8, 0.7, 0.4, 0.5])
-
-    a = numpy.zeros(2*gr.ng + gr.nx, dtype=numpy.float64)
-
-    # fill interior and ghost cells
-    a[gr.ilo:gr.ihi+1] = atemp[:]
+    a[gr.ilo:gr.ihi+1] = np.array([0.8, 0.7, 0.4, 0.5])
     a[0:gr.ilo] = a[gr.ihi-1:gr.ihi+1]
     a[gr.ihi:2*gr.ng+gr.nx] = a[gr.ihi]
+
+    pc = gp.PiecewiseConstant(gr, a)
+    pl = gp.PiecewiseLinear(gr, a, nolimit=1)
 
 
 
     #------------------------------------------------------------------------
     # plot a domain without ghostcells
-    gpu.drawGrid(gr, emphasizeEnd=1, drawGhost=1)
+    gr.draw_grid(draw_ghost=1, emphasize_end=1)
 
-    gpu.labelCenter(gr, gr.ng-2, r"$\mathrm{lo-2}$")
-    gpu.labelCenter(gr, gr.ng-1, r"$\mathrm{lo-1}$")
-    gpu.labelCenter(gr, gr.ng, r"$\mathrm{lo}$")
-    gpu.labelCenter(gr, gr.ng+1, r"$\mathrm{lo+1}$")
+    gr.label_center(gr.ng-2, r"$\mathrm{lo-2}$", fontsize="medium")
+    gr.label_center(gr.ng-1, r"$\mathrm{lo-1}$", fontsize="medium")
+    gr.label_center(gr.ng, r"$\mathrm{lo}$", fontsize="medium")
+    gr.label_center(gr.ng+1, r"$\mathrm{lo+1}$", fontsize="medium")
 
-    gpu.labelEdge(gr, gr.ng, r"$\mathrm{lo}-1/2$")
+    gr.label_edge(gr.ng, r"$\mathrm{lo}-1/2$", fontsize="medium")
     
     # draw cell averages
-    n = 0
-    while n < gr.ng+gr.nx:
-        gpu.drawCellAvg(gr, n, a[n], color="0.5", ls=":")
-        n += 1
+    for n in range(0, gr.ng+gr.nx-1):
+        pc.draw_cell_avg(n, color="0.5", ls=":")
 
-    # get slopes
-    lda = gpu.lslopes(a, nolimit=1)
 
-    n = gr.ilo-1
-    while (n <= gr.ihi):
-        gpu.drawSlope(gr, n, lda[n], a[n], color="r")
-        n += 1
+    # draw slopes
+    for n in range(gr.ilo-1, gr.ihi):
+        pl.draw_slope(n, color="r")
+
 
     # compute the states to the left and right of lo-1/2
     C = 0.7 # CFL
-    al = a[gr.ilo-1] + 0.5*gr.dx*(1.0 - C)*lda[gr.ilo-1]
-    ar = a[gr.ilo] - 0.5*gr.dx*(1.0 + C)*lda[gr.ilo]
+    al = a[gr.ilo-1] + 0.5*gr.dx*(1.0 - C)*pl.slope[gr.ilo-1]
+    ar = a[gr.ilo] - 0.5*gr.dx*(1.0 + C)*pl.slope[gr.ilo]
 
     # L
-    gpu.markCellRightState(gr, ng-1, r"$a_{\mathrm{lo}+1/2,L}^{n+1/2}$", 
-                           value=al, vertical="top", color="b")
+    gr.mark_cell_right_state(ng-1, r"$a_{\mathrm{lo}+1/2,L}^{n+1/2}$", 
+                             value=al, vertical="top", color="b")
 
     # R
-    gpu.markCellLeftState(gr, ng, r"$a_{\mathrm{lo}+1/2,R}^{n+1/2}$", 
-                          value=ar, vertical="top", color="b")
+    gr.mark_cell_left_state(ng, r"$a_{\mathrm{lo}+1/2,R}^{n+1/2}$", 
+                            value=ar, vertical="top", color="b")
 
 
+    plt.xlim(gr.xl[0]-0.15*gr.dx,gr.xr[ng+1]+0.15*gr.dx)
+    plt.ylim(-0.25, 1.1)
+    plt.axis("off")
 
-    pylab.xlim(gr.xl[0]-0.15*gr.dx,gr.xr[ng+1]+0.15*gr.dx)
-    pylab.ylim(-0.25, 1.1)
-    pylab.axis("off")
+    plt.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
 
-    pylab.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
-
-    f = pylab.gcf()
+    f = plt.gcf()
     f.set_size_inches(8.0,2.0)
 
-    pylab.tight_layout()
+    plt.tight_layout()
 
-    pylab.savefig("riemann-bc.png")
-    pylab.savefig("riemann-bc.eps")
-
+    plt.savefig("riemann-bc.pdf")
 
 if __name__== "__main__":
     riemann()
