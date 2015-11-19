@@ -244,10 +244,10 @@ class PiecewiseLinear(PiecewiseConstant):
         plt.fill(xx, yy/self.scale, color=color, lw=1, zorder=-1)
 
 
-    def slope_trace_right(self, idx, slope, color="0.5"):
+    def slope_trace_right(self, idx, sigma, color="0.5"):
 
         # sigma is the fraction of the domain -- the CFL number
-        x = np.linspace(self.gr.xl[idx], self.gr.xl[idx]+sigma*self.dx, 50)
+        x = np.linspace(self.gr.xl[idx], self.gr.xl[idx]+sigma*self.gr.dx, 50)
 
         a = self.gr.voff+self.a[idx] + (self.slope[idx]/self.gr.dx) * (x - self.gr.xc[idx])
 
