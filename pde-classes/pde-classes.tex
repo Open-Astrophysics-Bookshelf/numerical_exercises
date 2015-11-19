@@ -2,4 +2,47 @@ Partial differential equations are usually grouped into one of
 three different classes: {\em hyperbolic}, {\em parabolic}, 
 or {\em elliptic}.
 
-Canonical examples
+
+\section{Hyperbolic PDEs}
+
+The canonical hyperbolic PDE is the wave equation:
+\begin{equation}
+  \frac{\partial^2 \phi}{\partial t^2} = c^2 \frac{\partial^2 \phi}{\partial x^2}
+\end{equation}   
+The general solution to this is traveling waves in either direction:
+\begin{equation}
+  \phi(x,t) = \alpha f_0(x - ct) + \beta g_0(x + ct)
+\end{equation}
+Here $f_0$ and $g_0$ are set by the initial
+conditions, and the solution propages $f_0$ to the right and $g_0$ to
+the left at a speed $c$.
+
+A system of first-order hyperbolic PDEs takes the form:
+\begin{equation}
+a_t + A a_x = 0
+\end{equation}
+where $a = (a_0, a_1, \ldots a_{N-1})^\intercal$ and $A$ is a matrix.
+This system is hyperbolic is the eigenvalues of $A$ are real.
+
+
+\section{Elliptic PDEs}
+
+The canonical elliptic PDE is the Poisson equation:
+\begin{equation}
+  \nabla^2 \phi = f
+\end{equation}
+Note that there is no time-variable here.  This is a pure boundary
+value problem.  The solution, $\phi$ is determined completely by the
+source, $f$, and the boundary conditions.
+
+
+\section{Parabolic PDEs}
+
+The canonical parabolic PDE is the heat equation:
+\begin{equation}
+  \frac{\partial \phi}{\partial t} = k \frac{\partial^2 f}{\partial x^2}
+\end{equation}
+This has aspects of both hyperbolic and elliptic PDEs.
+
+
+
