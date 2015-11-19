@@ -112,20 +112,22 @@ class FVGrid(object):
                  fontsize="large")
 
     def mark_cell_left_state(self, idx, string, color="k", value=0.5,
-                             vertical="center"):
+                             vertical="center", fontsize="medium"):
 
         plt.scatter(self.xl[idx]+0.05*self.dx, self.voff+value, marker="x", color=color)
 
         plt.text(self.xl[idx]+0.075*self.dx, self.voff+value, string,
-                 horizontalalignment='left', verticalalignment=vertical, color=color)
+                 horizontalalignment='left', verticalalignment=vertical, color=color,
+                 fontsize=fontsize)
 
     def mark_cell_right_state(self, idx, string, color="k", value=0.5,
-                              vertical="center"):
+                              vertical="center", fontsize="medium"):
 
         plt.scatter(self.xr[idx]-0.05*self.dx, self.voff+value, marker="x", color=color)
 
         plt.text(self.xr[idx]-0.075*self.dx, self.voff+value, string,
-                 horizontalalignment='right', verticalalignment=vertical, color=color)
+                 horizontalalignment='right', verticalalignment=vertical, color=color,
+                 fontsize=fontsize)
 
     def clean_axes(self):
         plt.xlim(self.xmin-0.5*self.dx, self.xmax+0.5*self.dx)
