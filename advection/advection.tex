@@ -331,7 +331,7 @@ $\Delta x$:
 This is an evolution equation for the zone-average of $a$, and shows
 that it updates in time based on the fluxes through the boundary of
 the zone.  We discretize in time by evaluating the righthand side at
-the midpoint in time---this gives a centered difference in time, which
+the midpoint in time---this gives a centered-difference in time, which
 is second-order accurate:
 \begin{equation}
 \frac{a_i^{n+1} - a_i^n}{\Delta t} = -\frac{\left [f(a) \right ]_{i+\myhalf}^{n+\myhalf} - \left [f(a) \right ]_{i-\myhalf}^{n+\myhalf}}{\Delta x}
@@ -376,14 +376,15 @@ as
 \begin{equation}
 \left . \frac{\partial a}{\partial x}\right |_i = \frac{a_{i+1} - a_{i-1}}{2 \Delta x} \label{eq:slopecentered}
 \end{equation}
-
 We can think of this method as reconstructing the function form of the
-data from the cell-average data in each cell using  a piecewise linear
-polynomial. 
+data from the cell-average data in each cell using a piecewise linear
+polynomial.  Don't be worried that this looks like FTCS---we'll do
+upwinding next.
+
 
 We now have two states, $a_{i+\myhalf,L}^{n+\myhalf}$ and
-$a_{i+\myhalf,R}^{n+\myhalf}$ separated by an interface---this is called the
-{\em Riemann problem}.
+$a_{i+\myhalf,R}^{n+\myhalf}$ separated by an interface---this is
+called the {\em Riemann problem}.
 %
 The solution to this will depend on the equation being solved, and
 results in a single state at the interface:
@@ -434,7 +435,7 @@ needed the data in zone $\mathrm{lo}-2$ to construct a centered-difference.}
   equation.  To mimic a real hydrodynamics code, your code should have
   routines for finding initializing the state, filling boundary conditions,
   computing the timestep,
-  computing the interface states, solving the Riemann problem, and
+  constructing the interface states, solving the Riemann problem, and
   doing the update.  The problem flow should look like:
   \begin{itemize}
     \item set initial conditions
