@@ -61,11 +61,11 @@ def riemann():
                             value=ar, vertical="top", color="b")
 
 
-    plt.xlim(gr.xl[0]-0.15*gr.dx,gr.xr[ng+1]+0.15*gr.dx)
+    plt.xlim(gr.xl[0]-0.025*gr.dx,gr.xr[ng+1]+0.15*gr.dx)
     plt.ylim(-0.25, 1.1)
     plt.axis("off")
 
-    plt.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
+    plt.subplots_adjust(left=0.025,right=0.95,bottom=0.05,top=0.95)
 
     f = plt.gcf()
     f.set_size_inches(8.0,2.0)
