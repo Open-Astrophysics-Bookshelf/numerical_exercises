@@ -2,235 +2,188 @@
 # limit
 
 import math
-import numpy
-import pylab
-import grid_plot_util as gpu
-
-
-#-----------------------------------------------------------------------------
-def fillgc(gr, a):
-
-    # simple zero-gradient
-    a[0:gr.ilo] = a[gr.ilo]
-    a[gr.ihi:2*gr.ng+gr.nx] = a[gr.ihi]
-
+import numpy as np
+import matplotlib.pyplot as plt
+import grid_plot as gp
 
 #-----------------------------------------------------------------------------
-def evolve(gr, a, C, num, nolimit=1):
+def evolve(pl, C, num, nolimit=1):
     
-    #-------------------------------------------------------------------------
     # first frame -- the original cell-averages
 
-    pylab.clf()
+    plt.clf()
 
-    gpu.drawGrid(gr)
+    pl.gr.draw_grid()
 
-    gpu.labelCenter(gr, gr.ng + nzones/2,   r"$i$", fontsize="medium")
-    gpu.labelCenter(gr, gr.ng + nzones/2-1, r"$i-1$", fontsize="medium")
-    gpu.labelCenter(gr, gr.ng + nzones/2+1, r"$i+1$", fontsize="medium")
-    gpu.labelCenter(gr, gr.ng + nzones/2-2, r"$i-2$", fontsize="medium")
-    gpu.labelCenter(gr, gr.ng + nzones/2+2, r"$i+2$", fontsize="medium")
-
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2,   r"$i$", fontsize="medium")
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2-1, r"$i-1$", fontsize="medium")
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2+1, r"$i+1$", fontsize="medium")
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2-2, r"$i-2$", fontsize="medium")
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2+2, r"$i+2$", fontsize="medium")
 
     # draw cell averages
-    n = gr.ilo
-    while (n <= gr.ihi):
-        gpu.drawCellAvg(gr, n, a[n], color="r")
-        n += 1
+    for n in range(pl.gr.ilo, gr.ihi+1):
+        pl.draw_cell_avg(n, color="r")
 
-    pylab.axis([gr.xmin-0.5*gr.dx,gr.xmax+0.5*gr.dx, -0.25, 1.2])
-    pylab.axis("off")
+    plt.axis([pl.gr.xmin-0.5*pl.gr.dx,pl.gr.xmax+0.5*pl.gr.dx, -0.25, 1.2])
+    plt.axis("off")
 
-    print gr.xmin-0.5*gr.dx, gr.xmax+0.5*gr.dx
+    plt.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
 
-    pylab.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
-
-    f = pylab.gcf()
+    f = plt.gcf()
     f.set_size_inches(8.0,2.0)
 
-    if (nolimit):
-        pylab.savefig("rea-nolimit-start_%3.3d.png" % (num))
-        pylab.savefig("rea-nolimit-start_%3.3d.eps" % (num))
+    if nolimit:
+        plt.savefig("rea-nolimit-start_%3.3d.pdf" % (num))
     else:
-        pylab.savefig("rea-start_%3.3d.png" % (num))
-        pylab.savefig("rea-start_%3.3d.eps" % (num))
+        plt.savefig("rea-start_%3.3d.pdf" % (num))
 
-    #-------------------------------------------------------------------------
+
     # second frame -- reconstruction
 
-    # compute the slopes
-    lda = gpu.lslopes(a, nolimit=nolimit)
-
     # draw
-    pylab.clf()
+    plt.clf()
 
-    gpu.drawGrid(gr)
+    pl.gr.draw_grid()
 
-    gpu.labelCenter(gr, gr.ng + nzones/2,   r"$i$", fontsize="medium")
-    gpu.labelCenter(gr, gr.ng + nzones/2-1, r"$i-1$", fontsize="medium")
-    gpu.labelCenter(gr, gr.ng + nzones/2+1, r"$i+1$", fontsize="medium")
-    gpu.labelCenter(gr, gr.ng + nzones/2-2, r"$i-2$", fontsize="medium")
-    gpu.labelCenter(gr, gr.ng + nzones/2+2, r"$i+2$", fontsize="medium")
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2,   r"$i$", fontsize="medium")
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2-1, r"$i-1$", fontsize="medium")
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2+1, r"$i+1$", fontsize="medium")
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2-2, r"$i-2$", fontsize="medium")
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2+2, r"$i+2$", fontsize="medium")
 
+    # draw cell averages and slopes
+    for n in range(pl.gr.ilo, gr.ihi+1):
+        pl.draw_cell_avg(n, color="0.5", ls=":")
+        pl.draw_slope(n, color="r")
 
-    # draw cell averages
-    n = gr.ilo
-    while (n <= gr.ihi):
-        gpu.drawCellAvg(gr, n, a[n], color="0.5", ls=":")
-        n += 1
+    plt.axis([pl.gr.xmin-0.5*pl.gr.dx,pl.gr.xmax+0.5*pl.gr.dx, -0.25, 1.2])
+    plt.axis("off")
 
-    n = gr.ilo
-    while (n <= gr.ihi):
-        gpu.drawSlope(gr, n, lda[n], a[n], color="r")
-        n += 1
+    plt.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
 
-    pylab.axis([gr.xmin-0.5*gr.dx,gr.xmax+0.5*gr.dx, -0.25, 1.2])
-    pylab.axis("off")
-
-
-    pylab.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
-
-    f = pylab.gcf()
+    f = plt.gcf()
     f.set_size_inches(8.0,2.0)
 
-    if (nolimit):
-        pylab.savefig("rea-nolimit-reconstruction_%3.3d.png" % (num))
-        pylab.savefig("rea-nolimit-reconstruction_%3.3d.eps" % (num))
+    if nolimit:
+        plt.savefig("rea-nolimit-reconstruction_%3.3d.pdf" % (num))
     else:
-        pylab.savefig("rea-reconstruction_%3.3d.png" % (num))
-        pylab.savefig("rea-reconstruction_%3.3d.eps" % (num))
+        plt.savefig("rea-reconstruction_%3.3d.pdf" % (num))
 
 
-    #-------------------------------------------------------------------------
     # third frame -- evolve
 
     # draw
+    plt.clf()
 
-    pylab.clf()
+    pl.gr.draw_grid()
 
-    gpu.drawGrid(gr)
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2,   r"$i$", fontsize="medium")
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2-1, r"$i-1$", fontsize="medium")
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2+1, r"$i+1$", fontsize="medium")
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2-2, r"$i-2$", fontsize="medium")
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2+2, r"$i+2$", fontsize="medium")
 
-    gpu.labelCenter(gr, gr.ng + nzones/2,   r"$i$", fontsize="medium")
-    gpu.labelCenter(gr, gr.ng + nzones/2-1, r"$i-1$", fontsize="medium")
-    gpu.labelCenter(gr, gr.ng + nzones/2+1, r"$i+1$", fontsize="medium")
-    gpu.labelCenter(gr, gr.ng + nzones/2-2, r"$i-2$", fontsize="medium")
-    gpu.labelCenter(gr, gr.ng + nzones/2+2, r"$i+2$", fontsize="medium")
+    # draw cell averages and slopes
+    for n in range(pl.gr.ilo, gr.ihi+1):
+        #pl.draw_cell_avg(n, color="r")
+        pl.draw_slope(n, color="0.5", ls=":")
 
-
-    # draw cell slopes
-    n = gr.ilo
-    while (n <= gr.ihi):
-        gpu.drawSlope(gr, n, lda[n], a[n], color="0.75", ls=":")
-        n += 1
 
     # evolve
-    n = gr.ilo
-    while (n <= gr.ihi):
-        gpu.evolveToRight(gr, n, lda, a, C, color="r")
-        n += 1
+    for n in range(pl.gr.ilo, pl.gr.ihi+1):
+        pl.evolve_to_right(n, C, color="r")
 
+    plt.axis([pl.gr.xmin-0.5*pl.gr.dx,pl.gr.xmax+0.5*pl.gr.dx, -0.25, 1.2])
+    plt.axis("off")
 
-    pylab.axis([gr.xmin-0.5*gr.dx,gr.xmax+0.5*gr.dx, -0.25, 1.2])
-    pylab.axis("off")
+    plt.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
 
-    print gr.xmin-0.5*gr.dx, gr.xmax+0.5*gr.dx
-    
-    pylab.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
-
-    f = pylab.gcf()
+    f = plt.gcf()
     f.set_size_inches(8.0,2.0)
 
-    if (nolimit):
-        pylab.savefig("rea-nolimit-evolve_%3.3d.png" % (num))
-        pylab.savefig("rea-nolimit-evolve_%3.3d.eps" % (num))
+    if nolimit:
+        plt.savefig("rea-nolimit-evolve_%3.3d.pdf" % (num))
     else:
-        pylab.savefig("rea-evolve_%3.3d.png" % (num))
-        pylab.savefig("rea-evolve_%3.3d.eps" % (num))
+        plt.savefig("rea-evolve_%3.3d.pdf" % (num))
 
 
     #-------------------------------------------------------------------------
     # fourth frame -- re-average
 
     # left states (we don't need the right state when u > 0)
-    al = numpy.zeros(2*gr.ng + gr.nx, dtype=numpy.float64)
+    al = pl.gr.scratch_array()
 
-    n = gr.ilo
-    while (n <= gr.ihi+1):
-        al[n] = a[n-1] + 0.5*(1 - C)*lda[n-1]
-        n += 1
-
+    for n in range(pl.gr.ilo, pl.gr.ihi+2):
+        al[n] = pl.a[n-1] + 0.5*(1.0 - C)*pl.slope[n-1]
 
     # the Riemann problem just picks the left state.  Do a conservative
     # update
-    anew = numpy.zeros(2*gr.ng + gr.nx, dtype=numpy.float64)
+    anew = pl.gr.scratch_array()
 
-    anew[gr.ilo:gr.ihi+1] = a[gr.ilo:gr.ihi+1] + \
-        C*(al[gr.ilo:gr.ihi+1] - al[gr.ilo+1:gr.ihi+2])
-
-
-    pylab.clf()
-
-    gpu.drawGrid(gr)
-
-    gpu.labelCenter(gr, gr.ng + nzones/2,   r"$i$", fontsize="medium")
-    gpu.labelCenter(gr, gr.ng + nzones/2-1, r"$i-1$", fontsize="medium")
-    gpu.labelCenter(gr, gr.ng + nzones/2+1, r"$i+1$", fontsize="medium")
-    gpu.labelCenter(gr, gr.ng + nzones/2-2, r"$i-2$", fontsize="medium")
-    gpu.labelCenter(gr, gr.ng + nzones/2+2, r"$i+2$", fontsize="medium")
+    anew[pl.gr.ilo:pl.gr.ihi+1] = pl.a[pl.gr.ilo:pl.gr.ihi+1] + \
+            C*(al[pl.gr.ilo:pl.gr.ihi+1] - al[pl.gr.ilo+1:pl.gr.ihi+2])
 
 
-    # show the evolved profiles from the old time
-    n = gr.ilo
-    while (n <= gr.ihi):
-        gpu.evolveToRight(gr, n, lda, a, C, color="0.5", ls=":")
-        n += 1
+    plt.clf()
+
+    pl.gr.draw_grid()
+
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2,   r"$i$", fontsize="medium")
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2-1, r"$i-1$", fontsize="medium")
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2+1, r"$i+1$", fontsize="medium")
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2-2, r"$i-2$", fontsize="medium")
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2+2, r"$i+2$", fontsize="medium")
+
+
+    # show old evolved profiles and new averages
+    for n in range(pl.gr.ilo, pl.gr.ihi+1):
+        pl.evolve_to_right(n, C, color="0.5", ls=":")
 
     # draw new averages
-    n = gr.ilo
-    while (n <= gr.ihi):
-        gpu.drawCellAvg(gr, n, anew[n], color="red")
-        n += 1
+    pl.a[:] = anew[:]
+    pl.fill_zero_gradient()
+    pl.calculate_slopes()
+    for n in range(pl.gr.ilo, pl.gr.ihi+1):
+        pl.draw_cell_avg(n, color="r")
 
-    pylab.axis([gr.xmin-0.5*gr.dx,gr.xmax+0.5*gr.dx, -0.25, 1.2])
-    pylab.axis("off")
 
-    print gr.xmin-0.5*gr.dx, gr.xmax+0.5*gr.dx
+    plt.axis([pl.gr.xmin-0.5*pl.gr.dx,pl.gr.xmax+0.5*pl.gr.dx, -0.25, 1.2])
+    plt.axis("off")
 
-    pylab.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
+    plt.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
 
-    f = pylab.gcf()
+    f = plt.gcf()
     f.set_size_inches(8.0,2.0)
 
-    if (nolimit):
-        pylab.savefig("rea-nolimit-final_%3.3d.png" % (num))
-        pylab.savefig("rea-nolimit-final_%3.3d.eps" % (num))
+    if nolimit:
+        plt.savefig("rea-nolimit-final_%3.3d.pdf" % (num))
     else:
-        pylab.savefig("rea-final_%3.3d.png" % (num))
-        pylab.savefig("rea-final_%3.3d.eps" % (num))
+        plt.savefig("rea-final_%3.3d.pdf" % (num))
 
     return anew
 
 
 
 #-----------------------------------------------------------------------------
-ainit = numpy.array([1.0, 1.0, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1])
+ainit = np.array([1.0, 1.0, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1])
 nzones = len(ainit)
 
 # CFL number
 C = 0.7
+nolimit = 1
 
-gr = gpu.grid(nzones, ng=4)
+gr = gp.FVGrid(nzones, ng=4)
 
-a = numpy.zeros(2*gr.ng + gr.nx, dtype=numpy.float64)
+a = gr.scratch_array()
 a[gr.ilo:gr.ihi+1] = ainit[:]
 
+pl = gp.PiecewiseLinear(gr, a, nolimit=nolimit)
 
 # loop
 for i in range(1,9):
 
-    fillgc(gr, a)
-
-    anew = evolve(gr, a, C, i, nolimit=0)
-
-    a[:] = anew[:]
+    pl.fill_zero_gradient()
+    print i, pl.a[:]
+    evolve(pl, C, i, nolimit=nolimit)
 

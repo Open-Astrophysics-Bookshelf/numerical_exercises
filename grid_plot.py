@@ -166,6 +166,12 @@ class PiecewiseConstant(object):
 
         self.scale = scale
 
+
+    def fill_zero_gradient(self):
+        self.a[0:self.gr.ilo] = self.a[self.gr.ilo]
+        self.a[self.gr.ihi:2*self.gr.ng+self.gr.nx] = self.a[self.gr.ihi]
+
+
     def label_cell_avg(self, idx, string, color="k"):
         plt.text(self.gr.xc[idx], self.gr.voff+self.a[idx]/self.scale+0.1, string,
                  horizontalalignment='center', verticalalignment='bottom',
@@ -183,13 +189,17 @@ class PiecewiseLinear(PiecewiseConstant):
         PiecewiseConstant.__init__(self, gr, a, scale=scale)
 
         self.slope = np.zeros_like(self.a)
+        self.nolimit = nolimit
 
+        self.calculate_slopes()
+ 
+    def calculate_slopes(self):
         # calculate the slopes
         for n in range(1, len(self.a)-1):
             test = (self.a[n+1] - self.a[n])*(self.a[n] - self.a[n-1])
             da = 0.5*(self.a[n+1] - self.a[n-1])
 
-            if not nolimit:
+            if not self.nolimit:
                 if test > 0.0:
                     self.slope[n] = min(math.fabs(da),
                                         min(2.0*math.fabs(self.a[n+1] - self.a[n]),
@@ -262,11 +272,11 @@ class PiecewiseLinear(PiecewiseConstant):
         # show the reconstructed profile as we evolve to the right
 
         xm = np.linspace(self.gr.xr[idx-1]-sigma*self.gr.dx, self.gr.xr[idx-1], 50)
-        am = self.a[idx-1] + (self.slopes[idx-1]/self.gr.dx) * (xm - self.gr.xc[idx-1])
+        am = self.a[idx-1] + (self.slope[idx-1]/self.gr.dx) * (xm - self.gr.xc[idx-1])
         xm = xm + sigma*self.gr.dx
 
         xp = np.linspace(self.gr.xl[idx], self.gr.xl[idx]+(1.0-sigma)*self.gr.dx, 50)
-        ap = self.a[idx] + (self.slopes[idx]/gr.dx) * (xp - gr.xc[idx])
+        ap = self.a[idx] + (self.slope[idx]/self.gr.dx) * (xp - self.gr.xc[idx])
         xp = xp + sigma*self.gr.dx
 
         plt.plot(xm, am/self.scale, color=color, lw=1, ls=ls, zorder=10)
