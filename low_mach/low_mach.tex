@@ -302,7 +302,7 @@ Dirichlet or Neumann BCs implemented, we'll run with Neumann BCs on $\eta$.
 
 
 \section{Atmospheric flows}
-\label{sec:lm:atm}
+\label{sec:lm:atm} 
 
 \subsection{Equation Set}
 
@@ -364,6 +364,8 @@ with $\beta_0 = p_0^{1/\gamma}$.
 
   
 \subsection{Solution Procedure}
+
+\label{sec:lm:density}
 
 The general solution procedure is for a single step is:
 \begin{enumerate}
@@ -431,8 +433,6 @@ The general solution procedure is for a single step is:
   \end{align}
   
 \item {\em Predict $\rho$ to the interfaces}
-
-\label{sec:lm:density}
 
 We need to solve the continuity equation.  We use the same techniques
 that were used for advection.  Our equation is:

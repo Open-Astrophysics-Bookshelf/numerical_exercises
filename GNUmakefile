@@ -37,6 +37,7 @@ CompHydroTutorial.pdf: CompHydroTutorial.tex $(TEXS) $(EPSS) $(PDFS) refs.bib
 	bibtex CompHydroTutorial.aux
 	pdflatex CompHydroTutorial  < /dev/null
 	pdflatex CompHydroTutorial  < /dev/null
+	pdflatex CompHydroTutorial  < /dev/null
 	$(RM) git_info.tex
 
 

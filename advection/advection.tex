@@ -818,16 +818,16 @@ just the different between the new and old state.
 \label{eq:update2du}
 \end{align}
 We define the flux through the interface as the average over the face
-of that interface and time:
+of that interface and time: \MarginPar{is there a way to illustrate this, as some space-time diagram?}
 \begin{align}
 (ua)_{i+\myhalf,j} &= \frac{1}{\Delta y \Delta t}
-    \int_{t^n}^{t^{n+1}} \int_{y_{j-\myhalf}}^{y_{j+\myhalf}} (ua)_{i+\myhalf,j} dy dt  \\
+    \int_{t^n}^{t^{n+1}} \int_{y_{j-\myhalf}}^{y_{j+\myhalf}} (ua)_{i+\myhalf,j}\, dy dt  \\
 (va)_{i,j+\myhalf} &= \frac{1}{\Delta x \Delta t}
-    \int_{t^n}^{t^{n+1}} \int_{x_{i-\myhalf}}^{x_{i+\myhalf}} (va)_{i,j+\myhalf} dx dt 
+    \int_{t^n}^{t^{n+1}} \int_{x_{i-\myhalf}}^{x_{i+\myhalf}} (va)_{i,j+\myhalf}\, dx dt 
 \end{align}
-For a second-order accurate method in time, we replace the integration in
+For a second-order accurate method in time, we replace the average in
 time with the flux at the midpoint in time, and in space, we replace
-the integration with the center of the interface.  Then we have:
+the average over the face of the zone with the flux at the center of the face.  Then we have:
 \begin{equation}
 a_{i,j}^{n+1} = a_{i,j}^n - 
    \frac{(ua)_{i+\myhalf,j}^{n+\myhalf} - (ua)_{i-\myhalf,j}^{n+\myhalf}}{\Delta x} -
@@ -842,7 +842,7 @@ dimensionally split and unsplit.  Dimensionally split methods are
 easier to code, since each dimension is operated on independent of the
 others, so you can simply call a one-dimensional method for each
 direction.  Unsplit methods, however, are more accurate and less
-susceptible to grid effects.
+susceptible to grid effects.  \MarginPar{show an example + refs? Zalesak test?}
 
 \subsection{Dimensionally split}
 
@@ -908,7 +908,7 @@ state instead of the old-time state.  In this fashion, the $y$-update
 `sees' the result of the $x$-update and couples things together.
 
 To achieve second-order accuracy in time, it is necessary to alternate
-the directions of the sweeps each timestep, i.e. $x$-$y$ then $y$-$x$.
+the directions of the sweeps each timestep, i.e., $x$-$y$ then $y$-$x$.
 Furthermore, this pair of sweeps should use the same timestep, $\Delta t$.
 
 
@@ -947,11 +947,11 @@ a_{i+\myhalf,j,L}^{n+\myhalf} = \hat{a}_{i+\myhalf,j,L}^{n+\myhalf}
    - \frac{\Delta t}{2} v \left .\frac{\partial a}{\partial y} \right |_{i,j}
 \end{equation}
 Here, the $\hat{a}_{i+\myhalf,j,L}^{n+\myhalf}$ term is just the normal
-prediction without considering the transverse direction.  The basic
+prediction without considering the transverse direction (e.g., Eq.~\ref{eq:statels}).  The basic
 update procedure is:
 \begin{itemize}
 \item Construct the normal predictor term, $\hat{a}_{i+\myhalf,j,L}^{n+\myhalf}$,
-in a fashion identical to the one-dimensional and split method.  We
+in a fashion identical to the one-dimensional and split methods.  We
 compute these one-dimensional $\hat{a}$'s at the left and right every
 interface in both coordinate directions.  Note that these states are
 still one-dimensional, since we have not used any information from the
@@ -974,7 +974,7 @@ the transverse flux difference:
 a_{i+\myhalf,j,L}^{n+\myhalf} = \hat{a}_{i+\myhalf,j,L}^{n+\myhalf} 
    - \frac{\Delta t}{2} v \frac{a^T_{i,j+\myhalf} - a^T_{i,j-\myhalf}}{\Delta y}
 \end{equation}
-A similar procedure happens at the $y$-interfaces.  Notice that the
+Notice that the
 fluxes that are differenced for the left state are those that are
 transverse, but to the left of the interface.  Similarly, for the
 right state, it would be those that are transverse, but to the right
@@ -984,9 +984,10 @@ a_{i+\myhalf,j,R}^{n+\myhalf} = \hat{a}_{i+\myhalf,j,R}^{n+\myhalf}
    - \frac{\Delta t}{2} v \frac{a^T_{i+1,j+\myhalf} - a^T_{i+1,j-\myhalf}}{\Delta y}
 \end{equation}
 \end{itemize}
+A similar procedure happens at the $y$-interfaces.  
 
 Figure~\ref{fig:unsplitstates} illustrates the steps involved in
-the construction of the $a_{i+\myhalf,j,L}^{n+\myhalf}$ state.
+the construction of the $a_{i+\myhalf,j,L}^{n+\myhalf}$ state.  \MarginPar{more panels illustrating the sequence?}
 %
 % this is created by figures/advection/2dgrid-hat.py
 % and                                  2dgrid-transverse.py
@@ -1017,12 +1018,15 @@ The final conservative update is then done via Eq.~\ref{eq:update2du}.
 
 See \cite{colella:1990} for more details on this unsplit method.
 
+\MarginPar{The extension to 3-d is a little more complex}
+
 
 \section{Going further}
 
 \begin{itemize}
-\item {\em Stability analysis}: many texts provide the details of von
+\item {\em Stability analysis}: many texts provide more details of von
   Neumann stability analysis for the linear advection equation.
+  \MarginPar{A good example is ...}
   There, you will see how a Fourier analysis can be used to derive the
   CFL condition.  Note: this stability analysis is restricted to
   linear equations, but we nevertheless use the resulting limits for
@@ -1063,13 +1067,15 @@ See \cite{colella:1990} for more details on this unsplit method.
    - \frac{\Delta t}{2} \left [\phi u_x \right ]_{i,j} 
    - \frac{\Delta t}{2} \left [ (\phi v)_y \right ]_{i,j}
 \end{align}
-  and upwinding is used to resolve the Riemann problem for both the transverse
-  and normal interface states.
+  and upwinding is used to resolve the Riemann problem for both the
+  transverse and normal interface states.  This type of construction
+  comes up in low Mach number flows, where the density can be advected
+  according to the velocity field in much the fashion shown here, and
+  is described in \S~\ref{sec:lm:density}.
+
   
   For compressible hydrodynamics, we often have density-weighted quantities
   that we advect.  This extension is described in \S~\ref{sec:euler:further}.
-  For low Mach number flows, the density can be advected according to
-  the velocity field in much the fashion shown here, as described in \S~\ref{sec:lm:density}.
 
 \end{itemize}
 
