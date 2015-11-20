@@ -505,7 +505,7 @@ Use this slope in your second-order advection code and notice that the
 oscillations go away---see Figure~\ref{fig:fvadvect}.}
 \end{exercise}
 
-We can get a feel for what happens with and without limiting pictorially.
+We can get a feel for what happens with and without limiting pictorially. \MarginPar{add a discussion on how a limiter is designed/constructed}
 Figures~\ref{fig:limitingex} and \ref{fig:limitingexb} show the evolution
 of an initial discontinuity with and without limiting.  See the text
 by LeVeque~\cite{leveque:2002} for alternate choices of
@@ -614,11 +614,11 @@ Another way to think about these methods is as a reconstruction,
 evolve, and average (R-E-A) process (see Figure~\ref{fig:rea}).  
 
 We can write the conservative update as:
-\begin{eqnarray}
-a_i^{n+1} &=& a_i^n + \frac{\Delta t}{\Delta x} 
+\begin{align}
+a_i^{n+1} &= a_i^n + \frac{\Delta t}{\Delta x} 
     (u a^{n+\myhalf}_{i-\myhalf} - u a^{n+\myhalf}_{i+\myhalf} ) \\
-          &=& a_i^n + C (a^{n+\myhalf}_{i-\myhalf} - a^{n+\myhalf}_{i+\myhalf} ) 
-\end{eqnarray}
+          &= a_i^n + C (a^{n+\myhalf}_{i-\myhalf} - a^{n+\myhalf}_{i+\myhalf} ) 
+\end{align}
 If we take $u > 0$, then the Riemann problem will always choose the
 left state, so we can write this as:
 \begin{equation}
@@ -671,7 +671,7 @@ in the cell is
 \begin{equation}
 a_i^{n+1} = C \mathcal{I}_< + (1 - C) \mathcal{I}_> 
 \end{equation}          
-This is identical to Eq.~\ref{eq:rea_orig}.  This demonstrates that the
+This is identical to Eq.~\ref{eq:rea_orig}.  \MarginPar{write this out} This demonstrates that the
 R-E-A procedure is equivalent to our reconstruction, prediction of the
 interface states, solving the Riemann problem, and doing the 
 conservative flux update.
@@ -730,7 +730,7 @@ each resolution and observe that it converges in a first-order fashion
 (i.e.\ $\epsilon$ decreases by 2 when we decrease $\Delta x$ by a factor of 2).
 
 \noindent Do the same with the second-order solver and observe that it
-converges as second-order. {\em However:} you may find less than second-order
+converges as second-order. However: you may find less than second-order
 is your initial conditions have discontinuities and you are limiting. 
 Figure~\ref{fig:advnorm} shows the convergence of the method with minmod
 limiting, $C = 0.8$, and a Gaussian initial condition.}
@@ -767,7 +767,7 @@ perimeter of ghost cells to set the boundary conditions.
 \includegraphics[width=4.0in]{2dgrid}
 \caption[A 2-d grid with zone-centered indexes]{\label{fig:2dgrid} A
   simple 2-d grid with the zone-centered indexes.  The $\times$s mark
-  the interface states at the upper edge of the $i,j$ zone in each
+  the left and right interface states at the upper edge of the $i,j$ zone in each
   coordinate direction.}
 \end{figure}
 
