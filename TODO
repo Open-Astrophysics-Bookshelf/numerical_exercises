@@ -96,6 +96,12 @@ Chapter 5:
  -- derive the jump conditions and the entropy conditions for the 
     Riemann problem and show the function we zero.
 
+ -- implementation detail: for Riemann solvers, usually the godunov
+    velocity is set to 0 at symmetry boundaries
+
+ -- it is important to odd-reflect the gravitational acceleration 
+    at reflecting boundaries
+
  examples:
 
    -- 1-d Riemann solver
