@@ -1,12 +1,5 @@
 \label{ch:multigrid}
 
-\begin{quote}
-\noindent {\em These summarize multigrid on cell-centered grids.  The
-  text ``A Multigrid Tutorial''~\cite{multigridtutorial} is an incredible
-  reference.  These notes discuss the basics and point out some specific
-  details for cell-centered grids.}
-\end{quote}
-
 \section{Elliptic equations}
 
 The simplest elliptic PDE is {\em Laplace's equation}:
@@ -445,16 +438,21 @@ idea behind multigrid.
 \section{Multigrid}
 
 The text {\em A Multigrid Tutorial}~\cite{multigridtutorial} provides
-an excellent introduction to the mechanics of multigrid.  The basic
-idea is to smooth a little on the current grid solving $L\phi = f$,
-compute the residual, $r$, then {\em restrict} $r$ to a coarser grid and
-smooth on that grid solving $Le = r$, restrict again, $\ldots$.  Once
-you reach a sufficiently coarse grid, the problem solved exactly.
-Then the data is moved up to the finer grids, a process called {\em
-  prolongation}.  The error on the coarse grid, $e$, is prolonged to
-the finer grid.  This error is then used to correct the solution on
-the finer grid, some smoothing is done, and then the data is prolonged
-up again.
+an excellent introduction to the mechanics of multigrid.  The
+discussion here differs mainly in that we are dealing with
+cell-centered/finite-volume data.  The basic idea of multigrid\footnote{
+In these discussions, we use {\em multigrid} to mean {\em geometric multigrid},
+where the coarsening is done to the grid geometry directly.  The alternative
+is {\em algebraic multigrid}, where it is the structure of the matrix 
+in the linear system itself that is coarsened.}   is to
+smooth a little on the current grid solving $L\phi = f$, compute the
+residual, $r$, then {\em restrict} $r$ to a coarser grid and smooth on
+that grid solving $Le = r$, restrict again, $\ldots$.  Once you reach
+a sufficiently coarse grid, the problem solved exactly.  Then the data
+is moved up to the finer grids, a process called {\em prolongation}.
+The error on the coarse grid, $e$, is prolonged to the finer grid.
+This error is then used to correct the solution on the finer grid,
+some smoothing is done, and then the data is prolonged up again.
 
 Note: on the coarse grids, you are not solving the original system,
 but rather an error equation.  If the boundary conditions in the
