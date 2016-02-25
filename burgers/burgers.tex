@@ -1,6 +1,8 @@
 
 \begin{quote}
-\noindent {\em These notes extend our ideas of linear advection to a scalar nonlinear equation.}
+\noindent {\em Here we will look at the inviscid Burgers' equation---this is the simplest
+  nonlinear hyperbolic PDE, and will illustrate some of the rich phenomena that nonlinear
+  PDEs enable.}
 \end{quote}
 
 
@@ -12,12 +14,39 @@ equation:
 u_t + u u_x = 0
 \end{equation}
 Here $u$ is both the quantity being advected and the speed at which 
-it is moving.
-In conservative form, this appears as:
+it is moving.  Recall that for the linear advection equation, we saw
+that the solution was constant along lines $x = ut + x_0$, which are
+parallel, since $u$ is spatially constant.  For Burgers' equation, 
+this is no longer the case, and the characteristic lines are now
+given by $dx/dt = u$, with $x(0) = x_0$.  Since $u = u(t)$, we cannot
+integrate this directly.   
+
+If we take $u_0 = u(t=0)$, then we can look at how the characteristic
+behave initially (before $u(x,t)$ changes a lot).
+Figure~\ref{fig:burgers_char} shows the behavior of an initial
+sinusoidal velocity.  We see that after a short period of time, the
+characteristics intersect.  At the point, $(x_s, t_s)$ where they 
+intersect, there is no way to trace backwards along the characteristics to
+find a unique initial state.  This merging of the characteristics in 
+the $x-t$ plane is a shock, and represents just one way that nonlinear
+problems can differ from linear ones.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.6\linewidth]{burgers-characteristics}
+\caption{\label{fig:burgers_char} (top) Initially sinusoidal
+velocity distribution (bottom) Approximate characteristic
+structure for Burgers' equation, using $u_0 = u(t)$.  Note that
+after a short period of time, the characteristics intersect, signaling
+the formation of a shock.}
+\end{figure}
+
+
+
+In conservative form, Burgers' equation appears as:
 \begin{equation}
 u_t + \left [\tfrac{1}{2} u^2 \right ]_x = 0
 \end{equation}
-
 The solution of this follows the same methodology as outlined above.
 The interface states are predicted as:
 \begin{eqnarray}
@@ -38,12 +67,10 @@ $u_i \Delta t/\Delta x$ varies from zone to zone, whereas with linear
 advection, it is the constant $C$.  The slopes are computed using
 the same limiters as with linear advection.  \MarginPar{add characteristic tracing}
 
-The Riemann problem differs from linear advection.  It remains the
-case that the solution is constant along the lines $x = ut + x_0$ (the
-characteristics), but now those lines are no longer parallel.  If the
-characteristic lines intersect, then there it is not possible to trace
-backward from time to learn where the flow originated.  This is the 
-condition for a {\em shock}.
+The Riemann problem differs from linear advection.  As we saw above,
+the characteristic curves can intersect in the $x$-$t$ plane, and it
+is not possible to trace backward from time to learn where the flow
+originated.  This is the condition for a {\em shock}.
 
 \begin{figure}[t]
 \centering
