@@ -57,7 +57,8 @@ conditions.  For a scalar equation, these are easy to construct.
 We'll follow the method of \cite{leveque:2002}.  Figure~\ref{fig:rh}
 shows two states separated by a rightward moving shock in the $x$-$t$
 plane.  At time $t^n$, the state in our interval ($x \in [x_l,x_r]$)
-is entirely $u_r$, and at the later time, $t^{n+1}$ it is entirely
+is entirely $u_r$.  As time evolves, we imagine our interval $[x_l,x_r]$ moving
+vertically upwards in the diagram, and we see that it contains a mix of states $u_l$ and $u_r$.  Finally, at time, $t^{n+1}$ it is entirely
 $u_l$.  The shock moves with a speed $S = \Delta x/\Delta t$ in this
 figure.  To determine the speed, we integrate our conservation law over
 both space and time (and normalize by $\Delta x = x_r - x_l$):
@@ -147,6 +148,15 @@ reconstruction and the MC limiter.
 and use the local velocity in the construction of the interface states.  Run
 the examples shown in Figure~\ref{fig:burgers}}.
 \end{exercise}
+
+\section{Characteristic tracing}
+
+A concept that will be useful in the next section is {\em
+  characteristic tracing}.  The idea is that we only include
+information in the interface states if the characteristic that carries
+that information is moving toward the interface.  For Burgers equation,
+this is simple, since there is only a single characteristic---the velocity.
+
 
 \section{Going further}
 
