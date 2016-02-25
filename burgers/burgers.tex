@@ -28,7 +28,7 @@ sinusoidal velocity.  We see that after a short period of time, the
 characteristics intersect.  At the point, $(x_s, t_s)$ where they 
 intersect, there is no way to trace backwards along the characteristics to
 find a unique initial state.  This merging of the characteristics in 
-the $x-t$ plane is a shock, and represents just one way that nonlinear
+the $x$-$t$ plane is a shock, and represents just one way that nonlinear
 problems can differ from linear ones.
 
 \begin{figure}[t]
@@ -65,7 +65,7 @@ u^{n+1}_{i+1/2,L}
 The only difference with the linear advection equation is that now
 $u_i \Delta t/\Delta x$ varies from zone to zone, whereas with linear
 advection, it is the constant $C$.  The slopes are computed using
-the same limiters as with linear advection.  \MarginPar{add characteristic tracing}
+the same limiters as with linear advection. 
 
 The Riemann problem differs from linear advection.  As we saw above,
 the characteristic curves can intersect in the $x$-$t$ plane, and it
@@ -154,27 +154,80 @@ condition over all the zones:
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.8\linewidth]{fv-burger-rarefaction} \\
-\includegraphics[width=0.8\linewidth]{fv-burger-sine}
-\caption[Solutions to the inviscid Burgers'
-  equation]{\label{fig:burgers} Solution to the inviscid Burgers'
-  equation with 256 zones and a Courant number, $C = 0.8$.  At the
-  top, is a rarefaction---the left half of the domain was initialized
-  with $u = 1$ and the right half with $u = 2$, creating a divergent
-  flow.  On the bottom is a sine-wave steepening into a shock.  The
-  curves are shown 0.02~s apart. \\
-  \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/burgers/burgers.py}{burgers.py}}}
+\includegraphics[width=0.8\linewidth]{fv-burger-rarefaction} 
+\caption[Rarefaction solution to the inviscid Burgers'
+  equation]{\label{fig:burgers-rarefaction} Solution to the inviscid
+  Burgers' equation with 256 zones and a Courant number, $C = 0.8$ for
+  initial conditions that generate a rarefaction: the left half of the
+  domain was initialized with $u = 1$ and the right half with $u = 2$.
+  This initial velocity state creates a divergent flow.  The curves
+  are shown 0.02~s apart, with the darker grayscale representing later
+  in
+  time. \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/burgers/burgers.py}{burgers.py}}}
 \end{figure}
 
-Figure~\ref{fig:burgers} shows the solution for two cases: a rarefaction
-and a sine-wave steepening into a shock, using a piecewise linear
-reconstruction and the MC limiter.
+
+Figure~\ref{fig:burgers-rarefaction} shows the solution to Burgers'
+equation using the 2nd-order piecewise linear method described here,
+with the MC limiter.  The initial conditions chosen are all positive
+velocity, with a lower velocity to the left of the higher velocity.
+As the solution evolves, the state on the right will rush away from
+the state on the left, and spread out like a fan.  This is called a
+{\em rarefaction wave} or simply a {\em rarefaction}.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.8\linewidth]{fv-burger-sine}
+\caption[Shock solutions to the inviscid Burgers'
+  equation]{\label{fig:burgers-shock} Solution to the inviscid
+  Burgers' equation with 256 zones and a Courant number, $C = 0.8$.
+  The initial conditions here are sinusoidal and the solution quickly
+  steepens into a shock.The curves are shown 0.02~s apart, with the
+  darker grayscale representing later in
+  time. \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/burgers/burgers.py}{burgers.py}}}
+\end{figure}
+
+Figure~\ref{fig:burgers-shock} shows the solution to Burgers'
+equation with initially sinusoidal data:
+\begin{equation}
+\renewcommand{\arraystretch}{1.75}
+u(x, t=0) = \left \{ \begin{array}{cc}
+    1   & x < 1/3 \\
+    1 + \frac{1}{2} \sin\left (\frac{2\pi (x - 1/3)}{1/3}\right ) & 1/3 \le x \le 2/3 \\
+    1   & x > 2/3 
+\end{array}
+\right .
+\renewcommand{\arraystretch}{1.0}
+\end{equation}
+This is analogous to the case shown in
+Figure~\ref{fig:burgers_char}---we see the solution steepen and form a
+shock which propagates to the right.  The shock is practically infinitesimally thin
+here, since there is no explicitly viscosity to smear it out\footnote{Numerical diffusion,
+in the form of truncation error of our method, will smear things a little.}.
 
 \begin{exercise}[Simple Burgers' solver]
-{Extend your 1-d finite-volume solver for advection (from Exercise~\ref{adv:ex:fv}) to solver Burgers' equation.  You will need to change the Riemann solver
-and use the local velocity in the construction of the interface states.  Run
-the examples shown in Figure~\ref{fig:burgers}}.
+{Extend your 1-d finite-volume solver for advection (from
+  Exercise~\ref{adv:ex:fv}) to solver Burgers' equation.  You will
+  need to change the Riemann solver and use the local velocity in the
+  construction of the interface states.  Run the examples shown in
+  Figures~\ref{fig:burgers-rarefaction} and \ref{fig:burgers-shock}}.
 \end{exercise}
+
+As we'll see shortly, these two types of waves can also appear in the Euler equations
+for hydrodynamics.
+
+A final thing to note is that we solved Burgers' equation in conservative form.
+For shock solutions, this is essential, since as we noted earlier, that finite-volume
+method relates to the integral form of the PDEs, the discontinuity is nicely handled
+by the Riemann solver.  We could also imagine differencing Burgers' equation in
+non-conservative form, i.e., starting with:
+\begin{equation}
+u_t + u u_x = 0
+\end{equation}
+If you did this (for instance, using a finite difference scheme and an
+upwind difference for $u_x$), you would find that you get the wrong
+shock speed.  Try it.
+
 
 \section{Characteristic tracing}
 
@@ -183,7 +236,17 @@ A concept that will be useful in the next section is {\em
 information in the interface states if the characteristic that carries
 that information is moving toward the interface.  For Burgers equation,
 this is simple, since there is only a single characteristic---the velocity.
-
+So for the left state on an interface, we'd only add the change if 
+the velocity $u_i > 0$ (moving toward the interface $i+1/2$):
+\begin{equation}
+u^{n+1}_{i+1/2,L} 
+ = u^n_i + \frac{\Delta x}{2} 
+   \left ( 1 - \frac{\Delta t}{\Delta x} \max(0, u_i) \right ) 
+   \left . \frac{\partial u}{\partial x} \right |_i + \ldots
+\end{equation}
+Notice that the effect of this is to set the interface state simply to
+the value given by the piecewise linear reconstruction on the interface
+if the wave isn't moving to the interface.  
 
 \section{Going further}
 
@@ -195,5 +258,9 @@ u_t + u u_x = \epsilon u_{xx}
 \end{equation}
 To solve this, we need to first learn about techniques for diffusion, and then how to
 solve equations with multiple PDE types.  This will be described later.
+
+\item Aside from pedagogical interest, Burgers' equation can be used as a simple
+model of traffic flow (where shocks can arise from people slamming on the brakes).
+Many sources discuss this application, including the text by~\cite{leveque:2002}.
 
 \end{itemize}
