@@ -1,15 +1,16 @@
 \label{ch:compressible}
 
-\begin{quote}
-\noindent {\em These notes describe how to do a piecewise linear or
-  piecewise parabolic method for the Euler equations.  These are the
-  basis for some of the most popular methods in astrophysics.}
-\end{quote}
 
 %-----------------------------------------------------------------------------
 \section{Euler equation properties}
 
-The Euler equations in one dimension appear as:
+The Euler equations\footnote{ We focus on the Euler equations, which
+are the most commonly modeled set of fluid equations in astrophysics.
+The more general equation set, the Navier-Stokes equations, includes
+dissipative terms.  However, for astophysical flows, the scales on
+which these dissipative terms operate are usually much smaller than
+the system of interest (equivalently, Reynolds numbers of
+astrophysical flows are very large).}  in one dimension appear as:
 \begin{align}
 \frac{\partial \rho}{\partial t} + 
     \frac{\partial (\rho u)}{\partial x} &= 0 \\
@@ -56,15 +57,21 @@ F(U) = \left ( \begin{array}{c} \rho u \\ \rho uu + p \\ \rho u E + up \end{arra
 \end{equation}
 %
 We can write this in {\em quasi-linear} form by first expressing the flux
-vector in terms of the conserved variables directly.  Taking $u_1 =
-\rho, u_2 = \rho u, u_3 = \rho E$, we have
+vector in terms of the conserved variables directly.  Taking 
+$m \equiv \rho u$, $\mathcal{E} \equiv \rho E$, and expressing 
+\begin{equation}
+p = \rho e (\gamma-1) =  \left (\mathcal{E} - \frac{1}{2} \frac{m^2}{\rho}\right )(\gamma - 1)
+\end{equation}
+we have
 \begin{equation}
 F(U) = \left ( \begin{array}{c} 
-      u_2 \\
-      \frac{u_2^2}{u_1} \left (1 - \frac{\hat{\gamma}}{2} \right ) + u_3 \hat{\gamma} \\
-      \frac{u_3 u_2}{u_1}(1 + \hat{\gamma}) - \frac{1}{2} \frac{u_2^3}{u_1^2} \hat{\gamma} \end{array} \right )
+      m \\
+      \frac{1}{2}\frac{m^2}{\rho} \left (3 - \gamma \right ) + 
+          \mathcal{E} (\gamma - 1) \\
+      \frac{m\mathcal{E}}{\rho} \gamma -\frac{1}{2} \frac{m^3}{\rho^2} (\gamma -1) \end{array} \right )
 \end{equation}
-where $\hat{\gamma} = \gamma - 1$, and $p = \rho e \hat{\gamma} = (\rho E - \rho u^2/2)\hat{\gamma}$.  The Jacobian of this flux vector is $A = \partial F/\partial U$:
+The Jacobian of this flux vector can now be computed as $A = \partial
+F/\partial U$:
 \begin{equation}
 A(U) = \left ( \begin{array}{ccc} 
    0  & 1 & 0 \\
@@ -72,7 +79,7 @@ A(U) = \left ( \begin{array}{ccc}
    \frac{1}{2}(\gamma -2)u^3 - \frac{uc^2}{\gamma -1} &
        \frac{3-2\gamma}{2} u^2 + \frac{c^2}{\gamma -1} & u \gamma
   \end{array} \right )
-\end{equation}
+\end{equation}\MarginPar{SymPy notebook?}
 where the speed of sound is $c = \sqrt{\gamma p/\rho}$.   With this, our
 system can be written as:
 \begin{equation}
