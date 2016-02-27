@@ -14,7 +14,7 @@ def simplegrid():
     #------------------------------------------------------------------------
     # label
     gr.label_cell_center(nzones/2, nzones/2, r"$a_{i,j}$", 
-                         fontsize="large", color="r")
+                         fontsize="x-large", color="r")
     gr.shade_cell(nzones/2, nzones/2)
 
     # grid labels
@@ -32,7 +32,7 @@ def simplegrid():
 
     # axes
     gr.clean_axes()
-    plt.subplots_adjust(left=0.1,right=0.98,bottom=0.1,top=0.98)
+    plt.subplots_adjust(left=0.025,right=0.98,bottom=0.1,top=0.98)
 
     f = plt.gcf()
     f.set_size_inches(7.0,7.0)
