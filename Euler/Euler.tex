@@ -119,18 +119,20 @@ Show that the eigenvalues of $A$ are $\lambda^\evm = u -c$, $\lambda^\evz = u$, 
 }
 \end{exercise}
 Note that both the conserved Jacobian matrix, $A(U)$, and the
-primitive variable matrix, $A(q)$, have the same eigenvalues---as
-expected, since they represent the same physics.  Also note that in
-Eq.~\ref{eq:primitivesystem}, we used the algebraic gamma-law equation
-of state to replace $e$ with $p$, however, for a general equation of state,
-we can get the appropriate expression by writing $p = p(\rho, s)$:
+primitive variable matrix, $A(q)$, have the same eigenvalues, 
+ since they represent the same physics.  
+
+In Eq.~\ref{eq:primitivesystem}, we used the algebraic gamma-law
+equation of state to replace $e$ with $p$, however, for a general
+equation of state, we can get the appropriate expression by writing $p
+= p(\rho, s)$:
 \begin{equation}
 \frac{Dp}{Dt} = \left . \frac{\partial p}{\partial \rho} \right |_s
      \frac{D\rho}{Dt} +
      \left . \frac{\partial p}{\partial s} \right |_\rho
      \cancelto{0}{\frac{Ds}{Dt}}
 \end{equation}
-where $Ds/Dt$ is $0$ when no entropy sources are present.  Recognizing
+where $Ds/Dt = 0$ when no entropy sources are present.  Recognizing
 that $\Gamma_1 \equiv \partial \log p/\partial \log \rho |_s$, we have:
 \begin{equation}
 \frac{\partial p}{\partial t} + u \frac{\partial p}{\partial x} 
@@ -183,14 +185,19 @@ eigenvector.  Here they are normalized such that
 $l^{(i)} \cdot r^{(j)} = \delta_{ij}$.
 }
 \end{exercise}
-An {\sf IPython} notebook using {\sf SymPy} that derives these is available here:
+A {\sf IPython} notebook using {\sf SymPy} that derives these is available here:
 \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/compressible/euler.ipynb}{euler.ipynb}}
 \footnote{if you don't have {\sf IPython}, you can view this rendered online via {\sf nbviewer}:\\
 \url{http://nbviewer.ipython.org/github/zingale/hydro_examples/blob/master/compressible/euler.ipynb}}
 
 A final form of the equations is called the {\em characteristic form}.  Here,
 we wish to diagonalize the matrix $A$.  We take the matrix $R$ to be the
-matrix of right eigenvectors, $R = (r^\evm | r^\evz | r^\evp )$, and $L$
+matrix of right eigenvectors,
+\begin{equation}
+R = (r^\evm | r^\evz | r^\evp ) 
+\end{equation}
+(i.e., $R$ is a square matrix whose columns are the eigenvectors),
+and $L$
 is the corresponding matrix of left eigenvectors:
 \begin{equation}
 L = \left ( \begin{array}{c} l^\evm \\              

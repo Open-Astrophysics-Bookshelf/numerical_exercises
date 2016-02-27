@@ -32,7 +32,8 @@ class FVGrid(object):
         return np.zeros(2*self.ng+self.nx, dtype=np.float64)
 
     def draw_grid(self, center_only=0, draw_ghost=0,
-                  emphasize_end=0, edge_ticks=1, color="k"):
+                  emphasize_end=0, draw_end=True,
+                  edge_ticks=True, color="k"):
 
         if center_only and emphasize_end:
             sys.exit("center_only and emphasize_end are incompatible")
@@ -62,8 +63,9 @@ class FVGrid(object):
                        [self.voff,self.voff], color=color, lw=2)
 
         # draw first left edge
-        plt.plot([self.xl[nstart], self.xl[nstart]],
-                   [self.voff, grid_top+self.voff], color=color, lw=2)
+        if draw_end:
+            plt.plot([self.xl[nstart], self.xl[nstart]],
+                     [self.voff, grid_top+self.voff], color=color, lw=2)
 
 
         for n in range(nstart, nstop+1):
@@ -77,7 +79,7 @@ class FVGrid(object):
             if emphasize_end and n == self.ihi:
                 plt.plot([self.xr[n], self.xr[n]], [self.voff, grid_top+self.voff],
                            color=color, lw=4)
-            else:
+            elif n < nstop or (n == nstop and draw_end):
                 plt.plot([self.xr[n], self.xr[n]], [self.voff, grid_top+self.voff],
                            color=color, lw=2)
 
@@ -129,8 +131,11 @@ class FVGrid(object):
                  horizontalalignment='right', verticalalignment=vertical, color=color,
                  fontsize=fontsize)
 
-    def clean_axes(self):
-        plt.xlim(self.xmin-0.5*self.dx, self.xmax+0.5*self.dx)
+    def clean_axes(self, padding=True):
+        if padding:
+            plt.xlim(self.xmin-0.5*self.dx, self.xmax+0.5*self.dx)
+        else:
+            plt.xlim(self.xmin, self.xmax)
         plt.axis("off")
 
 
