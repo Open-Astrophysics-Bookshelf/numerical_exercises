@@ -36,7 +36,7 @@ def simplegrid():
     f = plt.gcf()
     f.set_size_inches(7.0,7.0)
 
-    plt.savefig("2dFD.pdf")
+    plt.savefig("2dFD.png")
 
 if __name__== "__main__":
     simplegrid()
