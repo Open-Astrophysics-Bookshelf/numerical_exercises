@@ -18,6 +18,8 @@ new chapters:
 
   -- relativisitc
 
+  -- WENO
+
   -- higher-order
 
      o method of lines integration with RK3/4 and high-order reconstruction
