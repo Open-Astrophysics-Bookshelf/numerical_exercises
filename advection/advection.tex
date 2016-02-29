@@ -768,7 +768,8 @@ perimeter of ghost cells to set the boundary conditions.
 \caption[A 2-d grid with zone-centered indexes]{\label{fig:2dgrid} A
   simple 2-d grid with the zone-centered indexes.  The $\times$s mark
   the left and right interface states at the upper edge of the $i,j$ zone in each
-  coordinate direction.}
+  coordinate direction.  For a finite-volume discretization, $a_{i,j}$ 
+  represents the average of $a(x,y)$ over the zone.}
 \end{figure}
 
 To derive the finite-volume form of the update, we start by writing

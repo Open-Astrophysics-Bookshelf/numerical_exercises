@@ -1,15 +1,16 @@
 \label{ch:compressible}
 
-\begin{quote}
-\noindent {\em These notes describe how to do a piecewise linear or
-  piecewise parabolic method for the Euler equations.  These are the
-  basis for some of the most popular methods in astrophysics.}
-\end{quote}
 
 %-----------------------------------------------------------------------------
 \section{Euler equation properties}
 
-The Euler equations in one dimension appear as:
+The Euler equations\footnote{ We focus on the Euler equations, which
+are the most commonly modeled set of fluid equations in astrophysics.
+The more general equation set, the Navier-Stokes equations, includes
+dissipative terms.  However, for astophysical flows, the scales on
+which these dissipative terms operate are usually much smaller than
+the system of interest (equivalently, Reynolds numbers of
+astrophysical flows are very large).}  in one dimension appear as:
 \begin{align}
 \frac{\partial \rho}{\partial t} + 
     \frac{\partial (\rho u)}{\partial x} &= 0 \\
@@ -56,15 +57,21 @@ F(U) = \left ( \begin{array}{c} \rho u \\ \rho uu + p \\ \rho u E + up \end{arra
 \end{equation}
 %
 We can write this in {\em quasi-linear} form by first expressing the flux
-vector in terms of the conserved variables directly.  Taking $u_1 =
-\rho, u_2 = \rho u, u_3 = \rho E$, we have
+vector in terms of the conserved variables directly.  Taking 
+$m \equiv \rho u$, $\mathcal{E} \equiv \rho E$, and expressing 
+\begin{equation}
+p = \rho e (\gamma-1) =  \left (\mathcal{E} - \frac{1}{2} \frac{m^2}{\rho}\right )(\gamma - 1)
+\end{equation}
+we have
 \begin{equation}
 F(U) = \left ( \begin{array}{c} 
-      u_2 \\
-      \frac{u_2^2}{u_1} \left (1 - \frac{\hat{\gamma}}{2} \right ) + u_3 \hat{\gamma} \\
-      \frac{u_3 u_2}{u_1}(1 + \hat{\gamma}) - \frac{1}{2} \frac{u_2^3}{u_1^2} \hat{\gamma} \end{array} \right )
+      m \\
+      \frac{1}{2}\frac{m^2}{\rho} \left (3 - \gamma \right ) + 
+          \mathcal{E} (\gamma - 1) \\
+      \frac{m\mathcal{E}}{\rho} \gamma -\frac{1}{2} \frac{m^3}{\rho^2} (\gamma -1) \end{array} \right )
 \end{equation}
-where $\hat{\gamma} = \gamma - 1$, and $p = \rho e \hat{\gamma} = (\rho E - \rho u^2/2)\hat{\gamma}$.  The Jacobian of this flux vector is $A = \partial F/\partial U$:
+The Jacobian of this flux vector can now be computed as $A = \partial
+F/\partial U$:
 \begin{equation}
 A(U) = \left ( \begin{array}{ccc} 
    0  & 1 & 0 \\
@@ -72,7 +79,7 @@ A(U) = \left ( \begin{array}{ccc}
    \frac{1}{2}(\gamma -2)u^3 - \frac{uc^2}{\gamma -1} &
        \frac{3-2\gamma}{2} u^2 + \frac{c^2}{\gamma -1} & u \gamma
   \end{array} \right )
-\end{equation}
+\end{equation}\MarginPar{SymPy notebook?}
 where the speed of sound is $c = \sqrt{\gamma p/\rho}$.   With this, our
 system can be written as:
 \begin{equation}
@@ -112,18 +119,20 @@ Show that the eigenvalues of $A$ are $\lambda^\evm = u -c$, $\lambda^\evz = u$, 
 }
 \end{exercise}
 Note that both the conserved Jacobian matrix, $A(U)$, and the
-primitive variable matrix, $A(q)$, have the same eigenvalues---as
-expected, since they represent the same physics.  Also note that in
-Eq.~\ref{eq:primitivesystem}, we used the algebraic gamma-law equation
-of state to replace $e$ with $p$, however, for a general equation of state,
-we can get the appropriate expression by writing $p = p(\rho, s)$:
+primitive variable matrix, $A(q)$, have the same eigenvalues, 
+ since they represent the same physics.  
+
+In Eq.~\ref{eq:primitivesystem}, we used the algebraic gamma-law
+equation of state to replace $e$ with $p$, however, for a general
+equation of state, we can get the appropriate expression by writing $p
+= p(\rho, s)$:
 \begin{equation}
 \frac{Dp}{Dt} = \left . \frac{\partial p}{\partial \rho} \right |_s
      \frac{D\rho}{Dt} +
      \left . \frac{\partial p}{\partial s} \right |_\rho
      \cancelto{0}{\frac{Ds}{Dt}}
 \end{equation}
-where $Ds/Dt$ is $0$ when no entropy sources are present.  Recognizing
+where $Ds/Dt = 0$ when no entropy sources are present.  Recognizing
 that $\Gamma_1 \equiv \partial \log p/\partial \log \rho |_s$, we have:
 \begin{equation}
 \frac{\partial p}{\partial t} + u \frac{\partial p}{\partial x} 
@@ -176,14 +185,19 @@ eigenvector.  Here they are normalized such that
 $l^{(i)} \cdot r^{(j)} = \delta_{ij}$.
 }
 \end{exercise}
-An {\sf IPython} notebook using {\sf SymPy} that derives these is available here:
+A {\sf IPython} notebook using {\sf SymPy} that derives these is available here:
 \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/compressible/euler.ipynb}{euler.ipynb}}
 \footnote{if you don't have {\sf IPython}, you can view this rendered online via {\sf nbviewer}:\\
 \url{http://nbviewer.ipython.org/github/zingale/hydro_examples/blob/master/compressible/euler.ipynb}}
 
 A final form of the equations is called the {\em characteristic form}.  Here,
 we wish to diagonalize the matrix $A$.  We take the matrix $R$ to be the
-matrix of right eigenvectors, $R = (r^\evm | r^\evz | r^\evp )$, and $L$
+matrix of right eigenvectors,
+\begin{equation}
+R = (r^\evm | r^\evz | r^\evp ) 
+\end{equation}
+(i.e., $R$ is a square matrix whose columns are the eigenvectors),
+and $L$
 is the corresponding matrix of left eigenvectors:
 \begin{equation}
 L = \left ( \begin{array}{c} l^\evm \\              
