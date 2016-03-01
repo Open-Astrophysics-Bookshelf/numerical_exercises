@@ -1,5 +1,7 @@
 ALL: CompHydroTutorial.pdf
 
+DEBUG := 
+
 DIRS := preface \
         intro \
 	pde-classes \
@@ -31,7 +33,14 @@ cPDFS := $(foreach dir, $(DIRS), $(wildcard $(dir)/*converted-to.pdf))
 PDFS := $(filter-out $(cPDFS), $(tPDFS)) 
 
 
-CompHydroTutorial.pdf: CompHydroTutorial.tex $(TEXS) $(EPSS) $(PDFS) refs.bib
+conditional.tex:
+ifdef DEBUG
+	echo "\def\debugmode{}" > conditional.tex
+else
+	echo "" > conditional.tex
+endif
+
+CompHydroTutorial.pdf: CompHydroTutorial.tex conditional.tex $(TEXS) $(EPSS) $(PDFS) refs.bib
 	git rev-parse --short=12 HEAD > git_info.tex
 	pdflatex CompHydroTutorial  < /dev/null
 	bibtex CompHydroTutorial.aux
@@ -39,6 +48,7 @@ CompHydroTutorial.pdf: CompHydroTutorial.tex $(TEXS) $(EPSS) $(PDFS) refs.bib
 	pdflatex CompHydroTutorial  < /dev/null
 	pdflatex CompHydroTutorial  < /dev/null
 	$(RM) git_info.tex
+	$(RM) conditional.tex
 
 
 clean:

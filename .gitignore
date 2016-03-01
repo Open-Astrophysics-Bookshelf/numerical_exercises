@@ -14,3 +14,10 @@
 *.exc
 *.toc
 *.png
+*.bcf
+*.brf
+CompHydroTutorial.out
+CompHydroTutorial.pdf
+
+figures/*/*.eps
+figures/*/*.pdf
