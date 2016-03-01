@@ -1,7 +1,5 @@
-import math
-import numpy
-import pylab
-import grid_plot_util as gpu
+import matplotlib.pyplot as plt
+import grid_plot as gp
 
 # plot two stacked fv grids of different (2x) resolution to show prolongation
 
@@ -10,48 +8,46 @@ import grid_plot_util as gpu
 nf = 4
 nc = nf/2
 
-grf = gpu.grid(nf)
-grc = gpu.grid(nc, voff=2.0)
+grf = gp.FVGrid(nf)
+grc = gp.FVGrid(nc, voff=2.0)
 
 
-pylab.clf()
+plt.clf()
 
-gpu.drawGrid(grf)
-gpu.drawGrid(grc)
+grf.draw_grid()
+grc.draw_grid()
 
-gpu.labelCenter(grf, nf/2-2,   r"$i-2$")
-gpu.labelCenter(grf, nf/2-1,   r"$i-1$")
-gpu.labelCenter(grf, nf/2,   r"$i$")
-gpu.labelCenter(grf, nf/2+1,   r"$i+1$")
+grf.label_center(nf/2-2, r"$i-2$")
+grf.label_center(nf/2-1, r"$i-1$")
+grf.label_center(nf/2,   r"$i$")
+grf.label_center(nf/2+1, r"$i+1$")
 
+grc.label_center(nc/2-1, r"$j-1$")
+grc.label_center(nc/2,   r"$j$")
 
-gpu.labelCenter(grc, nc/2-1,   r"$j-1$")
-gpu.labelCenter(grc, nc/2,   r"$j$")
+grf.label_cell_center(nf/2-2, r"$\phi_{i-2}^h$")
+grf.label_cell_center(nf/2-1, r"$\phi_{i-1}^h$")
+grf.label_cell_center(nf/2,   r"$\phi_i^h$")
+grf.label_cell_center(nf/2+1, r"$\phi_{i+1}^h$")
 
-gpu.labelCellCenter(grf, nf/2-2, r"$\phi_{i-2}^h$")
-gpu.labelCellCenter(grf, nf/2-1, r"$\phi_{i-1}^h$")
-gpu.labelCellCenter(grf, nf/2, r"$\phi_i^h$")
-gpu.labelCellCenter(grf, nf/2+1, r"$\phi_{i+1}^h$")
-
-gpu.labelCellCenter(grc, nc/2-1, r"$\phi_{j-1}^{2h}$")
-gpu.labelCellCenter(grc, nc/2,   r"$\phi_{j}^{2h}$")
+grc.label_cell_center(nc/2-1, r"$\phi_{j-1}^{2h}$")
+grc.label_cell_center(nc/2,   r"$\phi_{j}^{2h}$")
     
 
 # connect the dots...
 
-pylab.plot([grf.xl[nf/2-2], grf.xl[nf/2-2]], [-0.25, 3.25], ":", color="0.5")
-pylab.plot([grf.xl[nf/2], grf.xl[nf/2]], [-0.25, 3.25], ":", color="0.5")
-pylab.plot([grf.xr[nf/2+1], grf.xr[nf/2+1]], [-0.25, 3.25], ":", color="0.5")
+plt.plot([grf.xl[nf/2-2], grf.xl[nf/2-2]], [-0.25, 3.25], ":", color="0.5")
+plt.plot([grf.xl[nf/2], grf.xl[nf/2]], [-0.25, 3.25], ":", color="0.5")
+plt.plot([grf.xr[nf/2+1], grf.xr[nf/2+1]], [-0.25, 3.25], ":", color="0.5")
 
 
-pylab.axis([grf.xmin-0.5*grf.dx,grf.xmax+0.5*grf.dx, -0.5, 3.5])
-pylab.axis("off")
+plt.axis([grf.xmin-0.5*grf.dx,grf.xmax+0.5*grf.dx, -0.5, 3.5])
+plt.axis("off")
 
-pylab.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
+plt.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
 
-f = pylab.gcf()
+f = plt.gcf()
 f.set_size_inches(6.0,5.0)
 
-pylab.savefig("fvprolong.png")
-pylab.savefig("fvprolong.eps")
+plt.savefig("fvprolong.pdf")
 
