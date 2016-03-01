@@ -1,1 +1,1 @@
-__all__ = ['grid_plot_util']
+__all__ = ['grid_plot']

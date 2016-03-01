@@ -1,7 +1,6 @@
-import math
-import numpy as np
 import matplotlib.pyplot as plt
-import grid_plot_util as gpu
+import numpy as np
+import grid_plot as gp
 
 # plot a simple finite-difference grid
 
@@ -13,28 +12,26 @@ nzones = 8
 #a = np.array([0.3, 1.0, 0.9, 0.8, 0.25, 0.15, 0.5, 0.55])
 a = np.array([0.3, 1.0, 0.9, 0.8, 0.25, 0.1, 0.5, 0.55])
 
-gr = gpu.grid(nzones, fd=1)
+gr = gp.FDGrid(nzones)
 
 
 plt.clf()
 
-gpu.drawGrid(gr)
+gr.draw_grid()
 
-gpu.labelCenter(gr, nzones/2,   r"$i$", fontsize="medium")
-gpu.labelCenter(gr, nzones/2-1, r"$i-1$", fontsize="medium")
-gpu.labelCenter(gr, nzones/2+1, r"$i+1$", fontsize="medium")
-gpu.labelCenter(gr, nzones/2-2, r"$i-2$", fontsize="medium")
-gpu.labelCenter(gr, nzones/2+2, r"$i+2$", fontsize="medium")
+gr.label_node(nzones/2,   r"$i$",   fontsize="medium")
+gr.label_node(nzones/2-1, r"$i-1$", fontsize="medium")
+gr.label_node(nzones/2+1, r"$i+1$", fontsize="medium")
+gr.label_node(nzones/2-2, r"$i-2$", fontsize="medium")
+gr.label_node(nzones/2+2, r"$i+2$", fontsize="medium")
 
 
 # draw the data
-i = 0
-while i < nzones:
-    gpu.drawFDData(gr, i, a[i], color="r")
-    i += 1
+for i in range(nzones):
+    gr.draw_data(i, a[i], color="r")
 
 
-gpu.labelFD(gr, nzones/2, a[nzones/2], r"$f_i$", color="r")
+gr.label_value(nzones/2, a[nzones/2], r"$f_i$", color="r")
 
 # label dx
 plt.plot([gr.xc[gr.ng+nzones/2-1], gr.xc[gr.ng+nzones/2-1]], [-0.35,-0.25], color="k")
