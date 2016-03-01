@@ -6,9 +6,103 @@ import numpy as np
 import matplotlib.pyplot as plt
 import sys
 
-class FVGrid(object):
+class FDGrid(object):
+    """ a 1-d finite-difference grid """
 
-    def __init__(self, nx, ng = 0, xmin=0.0, xmax=1.0, voff=0.0):
+    def __init__(self, nx, ng=0, xmin=0.0, xmax=1.0, voff=0.0):
+
+        # finite-difference -- the xc will now be the node (where
+        # the data lives)
+        self.nx = nx
+        self.ng = ng
+        self.xmin = xmin
+        self.xmax = xmax
+        
+        self.ilo = ng
+        self.ihi = ng+nx-1
+
+        self.dx = (xmax-xmin)/float(nx-1)
+
+        self.xl = None
+        self.xr = None
+        self.xc = xmin + (np.arange(2*ng+nx)-ng)*self.dx
+
+        # vertical offset (if we want to stack grids)
+        self.voff = voff
+
+    def draw_grid(self, draw_ghost=0, emphasize_end=0, edge_ticks=1, color="k"):
+
+        grid_top = 0.25
+
+        if not draw_ghost:
+            nstart = self.ilo
+            nstop = self.ihi
+        else:
+            nstart = self.ilo-self.ng
+            nstop = self.ihi+self.ng
+
+        if not draw_ghost:
+            if emphasize_end:
+                plt.plot([self.xmin, self.xmax], 
+                         [0,0], color=color, lw=2)
+            else:
+                plt.plot([self.xmin-0.5*self.dx, self.xmax+0.5*self.dx], 
+                         [self.voff,self.voff], color=color, lw=2)
+        else:
+            plt.plot([self.xmin-self.ng*self.dx, self.xmin],
+                     [self.voff,self.voff], color=color, lw=2, ls=":")
+            plt.plot([self.xmax, self.xmax+self.ng*self.dx], 
+                     [self.voff,self.voff], color=color, lw=2, ls=":")
+            plt.plot([self.xmin, self.xmax], 
+                     [self.voff,self.voff], color=color, lw=2)
+
+        for n in range(nstart, nstop+1):
+
+            # draw center (node) indicator line
+            if n < self.ilo or n > self.ihi:
+                plt.plot([self.xc[n], self.xc[n]], 
+                         [-0.05+self.voff, grid_top+self.voff], 
+                         color=color, ls=":", lw=2)
+            else:
+                plt.plot([self.xc[n], self.xc[n]], 
+                         [-0.05+self.voff, grid_top+self.voff], color=color, lw=2)
+      
+
+        if emphasize_end:
+            plt.plot([self.xc[self.ilo], self.xc[self.ilo]], 
+                     [-0.05+self.voff, grid_top+self.voff], color=color, lw=4)
+
+            plt.plot([self.xc[self.ihi], self.xc[self.ihi]], 
+                     [-0.05+self.voff, grid_top+self.voff], color=color, lw=4)
+
+    def label_node(self, idx, string, fontsize="small"):
+
+        plt.text(self.xc[idx], self.voff-0.1, string,
+                 horizontalalignment='center', verticalalignment='top',
+                 fontsize=fontsize)
+
+    def label_node_data(self, idx, string):
+
+        plt.text(self.xc[idx], self.voff+0.5, string,
+                 horizontalalignment='center', verticalalignment='center',
+                 fontsize="large")
+
+    def label_value(self, idx, value, string, color="k", fontsize="large"):
+
+        plt.text(self.xc[idx], self.voff+value+0.1, string,
+                 horizontalalignment='center', verticalalignment='bottom',
+                 fontsize=fontsize, color=color)
+
+    def draw_data(idx, value, color="0.5", marker="o"):
+        plt.scatter([self.xc[idx]], [self.voff+value], 
+                    color=color, marker=marker, zorder=100)
+
+
+
+class FVGrid(object):
+    """ a 1-d finite-volume grid """
+
+    def __init__(self, nx, ng=0, xmin=0.0, xmax=1.0, voff=0.0):
 
         # finite-volume or cell-centered finite-difference
         self.nx = nx
