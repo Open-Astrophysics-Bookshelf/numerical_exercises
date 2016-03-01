@@ -1,3 +1,10 @@
+# by default, typing make will build the `production' version of the 
+# Computational Hydrodynamics notes.
+#
+# if you instead for 'make DEBUG=t', then it will make the draft version.
+# this will enable margin comments and build in any chapters that are
+# not yet complete.
+
 ALL: CompHydroTutorial.pdf
 
 DEBUG := 
