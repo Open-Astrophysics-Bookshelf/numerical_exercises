@@ -1,5 +1,5 @@
-# This is a refactorization of the grid_plot_util routines that allow one to
-# plot grids
+# grid_plot is a collection of classes for defining and drawing
+# finite-volume and finite-difference grids in 1- and 2-d.
 
 import math
 import numpy as np
@@ -234,6 +234,8 @@ class FVGrid(object):
 
 
 class CellCentered(object):
+    """ cell-centered data defined on a 1-d finite-volume grid """
+
     def __init__(self, gr, a):
         if not len(a) == len(gr.xc):
             sys.exit("ERROR: grid length != data length")
@@ -252,6 +254,8 @@ class CellCentered(object):
 
 
 class PiecewiseConstant(object):
+    """ piecewise constant data defined on a 1-d finite-volume grid """
+
     def __init__(self, gr, a, scale=1.0):
         if not len(a) == len(gr.xc):
             sys.exit("ERROR: grid length != data length")
@@ -283,6 +287,8 @@ class PiecewiseConstant(object):
 
 
 class PiecewiseLinear(PiecewiseConstant):
+    """ piecewise linear data defined on a 1-d finite-volume grid """
+
     def __init__(self, gr, a, nolimit=0, scale=1.0):
 
         PiecewiseConstant.__init__(self, gr, a, scale=scale)
@@ -383,6 +389,8 @@ class PiecewiseLinear(PiecewiseConstant):
 
 
 class PiecewiseParabolic(PiecewiseConstant):
+    """ piecewise parabolic data defined on a 1-d finite-volume grid """
+
     def __init__(self, gr, a, nolimit=0, scale=1.0):
 
         PiecewiseConstant.__init__(self, gr, a, scale=scale)
@@ -485,6 +493,7 @@ class PiecewiseParabolic(PiecewiseConstant):
 
 
 class Grid2d(object):
+    """ the base 2-d grid """
 
     def __init__(self, nx, ny, ng = 0, 
                  xmin=0.0, xmax=1.0, ymin=0.0, ymax=1.0):
@@ -553,6 +562,7 @@ class Grid2d(object):
 
 
 class FVGrid2d(Grid2d):
+    """ a 2-d finite-volume grid """
 
     def label_cell_center(self, idx, jdx, string, fontsize="medium", color="k"):
         plt.text(self.xc[idx], self.yc[jdx], 
@@ -614,6 +624,7 @@ class FVGrid2d(Grid2d):
 
 
 class FDGrid2d(Grid2d):
+    """ a 2-d finite-difference grid """
 
     def label_cell_center(self, idx, jdx, string, fontsize="medium", color="k"):
         plt.scatter([self.xc[idx]], [self.yc[jdx]], marker="x", color=color)
