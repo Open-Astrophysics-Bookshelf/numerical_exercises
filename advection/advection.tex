@@ -213,10 +213,26 @@ We see that there is no value of $C$ that can make the method stable
 Eq.~\ref{eq:fo} would show that the upwind method is stable for $0\le
 C \le 1$. 
 
+\begin{exercise}[Stability of the upwind method]
+{Using the above stability analysis, considering the amplitude of a
+  single Fourier mode, show that the growth of a mode for the upwind
+  method (Eq.~\ref{eq:fo}) is:
+  \begin{equation}
+    \left | \frac{A^{n+1}}{A^n} \right |^2 = 
+           1 - 2C(1-C)(1-\cos\theta)
+  \end{equation}
+  and stability requires $2C(1-C) \ge 0$.
+}
+\end{exercise}
+
 It is important to note that this stability analysis only works for
 linear equations, where the different Fourier modes are decoupled,
 nevertheless, we use its ideas for nonlinear advection problems as
 well).
+
+Truncation analysis can also help us understand stability.  The idea
+here is to keep the higher order terms in the Taylor series to understand
+how they modify the actual equation you are trying to solve.
 
 \begin{exercise}[Stability analysis]
 {To get an alternate feel for stability, we can ask
