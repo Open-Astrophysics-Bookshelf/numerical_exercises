@@ -44,7 +44,7 @@ class FDGrid(object):
         if not draw_ghost:
             if emphasize_end:
                 plt.plot([self.xmin, self.xmax], 
-                         [0,0], color=color, lw=2)
+                         [self.voff, self.voff], color=color, lw=2)
             else:
                 plt.plot([self.xmin-0.5*self.dx, self.xmax+0.5*self.dx], 
                          [self.voff,self.voff], color=color, lw=2)

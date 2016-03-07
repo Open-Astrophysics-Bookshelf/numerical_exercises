@@ -273,12 +273,11 @@ slopes for our line.
 % created by figures/multigrid/bcs.py
 \begin{figure}[h]
 \centering
-\includegraphics[width=\linewidth]{mg-bcs}
-\caption[The cell-centered grid showing the difference between ghost
-  cells and the physical boundary]{\label{fig:bcs} The cell-centered
-  grid showing the cells (and ghost cells) surrounding the boundaries
-  and indicating that the boundary conditions are actually specified
-  right at the boundary itself.}
+\includegraphics[width=\linewidth]{fv-fd_grid_bc}
+\caption[Node-centered vs.\ cell-centered data at boundaries]{\label{fig:bcs} 
+  A node-centered (top) and cell-centered (bottom) finite difference
+  grid showing the data and domain boundaries.  Notice that for the 
+  cell-centered grid, there is no data point precisely at the boundary.}
 \end{figure}
 
 Consider Dirichlet boundary conditions, specifying values $\phi_l$ on
