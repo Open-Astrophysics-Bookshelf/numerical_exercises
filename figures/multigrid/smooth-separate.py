@@ -10,125 +10,106 @@ u = 0 on the boundary [0,1]
 
 The analytic solution is u(x) = -sin(x) + x sin(1)
 
+This version (separate) differs from smooth.py in that we implement the
+smoothing here directly, instead of using the MG solver.
+
 M. Zingale (2013-03-31)
 
 """
 #from io import *
-import numpy
-import pylab
+import numpy as np
+import matplotlib.pyplot as plt
 import sys
 
-# the analytic solution
 def true(x):
-    return -numpy.sin(x) + x*numpy.sin(1.0)
+    # the analytic solution
+    return -np.sin(x) + x*np.sin(1.0)
 
 
-# the L2 error norm
 def error(ilo, ihi, dx, r):
-
-    # L2 norm of elements in r, multiplied by dx to
-    # normalize
-    return numpy.sqrt(dx*numpy.sum((r[ilo:ihi+1]**2)))
+    # L2 norm of elements in r, multiplied by dx to normalize
+    return np.sqrt(dx*np.sum((r[ilo:ihi+1]**2)))
 
 
-# the righthand side
 def f(x):
-    return numpy.sin(x)
+    # the righthand side
+    return np.sin(x)
 
 
-
-def computeResidual(ilo, ihi, dx, phi, frhs):
-
-    r = numpy.zeros(len(phi))
-
+def compute_residual(ilo, ihi, dx, phi, frhs):
+    # compute r = f - L phi
+    r = np.zeros(len(phi))
     r[ilo:ihi+1] = frhs[ilo:ihi+1] - \
         (phi[ilo+1:ihi+2] - 2.0*phi[ilo:ihi+1] + phi[ilo-1:ihi])/dx**2
-
-
     return r
 
 
-def smoothRun(nx):
+def smooth_run(nx, method="GS"):
 
     xmin = 0.0
     xmax = 1.0
 
     ng = 1
 
-    print nx
-
     # initialize the solution to zero.  Put one ghost cell on either end
-    phi = numpy.zeros(nx + 2*ng, dtype=numpy.float64)
-    phinew = numpy.zeros(nx + 2*ng, dtype=numpy.float64)
+    phi = np.zeros(nx + 2*ng, dtype=np.float64)
+    phinew = np.zeros_like(phi)
 
     ilo = ng
     ihi = ng + nx - 1
 
     # coordinates of centers
     dx = (xmax - xmin)/nx
-    x = (numpy.arange(nx+2*ng) - ng + 0.5)*dx + xmin
+    x = (np.arange(nx+2*ng) - ng + 0.5)*dx + xmin
 
     # initialize the RHS using the function f
-    frhs = numpy.zeros(nx + 2*ng, dtype=numpy.float64)
-    frhs[ilo:ihi+1] = f(x[ilo:ihi+1])
+    frhs = f(x)
 
     # smooth 
-    n = numpy.arange(20000) + 1
+    n = np.arange(20000) + 1
     e = []
     r = []
 
-    # fill the ghost cells
-    phi[ilo-1] = -phi[ilo]
-    phi[ihi+1] = -phi[ihi]
-
-    print "source norm: ", error(ilo, ihi, dx, frhs)
-    print numpy.sum(frhs[ilo:ihi+1])
+    print("source norm: ", error(ilo, ihi, dx, frhs))
+    print(np.sum(frhs[ilo:ihi+1]))
 
     for i in n:
 
-        # do Jacobi
-        #phinew[ilo:ihi+1] = \
-        #    (-dx*dx*frhs[ilo:ihi+1] + phi[ilo+1:ihi+2] + phi[ilo-1:ihi])/2.0
-        # phi[:] = phinew[:]
-
-        # this also does Jacobi, since phi on the RHS is evaluated before
-        # the LHS is updated
-        #phi[ilo:ihi+1] = \
-        #    0.5*(-dx*dx*frhs[ilo:ihi+1] + phi[ilo+1:ihi+2] + phi[ilo-1:ihi])
-
-
-        # red-black Gauss-Seidel -- first do the odd, then even points
-        phi[ilo:ihi+1:2] = \
-            0.5*(-dx*dx*frhs[ilo:ihi+1:2] + \
-                      phi[ilo+1:ihi+2:2] + phi[ilo-1:ihi:2])
-
         # fill the ghost cells
         phi[ilo-1] = -phi[ilo]
         phi[ihi+1] = -phi[ihi]
 
-        phi[ilo+1:ihi+1:2] = \
-            0.5*(-dx*dx*frhs[ilo+1:ihi+1:2] + \
-                      phi[ilo+2:ihi+2:2] + phi[ilo:ihi:2])
+        if method == "Jacobi":
+            phinew[ilo:ihi+1] = \
+                (-dx*dx*frhs[ilo:ihi+1] + phi[ilo+1:ihi+2] + phi[ilo-1:ihi])/2.0
+            phi[:] = phinew[:]
 
+        elif method == "GS":
 
-        # fill the ghost cells
-        phi[ilo-1] = -phi[ilo]
-        phi[ihi+1] = -phi[ihi]
+            # red-black Gauss-Seidel -- first do the odd, then even points
+            phi[ilo:ihi+1:2] = \
+                0.5*(-dx*dx*frhs[ilo:ihi+1:2] + 
+                     phi[ilo+1:ihi+2:2] + phi[ilo-1:ihi:2])
 
-        
-        # compute the true error (wrt the analytic solution)
+            # fill the ghost cells between red and black
+            phi[ilo-1] = -phi[ilo]
+            phi[ihi+1] = -phi[ihi]
+
+            phi[ilo+1:ihi+1:2] = \
+                0.5*(-dx*dx*frhs[ilo+1:ihi+1:2] + \
+                     phi[ilo+2:ihi+2:2] + phi[ilo:ihi:2])
+
+        else:
+            sys.exit("invalid method")
+
+        # compute the true error (wrt the analytic solution) and residual
         e.append(error(ilo, ihi, dx, phi - true(x)))
         
         # compute the residual
-        resid = computeResidual(ilo, ihi, dx, phi, frhs)
-
+        resid = compute_residual(ilo, ihi, dx, phi, frhs)
         r.append(error(ilo, ihi, dx, resid))
 
-
-    r = numpy.array(r)
-    e = numpy.array(e)
-
-    return n, r, e
+    return n, np.array(r), np.array(e)
 
 
 # test the multigrid solver
@@ -138,19 +119,19 @@ c = ["r", "g", "b"]
 
 for nx in N:
 
-    n, r, e = smoothRun(nx)
+    n, r, e = smooth_run(nx)
     color = c.pop()
-    pylab.plot(n, e, color=color, label = `nx`)
-    pylab.plot(n, r, color=color, ls=":")
+    plt.plot(n, e, color=color, label = str(nx))
+    plt.plot(n, r, color=color, ls=":")
 
-ax = pylab.gca()
+ax = plt.gca()
 ax.set_xscale('log')
 ax.set_yscale('log')
 
-pylab.xlabel("# of iterations")
-pylab.ylabel("L2 norm of true error (solid) and residual (dotted)")
-pylab.legend(frameon=False, fontsize="small")
+plt.xlabel("# of iterations")
+plt.ylabel("L2 norm of true error (solid) and residual (dotted)")
+plt.legend(frameon=False, fontsize="small")
 
-pylab.savefig("smooth-error.png")
+plt.savefig("smooth-error.png")
 
 
