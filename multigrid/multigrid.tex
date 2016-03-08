@@ -359,12 +359,13 @@ as the source.
 % this figure can be created with figures/multigrid/smooth-separate.py
 \begin{figure}
 \centering
-\includegraphics[width=\linewidth]{smooth-error.eps}
+\includegraphics[width=\linewidth]{smooth-error}
 \caption[Convergence as a function of number of iterations using Gauss-Seidel relaxation]{\label{fig:smootherror} Gauss-Seidel relaxation applied to
   $\phi_{xx} = \sin(x)$ with $\phi(0) = \phi(1) = 0$.  Shown are the
   L2 norm of the error compared with the true solution (solid lines)
   and the L2 norm of the residual (dotted lines) for 3 different
-  resolutions (16, 32, and 64 zones).}
+  resolutions (16, 32, and 64 zones). \\
+  \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/multigrid/smooth.py}{smooth.py}}}
 \end{figure}
 
 Consider the simple Poisson problem on $x \in [0,1]$:
