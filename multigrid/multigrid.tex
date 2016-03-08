@@ -395,14 +395,14 @@ In practice, we can only monitor the residual error, not the true
 error, and we hope that small residual error implies a small true
 error.
 
-% this figure was created with figures/multigrid/smooth_test/
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.8\linewidth]{smooth-multimode}
 \caption[Smoothing of different wavenumbers]{\label{fig:smooth} Error
   in the solution to $\phi'' = 0$ given an initial guess with 3
   different wavenumbers of noise.  The different curves are different
-  numbers of smoothing iterations.}
+  numbers of smoothing iterations. \\
+  \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/multigrid/smooth-modes.py}{smooth-modes.py}}}
 \end{figure}
 
 We can think of the error in the solution as a superposition of high
