@@ -1,21 +1,36 @@
 \section{How to setup a simulation?}
 
+When you perform a simulation, you are making a series of
+approximations.  The first comes with the choice of equation set.  As
+discussed earlier, for pure hydrodynamics, this often means solving
+the Euler rather than the full Navier-Stokes equations.  The next
+approximation is made when discretizing the equations, using the 
+methods we described in the earlier chapters.  
+
 Astrophysical flows involve a range of length and timescales.  Often
 it is not possible to capture all these scales in a single simulation,
-so some comprimises must be made.  
+so some comprimises must be made.  If you are interested in the
+dynamics on the full scale of the system, $L$, then you will resolve
+down to some cutoff scale $l$, where $L/l ~ O(10^3--10^4)$.  At scales
+smaller than $l$, you neglect the flow features.  The smallest
+scale of importance is the disipation scale $\lambda \ll L$.  
 
 \section{Picking your resolution}
 
 To capture turbulence, you need a large range of lengthscales to get a
-high Reynolds number.  
+high Reynolds number.  Generally, you'll just start to get a resolved
+inertial range over a decade in wavenumber in your power spectrum at
+around 512 zones on a side of your domain.  With fewer points than
+this, you are unlikely to see a turbulent cascade.
 
 If nuclear burning is modeled, the steepness of the reaction rate will
 set a lengthscale.
 
+Hydrostatic equilibrium also puts demands on the resolution.  A good
+rule of thumb is that you need 10 points per pressure scale height to
+get a reasonable hydrostatic balance.
 
-Hydrostatic equilibrium also puts demands on the resolution.
-
-
+At the end of the day, the best thing you can do is 
 Convergence study
 
 
@@ -23,8 +38,18 @@ Convergence study
 
 \subsection{Boundary conditions}
 
+Another approximation you make is how to treat the boundaries.
+Generally speaking, you should put your boundaries as far away from
+the place where the action is occuring as possible.  For example,
+if you are modeling a convective region bounded by stably stratified
+flow, then you should have a large buffer of stable atmosphere
+bounding it.
 
-periodic still confines the flow
+Periodic boundary conditions don't magically fix everything either.  
+With a triply-periodic box (periodic on all boundaries), then you 
+are confining the flow.  If energy is injected into the box, then
+there is no place for it to expand.  
+
 
 wall heating
 
@@ -46,9 +71,23 @@ Burning timescale
 
 \subsection{Computational cost}
 
-N^4 scaling
+The main limitation to your choice of resolution and timestep is
+computational cost.  For a three-dimensional simulation in a box with
+$N$ zones on a side, the work scales as $O(N^4)$.  The cost to advance
+a single timestep is based on the volume, $N^3$, and the number of
+timesteps to get you to a fixed simulation time, $t_\mathrm{max}$, is
+$t_\mathrm{max}/\Delta t$, but $\Delta t \sim \Delta x / s \sim L/(N
+s)$, where $s$ is the fastest information speed.  So the number 
+of timesteps increases with $N$, making the total cost $N^4$.
+Think about this for a minute---if you double the number of zones, then
+the amount of work you need to do increases by 16$\times$.
 
-
+A common conflict that arises is: Do you do one ``hero'' calculation
+or many smaller calculations to understand the sensitivity of your
+results to input parameters?  Computing centers that grant allocations
+usually setup their queues to favor big jobs that use as much of the
+machine as possible (as that's what their funders use as a metric for
+their success).
 
 
 It is important to understand that no single algorithm will offer everything
