@@ -396,6 +396,31 @@ In practice, we can only monitor the residual error, not the true
 error, and we hope that small residual error implies a small true
 error.
 
+Figure~\ref{fig:smooth-badbcs} shows the norm of the true error for
+the same problem, but this time with a naive implementation of the 
+boundary conditions (simply initializing the ghost cell to the boundary
+value, instead of averaging to the interface).  We see that with this
+mistake at the boundaries, the error of the entire solution is 
+affected, and we get only first-order convergence with resolution
+(this can be seen by looking at the spacing of the curves).  The previous
+solution, with the correct BCs is shown for reference, and shows 
+second-order convergence.  It is important to not that because every
+zone is linked to every other zone (and the boundary) in elliptic
+problems, an error at the boundary pollutes the global solution.
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{smooth-badBCs}
+\caption[Convergence of smoothing in first-order BCs]{\label{fig:smooth-badbcs} 
+  The same problem as in figure \ref{fig:smooth}, but
+  now we done with a naive first-order boundary conditions (just initializing
+  the ghost cell to the boundary value; solid lines).  We see that this 
+  achieves only first-order convergence in the true error.  The correct
+  second-order implmentation is shown as the dotted lines.
+  \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/multigrid/smooth-badbcs.py}{smooth-badbcs.py}}}
+\end{figure}
+
+
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.8\linewidth]{smooth-multimode}
@@ -662,6 +687,21 @@ source integrate to zero.  If the Neumann boundaries are inhomogeneous,
 there is still a solvability condition on $f$ based on the sum on
 the boundary values.
 
+A simple example of solvability is:
+\begin{equation}
+\phi^{\prime\prime} = 0
+\end{equation}
+on $[a, b]$ with 
+\begin{align}
+\phi^\prime(a) &= A \\
+\phi^\prime(b) &= B
+\end{align}
+We can integrate $\phi^{\prime\prime} = 0$ to get $\phi(x) = \alpha x
++ \beta$ where $\alpha$ and $\beta$ are integration constants.  But
+note that this is just a straight line, with a single slope, $\alpha$,
+so it is not possible to specify two unique slopes, $A$ and $B$ at the
+boundary unless there is a non-zero source term.
+
 For all periodic boundaries, we have $\nabla \phi
 |_\mathrm{left} = -\nabla \phi |_\mathrm{right}$ on the left and right
 boundaries by definition of the periodicity (and similarly for the top
@@ -670,6 +710,7 @@ and bottom).  Again this implies that $f$ must integrate to zero.
 Sometimes, with periodic boundary conditions all around, you need to
 enforce that $f$ integrate to zero numerically to test convergence.
 This is discussed in \S~\ref{sec:lm:periodicbcs}.
+
 
 \subsection{Boundary charges}
 
@@ -727,7 +768,21 @@ The $L_1$ norm and $L_2$ norms are more global.
 \end{eqnarray}
 Generally, the measure in $L_2$ falls between $L_\infty$ and $L_1$.
 Regardless of the norm used, if the problem converges, it should
-converge in all norms.
+converge in all norms.  Figure~\ref{fig:smoothnorms} shows the error
+with respect to the true solution and of the residual for pure smoothing
+in three different norms.
+
+% this figure can be created with figures/multigrid/smooth-separate.py
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{smooth-error-norms}
+\caption[Convergence of smoothing in different norms]{\label{fig:smoothnorms} 
+  Gauss-Seidel relaxation applied to $\phi_{xx} = \sin(x)$ with
+  $\phi(0) = \phi(1) = 0$.  This is like figure \ref{fig:smooth}, but
+  now we show the error in 3 different norms: $L_1$, $L_2$, and $L_\infty$.
+  \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/multigrid/smooth-norms.py}{smooth-norms.py}}}
+\end{figure}
+
 
 For reference, the BoxLib library uses $L_\infty$ in its multigrid solvers.
 
