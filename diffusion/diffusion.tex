@@ -31,6 +31,7 @@ concentrations of $\phi$ and smooth them out with time.
 The simplest way to difference this equation is {\em explicit} in time
 (i.e.\ the righthand side depends only on the old state):
 \begin{equation}
+\label{eq:diff:explicitdiff}
 \frac{\phi_i^{n+1} - \phi_i^n}{\Delta t} = 
   k \frac{\phi_{i+1}^n - 2\phi_i^n + \phi_{i-1}^n}{\Delta x^2}
 \end{equation}
@@ -39,9 +40,10 @@ time (since the righthand side is not centered in time).
 
 As with the advection equation, when differenced explicitly, there is
 a constraint on the timestep required for stability.  Looking at the
-growth of a single Fourier mode, $\phi = A^n e^{ij\theta}$ with $j =
+growth of a single Fourier mode, $\phi^n = A^n e^{ij\theta}$ with $j =
 \sqrt{-1}$, we find:
 \begin{equation}
+\label{eq:diff:amplitude}
 \frac{A^{n+1}}{A^n} = 1 + 2 \frac{k \Delta t}{\Delta x^2} ( \cos\theta - 1)
 \end{equation}
 Stability requires that $|A^{n+1}/A^n| \le 1$, which can only be true
@@ -51,8 +53,18 @@ constraint in this case is
 \label{eq:diff:dt}
 \Delta t < \frac{1}{2} \frac{\Delta x^2}{k}
 \end{equation}
+As with advection, we often write the timestep as
+\begin{equation}
+\Delta t = \frac{C}{2} \frac{\Delta x^2}{k}
+\end{equation}
+where $C$ is a constant, $C < 1$. 
 Note the $\Delta x^2$ dependence---this constraint can become really
 restrictive.
+
+\begin{exercise}
+Derive Eq.~\ref{eq:diff:amplitude} by inserting $\phi^n = A^n e^{ij\theta}$
+into Eq.~\ref{eq:diff:explicitdiff}
+\end{exercise}
 
 To complete the solution, we need boundary conditions at the left
 ($x_l$) and right ($x_r$) boundaries.  These are typically either
@@ -66,6 +78,81 @@ or Neumann:
 \phi_x |_{x=x_l} &=& \phi_x |_l\\
 \phi_x |_{x=x_r} &=& \phi_x |_r
 \end{eqnarray}
+
+\begin{exercise}[1-d explicit diffusion]
+{Write a one-dimensional explicit diffusion solver for the
+  domain $[0,1]$ with Neumann boundary conditions at each end and $k = 1$,
+  using the discretization of Eq.~\ref{eq:diff:explicitdiff}.
+
+  If we begin with a Gaussian, the resulting solution is also a Gaussian.
+  Initialize using the following with $t = 0$:
+  \begin{equation}
+   \phi(x,t) = (\phi_2 - \phi_1) \sqrt{\frac{t_0}{t + t_0}} e^{-\frac{1}{4}(x - x_c)^2/k(t+t_0)} + \phi_1
+  \end{equation}
+  with $t_0 = 0.001$, $\phi_1 = 1$, and $\phi_2 = 2$, and $x_c$ is the
+  coordinate of the center of the domain.  Run until $t = 0.01$ and
+  compare to the analytic solution above.
+
+  (Note: the solution for two-dimensions differs slightly) }
+\end{exercise}
+
+
+Figure~\ref{fig:diff_explicit} shows the solution for 64 zones
+and a value of $C = 0.8$.  We see good agreement with the
+analytic solution.  Note that if the initial conditions are
+not well resolve initially, then the solution will be bad
+(see Figure~\ref{fig:diff_explicit_res}).
+
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{diff-explicit-64}
+\caption[Explicit diffusion of a Gaussian]{\label{fig:diff_explicit}
+Diffusion of a Gaussian using the explicit differencing of
+Eq.~\ref{eq:diff:explicitdiff} with 64 zones and C = 0.8, shown at
+several times.  The dotted line is the analytic
+solution.  \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/diffusion/diffusion-explicit.py}{diffusion-explicit.py}}}
+\end{figure}
+
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{diffexplicit-res}
+\caption[Underresolved explicit diffusion of a Gaussian]{\label{fig:diff_explicit_res}
+Diffusion of a Gaussian using the explicit differencing of
+Eq.~\ref{eq:diff:explicitdiff} with different resolutions.
+several times.  The dotted line is the analytic
+solution.  \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/diffusion/diffusion-explicit.py}{diffusion-explicit.py}}}
+\end{figure}
+
+As with advection, if we exceed the timestep limit ($C > 1$), then
+the solution is unstable.  This is shown in Figure~\ref{fig:diff_explicit_bad}.
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{diff-explicit-64-bad}
+\caption[Unstable explicit diffusion]{\label{fig:diff_explicit_bad}
+Diffusion of a Gaussian using the explicit differencing of
+Eq.~\ref{eq:diff:explicitdiff} with 64 zones, but a timestep
+with $C > 1$, showing that the solution is unstable.
+ \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/diffusion/diffusion-explicit.py}{diffusion-explicit.py}}}
+\end{figure}
+
+Our spatial order-of-accuracy is second-order.
+Figure~\ref{fig:diffexplicit_converge} shows the error as a function
+of number of zones, using the $L_2$ norm of the solution with respect
+to the analytic solution.  Notice that at the coarsest resolution
+the error is very high---we are not resolving the initial conditions
+well enough to have a meaningful solution.
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{diffexplicit-converge-0_8}
+\caption[Error convergence of explicit diffusion]{\label{fig:diffexplicit_converge}
+Error convergence with resolution of the explicit diffusion using the differencing of 
+Eq.~\ref{eq:diff:explicitdiff}
+ \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/diffusion/diffusion-explicit.py}{diffusion-explicit.py}}}
+\end{figure}
 
 \section{Implicit with direct solve}
 
@@ -248,16 +335,8 @@ solution (especially at early times).
   that above.  Use a timestep close to the explicit step, a grid with
   N = 128 zones.
 
-  If we begin with a Gaussian, the resulting solution is also a Gaussian.
-  Initialize using the following with $t = 0$:
-  \begin{equation}
-   \phi(x,t) = (\phi_2 - \phi_1) \sqrt{\frac{t_0}{t + t_0}} e^{-\frac{1}{4}(x - x_c)^2/k(t+t_0)} + \phi_1
-  \end{equation}
-  with $t_0 = 0.001$, $\phi_1 = 1$, and $\phi_2 = 2$, and $x_c$ is the
-  coordinate of the center of the domain.  Run until $t = 0.01$ and
-  compare to the analytic solution above.
-
-  (Note: the solution for two-dimensions differs slightly) }
+  Use a Gaussian for your initial conditions (as you did for the 
+  explicit problem.}
 \end{exercise}
 
 
