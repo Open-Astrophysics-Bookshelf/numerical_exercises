@@ -111,7 +111,7 @@ not well resolve initially, then the solution will be bad
 Diffusion of a Gaussian using the explicit differencing of
 Eq.~\ref{eq:diff:explicitdiff} with 64 zones and C = 0.8, shown at
 several times.  The dotted line is the analytic
-solution.  \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/diffusion/diffusion-explicit.py}{diffusion-explicit.py}}}
+solution.  \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/diffusion/diffusion_explicit.py}{diffusion_explicit.py}}}
 \end{figure}
 
 
@@ -122,7 +122,7 @@ solution.  \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/
 Diffusion of a Gaussian using the explicit differencing of
 Eq.~\ref{eq:diff:explicitdiff} with different resolutions.
 several times.  The dotted line is the analytic
-solution.  \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/diffusion/diffusion-explicit.py}{diffusion-explicit.py}}}
+solution.  \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/diffusion/diffusion_explicit.py}{diffusion_explicit.py}}}
 \end{figure}
 
 As with advection, if we exceed the timestep limit ($C > 1$), then
@@ -135,7 +135,7 @@ the solution is unstable.  This is shown in Figure~\ref{fig:diff_explicit_bad}.
 Diffusion of a Gaussian using the explicit differencing of
 Eq.~\ref{eq:diff:explicitdiff} with 64 zones, but a timestep
 with $C > 1$, showing that the solution is unstable.
- \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/diffusion/diffusion-explicit.py}{diffusion-explicit.py}}}
+ \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/diffusion/diffusion_explicit.py}{diffusion_explicit.py}}}
 \end{figure}
 
 Our spatial order-of-accuracy is second-order.
@@ -151,7 +151,7 @@ well enough to have a meaningful solution.
 \caption[Error convergence of explicit diffusion]{\label{fig:diffexplicit_converge}
 Error convergence with resolution of the explicit diffusion using the differencing of 
 Eq.~\ref{eq:diff:explicitdiff}
- \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/diffusion/diffusion-explicit.py}{diffusion-explicit.py}}}
+ \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/diffusion/diffusion_explicit.py}{diffusion_explicit.py}}}
 \end{figure}
 
 \section{Implicit with direct solve}
@@ -175,12 +175,6 @@ we can write this as:
 This is a set of coupled algebraic equations.  We can write this in
 matrix form.  Using a cell-centered grid, we will solve for the values
 $[\mathrm{lo},\mathrm{hi}]$.  
-
-We can define a diffusive CFL number, $C$, as the ratio of $\Delta t$ to the 
-maximum explicit timestep (Eq.~\ref{eq:diff:dt}), and we see:
-\begin{equation}
-C \equiv \frac{\Delta t}{\frac{\Delta x^2}{2 k}} = 2\alpha
-\end{equation}
 The implicit method can use any $C > 0$.
 
 We specify boundary conditions by modifying the stencil
@@ -244,7 +238,10 @@ matrix.
 \right )
 \end{equation}
 This can be solved by standard matrix operations, using a tridiagonal
-solvers (for example).
+solvers (for example).  Notice that the ghost cells do not appear in this
+linear system---we are only updating the interior points.
+
+\subsubsection{Crank-Nicolson time discretization}
 
 A second-order in time discretization requires us to center the righthand side in time.  We
 do this as:
@@ -325,7 +322,7 @@ solution (especially at early times).
 \caption[Implicit diffusion of a Gaussian]{\label{fig:diffuse} Implicit diffusion of a Gaussian (with Crank-Nicolson discretization)
   with $C = 0.8$ and $C = 8.0$.  The exact solution at each time is shown as the dotted
   line. \\
-  \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/diffusion/diffusion-implicit.py}{diffusion-implicit.py}}}
+  \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/diffusion/diffusion_implicit.py}{diffusion_implicit.py}}}
 \end{figure}
 
 \begin{exercise}[1-d implicit diffusion]
