@@ -318,8 +318,8 @@ solution (especially at early times).
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.85\linewidth]{diff-implicit-128-CFL_0_8}\\
-\includegraphics[width=0.85\linewidth]{diff-implicit-128-CFL_8_0}
+\includegraphics[width=0.75\linewidth]{diff-implicit-128-CFL_0_8}\\
+\includegraphics[width=0.75\linewidth]{diff-implicit-128-CFL_8_0}
 \caption[Implicit diffusion of a Gaussian]{\label{fig:diffuse}
   Implicit diffusion of a Gaussian (with Crank-Nicolson
   discretization) with $C = 0.8$ and $C = 8.0$.  The exact solution at
@@ -407,6 +407,19 @@ of under-resolved flows.
 {\label{fig:diff:cnunstable} Crank-Nicolson diffusion of a Gaussian
 on under-resolved initial data with a large timestep.  Here we use
 $64$ zones and $C= 10$.}
+\end{figure}
+
+
+\begin{figure}
+\centering
+\includegraphics[width=0.75\linewidth]{diffimplicit-converge-0_8} \\
+\includegraphics[width=0.75\linewidth]{diffimplicit-converge-8_0} 
+\caption[Convergence of diffusion methods]
+{\label{fig:diff:convergence} Convergence of the explicit, backward-difference,
+and Crank-Nicolson diffusion methods for $C = 0.8$ (top) and $C = 8.0$ (bottom).
+For the latter case, the explicit method is not valid and is not shown.
+We see that the Crank-Nicolson method has the lowest error, and when resolving
+the data, has second-order convergence.}
 \end{figure}
 
 \section{Going further}
