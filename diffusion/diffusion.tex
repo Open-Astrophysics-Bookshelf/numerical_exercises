@@ -320,10 +320,11 @@ solution (especially at early times).
 \centering
 \includegraphics[width=0.85\linewidth]{diff-implicit-128-CFL_0_8}\\
 \includegraphics[width=0.85\linewidth]{diff-implicit-128-CFL_8_0}
-\caption[Implicit diffusion of a Gaussian]{\label{fig:diffuse} Implicit diffusion of a Gaussian (with Crank-Nicolson discretization)
-  with $C = 0.8$ and $C = 8.0$.  The exact solution at each time is shown as the dotted
-  line. \\
-  \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/diffusion/diffusion_implicit.py}{diffusion\_implicit.py}}}
+\caption[Implicit diffusion of a Gaussian]{\label{fig:diffuse}
+  Implicit diffusion of a Gaussian (with Crank-Nicolson
+  discretization) with $C = 0.8$ and $C = 8.0$.  The exact solution at
+  each time is shown as the dotted
+  line. \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/diffusion/diffusion_implicit.py}{diffusion\_implicit.py}}}
 \end{figure}
 
 \begin{exercise}[1-d implicit diffusion]
@@ -386,6 +387,27 @@ the grid across parallel processors.  Since the discretization is the
 same as the direct matrix solve, Eq.~\ref{eq:diff:cnmatrix}, the
 result will be exactly the same (to the tolerance of the multigrid
 solver).
+
+
+\subsection{Convergence}
+
+One needs to be careful with the Crank-Nicolson discretization.  If
+the initial data is under-resolved and you are taking a big timestep
+($C \gg 1$), then the method can be unstable.
+Figure~\ref{fig:diff:cnunstable} shows such a case for the Gaussian
+diffusion with Crank-Nicolson discretization and 64 zones with $C =
+10$.  For this reason, simulation codes often drop down to the
+simple backwards difference time-discretization for implicit diffusion
+of under-resolved flows.
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{diff-implicit-64-CFL_10_0}
+\caption[Under-resolved Crank-Nicolson diffusion]
+{\label{fig:diff:cnunstable} Crank-Nicolson diffusion of a Gaussian
+on under-resolved initial data with a large timestep.  Here we use
+$64$ zones and $C= 10$.}
+\end{figure}
 
 \section{Going further}
 
