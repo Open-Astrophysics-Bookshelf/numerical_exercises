@@ -111,7 +111,7 @@ not well resolve initially, then the solution will be bad
 Diffusion of a Gaussian using the explicit differencing of
 Eq.~\ref{eq:diff:explicitdiff} with 64 zones and C = 0.8, shown at
 several times.  The dotted line is the analytic
-solution.  \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/diffusion/diffusion_explicit.py}{diffusion_explicit.py}}}
+solution.  \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/diffusion/diffusion_explicit.py}{diffusion\_explicit.py}}}
 \end{figure}
 
 
@@ -122,7 +122,7 @@ solution.  \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/
 Diffusion of a Gaussian using the explicit differencing of
 Eq.~\ref{eq:diff:explicitdiff} with different resolutions.
 several times.  The dotted line is the analytic
-solution.  \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/diffusion/diffusion_explicit.py}{diffusion_explicit.py}}}
+solution.  \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/diffusion/diffusion_explicit.py}{diffusion\_explicit.py}}}
 \end{figure}
 
 As with advection, if we exceed the timestep limit ($C > 1$), then
@@ -135,7 +135,7 @@ the solution is unstable.  This is shown in Figure~\ref{fig:diff_explicit_bad}.
 Diffusion of a Gaussian using the explicit differencing of
 Eq.~\ref{eq:diff:explicitdiff} with 64 zones, but a timestep
 with $C > 1$, showing that the solution is unstable.
- \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/diffusion/diffusion_explicit.py}{diffusion_explicit.py}}}
+ \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/diffusion/diffusion_explicit.py}{diffusion\_explicit.py}}}
 \end{figure}
 
 Our spatial order-of-accuracy is second-order.
@@ -151,7 +151,7 @@ well enough to have a meaningful solution.
 \caption[Error convergence of explicit diffusion]{\label{fig:diffexplicit_converge}
 Error convergence with resolution of the explicit diffusion using the differencing of 
 Eq.~\ref{eq:diff:explicitdiff}
- \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/diffusion/diffusion_explicit.py}{diffusion_explicit.py}}}
+ \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/diffusion/diffusion_explicit.py}{diffusion\_explicit.py}}}
 \end{figure}
 
 \section{Implicit with direct solve}
@@ -274,6 +274,7 @@ becomes
 The matrix form of this system is:
 \newcommand{\atwo}{\frac{\alpha}{2}}
 \begin{equation}
+\label{eq:diff:cnmatrix}
 \renewcommand\arraystretch{1.5}
 \left (
 \begin{array}{ccccccc}
@@ -317,12 +318,12 @@ solution (especially at early times).
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.7\linewidth]{diff-implicit-128-CFL_0_8}\\
-\includegraphics[width=0.7\linewidth]{diff-implicit-128-CFL_8_0}
+\includegraphics[width=0.85\linewidth]{diff-implicit-128-CFL_0_8}\\
+\includegraphics[width=0.85\linewidth]{diff-implicit-128-CFL_8_0}
 \caption[Implicit diffusion of a Gaussian]{\label{fig:diffuse} Implicit diffusion of a Gaussian (with Crank-Nicolson discretization)
   with $C = 0.8$ and $C = 8.0$.  The exact solution at each time is shown as the dotted
   line. \\
-  \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/diffusion/diffusion_implicit.py}{diffusion_implicit.py}}}
+  \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/diffusion/diffusion_implicit.py}{diffusion\_implicit.py}}}
 \end{figure}
 
 \begin{exercise}[1-d implicit diffusion]
@@ -354,6 +355,7 @@ $n+1$ terms on the left, we find:
 \end{equation}
 This is in the form of a constant-coefficient Helmholtz equation,
 \begin{equation}
+\label{eq:diff:helmholtz}
 (\alpha - \beta \nabla^2) \phi^{n+1} = f
 \end{equation}
 with
@@ -363,12 +365,27 @@ with
 f &=& \phi^n + \frac{\Delta t}{2} k \nabla^2 \phi^n
 \end{eqnarray}
 This can be solved using multigrid techniques with a Helmholtz
-operator.  The same boundary conditions described above apply here.
+operator.  The same boundary conditions discussed in
+Chapter~\ref{ch:multigrid} apply here.  The main difference between
+the multigrid technique for the Poisson problem and the Helmholtz
+problem is the form of the smoother.  In 1-d, we discretize
+Eq.~\ref{eq:diff:helmholtz} with a second-order difference expression
+for the second derivative, and isolate $\phi_i$, giving a smoothing
+operation of the form:
+\begin{equation}
+\phi_{i} \leftarrow
+ \left .    \left ( f_{i} + \frac{\beta}{\Delta x^2} [\phi_{i+1}
+                             + \phi_{i-1}] \right ) \middle / 
+\left ( \alpha + \frac{2 \beta}{\Delta x^2}  \right )  \right .
+\end{equation}
 
-Note: when using multigrid, you do not need to actually construct
-the matrix.  This is usually the most efficient way to implement 
-diffusion in a multi-dimensional simulation code, especially when
-distributing the grid across parallel processors.
+Note: when using multigrid, you do not need to actually construct the
+matrix.  This is usually the most efficient way to implement diffusion
+in a multi-dimensional simulation code, especially when distributing
+the grid across parallel processors.  Since the discretization is the
+same as the direct matrix solve, Eq.~\ref{eq:diff:cnmatrix}, the
+result will be exactly the same (to the tolerance of the multigrid
+solver).
 
 \section{Going further}
 
