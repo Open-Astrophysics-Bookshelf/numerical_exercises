@@ -60,7 +60,7 @@ CompHydroTutorial.pdf: CompHydroTutorial.tex conditional.tex $(TEXS) $(EPSS) $(P
 
 clean:
 	$(RM) *.aux *.log *.dvi *.bbl *.blg *.lof *.toc *.exc *.out *.brf
-	$(RM) *~
+	$(RM) *~ conditional.tex
 
 realclean: clean
 	$(RM) CompHydroTutorial.pdf

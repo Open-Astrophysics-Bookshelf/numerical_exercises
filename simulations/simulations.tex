@@ -11,7 +11,7 @@ Astrophysical flows involve a range of length and timescales.  Often
 it is not possible to capture all these scales in a single simulation,
 so some comprimises must be made.  If you are interested in the
 dynamics on the full scale of the system, $L$, then you will resolve
-down to some cutoff scale $l$, where $L/l ~ O(10^3--10^4)$.  At scales
+down to some cutoff scale $l$, where $L/l \sim O(10^3--10^4)$.  At scales
 smaller than $l$, you neglect the flow features.  The smallest
 scale of importance is the disipation scale $\lambda \ll L$.  
 
@@ -36,7 +36,7 @@ Convergence study
 
 
 
-\subsection{Boundary conditions}
+\section{Boundary conditions}
 
 Another approximation you make is how to treat the boundaries.
 Generally speaking, you should put your boundaries as far away from
@@ -63,13 +63,13 @@ characteristic BCs?
 
 
 
-\subsection{Timestep considerations}
+\section{Timestep considerations}
 
 Burning timescale
 
 
 
-\subsection{Computational cost}
+\section{Computational cost}
 
 The main limitation to your choice of resolution and timestep is
 computational cost.  For a three-dimensional simulation in a box with
@@ -92,3 +92,40 @@ their success).
 
 It is important to understand that no single algorithm will offer everything
 you need.
+
+
+\section{I/O}
+
+Another challenge with simulations is data storage.  For a calculation
+on a $1024^3$ grid, using double precision, each number you store
+takes 8~bytes / zone, so a single variable on the grid will require
+8~GB.  For compressible hydro, you will have atleast 5 variables (in
+3-d), $\rho$, $(\rho {\bf U})$, and $(\rho E)$, so this is a minimum of 40~GB per
+file.  Often you will want some derived quantities (like temperature)
+and composition quantities in your output, which will greatly increase
+your storage requirements.
+
+For this reason, simulation codes often have different types of
+output.  Checkpoint files store all the variables that are needed to
+restart the calculation from where you left off---these should be
+stored in a (portable) binary format at machine precision.  You don't
+need to keep these around forever, perhaps only saving the last few as
+necessary to restart your calculation as it works through a computing
+center's queue.  Plotfiles store a lot of variables---basically anything
+that will be needed for the analysis of the simulation.  Since you don't
+need these to restart, you can probably afford to store the variables
+at single precision.  Sometimes you might have multiple levels of plotfiles,
+storing a few variables (like density) very frequently to allow for 
+the production of smooth movies, and storing a lot of variables and 
+derived quantities at a much longer cadence.
+
+A perpetual challenge with the analysis and visualization of
+simulations is that sometimes you don't know what you are looking for
+until the simulation is complete, so you cannot simply do runtime
+visualization and not save the raw data as the simulation progresses.
+This leads to collections of plotfiles that can easily top 100~TB per
+simulation.  Runtime diagnostics can help a little---if you know any
+global quantities that you will be interested in over the course of
+the simulation (like peak temperature, or total energy) you can
+compute these on the fly and simply store a single number per step (or
+every $N$ steps) into a file.
