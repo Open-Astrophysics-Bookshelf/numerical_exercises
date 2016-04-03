@@ -1,22 +1,36 @@
 \label{ch:diffusion}
 
-\begin{quote}
-\noindent {\em These summarize methods for solving the diffusion equation.}
-\end{quote}
+\section{Diffusion}
 
-\section{Parabolic equations}
-
-The diffusion equation is
+A diffusive process tends to obey Fick's law---the quantity that is
+diffusing, $\phi$, moves from higher to lower concentration at a rate
+proportional to the gradient,
+\begin{equation}
+  F = - k \nabla \phi
+\end{equation}
+If we think of this as a diffusive flux, then we can write the time-rate-of-change of $\phi$ as a conservation law:
+\begin{equation}
+  \phi_t + \nabla\cdot F(\phi) = 0
+\end{equation}
+This gives rise to the diffusion equation:
+\begin{equation}
+\phi_t = \nabla \cdot (k \nabla \phi)
+\end{equation}
+In one-dimension, and assuming that the diffusion coefficient, $k$, is 
+constant, we have
 \begin{equation}
 \frac{\partial \phi}{\partial t} = 
   \frac{\partial }{\partial x} 
   \left ( k \frac{\partial \phi}{\partial x} \right )
 \end{equation}
-This can describe thermal diffusion (for example, as part of the energy
-equation in compressible flow), species/mass diffusion for multi-species
-flows, or the viscous terms in incompressible flows.  In this form,
-the diffusion coefficient (or conductivity), $k$, can be a function
-of $x$, or even $\phi$.  We will consider a constant diffusion coefficient:
+
+
+The diffusion equation can describe thermal diffusion (for example, as
+part of the energy equation in compressible flow), species/mass
+diffusion for multi-species flows, or the viscous terms in
+incompressible flows.  In this form, the diffusion coefficient (or
+conductivity), $k$, can be a function of $x$, or even $\phi$.  We will
+consider a constant diffusion coefficient:
 \begin{equation}
 \frac{\partial \phi}{\partial t} = k \frac{\partial^2 \phi}{\partial x^2}
 \end{equation}
@@ -141,9 +155,19 @@ with $C > 1$, showing that the solution is unstable.
 Our spatial order-of-accuracy is second-order.
 Figure~\ref{fig:diffexplicit_converge} shows the error as a function
 of number of zones, using the $L_2$ norm of the solution with respect
-to the analytic solution.  Notice that at the coarsest resolution
-the error is very high---we are not resolving the initial conditions
-well enough to have a meaningful solution.
+to the analytic solution.  Notice that at the coarsest resolution the
+error is very high---we are not resolving the initial conditions well
+enough to have a meaningful solution.  At higher resolutions, we
+converge as $O(\Delta x^2)$.  Recall though that our method has a
+truncation error that is $O(\Delta t) + O(\Delta x^2)$, but we don't
+see the first-order in time scaling.  This is because of the timestep
+restriction.  Since $\Delta t \sim \Delta x^2/k$, as we cut $\Delta x$
+by 2, $\Delta t$ drops by 4, so the timestep choice makes our
+$O(\Delta t)$ truncation error go as $O(\Delta x^2)$.
+
+Note, this is not the case for advection, where $\Delta t \sim \Delta x$, so
+for our advection discretizations we will want the same order of accuracy
+in our spatial and temporal discretizations.
 
 \begin{figure}
 \centering
