@@ -86,12 +86,18 @@ following scripts are available:
 \item {\tt diffusion/}
 
   \begin{itemize}
-    \item {\tt diffusion-explicit.py}: solve the constant-diffusivity
+    \item {\tt diffusion\_explicit.py}: solve the constant-diffusivity
       diffusion equation explicitly.  The method is first-order
       accurate in time, but second-order in space.  A Gaussian profile
       is diffused---the analytic solution is also a Gaussian.
 
-    \item {\tt diffusion-implicit.py}: solve the constant-diffusivity
+    \item {\tt diffusion\_fo\_implicit.py}: solve the
+      constant-diffusivity diffusion equation implicitly.
+      Backwards-difference time-discretization is used, resulting in a
+      first-order-in-time method.  Spatial discretization is second
+      order.  A Gaussian profile is diffused.
+
+    \item {\tt diffusion\_implicit.py}: solve the constant-diffusivity
       diffusion equation implicitly.  Crank-Nicolson time-discretization
       is used, resulting in a second-order method.  A Gaussian profile
       is diffused.
@@ -132,6 +138,9 @@ following scripts are available:
     lives on a grid.  This manages the data, handles boundary
     conditions, and provides routines for prolongation and restriction
     to other grids.
+
+  \item {\tt smooth.py}: solve a Poisson equation with smoothing
+    only (but we still use the interface through the multigrid object).
 
   \end{itemize}
 
