@@ -255,9 +255,9 @@ Figure~\ref{fig:sod} shows the three waves emanating from an initial
 discontinuity.  This is a classic problem called the Sod
 problem~\cite{sod:1978}.  The initial conditions are
 \begin{align}
-\rho_L &= 1.0    &  \rho_R &= 1/8 \\
+\rho_L &= 1.0    &  \rho_R &= 1/8 \nonumber \\
 u_L   &= 0       &  u_R    &= 0   \\
-p_L    &= 1.0    &  p_R    &= 1/10 
+p_L    &= 1.0    &  p_R    &= 1/10 \nonumber
 \end{align}
 Here we see the three waves propagating away from the initial
 discontinuity.  The left ($u-c$) wave is a rarefaction, the middle
@@ -361,7 +361,7 @@ that build off of these ideas below.
 \subsection{Piecewise constant}
 
 The simplest possible reconstruction of the data is piecewise constant.
-This is what was done in the original Godunov method.  For the interface
+This is what was done in the original Godunov method~\cite{godunov:1959}.  For the interface
 marked by $i+1/2$, the left and right states on the interface are simply:
 \begin{align}
 U_{i+1/2,L} &= U_i \\
