@@ -206,8 +206,7 @@ L = \left ( \begin{array}{c} l^\evm \\
                              \hdashline 
                              l^\evp \end{array} \right )
 \end{equation}
-Note that $L\, R = I = R\, L$, and
-$L = R^{-1}$.
+Note that $L\, R = I = R\, L$, and $L = R^{-1}$.
 \begin{exercise}[Characteristic form of the Euler equations]
 {
 Show that $\Lambda = L A R$ is a diagonal matrix with the diagonal elements
@@ -225,12 +224,18 @@ Defining $dw = L dq$, we can write our system as:
 \begin{equation}
 w_t + \Lambda w_x = 0
 \end{equation}
-Here, the $w$ are the characteristic variables.  Note that we cannot
+Here, the $w$ are the {\em characteristic variables}.  Note that we cannot
 in general integrate $dw = L dq$ to write down the characteristic
 quantities.  Since $\Lambda$ is diagonal, this system is a set of
 decoupled advection-like equations.  If the system were linear, then the
 solution to each would simply be to advect the quantity $w^\enu$ at
 the wave speed $\lambda^\enu$.
+
+The basic idea of hyperbolic systems of PDEs is that there is one wave
+for each eigenvalue, and these define the characteristic curves,
+$dx/dt = \lambda_i$.  Along the characteristics, the solution is
+constant.  Across them, the solution jumps.  For a linear system, the
+characteristics are straight lines.
 
 Imagine initial conditions consisting of a jump in the primitive
 variables, $\Delta q$.  The corresponding characteristic variables are
@@ -244,24 +249,33 @@ $r^\evz$ is only non-zero for the density element, this then means
 that only density jumps across the $\lambda^\evz = u$ wave---pressure
 and velocity are constant across this wave (see for example,
 Toro~\cite{toro:1997}, Ch.\ 2, 3 or LeVeque~\cite{leveque:2002} for a
-thorough discussion).  Figure~\ref{fig:sod} shows the three waves
-emanating from an initial discontinuity.
+thorough discussion).  
+
+Figure~\ref{fig:sod} shows the three waves emanating from an initial
+discontinuity.  This is a classic problem called the Sod
+problem~\cite{sod:1978}.  The initial conditions are
+\begin{align}
+\rho_L &= 1.0    &  \rho_R &= 1/8 \\
+u_L   &= 0       &  u_R    &= 0   \\
+p_L    &= 1.0    &  p_R    &= 1/10 
+\end{align}
+Here we see the three waves propagating away from the initial
+discontinuity.  The left ($u-c$) wave is a rarefaction, the middle
+($u$) is the contact discontinuity, and the right ($u+c$) is a
+shock. Note that all 3 primitive variables jump across the left and
+right waves, but only the density jumps across the middle wave.  This
+reflects the right eigenvectors.  Also note that no waves have reached
+the far left and far right yet, the conditions there are the same as
+the initial conditions.  \MarginPar{we need a python version of the riemann exact script}
 
 \begin{figure}
 \centering
-\includegraphics[width=0.85\linewidth]{sod}
+\includegraphics[width=0.8\linewidth]{sod}
 \caption[The Sod problem]{\label{fig:sod} Evolution following from an initial
   discontinuity at $x = 0.5$.  These particular conditions are called
   the {\em Sod problem}, and in general, a setup with two states
-  separated by a discontinuity is called a shock-tube problem.  Here
-  we see the three waves propagating away from the initial
-  discontinuity.  The left ($u-c$) wave is a rarefaction, the middle
-  ($u$) is the contact discontinuity, and the right ($u+c$) is a
-  shock. Note that all 3 primitive variables jump across the left and
-  right waves, but only the density jumps across the middle wave.
-  This reflects the right eigenvectors.  Also note that no waves have
-  reached the far left and far right yet, the conditions there are the
-  same as the initial conditions.}
+  separated by a discontinuity is called a shock-tube problem.  We see three
+  waves carrying changes in the solution. }
 \end{figure}
 
 
