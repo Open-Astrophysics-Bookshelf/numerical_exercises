@@ -332,6 +332,42 @@ a variety of CFL numbers. \\
 \end{figure}
 
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Eulerian vs.\ Lagrangian frames}
+
+It is useful to think about how our advected quantity, $a(x,t)$, changes in
+time.  The full time derivative is:
+\begin{equation}
+\frac{d a(x,t)}{dt} = \frac{\partial a}{\partial t} + \frac{\partial a}{\partial x}
+   \frac{dx}{dt}
+\end{equation}
+So the value of this derivative depends on the path, $x(t)$, that we choose
+to follow.  
+
+Consider an observer who is stationary.  They will watch the flow move
+past them, so $dx/dt = 0$, and $da/dt = \partial a/\partial t$.  
+This fixed frame is called {\em Eulerian frame}.
+
+Instead imagine an observer who moves with the flow, at the velocity $u$.
+This way they keep pace with an individual feature in the flow and track
+the changes it experiences.  In this case, $dx/dt = u$, and our derivative,
+commonly written as $D/Dt$ is:
+\begin{equation}
+\frac{D}{Dt} = \frac{\partial}{\partial t} + u \frac{\partial}{\partial x}
+\end{equation}
+This is the {\em Lagrangian frame}, and the derivative, $D/Dt$ is
+called the {\em Lagrangian derivative}, {\em material derivative},
+{\em convective derivative}, or {\em advective
+derivative}\footnote{and there are actually many more names...}.
+
+Our linear advection equation can be written simply as $Da/Dt = 0$.
+We've been solving the equations in the Eulerian frame---our grid is
+fixed and the fluid moves through it.  For hydrodynamics, it will be
+useful conceptually to consider the Lagrangian frame to understand how
+the fluid properties change in a particular fluid element over time.
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Second-order advection in 1-d and the finite-volume method}
 
@@ -651,6 +687,8 @@ Eq. 191).
   method reduces to precisely our first-order finite-difference discretization,
   Eq.~\ref{eq:fo}.  }
 \end{exercise}
+
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

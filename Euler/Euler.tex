@@ -12,13 +12,13 @@ which these dissipative terms operate are usually much smaller than
 the system of interest (equivalently, Reynolds numbers of
 astrophysical flows are very large).}  in one dimension appear as:
 \begin{align}
-\frac{\partial \rho}{\partial t} + 
+\frac{\partial \rho}{\partial t} +
     \frac{\partial (\rho u)}{\partial x} &= 0 \\
 %
 \frac{\partial(\rho u)}{\partial t} +
     \frac{\partial (\rho uu + p)}{\partial x} &= 0 \\
 %
-\frac{\partial(\rho E)}{\partial t} + 
+\frac{\partial(\rho E)}{\partial t} +
     \frac{\partial(\rho u E + u p)}{\partial x} &= 0
 \end{align}
 These represent conservation of mass, momentum, and energy.  Here $\rho$ is the
@@ -35,7 +35,7 @@ p = \rho e(\gamma - 1)
 \end{equation}
 where $\gamma$ is the ratio of specific heats for the gas/fluid (for
 an ideal, monatomic gas, $\gamma = 5/3$), but any relation of the form
-$p = p(\rho, e)$ will work.  
+$p = p(\rho, e)$ will work.
 
 One thing that we can notice immediately is that there is no need for
 temperature in this equation set, although often, when source terms
@@ -57,23 +57,23 @@ F(U) = \left ( \begin{array}{c} \rho u \\ \rho uu + p \\ \rho u E + up \end{arra
 \end{equation}
 %
 We can write this in {\em quasi-linear} form by first expressing the flux
-vector in terms of the conserved variables directly.  Taking 
-$m \equiv \rho u$, $\mathcal{E} \equiv \rho E$, and expressing 
+vector in terms of the conserved variables directly.  Taking
+$m \equiv \rho u$, $\mathcal{E} \equiv \rho E$, and expressing
 \begin{equation}
 p = \rho e (\gamma-1) =  \left (\mathcal{E} - \frac{1}{2} \frac{m^2}{\rho}\right )(\gamma - 1)
 \end{equation}
 we have
 \begin{equation}
-F(U) = \left ( \begin{array}{c} 
+F(U) = \left ( \begin{array}{c}
       m \\
-      \frac{1}{2}\frac{m^2}{\rho} \left (3 - \gamma \right ) + 
+      \frac{1}{2}\frac{m^2}{\rho} \left (3 - \gamma \right ) +
           \mathcal{E} (\gamma - 1) \\
       \frac{m\mathcal{E}}{\rho} \gamma -\frac{1}{2} \frac{m^3}{\rho^2} (\gamma -1) \end{array} \right )
 \end{equation}
 The Jacobian of this flux vector can now be computed as $A = \partial
 F/\partial U$:
 \begin{equation}
-A(U) = \left ( \begin{array}{ccc} 
+A(U) = \left ( \begin{array}{ccc}
    0  & 1 & 0 \\
    -\frac{1}{2}u^2(3 -\gamma) & u (3 -\gamma) & \gamma - 1 \\
    \frac{1}{2}(\gamma -2)u^3 - \frac{uc^2}{\gamma -1} &
@@ -119,8 +119,8 @@ Show that the eigenvalues of $A$ are $\lambda^\evm = u -c$, $\lambda^\evz = u$, 
 }
 \end{exercise}
 Note that both the conserved Jacobian matrix, $A(U)$, and the
-primitive variable matrix, $A(q)$, have the same eigenvalues, 
- since they represent the same physics.  
+primitive variable matrix, $A(q)$, have the same eigenvalues,
+ since they represent the same physics.
 
 In Eq.~\ref{eq:primitivesystem}, we used the algebraic gamma-law
 equation of state to replace $e$ with $p$, however, for a general
@@ -135,7 +135,7 @@ equation of state, we can get the appropriate expression by writing $p
 where $Ds/Dt = 0$ when no entropy sources are present.  Recognizing
 that $\Gamma_1 \equiv \partial \log p/\partial \log \rho |_s$, we have:
 \begin{equation}
-\frac{\partial p}{\partial t} + u \frac{\partial p}{\partial x} 
+\frac{\partial p}{\partial t} + u \frac{\partial p}{\partial x}
   + \Gamma_1 p \frac{\partial u}{\partial x} = 0  \label{eq:euler:pgeneral}
 \end{equation}
 as the generalization of the pressure equation.
@@ -146,7 +146,7 @@ These eigenvalues are the speeds at which information propagates through
 the fluid.
 Since the eigenvalues are real, this system (the Euler equations) is said
 to be {\em hyperbolic}.  Additionally, since $A = A(q)$, the system is
-said to be {\em quasi-linear}.  
+said to be {\em quasi-linear}.
 %
 The right and left eigenvectors can be found via:
 \begin{equation}
@@ -154,7 +154,7 @@ A \, r^\enu = \lambda^\enu r^\enu \; ;
 \qquad
 l^\enu \, A  = \lambda^\enu l^\enu
 \end{equation}
-where $\nu = \{-,\circ,+\}$ corresponding to the three waves, and 
+where $\nu = \{-,\circ,+\}$ corresponding to the three waves, and
 there is one right and one left eigenvector for each of the eigenvalues.
 %
 \begin{exercise}[Eigenvectors of the Euler system]
@@ -171,7 +171,7 @@ r^\evp = \left ( \begin{array}{c} 1 \\ c/\rho \\ c^2 \end{array} \right )
 \end{equation}
 and the left eigenvectors are:
 \begin{align}
-l^\evm &= \left ( \begin{array}{ccc} 0 & -\frac{\rho}{2c} & \frac{1}{2c^2} 
+l^\evm &= \left ( \begin{array}{ccc} 0 & -\frac{\rho}{2c} & \frac{1}{2c^2}
                   \end{array} \right ) \\
 %
 \qquad
@@ -181,7 +181,7 @@ l^\evz &= \left ( \begin{array}{ccc} 1 & 0 & -\frac{1}{c^2}  \end{array} \right 
 l^\evp &= \left ( \begin{array}{ccc} 0 & \phantom{+}\frac{\rho}{2c} & \frac{1}{2c^2} \end{array} \right )
 \end{align}
 Note that in general, there can be an arbitrary constant in front of each
-eigenvector.  Here they are normalized such that 
+eigenvector.  Here they are normalized such that
 $l^{(i)} \cdot r^{(j)} = \delta_{ij}$.
 }
 \end{exercise}
@@ -194,16 +194,16 @@ A final form of the equations is called the {\em characteristic form}.  Here,
 we wish to diagonalize the matrix $A$.  We take the matrix $R$ to be the
 matrix of right eigenvectors,
 \begin{equation}
-R = (r^\evm | r^\evz | r^\evp ) 
+R = (r^\evm | r^\evz | r^\evp )
 \end{equation}
 (i.e., $R$ is a square matrix whose columns are the eigenvectors),
 and $L$
 is the corresponding matrix of left eigenvectors:
 \begin{equation}
-L = \left ( \begin{array}{c} l^\evm \\              
-                             \hdashline 
+L = \left ( \begin{array}{c} l^\evm \\
+                             \hdashline
                              l^\evz \\
-                             \hdashline 
+                             \hdashline
                              l^\evp \end{array} \right )
 \end{equation}
 Note that $L\, R = I = R\, L$, and $L = R^{-1}$.
@@ -212,7 +212,7 @@ Note that $L\, R = I = R\, L$, and $L = R^{-1}$.
 Show that $\Lambda = L A R$ is a diagonal matrix with the diagonal elements
 simply the 3 eigenvalues we found above:
 \begin{equation}
-\Lambda = 
+\Lambda =
    \left ( \begin{array}{ccc}
              \lambda^\evm &              & \\
                           & \lambda^\evz & \\
@@ -249,7 +249,7 @@ $r^\evz$ is only non-zero for the density element, this then means
 that only density jumps across the $\lambda^\evz = u$ wave---pressure
 and velocity are constant across this wave (see for example,
 Toro~\cite{toro:1997}, Ch.\ 2, 3 or LeVeque~\cite{leveque:2002} for a
-thorough discussion).  
+thorough discussion).
 
 Figure~\ref{fig:sod} shows the three waves emanating from an initial
 discontinuity.  This is a classic problem called the Sod
@@ -308,14 +308,14 @@ interface (centered in time), which are the input to the Riemann
 solver.  The Riemann solver will then look at the characteristic wave
 structure and determine the fluid state on the interface, which is
 then used to compute the flux.  This is illustrated in
-Figure~\ref{fig:riemann}.  
+Figure~\ref{fig:riemann}.
 
 Finally, although we use the conserved variables for the final update,
 in constructing the interface states it is often easier to work with
 the primitive variables.  These have a simpler characteristic
 structure.  The interface states in terms of the primitive variables
 can be converted into the interface states of the conserved variables
-through a simple algebraic transformation, 
+through a simple algebraic transformation,
 \begin{equation}
 U_{i+1/2,L}^{n+1/2} = U(q_{i+1/2,L}^{n+1/2})
 \end{equation}
@@ -329,17 +329,17 @@ U_{i+1/2,L}^{n+1/2} = U(q_{i+1/2,L}^{n+1/2})
   computed by the Riemann solver using these states as input.}
 \end{figure}
 
-As we saw with linear advection in \S~\ref{ch:adv:sndorder}, 
+As we saw with linear advection in \S~\ref{ch:adv:sndorder},
 at the start of a timestep, each zones contains cell-averages.
-Consider a cell average quantity, $q_i$.  
+Consider a cell average quantity, $q_i$.
 Constructing the interface states requires reconstructing the
-cell-average data as a continuous function, $q(x)$, defined for 
+cell-average data as a continuous function, $q(x)$, defined for
 each cell.  This polynomial is only {\em piecewise} continuous, since
-each cell has its own $q(x)$.  Standard choices are piecewise constant, 
+each cell has its own $q(x)$.  Standard choices are piecewise constant,
 \begin{equation}
 q(x) = q_i
 \end{equation}
-piecewise linear, 
+piecewise linear,
 \begin{equation}
 q(x) = q_i + \frac{\Delta q_i}{\Delta x}(x - x_i)
 \end{equation}
@@ -397,7 +397,7 @@ interface, and $\Delta t/2$ to bring us to the midpoint in time.
 Starting with $q_i$, the cell-centered primitive variable, expanding
 to the right interface (to create the left state there) gives:
 \begin{align}
-q_{i+1/2,L}^{n+1/2} &= q_i^n + 
+q_{i+1/2,L}^{n+1/2} &= q_i^n +
     \left . \frac{\Delta x}{2} \frac{\partial q}{\partial x} \right |_i +
     \frac{\Delta t}{2} \underbrace{\left .\frac{\partial q}{\partial t} \right |_i}_{= -A \partial q / \partial x} + \ldots \\
 &= q_i^n + \frac{\Delta x}{2} \left . \frac{\partial q}{\partial x} \right |_i
@@ -421,7 +421,7 @@ that the `$1$'
 in Eq.~\ref{eq:taylorstate} is the identity, $I = LR$, we rewrite this
 expression as:
 \begin{equation}
-q_{i+1/2,L}^{n+1/2} = q_i^n + 
+q_{i+1/2,L}^{n+1/2} = q_i^n +
      \frac{1}{2} \left [ RL - \frac{\Delta t}{\Delta x} R\Lambda L \right ]_i \overline{\Delta q}_i
 \end{equation}
 We see the common factor of $L \Delta q$.  We now write this back in
@@ -439,7 +439,7 @@ R\Lambda L \overline{\Delta q} =
                           &              & \lambda^\evp \end{array} \right )
    \left ( \begin{array}{ccc}
              l_1^\evm & l_2^\evm & l_3^\evm \\
-             \hdashline 
+             \hdashline
              l_1^\evz & l_2^\evz & l_3^\evz \\
              \hdashline
              l_1^\evp & l_2^\evp & l_3^\evp \end{array} \right )
@@ -506,7 +506,7 @@ We can rewrite this compactly as:
 \begin{equation}
 \sum_\nu \lambda^{(\nu)} (l^{(\nu)} \cdot \overline{\Delta q}) r^{(\nu)}
 \end{equation}
-where we use $\nu$ to indicate which wave we are summing over.  A similar 
+where we use $\nu$ to indicate which wave we are summing over.  A similar
 expansion is used for $RL \overline{\Delta q}$.  In fact, any vector
 can be decomposed in this fashion:
 \begin{equation}
@@ -516,7 +516,7 @@ And then it is easy to see that the above manipulations for $A \Delta q$
 can be expressed as:
 \begin{equation}
 A \Delta q =  A \sum_\nu (l^\enu \cdot \overline{\Delta q}) r^\enu = \sum_\nu (l^\enu \cdot \overline{\Delta q}) A r^\enu = \sum_\nu (l^\enu \cdot \overline{\Delta q}) \lambda^\enu r^\enu
-\end{equation} 
+\end{equation}
 where we used $A r^\enu = \lambda^\enu r^\enu$.  The quantity $(l^\enu
 \cdot \overline{\Delta q})$ that shows up here is the projection of
 the vector $\overline{\Delta q}$ into the characteristic variable
@@ -527,8 +527,8 @@ variables proportion to the right eigenvector, $r^\enu$.
 The resulting vector
 for the left state is:
 \begin{equation}
-q_{i+1/2,L}^{n+1/2} = q_i^n + \frac{1}{2} \sum_{\nu; \lambda^{(\nu)} \ge 0} 
-  \left [ 1 - \frac{\Delta t}{\Delta x} \lambda_i^{(\nu)} \right ] (l_i^{(\nu)} \cdot \overline{\Delta q}_i) r_i^{(\nu)} 
+q_{i+1/2,L}^{n+1/2} = q_i^n + \frac{1}{2} \sum_{\nu; \lambda^{(\nu)} \ge 0}
+  \left [ 1 - \frac{\Delta t}{\Delta x} \lambda_i^{(\nu)} \right ] (l_i^{(\nu)} \cdot \overline{\Delta q}_i) r_i^{(\nu)}
 \end{equation}
 Note that we make a slight change here, and only include a term in the sum if
 its wave is moving toward the interface ($\lambda^\enu \ge 0$).  The quantity
@@ -538,8 +538,8 @@ number for the wave $\nu$.
 Starting with the data in the $i+1$ zone and expanding to the left, we can
 find the right state on the $i+1/2$ interface:
 \begin{equation}
-q_{i+1/2,R}^{n+1/2} = q_{i+1}^n - \frac{1}{2} \sum_{\nu; \lambda^{(\nu)} \le 0} 
-  \left [ 1 + \frac{\Delta t}{\Delta x} \lambda_{i+1}^{(\nu)} \right ] (l_{i+1}^{(\nu)} \cdot \overline{\Delta q}_{i+1}) r_{i+1}^{(\nu)} 
+q_{i+1/2,R}^{n+1/2} = q_{i+1}^n - \frac{1}{2} \sum_{\nu; \lambda^{(\nu)} \le 0}
+  \left [ 1 + \frac{\Delta t}{\Delta x} \lambda_{i+1}^{(\nu)} \right ] (l_{i+1}^{(\nu)} \cdot \overline{\Delta q}_{i+1}) r_{i+1}^{(\nu)}
 \end{equation}
 
 
@@ -574,7 +574,7 @@ the interface state, and that the characteristic decomposition simply adds
 up all these jumps, we can subtract off the reference state and
 project the result.  In other words, we can write:
 \begin{equation}
-q_{i+1/2,L}^{n+1/2} - q_\mathrm{ref} = q_i^n - q_\mathrm{ref} +  
+q_{i+1/2,L}^{n+1/2} - q_\mathrm{ref} = q_i^n - q_\mathrm{ref} +
   \frac{1}{2} \left [ 1 - \frac{\Delta t}{\Delta x} A_i \right ] \overline{\Delta q}_i
 \label{eq:lin_decomp}
 \end{equation}
@@ -583,7 +583,7 @@ us how much of the quantity $q_{i+1/2,L}^{n+1/2} - q_\mathrm{ref}$
 reaches the interface.  Colella \& Glaz (p.\ 278) and Colella
 (Eq.\ 2.11) suggest
 \begin{equation}
-q_\mathrm{ref} = \tilde{q}_{i,L} \equiv q_i + 
+q_\mathrm{ref} = \tilde{q}_{i,L} \equiv q_i +
    \frac{1}{2} \left [ 1 - \frac{\Delta t}{\Delta x}
  \max(\lambda_i^\evp, 0) \right ] \overline{\Delta q}_i \label{eq:qref}
 \end{equation}
@@ -611,7 +611,7 @@ Colella~\cite{colella:1990} (p.\ 191, the group of expressions at the
 end).  The corresponding state to the right of this interface is:
 \begin{equation}
 q_{i+1/2,R}^{n+1/2} = \tilde{q}_{i+1,R} + \frac{1}{2} \frac{\Delta t}{\Delta x}
-       \sum_{\nu; \lambda^{(\nu)} \le 0} 
+       \sum_{\nu; \lambda^{(\nu)} \le 0}
        \left [ \min(\lambda_{i+1}^\evm,0) - \lambda_{i+1}^{(\nu)} \right ]
        (l_{i+1}^{(\nu)} \cdot \overline{\Delta q}_{i+1}) \, r_{i+1}^{(\nu)}
 \end{equation}
@@ -678,7 +678,7 @@ q_{i+1/2,L}^{n+1/2} = \tilde{q}_+ -
 Miller \& Colella rewrite the portion inside the $[\ldots]$
 recognizing that (similar to M\&C Eq.\ 88, but for the $i+1/2,L$ interface):
 \begin{equation}
-  q_i^n + \frac{1}{2} \left (1 - \frac{\Delta t}{\Delta x} \lambda_i^{(\nu)} \right ) \overline{\Delta q}_i 
+  q_i^n + \frac{1}{2} \left (1 - \frac{\Delta t}{\Delta x} \lambda_i^{(\nu)} \right ) \overline{\Delta q}_i
   \approx \frac{1}{\lambda \Delta t} \int_{x_{i+1/2} - \lambda \Delta t}^{x_{i+1/2}}
            q(x) dx
 \end{equation}
@@ -710,10 +710,10 @@ keep our expressions for the interface states.
   interface $i+1/2$.}
 \end{figure}
 
-In particular, we define 
+In particular, we define
 \begin{equation}
 \mathcal{I}_+^{(\nu)}(q_i) = \frac{1}{\sigma^{(\nu)} \Delta x} \int _{x_{i+1/2} - \sigma^{(\nu)} \Delta x}^{x_{i+1/2}} q(x) dx
-\end{equation} 
+\end{equation}
 with $\sigma^{(\nu)} = |\lambda^{(\nu)}|\Delta t / \Delta x$ (see Almgren et
 al. Eq. 31)  (see Figure~\ref{fig:ppm_trace}).  Then
 \begin{equation}
@@ -724,7 +724,7 @@ q_{i+1/2,L}^{n+1/2} = \tilde{q}_+ -
 \end{equation}
 Miller \& Colella choose the reference state as
 \begin{equation}
-\tilde{q}_+ = \left \{ \begin{array}{cc} 
+\tilde{q}_+ = \left \{ \begin{array}{cc}
        \mathcal{I}_+^{(+)}(q_i) & \mathrm{if~} u + c > 0 \\
        q_i                    & \mathrm{otherwise}
 \end{array}
@@ -747,7 +747,7 @@ paper:
 q(x) = q_{-} + \xi(x) \left ( \Delta q + q_6 (1 - \xi(x) ) \right )
 \end{equation}
 with $\Delta q = q_+ - q_-$, and $q_-$, $q_+$ the values of the polynomial
-on the left and right edges, respectively, of the current cell, and 
+on the left and right edges, respectively, of the current cell, and
 \begin{equation}
 q_6 \equiv 6 \left [ q_i - \frac{1}{2} (q_- + q_+) \right ]
 \end{equation}
@@ -761,7 +761,7 @@ the parabola.  The values of $q_-$ and $q_+$ are computed and limited
 as described in the original PPM paper.  With this definition, we can
 do the integral $\mathcal{I}_+$:
 \begin{equation}
-\mathcal{I}_+^{(\nu)}(q_i) = q_{+,i} - \frac{\sigma_i^{(\nu)}}{2} 
+\mathcal{I}_+^{(\nu)}(q_i) = q_{+,i} - \frac{\sigma_i^{(\nu)}}{2}
    \left [ \Delta q_i - q_{6,i} \left ( 1 - \frac{2}{3} \sigma_i^{(\nu)} \right ) \right ]
 \end{equation}
 Figure~\ref{fig:ppm_trace} illustrates the process of integrating under
@@ -782,72 +782,72 @@ Figure~\ref{fig:ppm}.  }
 \end{exercise}
 
 \begin{quote}
-\noindent\makebox[\linewidth]{\rule{0.9\textwidth}{1pt}} 
-{\em Aside}: 
+\noindent\makebox[\linewidth]{\rule{0.9\textwidth}{1pt}}
+{\em Aside}:
 Note that this characteristic projection of $\tilde{q}_+ -
 \mathcal{I}_+^{(\nu)}$ is discussed in the original PPM paper in the
 paragraph following Eq. 3.5.  They do not keep things in this form
 however, and instead explicitly multiply out the $l\cdot [\ldots] r$
 terms to arrive at Eq. 3.6.  For example, starting with
-Eq.~\ref{eq:ppmtrace}, 
+Eq.~\ref{eq:ppmtrace},
 we can write the left velocity state as (leaving off the $i$
 subscripts on the vectors):
 \begin{equation}
-u_{i+1/2,L}^{n+1/2} = 
-  \tilde{u}_+ - \sum_\nu l^{(\nu)} \cdot 
-      ( \tilde{q}_+ -  \mathcal{I}_+^{(\nu)}(q) ) 
+u_{i+1/2,L}^{n+1/2} =
+  \tilde{u}_+ - \sum_\nu l^{(\nu)} \cdot
+      ( \tilde{q}_+ -  \mathcal{I}_+^{(\nu)}(q) )
     \underbrace{r^{(\nu)}}_{\begin{smallmatrix}\mathrm{only~the}\\ u~\mathrm{`slot'} \end{smallmatrix}}
 \end{equation}
 (where, as above, the $\sim$ indicates the reference state).
 Here the $r$ eigenvector on the end is representative---we only pick
 the row corresponding to $u$ in the $q$ vector (in our case, the
-second row).  
+second row).
 
 Putting in the eigenvectors and writing out the sum, we have:
 \begin{align}
  u_{i+1/2,L}^{n+1/2} =
-     \tilde{u}_+ &- 
-       \left ( \begin{array}{ccc} 
-                  0 & -\frac{\rho}{2c} & \frac{1}{2c^2} \end{array} 
-       \right ) 
-    \left ( \begin{array}{c} 
+     \tilde{u}_+ &-
+       \left ( \begin{array}{ccc}
+                  0 & -\frac{\rho}{2c} & \frac{1}{2c^2} \end{array}
+       \right )
+    \left ( \begin{array}{c}
            \tilde{\rho}_+ - \mathcal{I}_+^\evm(\rho) \\
            \tilde{u}_+ - \mathcal{I}_+^\evm(u) \\
-           \tilde{p}_+ - \mathcal{I}_+^\evm(p) 
+           \tilde{p}_+ - \mathcal{I}_+^\evm(p)
             \end{array} \right )
-    {\color{mygray} \left ( \begin{array}{c} 
+    {\color{mygray} \left ( \begin{array}{c}
            1  \\
            {\color{black} -c/\rho} \\
            c^2
     \end{array} \right ) } \nonumber \\
 %
-     &-\left ( \begin{array}{ccc} 
-                  1 & 0 & -\frac{1}{c^2} \end{array} 
-       \right ) 
-    \left ( \begin{array}{c} 
+     &-\left ( \begin{array}{ccc}
+                  1 & 0 & -\frac{1}{c^2} \end{array}
+       \right )
+    \left ( \begin{array}{c}
            \tilde{\rho}_+ - \mathcal{I}_+^\evz(\rho) \\
            \tilde{u}_+ - \mathcal{I}_+^\evz(u) \\
-           \tilde{p}_+ - \mathcal{I}_+^\evz(p) 
+           \tilde{p}_+ - \mathcal{I}_+^\evz(p)
             \end{array} \right )
-    {\color{mygray} \left ( \begin{array}{c} 
+    {\color{mygray} \left ( \begin{array}{c}
            1  \\
            {\color{black} 0} \\
            0
     \end{array} \right ) } \nonumber \\
 %
-    &-\left ( \begin{array}{ccc} 
-                  0 & \frac{\rho}{2c} & \frac{1}{2c^2} \end{array} 
-       \right ) 
-    \left ( \begin{array}{c} 
+    &-\left ( \begin{array}{ccc}
+                  0 & \frac{\rho}{2c} & \frac{1}{2c^2} \end{array}
+       \right )
+    \left ( \begin{array}{c}
            \tilde{\rho}_+ - \mathcal{I}_+^\evp(\rho) \\
            \tilde{u}_+ - \mathcal{I}_+^\evp(u) \\
-           \tilde{p}_+ - \mathcal{I}_+^\evp(p) 
+           \tilde{p}_+ - \mathcal{I}_+^\evp(p)
             \end{array} \right )
-    {\color{mygray} \left ( \begin{array}{c} 
+    {\color{mygray} \left ( \begin{array}{c}
            1  \\
            {\color{black} c/\rho} \\
            c^2
-    \end{array} \right ) } 
+    \end{array} \right ) }
 %
 \end{align}
 Here again we show the entire right eigenvector for illustration, but
@@ -857,9 +857,9 @@ in velocity.  Multiplying out $l^{(\nu)} \cdot (\tilde{q}_+ -
 \mathcal{I}_+^{(\nu)})$ we have:
 \begin{align}
 u_{i+1/2,L}^{n+1/2} =
-   \tilde{u}_+ 
+   \tilde{u}_+
   &- \frac{1}{2} \left [
-      (\tilde{u}_+ - \mathcal{I}_+^\evm(u) ) - 
+      (\tilde{u}_+ - \mathcal{I}_+^\evm(u) ) -
        \frac{\tilde{p}_+ - \mathcal{I}_+^\evm(p)}{C} \right ] \nonumber \\
   &- \frac{1}{2} \left [
       (\tilde{u}_+ - \mathcal{I}_+^\evp(u) ) +
@@ -867,7 +867,7 @@ u_{i+1/2,L}^{n+1/2} =
 \label{eq:ufull}
 \end{align}
 where $C$ is the Lagrangian sound speed ($C = \sqrt{\gamma p \rho}$).
-Defining 
+Defining
 \begin{align}
 \beta^{+} &= - \frac{1}{2C}
   \left [
@@ -890,12 +890,12 @@ Lagrangian sound speed (in their $\beta$ expressions is written as
 $\tilde{C}$).  This may follow from the comment before Eq.~3.6,
 ``modified slightly for the present application''.  Similarly,
 the expressions for $\rho_L$ and $p_L$ can be written out. \\
-\noindent\makebox[\linewidth]{\rule{0.9\textwidth}{1pt}} 
+\noindent\makebox[\linewidth]{\rule{0.9\textwidth}{1pt}}
 \end{quote}
 
 Similar expressions can be derived for the right state at the left interface
 of the zone ($q_{i-1/2,R}^{n+1/2}$).  Here, the integral under the parabolic
-reconstruction is done over the region of each wave that can reach the left 
+reconstruction is done over the region of each wave that can reach the left
 interface over our timestep:
 \begin{equation}
 \mathcal{I}_-^{(\nu)}(q) = \frac{1}{\sigma^{(\nu)} \Delta x}
@@ -937,7 +937,7 @@ subsequent parts of the algorithm.
 %-----------------------------------------------------------------------------
 \section{The Riemann problem}
 
-Once the interface states are created, the Riemann solver is called.  This 
+Once the interface states are created, the Riemann solver is called.  This
 returns the solution at the interface:
 \begin{equation}
 q_{i+1/2}^{n+1/2} = \mathcal{R}(q_{i+1/2,L}^{n+1/2}, q_{i+1/2,R}^{n+1/2})
@@ -962,19 +962,81 @@ separating space into 4 regions, marked: $L$, $L^*$, $R^*$, and $R$.
   equations]{The wave structure and 4 distinct regions for the
   Riemann problem.  Time can be thought of as the vertical axis here,
   so we see the waves moving outward from the interface.}
-\end{figure} 
+\end{figure}
 We typically work in terms of primitive variables.  The states in the
 $L$ and $R$ regions are simply the left and right input states---the
 waves have not had time to reach here, so they are unmodified.
 
+
+\subsubsection{Jumps across waves}
+
+The middle wave will always be a contact.  We know from the eigenvectors
+that the pressure is constant across the contact.
+
+The left and right waves can be either a rarefaction or a shock.  It will
+be a shock if the flow is compressive and a rarefaction otherwise.
+
+
+The conditions across the rarefaction can be understood by considering
+a system where entropy replaces pressure, $q_s = (\rho, u, s)^\intercal$.
+The entropy equation is simply $Ds/Dt = 0$.  We need to express the
+pressure gradient in the velocity equation in terms of $q_s$.
+\begin{equation}
+\frac{\partial p(\rho, s)}{\partial x} =
+  \left . \frac{\partial p}{\partial s} \right |_\rho \frac{\partial s}{\partial x} +
+  \left . \frac{\partial p}{\partial \rho} \right |_s \frac{\partial \rho}{\partial x}
+=
+  \left . \frac{\partial p}{\partial s} \right |_\rho \frac{\partial s}{\partial x} +
+  \frac{p\Gamma_1}{\rho} \frac{\partial \rho}{\partial x}
+\end{equation}
+giving
+\begin{equation}
+\frac{\partial u}{\partial t} + u \frac{\partial u}{\partial x} + \frac{1}{\rho} \left [
+     \left . \frac{\partial p}{\partial s} \right |_\rho \frac{\partial s}{\partial x} +
+          \frac{p\Gamma_1}{\rho} \frac{\partial \rho}{\partial x} \right ] = 0
+\end{equation}
+This gives a system:
+\begin{equation}
+{q_s}_t + A_s(q_s) {q_s}_x = 0
+\end{equation}
+where
+\begin{equation}
+A_s =
+ \left ( \begin{array}{ccc} u & \rho & 0 \\
+        c^2/\rho & u & \frac{1}{\rho} \left . \frac{\partial p}{\partial s}\right |_\rho \\
+        0 & 0 & u \end{array} \right )
+\end{equation}
+The eigenvalues of $A_s$ are again $u$, $u-c$, and $u+c$.  The right eigenvectors
+are\footnote{Again, see the {\sf SymPy} {\sf IPython} notebook:
+\hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/compressible/euler.ipynb}{euler.ipynb}}}
+\begin{align}
+r_s^\evm = \left ( \begin{array}{c} 1 \\ -c/\rho \\ 0 \end{array} \right )
+%
+\qquad
+r_s^\evz = \left ( \begin{array}{c} 1 \\ 0 \\ -c^2/p_s  \end{array} \right )
+%
+\qquad
+r_s^\evp = \left ( \begin{array}{c} 1 \\ c/\rho \\ 0 \end{array} \right )
+\end{align}
+Since the jump in $q_s$ is proportional to these eigenvectors, we see that
+entropy does not change across the left, $(-)$, and right, $(+)$, waves.
+
+Entropy is not constant across a shock---there is dissipation, so we
+need a different way to connect the states across the shock.  As with
+Burgers' equation, we can understand the shock by looking at the
+Rankine-Hugoniot jump conditions.  There will be one condition for
+each of our conservation laws, and together they tell us the speed of
+the shock and how density and pressure jump across
+it.  \MarginPar{derive jump conditions}
+
 The left and right states are connected to the state in the star
-region by a Hugoniot curve---this is a curve in the $u$-$p$
-plane that shows all of the possible states one can reach from 
-the current state through either a shock or rarefaction.  There
-are two such curves, one corresponding to the left and one to the right
-state, and the solution to the Riemann problem is the point in
-the $u$-$p$ plane where these two curves intersect.  Figure~\ref{fig:euler:riemann-curve}
-shows the Hugoniot curves for the Sod problem.
+region by a Hugoniot curve---this is a curve in the $u$-$p$ plane that
+shows all of the possible states one can reach from the current state
+through either a shock or rarefaction.  There are two such curves, one
+corresponding to the left and one to the right state, and the solution
+to the Riemann problem is the point in the $u$-$p$ plane where these
+two curves intersect.  Figure~\ref{fig:euler:riemann-curve} shows the
+Hugoniot curves for the Sod problem.
 
 \begin{figure}[t]
 \centering
@@ -985,6 +1047,9 @@ to the Sod problem.  The shock and rarefaction curves are shown.  The
 solution to the Riemann problem is the point where the curves intersect.\\
 \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/compressible/riemann-phase.py}{riemann-phase.py}}}
 \end{figure}
+
+
+\subsubsection{Interface solution}
 
 We are interested in the state at the interface.  To
 determine this, we need to determine which region we are in.  That
@@ -1048,7 +1113,7 @@ wave to cross a single zone:
 \begin{equation}
 \Delta t < \max_i \frac{\Delta x}{|u_i| + c}
 \end{equation}
-              
+
 
 
 %-----------------------------------------------------------------------------
@@ -1091,7 +1156,7 @@ the contact.
 
 The temperature evolution equation appears as:
 \begin{equation}
-\frac{\partial T}{\partial t} = -u\ddx{T} + 
+\frac{\partial T}{\partial t} = -u\ddx{T} +
   \frac{1}{\rho c_p} \left [ (1 - \rho h_p) \frac{Dp}{Dt} \right ]
 \end{equation}
 (see, e.g.\ \cite{ABRZ:I}) where $c_p$ is the specific heat at
@@ -1126,12 +1191,12 @@ Our primitive variable system in matrix form is then:
 with
 \begin{equation}
 \renewcommand{\arraystretch}{1.5}
-\hat{A}(\hat{q}) = 
+\hat{A}(\hat{q}) =
 \left (
 \begin{array}{ccc}
 u                   & -\tau & 0 \\
 -\dfrac{p_\rho}{\tau} & u    & \tau p_T \\
-0                   & \eta & u 
+0                   & \eta & u
 \end{array}
 \right )
 \end{equation}
@@ -1142,10 +1207,10 @@ $|\hat{A} - \lambda I| = 0$:
 \end{equation}
 We can simplify the last term in parenthesis:
 \begin{equation}
-{p_T \eta\tau} + p_\rho = \frac{p_T (1 - \rho h_p) c^2}{\rho c_p} + p_\rho 
+{p_T \eta\tau} + p_\rho = \frac{p_T (1 - \rho h_p) c^2}{\rho c_p} + p_\rho
                                = \frac{c^2}{c_p}\left ( \frac{p p_T}{\rho^2 p_\rho} - \frac{p_T e_\rho}{p_\rho} \right ) + p_\rho \label{eq:step1}
 \end{equation}
-where we substituted in 
+where we substituted in
 \begin{equation}
 h_p = \frac{1}{\rho} \left ( 1 - \frac{p}{\rho p_\rho} \right ) + \frac{e_\rho}{p_\rho}
 \end{equation}
@@ -1154,11 +1219,11 @@ h_p = \frac{1}{\rho} \left ( 1 - \frac{p}{\rho p_\rho} \right ) + \frac{e_\rho}{
 $c_p - c_v$ (\cite{cg}, Eq.~9.81) where $c_v$ is the specific heat
 at constant volume, and Eq.~\ref{eq:step1} further reduces to:
 \begin{equation}
-{p_T \eta\tau} + p_\rho = \frac{c^2}{c_p} (c_p - c_v) + p_\rho 
-                               = c^2 - c^2 \frac{\chi_p}{\Gamma_1} + p_\rho = c^2 
+{p_T \eta\tau} + p_\rho = \frac{c^2}{c_p} (c_p - c_v) + p_\rho
+                               = c^2 - c^2 \frac{\chi_p}{\Gamma_1} + p_\rho = c^2
 \end{equation}
 where we used $c_v/c_p = \chi_p/\Gamma_1$ and $\chi_p = \rho p_\rho /
-p$ (\cite{cg}, Eqs.~9.87, 9.82).  Putting this into our 
+p$ (\cite{cg}, Eqs.~9.87, 9.82).  Putting this into our
 characteristic polynomial, we see that the eigenvalues are, as expected,
 $\lambda = u, u \pm c$.  It is also useful to note that
 \begin{equation}
@@ -1194,17 +1259,17 @@ temperature).
 We write:
 \begin{eqnarray}
 \hat{\beta}^\evm_s &\equiv& (\hat{l}^\evm \cdot \Delta \hat{q}^\evm ) =
-   \frac{1}{2C} \left (\frac{\rho^2 p_\rho}{C} \Delta \tau^\evm 
+   \frac{1}{2C} \left (\frac{\rho^2 p_\rho}{C} \Delta \tau^\evm
                         + \Delta u^\evm - \frac{p_T}{C}\Delta T^\evm \right ) \\
 %
 \hat{\beta}^\evz_s &\equiv& (\hat{l}^\evz \cdot \Delta \hat{q}^\evz ) =
-    \Delta \tau^\evz + 
-        \frac{1}{C^2} \left (-\rho^2 p_\rho \Delta \tau^\evz 
+    \Delta \tau^\evz +
+        \frac{1}{C^2} \left (-\rho^2 p_\rho \Delta \tau^\evz
                         + {p_T}\Delta T^\evz \right ) \\
 %
 \hat{\beta}^\evp_s &\equiv& (\hat{l}^\evp \cdot \Delta \hat{q}^\evp ) =
-   \frac{1}{2C} \left (\frac{\rho^2 p_\rho}{C} \Delta \tau^\evp 
-                        - \Delta u^\evp - \frac{p_T}{C}\Delta T^\evp \right ) 
+   \frac{1}{2C} \left (\frac{\rho^2 p_\rho}{C} \Delta \tau^\evp
+                        - \Delta u^\evp - \frac{p_T}{C}\Delta T^\evp \right )
 \end{eqnarray}
 Note that since $p_\tau = -\rho^2 p_\rho$, we can form a $\Delta p^\enu$ as
 \begin{equation}
@@ -1224,11 +1289,11 @@ Finally, we can write out the interface states:
 %
 u_s &=& \tilde{u} - (C \hat{\beta}^\evm - C \hat{\beta}^\evp) \\
 %
-T_s &=& \tilde{T} - \frac{1}{p_T} \left \{ 
+T_s &=& \tilde{T} - \frac{1}{p_T} \left \{
    \left [ -C^2 \hat{\beta}^\evm - C^2 \hat{\beta}^\evp \right ] +
    \rho^2 p_\rho \left [ \hat{\beta}^\evm + \hat{\beta}^\evz + \hat{\beta}^\evp \right ] \right \}
 \end{eqnarray}
-For $T_s$, we recognize the first quantity in the square brackets as 
+For $T_s$, we recognize the first quantity in the square brackets as
 being the same as $-(p_s - \tilde{p})$ in the $\mathring{q}$ system, and the
 second term in the square brackets being the same as $-(\tau_s - \tilde{\tau})$
 in the $\mathring{q}$ system, then we see
@@ -1243,7 +1308,7 @@ methods.
 
 The above did not consider variations in the composition of the fluid.
 Multiple species complicate things---now the replacement of the
-pressure gradient picks up a composition gradient term. 
+pressure gradient picks up a composition gradient term.
 The eigensystem will change with this addition.  We don't explore this here at this
 time.
 
@@ -1269,10 +1334,10 @@ F^{(y)}(U) = \left ( \begin{array}{c} \rho v \\ \rho vu     \\ \rho v v + p \\ \
 \end{equation}
 
 We note that there is no transformation that can convert the multidimensional
-system into characteristic variables, since we cannot simultaneously 
+system into characteristic variables, since we cannot simultaneously
 diagonalize the Jacobians corresponding to $F^{(x)}$ and $F^{(y)}$.  Related
 to this is that when limiting, we limit one-dimensional slopes instead of
-doing a full multidimensional reconstruction and limiting (see \cite{BDS} 
+doing a full multidimensional reconstruction and limiting (see \cite{BDS}
 for a multidimensional limiting procedure for linear advection.  For
 the Euler equations, since we cannot write the multidimensional system
 in a characteristic form, we cannot use this type of method).
@@ -1284,12 +1349,12 @@ time derivative ($\partial U/\partial t$) with the divergence of the
 fluxes, we gain a transverse flux derivative term.  For example,
 predicting to the upper $x$ edge of zone $i,j$, we have:
 \begin{align}
-U_{i+1/2,j,L}^{n+1/2} &= U_{i,j}^n + \frac{\Delta x}{2} \frac{\partial U}{\partial x} 
+U_{i+1/2,j,L}^{n+1/2} &= U_{i,j}^n + \frac{\Delta x}{2} \frac{\partial U}{\partial x}
                             + \frac{\Delta t}{2} \frac{\partial U}{\partial t} + \ldots \\
-&= U_{i,j}^n + \frac{\Delta x}{2} \frac{\partial U}{\partial x} 
-                            - \frac{\Delta t}{2} \frac{\partial F^{(x)}}{\partial x} 
+&= U_{i,j}^n + \frac{\Delta x}{2} \frac{\partial U}{\partial x}
+                            - \frac{\Delta t}{2} \frac{\partial F^{(x)}}{\partial x}
                             - \frac{\Delta t}{2} \frac{\partial F^{(y)}}{\partial y} \\
-&= U_{i,j}^n + \frac{1}{2} \left [ 1 - \frac{\Delta t}{\Delta x} A^{(x)}(U) \right ] \Delta U 
+&= U_{i,j}^n + \frac{1}{2} \left [ 1 - \frac{\Delta t}{\Delta x} A^{(x)}(U) \right ] \Delta U
                             - \frac{\Delta t}{2} \frac{\partial F^{(y)}}{\partial y} \label{eq:Utaylorstate}
 \end{align}
 where $A^{(x)}(U) \equiv \partial F^{(x)} / \partial U$.  We decompose
@@ -1297,7 +1362,7 @@ this into a {\em normal state} and a {\em transverse flux difference}.
 Adopting the notation from Colella (1990), we use $\hat{U}$ to denote
 the normal state:
 \begin{align}
-\hat{U}_{i+1/2,j,L}^{n+1/2} &\equiv U_{i,j}^n 
+\hat{U}_{i+1/2,j,L}^{n+1/2} &\equiv U_{i,j}^n
       + \frac{1}{2} \left [ 1 - \frac{\Delta t}{\Delta x} A^{(x)}(U) \right ] \Delta U \\
 U_{i+1/2,j,L}^{n+1/2} &= \hat{U}_{i+1/2,j,L}^{n+1/2}
                             - \frac{\Delta t}{2} \frac{\partial F^{(y)}}{\partial y}  \label{eq:fullleftstate}
@@ -1347,7 +1412,7 @@ reconstruction on the primitive variables from \S~\ref{sec:onedrecon}:
 \hat{U}_{i,j+1/2,L}^{n+1/2} = U(\hat{q}_{i,j+1/2,L}^{n+1/2})
 \end{equation}
 
-To compute the full interface state (Eq.~\ref{eq:fullleftstate}), we 
+To compute the full interface state (Eq.~\ref{eq:fullleftstate}), we
 need to include the transverse term.
 Colella (1990) gives two different procedures for evaluating the
 transverse fluxes.  The first is to simply use the cell-centered
@@ -1355,26 +1420,26 @@ $U_{i,j}$ (Colella 1990,
 Eq. 2.13); the second is to use the reconstructed normal states (the
 $\hat{U}$'s) (Eq. 2.15).  In both cases, we need to solve a {\em
   transverse Riemann problem} to find the true state on the transverse
-interface.  This latter approach is what we prefer.  In particular, 
-for computing the full $x$-interface left state, $U_{i+1/2,j,L}^{n+1/2}$, we need the 
+interface.  This latter approach is what we prefer.  In particular,
+for computing the full $x$-interface left state, $U_{i+1/2,j,L}^{n+1/2}$, we need the
 transverse ($y$) states, which we define as
 \begin{align}
-U^T_{i,j+1/2} &= \mathcal{R}(\hat{U}^{n+1/2}_{i,j+1/2,L}, 
+U^T_{i,j+1/2} &= \mathcal{R}(\hat{U}^{n+1/2}_{i,j+1/2,L},
                             \hat{U}^{n+1/2}_{i,j+1/2,R}) \\
-U^T_{i,j-1/2} &= \mathcal{R}(\hat{U}^{n+1/2}_{i,j-1/2,L}, 
+U^T_{i,j-1/2} &= \mathcal{R}(\hat{U}^{n+1/2}_{i,j-1/2,L},
                             \hat{U}^{n+1/2}_{i,j-1/2,R})
 \end{align}
 
 Taken together, the full interface state is now:
 \begin{equation}
-U_{i+1/2,j,L}^{n+1/2} = U(\hat{q}_{i+1/2,j,L}^{n+1/2}) 
+U_{i+1/2,j,L}^{n+1/2} = U(\hat{q}_{i+1/2,j,L}^{n+1/2})
    - \frac{\Delta t}{2} \frac{F^{(y)}(U^T_{i,j+1/2}) - F^{(y)}(U^T_{i,j-1/2})}{\Delta y}
 \end{equation}
 
 The right state at the $i+1/2$ interface can be similarly computed (starting with the
 data in zone $i+1,j$ and expanding to the left) as:
 \begin{equation}
-U_{i+1/2,j,R}^{n+1/2} = U(\hat{q}_{i+1/2,j,R}^{n+1/2}) 
+U_{i+1/2,j,R}^{n+1/2} = U(\hat{q}_{i+1/2,j,R}^{n+1/2})
    - \frac{\Delta t}{2} \frac{F^{(y)}(U^T_{i+1,j+1/2}) - F^{(y)}(U^T_{i+1,j-1/2})}{\Delta y}
 \end{equation}
 Note the indices on the transverse states---they are now to the right of the interface (since
@@ -1393,10 +1458,10 @@ F^{(x),n+1/2}_{i+1/2,j} = F^{(x)}(U_{i+1/2,j}^{n+1/2})
 Note, for multi-dimensional problems, in the Riemann solver, the transverse
 velocities are simply selected based on the speed of the contact, giving
 either the left or right state.
- 
+
 The final conservative update is done as:
 \begin{equation}
-U^{n+1}_{i,j} = U^n_{i,j} 
+U^{n+1}_{i,j} = U^n_{i,j}
    + \frac{\Delta t}{\Delta x} \left ( F^{(x),n+1/2}_{i-1/2,j} - F^{(x),n+1/2}_{i+1/2,j} \right )
    + \frac{\Delta t}{\Delta y} \left ( F^{(y),n+1/2}_{i,j-1/2} - F^{(y),n+1/2}_{i,j+1/2} \right )
 \end{equation}
@@ -1416,12 +1481,12 @@ of the first valid zone in the domain (just inside the left boundary).
   leave the domain.  The simplest form is to simply give all variables
   a zero-gradient:
   \begin{equation}
-  \left ( \begin{array}{c} \rho_{\mathrm{lo-1},j} \\ 
-                           (\rho u)_{\mathrm{lo-1},j} \\ 
+  \left ( \begin{array}{c} \rho_{\mathrm{lo-1},j} \\
+                           (\rho u)_{\mathrm{lo-1},j} \\
                            (\rho v)_{\mathrm{lo-1},j} \\
                            (\rho E)_{\mathrm{lo-1},j} \end{array} \right ) =
-  \left ( \begin{array}{c} \rho_{\mathrm{lo},j} \\ 
-                           (\rho u)_{\mathrm{lo},j} \\ 
+  \left ( \begin{array}{c} \rho_{\mathrm{lo},j} \\
+                           (\rho u)_{\mathrm{lo},j} \\
                            (\rho v)_{\mathrm{lo},j} \\
                            (\rho E)_{\mathrm{lo},j} \end{array} \right )
   \end{equation}
@@ -1436,23 +1501,23 @@ of the first valid zone in the domain (just inside the left boundary).
   normal velocity given the opposite sign.  At the $x$-boundary, the
   first ghost cell is:
   \begin{equation}
-  \left ( \begin{array}{c} \rho_{\mathrm{lo-1},j} \\ 
-                           (\rho u)_{\mathrm{lo-1},j} \\ 
+  \left ( \begin{array}{c} \rho_{\mathrm{lo-1},j} \\
+                           (\rho u)_{\mathrm{lo-1},j} \\
                            (\rho v)_{\mathrm{lo-1},j} \\
                            (\rho E)_{\mathrm{lo-1},j} \end{array} \right ) =
-  \left ( \begin{array}{c} \rho_{\mathrm{lo},j} \\ 
-                           -(\rho u)_{\mathrm{lo},j} \\ 
+  \left ( \begin{array}{c} \rho_{\mathrm{lo},j} \\
+                           -(\rho u)_{\mathrm{lo},j} \\
                            (\rho v)_{\mathrm{lo},j} \\
                            (\rho E)_{\mathrm{lo},j} \end{array} \right )
   \end{equation}
   The next is:
   \begin{equation}
-  \left ( \begin{array}{c} \rho_{\mathrm{lo-2},j} \\ 
-                           (\rho u)_{\mathrm{lo-2},j} \\ 
+  \left ( \begin{array}{c} \rho_{\mathrm{lo-2},j} \\
+                           (\rho u)_{\mathrm{lo-2},j} \\
                            (\rho v)_{\mathrm{lo-2},j} \\
                            (\rho E)_{\mathrm{lo-2},j} \end{array} \right ) =
-  \left ( \begin{array}{c} \rho_{\mathrm{lo+1},j} \\ 
-                           -(\rho u)_{\mathrm{lo+1},j} \\ 
+  \left ( \begin{array}{c} \rho_{\mathrm{lo+1},j} \\
+                           -(\rho u)_{\mathrm{lo+1},j} \\
                            (\rho v)_{\mathrm{lo+1},j} \\
                            (\rho E)_{\mathrm{lo+1},j} \end{array} \right )
   \end{equation}
@@ -1482,7 +1547,7 @@ used this to evaluate the fluxes through the interface.  There are
 alternate techniques however.  For instance, we could do a method of
 lines approach where we discretize the system in space, leading to a
 system of ODEs in time, and the we can use a Runge-Kutta integrator to
-evolve the system in time. 
+evolve the system in time.
 
 Discretizing our system in space leads to the following system:
 \begin{equation}
@@ -1491,23 +1556,23 @@ Discretizing our system in space leads to the following system:
 \end{equation}
 Note that there is no time superscript in the $U$ used to evaluate the
 fluxes on the righthand side---we have not done any time
-discretization yet.  Now we can use an ODE integrator to solve this system.  
+discretization yet.  Now we can use an ODE integrator to solve this system.
 
 Consider
 second-order Runge-Kutta.  We evaluate two slopes,
 \begin{alignat}{3}
-k_1 &= \Delta t \bigg [ &-&\frac{F^{(x)}(U^n_{i+1/2,j}) 
+k_1 &= \Delta t \bigg [ &-&\frac{F^{(x)}(U^n_{i+1/2,j})
                                - F^{(x)}(U^n_{i-1/2,j})}{\Delta x} \nonumber \\
-    &\,                 &-&\frac{F^{(y)}(U^n_{i,j+1/2}) 
+    &\,                 &-&\frac{F^{(y)}(U^n_{i,j+1/2})
                                - F^{(y)}(U^n_{i,j-1/2})}{\Delta y} \bigg ] \\
-k_2 &= \Delta t \bigg [ &-&\frac{F^{(x)}([U^n + k_1/2]_{i+1/2,j}) 
+k_2 &= \Delta t \bigg [ &-&\frac{F^{(x)}([U^n + k_1/2]_{i+1/2,j})
                                - F^{(x)}([U^n + k_1/2]_{i-1/2,j})}{\Delta x} \nonumber \\
-    &\,                 &-&\frac{F^{(y)}([U^n + k_1/2]_{i,j+1/2}) 
-                               - F^{(y)}([U^n + k_1/2]_{i,j-1/2})}{\Delta y} \bigg ]  
+    &\,                 &-&\frac{F^{(y)}([U^n + k_1/2]_{i,j+1/2})
+                               - F^{(y)}([U^n + k_1/2]_{i,j-1/2})}{\Delta y} \bigg ]
 \end{alignat}
 and then
 \begin{equation}
-U^{n+1}_{i,j} = U^n_{i,j} + k_2 
+U^{n+1}_{i,j} = U^n_{i,j} + k_2
 \end{equation}
 In the construction of the interface states, $U^n_{i+1/2,j}$ or $[U^n
 + k_1/2]_{i+1/2,j}$, there is no explicit transverse term, since that
@@ -1541,7 +1606,7 @@ you need $0 < C < 1/2$ for 2-d flows and $0 < C < 1/3$ for 3-d flows.
 
 An additional complexity arises when doing multiphysics.  Often we
 split the different physical processes up and treat them in turn.
-There are standard methods to do this with second-order accuracy in time, 
+There are standard methods to do this with second-order accuracy in time,
 but higher-order is more tricky.
 
 
@@ -1559,7 +1624,7 @@ but higher-order is more tricky.
   Shocks are self-steepening (this is how we
   detect them in the Riemann solver---we look for converging characteristics).
   This can cause trouble with the methods here, because the shocks may become
-  too steep.  
+  too steep.
 
   Flattening is a procedure to add additional dissipation at shocks,
   to ensure that they are smeared out over $\sim 2$ zones.  The
@@ -1590,7 +1655,7 @@ but higher-order is more tricky.
   cannot be any convergence).  The original PPM
   paper advocates a contact steepening method to artificially steepen
   contact waves.  While it shows good results in 1-d, it can be
-  problematic in multi-dimensions.  
+  problematic in multi-dimensions.
 
   Overall, the community seems split over whether this term should be
   used.  Many people advocate that if you reach a situation where you
@@ -1604,7 +1669,7 @@ but higher-order is more tricky.
   that behind slow-moving shocks these methods can have oscillations.
   The fix they propose is to use some artificial viscosity---this is
   additional dissipation that kicks in at shocks.  (They argue that
-  flattening alone is not enough).  
+  flattening alone is not enough).
 
   We use a multidimensional analog of their artificial viscosity
   (\cite{colellawoodward:1984}, Eq.\ 4.5) which modifies the fluxes.
@@ -1663,22 +1728,22 @@ sign of the contact wave speed, and do the conservative update for
 $\rho X_k$ using the species flux.
 
 One issue that can arise with species is that even if $\sum_k X_k = 1$
-initially, after the update, that may no longer be true.  There are a 
+initially, after the update, that may no longer be true.  There are a
 variety of ways to handle this:
 \begin{itemize}
 \item You can update the species, $(\rho X_k)$ to the new time and then
 define the density to be $\rho = \sum_k (\rho X_k)$---this means that
 you are not relying on the value of the density from the mass continuity
-equation itself.  
+equation itself.
 
 \item You can force the interface states of $X_k$ to sum to 1.  Because
-the limiting is non-linear, this is where problems can arise.  If the 
+the limiting is non-linear, this is where problems can arise.  If the
 interface values of $X_k$ are forced to sum to 1 (by renormalizing), then
 the updated cell-centered value of $X_k$ will as well.  This is the
 approach discussed in \cite{plewamuller:1999}.
 
 \item You can design the limiting procedure to preserve the summation
-property.  This approach is sometimes taken in the combustion field. 
+property.  This approach is sometimes taken in the combustion field.
 For piecewise linear reconstruction, this can be obtained by computing
 the limited slopes of all the species, and taking the most restrictive
 slope and applying this same slope to all the species.
@@ -1696,24 +1761,24 @@ we predict to the edges in the same fashion as described above, but now
 when we replace $\partial U/\partial t$ with the divergence of the
 fluxes, we also pick up the source term.  This appears as:
 \begin{align}
-U_{i+1/2,j,L}^{n+1/2} &= U_{i,j}^n 
-            + \frac{\Delta x}{2} \frac{\partial U}{\partial x} 
+U_{i+1/2,j,L}^{n+1/2} &= U_{i,j}^n
+            + \frac{\Delta x}{2} \frac{\partial U}{\partial x}
             + \frac{\Delta t}{2} \frac{\partial U}{\partial t} + \ldots \\
-&= U_{i,j}^n + \frac{\Delta x}{2} \frac{\partial U}{\partial x} 
-              - \frac{\Delta t}{2} \frac{\partial F^{(x)}}{\partial x} 
-              - \frac{\Delta t}{2} \frac{\partial F^{(y)}}{\partial y} 
+&= U_{i,j}^n + \frac{\Delta x}{2} \frac{\partial U}{\partial x}
+              - \frac{\Delta t}{2} \frac{\partial F^{(x)}}{\partial x}
+              - \frac{\Delta t}{2} \frac{\partial F^{(y)}}{\partial y}
               + \frac{\Delta t}{2} H_{i,j} \\
-&= U_{i,j}^n 
- + \frac{1}{2} \left [1 -\frac{\Delta t}{\Delta x} A^{(x)}(U)\right ] \Delta U 
+&= U_{i,j}^n
+ + \frac{1}{2} \left [1 -\frac{\Delta t}{\Delta x} A^{(x)}(U)\right ] \Delta U
  - \frac{\Delta t}{2} \frac{\partial F^{(y)}}{\partial y}
  + \frac{\Delta t}{2} H_{i,j}
   \label{eq:Utaylorstatesource}
 \end{align}
 We can compute things as above, but simply add the source term to the
-$\hat{U}$'s and carry it through.  
+$\hat{U}$'s and carry it through.
 
 Note that the source here is cell-centered.  This expansion is
-second-order accurate.  This is the approach outlined in Miller 
+second-order accurate.  This is the approach outlined in Miller
 \& Colella \cite{millercolella:2002}.
 
 The original PPM paper does things differently.  They construct a parabolic
@@ -1725,7 +1790,7 @@ To see this, write our system in primitive form as:
 q_t + A(q) q_x = G
 \end{equation}
 where $G = (0, g, 0)^T$---i.e. the gravitational source only affects
-$u$, not $\rho$ or $p$.  Note that in the PPM paper, they put $G$ on 
+$u$, not $\rho$ or $p$.  Note that in the PPM paper, they put $G$ on
 the lefthand side of the primitive variable equation, so our signs are
 opposite.  Our projections are now:
 \begin{equation}
@@ -1733,23 +1798,23 @@ opposite.  Our projections are now:
 \end{equation}
 for the left state, and
 \begin{equation}
-\sum_{\nu; \lambda^\enu \le 0} l^\enu \cdot (\tilde{q} - \mathcal{I}^\enu_-(q) - \tfrac{\Delta t}{2} G) r^\enu 
+\sum_{\nu; \lambda^\enu \le 0} l^\enu \cdot (\tilde{q} - \mathcal{I}^\enu_-(q) - \tfrac{\Delta t}{2} G) r^\enu
 \end{equation}
 for the right state.  Since $G$ is only non-zero for velocity, only
 the velocity changes.  Writing out the sum (and performing the vector products), we
 get:
 \begin{align}
 u_{i+1/2,L}^{n+1/2} =
-   \tilde{u}_+ 
+   \tilde{u}_+
   &- \frac{1}{2} \left [
-      \left (\tilde{u}_+ - \mathcal{I}_+^\evm(u) - \frac{\Delta t}{2} \mathcal{I}^\evm_+(g) \right ) - 
+      \left (\tilde{u}_+ - \mathcal{I}_+^\evm(u) - \frac{\Delta t}{2} \mathcal{I}^\evm_+(g) \right ) -
        \frac{\tilde{p}_+ - \mathcal{I}_+^\evm(p)}{C} \right ] \nonumber \\
   &- \frac{1}{2} \left [
       \left (\tilde{u}_+ - \mathcal{I}_+^\evp(u) - \frac{\Delta t}{2} \mathcal{I}^\evp_+(g) \right ) +
        \frac{\tilde{p}_+ - \mathcal{I}_+^\evp(p)}{C} \right ]
 \end{align}
 where the only change from Eq.~\ref{eq:ufull} are the
-$\mathcal{I}^\evm_+(g)$ and $\mathcal{I}^\evp_+(g)$ terms.  
+$\mathcal{I}^\evm_+(g)$ and $\mathcal{I}^\evp_+(g)$ terms.
 
 These differ from the expression in the PPM paper, where $\Delta t G$,
 not $\Delta t/2 G$ is used in the projection, however this appears to
@@ -1761,17 +1826,17 @@ t/2) g$ for constant g---this matches the result from the Taylor
 expansion above (Eq.~\ref{eq:Utaylorstatesource}).
 
 
-\subsection{General equation of state} 
+\subsection{General equation of state}
 
 The above methods were formulated
 with a constant gamma equation of state.  A general equation of state
 (such as degenerate electrons) requires a more complex method.  The classic
-prescription for extending this methodology is presented by Colella and 
+prescription for extending this methodology is presented by Colella and
 Glaz~\cite{colellaglaz:1985}.  They construct a thermodynamic index,
 \begin{equation}
 \gamma_e = \frac{p}{\rho e} + 1
 \end{equation}
-and derive an evolution equation for $\gamma_e$ (C\&G, Eq.\ 26).  
+and derive an evolution equation for $\gamma_e$ (C\&G, Eq.\ 26).
 We can derive a similar expression as
 \begin{align}
 \frac{D\gamma_e}{Dt} &= \frac{D}{Dt} \left ( \frac{p}{\rho e} + 1 \right )
@@ -1809,16 +1874,16 @@ q = \left ( \begin{array}{c} \rho \\ u \\ p \\ \rho e \end{array} \right )
 A = \left ( \begin{array}{cccc} u & \rho     & 0      & 0 \\
                                 0 & u        & 1/\rho & 0 \\
                                 0 & \rho c^2 & u      & 0 \\
-                                0 & \rho h   & 0      & u 
+                                0 & \rho h   & 0      & u
             \end{array} \right )
 \end{equation}
-where $h = e + p/\rho$ is the specific enthalpy.  The eigenvalues of this 
+where $h = e + p/\rho$ is the specific enthalpy.  The eigenvalues of this
 system are:
 \begin{equation}
-\lambda^{(1)} = u - c \qquad 
-\lambda^{(2)} = u  \qquad 
-\lambda^{(3)} = u  \qquad 
-\lambda^{(4)} = u + c 
+\lambda^{(1)} = u - c \qquad
+\lambda^{(2)} = u  \qquad
+\lambda^{(3)} = u  \qquad
+\lambda^{(4)} = u + c
 \end{equation}
 and the eigenvectors are:
 \begin{equation}
@@ -1833,16 +1898,16 @@ r^{(4)} = \left ( \begin{array}{c} 1 \\ c/\rho \\ c^2 \\ h \end{array} \right )
 and
 \begin{eqnarray}
 &&
-l^{(1)} = ( \begin{array}{cccc} 0 & -\frac{\rho}{2c} & \frac{1}{2c^2} & 0 
+l^{(1)} = ( \begin{array}{cccc} 0 & -\frac{\rho}{2c} & \frac{1}{2c^2} & 0
             \end{array} ) \nonumber \\
 &&
-l^{(2)} = ( \begin{array}{cccc} 1 & 0 & -\frac{1}{c^2} & 0 
+l^{(2)} = ( \begin{array}{cccc} 1 & 0 & -\frac{1}{c^2} & 0
             \end{array} ) \nonumber \\
 &&
-l^{(3)} = ( \begin{array}{cccc} 0 & 0 & -\frac{h}{c^2} & 1 
+l^{(3)} = ( \begin{array}{cccc} 0 & 0 & -\frac{h}{c^2} & 1
             \end{array} ) \nonumber \\
 &&
-l^{(4)} = ( \begin{array}{cccc} 0 & \frac{\rho}{2c} & \frac{1}{2c^2} & 0 
+l^{(4)} = ( \begin{array}{cccc} 0 & \frac{\rho}{2c} & \frac{1}{2c^2} & 0
             \end{array} )
 \end{eqnarray}
 Remember that the state variables in the $q$ vector are mixed into the
@@ -1854,7 +1919,7 @@ is as expected, since $\rho e$ is not needed in the system.
 
 Also recall that the jump carried by the wave $\nu$ is proportional
 to $r^{(\nu)}$---since $r^{(1)}$, $r^{(3)}$, and $r^{(4)}$ have
-non-zero $\rho e$ elements, this means that $\rho e$ jumps across 
+non-zero $\rho e$ elements, this means that $\rho e$ jumps across
 these three waves.
 
 Working through the sum for the $(\rho e)$ state, and using a $\sim$ to
@@ -1871,7 +1936,7 @@ denote the reference states, we arrive at:
   &-
    \frac{1}{2} \left [ \frac{\rho}{c} \left (\tilde{u} - \mathcal{I}^{(4)}_+(u) \right )
                        +\frac{1}{c^2} \left (\tilde{p} - \mathcal{I}^{(4)}_+(p) \right )
-               \right ] h 
+               \right ] h
 \end{align}
 This is the expression that is found in the Castro code.
 
@@ -1885,7 +1950,7 @@ and adding the transverse gradients to its interface state.  Castro
 deals with a conserved state of $U = (\rho, \rho U, \rho E, p)$, and
 explicitly adds the transverse terms found in the multi-dimensional form
 of Eq.~\ref{eq:euler:pgeneral}
-to the normal states of $p$.  
+to the normal states of $p$.
 
 
 \subsection{Axisymmetry}
@@ -1901,18 +1966,18 @@ to the normal states of $p$.
 
 It is common to so 2-d axisymmetric models---here
 the $r$ and $z$ coordinates from a cylindrical geometry are modeled.  This
-appears Cartesian, except there is a volume factor implicit in the 
+appears Cartesian, except there is a volume factor implicit in the
 divergence that must be accounted for.  Our system in cylindrical
 coordinates is:
 \begin{equation}
-\frac{\partial U}{\partial t} 
-  + \frac{1}{r}\frac{\partial r F^{(r)}}{\partial r} 
+\frac{\partial U}{\partial t}
+  + \frac{1}{r}\frac{\partial r F^{(r)}}{\partial r}
   + \frac{\partial F^{(z)}}{\partial z} = 0
 \end{equation}
 Expanding out the $r$ derivative, we can write this as:
 \begin{equation}
-\frac{\partial U}{\partial t} 
-  + \frac{\partial F^{(r)}}{\partial r} 
+\frac{\partial U}{\partial t}
+  + \frac{\partial F^{(r)}}{\partial r}
   + \frac{\partial F^{(z)}}{\partial z} = -\frac{F^{(r)}}{r}
 \end{equation}
 This latter form is used when predicting the interface states, with
@@ -1935,7 +2000,7 @@ divergence.
   \end{eqnarray}
   Trouble can arise when you are in a region of flow where the kinetic
   energy dominates (high Mach number flow).  In this case, the $e$ defined
-  via subtraction can become negative due to truncation error in the  
+  via subtraction can become negative due to truncation error in the
   evolution of $u$ compared to $E$.  In this instance, one must either
   impose a floor value for $e$ or find an alternate method of deriving
   it.
@@ -1944,12 +2009,12 @@ divergence.
   is proposed.  Both the total energy equation {\em and} the internal
   energy equation are evolved in each zone.  When the flow is dominated
   by kinetic energy, then the internal energy from the internal energy
-  evolution equation is used.  The cost of this is conservation---the 
-  internal energy is not a conserved quantity, and switching to it 
+  evolution equation is used.  The cost of this is conservation---the
+  internal energy is not a conserved quantity, and switching to it
   introduces conservation of energy errors.
 
 \subsection{Limiting on characteristic variables}
- 
+
   Some authors (see for example, \cite{athena} Eqs.~37, 38) advocate
   limiting on the characteristic variables rather than the primitive
   variables.  The characteristic slopes for the quantity carried by
@@ -1974,5 +2039,3 @@ The extension of the unsplit methodology to 3-d is described by
 Saltzman~\cite{saltzman:1994}.  The basic idea is the same as in 2-d,
 except now additional transverse Riemann solve are needed to fully
 couple in the corners.
-
-
