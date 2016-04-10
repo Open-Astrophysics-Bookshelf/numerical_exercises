@@ -432,7 +432,7 @@ Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
 
 \mainmatter
 
-%\part{Basics}
+\part{Basics}
 
 \chapter{Simulation Overview}
 
@@ -449,7 +449,7 @@ Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
 
 \input finite-volume/finite-volume.tex
 
-%\part{Hyperbolic Problems}
+\part{Advection and Hydrodynamics}
 
 %\addtocontents{exc}{\protect\addvspace{10pt}}%
 \chapter{Advection}
@@ -462,9 +462,14 @@ Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
 \input burgers/burgers.tex
 
 %\addtocontents{exc}{\protect\addvspace{10pt}}%
-\chapter{Euler Equations}
+\chapter{Euler Equations: Theory}
 
-\input Euler/Euler.tex
+\input Euler/Euler-theory.tex
+
+
+\chapter{Euler Equations: Numerical Methods}
+
+\input Euler/Euler-methods.tex
 
 
 \ifdefined\debugmode
@@ -486,7 +491,7 @@ Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
 
 
 
-%\part{Elliptic, Parabolic Problems, and Mixed-Type Problems}
+\part{Elliptic, Parabolic Problems, and Mixed-Type Problems}
 
 %\addtocontents{exc}{\protect\addvspace{10pt}}%
 \chapter{Elliptic Equations and Multigrid}
@@ -504,7 +509,7 @@ Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
 \input multiphysics/multiphysics.tex
 
 
-%\part{Low Speed Hydrodynamics}
+\part{Low Speed Hydrodynamics}
 
 %\addtocontents{exc}{\protect\addvspace{10pt}}%
 \chapter{Incompressible Flow and Projection Methods}
