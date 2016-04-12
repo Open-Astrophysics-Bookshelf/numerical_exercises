@@ -1,6 +1,6 @@
-import math
-import numpy
-import pylab
+import numpy as np
+import matplotlib.pyplot as plt
+import grid_plot as gp
 
 def riemann():
 
@@ -10,90 +10,52 @@ def riemann():
 
     nzones = 2
     ng = 0
-    
-    dx = (xmax - xmin)/float(nzones)
 
-    xl = (numpy.arange(2*ng+nzones) - ng)*dx
-    xr = (numpy.arange(2*ng+nzones)+1 - ng)*dx
-
-    xc = 0.5*(xl + xr)
+    gr = gp.FVGrid(nzones, xmin=xmin, xmax=xmax)
 
 
     #------------------------------------------------------------------------
     # plot a domain without ghostcells
-    pylab.plot([xmin,xmax], [0,0], color="k", lw=2)
-
-    # domain left edge
-    pylab.plot([xl[ng], xl[ng]], [0, 0.5], color="k", lw=2)
-
-    n = ng
-    while (n < ng+nzones):
-
-        # draw right edge
-        pylab.plot([xr[n], xr[n]], [0, 0.5], color="k", lw=2)        
-
-        # draw center marker
-        pylab.plot([xc[n], xc[n]], [-0.05, 0], color="k")                
-        n += 1
-
-    # domain left edge
-    pylab.plot([xr[ng+nzones-1], xr[ng+nzones-1]], [0, 0.5], color="k", lw=2)
-
-       
+    gr.draw_grid(emphasize_end=True)
 
     # label a few
-    pylab.text(xc[ng+nzones/2-1], -0.1, r"$i$", 
-               horizontalalignment='center', verticalalignment='top')
+    gr.label_center(0, r"$i$", fontsize="medium")
+    gr.label_center(1, r"$i+1$", fontsize="medium")
+    gr.label_edge(1, r"$i+1/2$", fontsize="medium")
 
-    pylab.text(xc[ng+nzones/2], -0.1, r"$i+1$", 
-               horizontalalignment='center', verticalalignment='top')
+    gr.mark_cell_left_state(1, r"$U_{i+1/2,L}^{n+1/2}$", fontsize="large",
+                            color="b")
+    gr.mark_cell_right_state(0, r"$U_{i+1/2,R}^{n+1/2}$", fontsize="large",
+                             color="b")
 
-    pylab.text(xl[ng+nzones/2], -0.1, r"$i+1/2$", 
-               horizontalalignment='center', verticalalignment='top')
+    gr.label_cell_center(0, r"$U_i$")
+    gr.label_cell_center(1, r"$U_{i+1}$")
 
-
-    # L
-    pylab.scatter(xl[ng+nzones/2]-0.05*dx, 0.25, marker="x")
-
-    pylab.text(xl[ng+nzones/2]-0.075*dx, 0.25, r"$U_{i+1/2,L}^{n+1/2}$", 
-               horizontalalignment='right', verticalalignment='center')
-
-    pylab.text(xc[ng+nzones/2-1], 0.25, r"$U_i$",
-               horizontalalignment='center', verticalalignment='center', fontsize="16")
-
-
-    # R
-    pylab.scatter(xl[ng+nzones/2]+0.05*dx, 0.25, marker="x")
-
-    pylab.text(xl[ng+nzones/2]+0.075*dx, 0.25, r"$U_{i+1/2,R}^{n+1/2}$", 
-               horizontalalignment='left', verticalalignment='center')
-
-    pylab.text(xc[ng+nzones/2], 0.25, r"$U_{i+1}$",
-               horizontalalignment='center', verticalalignment='center', fontsize="16")
 
 
     # flux
-    pylab.arrow(xl[ng+nzones/2]-0.25*dx, 0.6, 0.5*dx, 0, 
+    plt.arrow(gr.xl[ng+nzones/2]-0.25*gr.dx, 1.05, 0.5*gr.dx, 0, 
                 shape='full', head_width=0.075, head_length=0.05, 
                 lw=1, width=0.03,
                 edgecolor="none", facecolor="red",
                 length_includes_head=True, zorder=100)
     
-    pylab.text(xl[ng+nzones/2], 0.68, r"$F(U_{i+1/2}^{n+1/2})$", color="red",
+    plt.text(gr.xl[ng+nzones/2], 1.15, r"$F(U_{i+1/2}^{n+1/2})$", color="red",
                horizontalalignment="center")
 
 
-    pylab.xlim(xl[0]-0.5*dx,xr[2*ng+nzones-1]+0.5*dx)
-    pylab.ylim(-0.25, 0.75)
-    pylab.axis("off")
+    gr.clean_axes(padding=False)
+    plt.ylim(-0.25, 1.25)
 
-    pylab.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
+    plt.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
 
-    f = pylab.gcf()
-    f.set_size_inches(8.0,2.5)
+    f = plt.gcf()
+    f.set_size_inches(6.0,2.25)
 
 
-    pylab.savefig("riemann_comp.eps")
+    plt.tight_layout()
+
+    plt.savefig("riemann_comp.pdf")
 
 
 if __name__== "__main__":
