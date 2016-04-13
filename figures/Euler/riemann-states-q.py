@@ -23,9 +23,9 @@ def riemann():
     gr.label_center(1, r"$i+1$", fontsize="medium")
     gr.label_edge(1, r"$i+1/2$", fontsize="medium")
 
-    gr.mark_cell_left_state(1, r"$q_{i+1/2,L}^{n+1/2}$", fontsize="large",
+    gr.mark_cell_left_state(1, r"$q_{i+1/2,R}^{n+1/2}$", fontsize="large",
                             color="b")
-    gr.mark_cell_right_state(0, r"$q_{i+1/2,R}^{n+1/2}$", fontsize="large",
+    gr.mark_cell_right_state(0, r"$q_{i+1/2,L}^{n+1/2}$", fontsize="large",
                              color="b")
 
     gr.label_cell_center(0, r"$q_i$")
