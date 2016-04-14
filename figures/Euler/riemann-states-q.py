@@ -23,13 +23,13 @@ def riemann():
     gr.label_center(1, r"$i+1$", fontsize="medium")
     gr.label_edge(1, r"$i+1/2$", fontsize="medium")
 
-    gr.mark_cell_left_state(1, r"$U_{i+1/2,L}^{n+1/2}$", fontsize="large",
+    gr.mark_cell_left_state(1, r"$q_{i+1/2,R}^{n+1/2}$", fontsize="large",
                             color="b")
-    gr.mark_cell_right_state(0, r"$U_{i+1/2,R}^{n+1/2}$", fontsize="large",
+    gr.mark_cell_right_state(0, r"$q_{i+1/2,L}^{n+1/2}$", fontsize="large",
                              color="b")
 
-    gr.label_cell_center(0, r"$U_i$")
-    gr.label_cell_center(1, r"$U_{i+1}$")
+    gr.label_cell_center(0, r"$q_i$")
+    gr.label_cell_center(1, r"$q_{i+1}$")
 
 
 
@@ -40,7 +40,7 @@ def riemann():
                 edgecolor="none", facecolor="red",
                 length_includes_head=True, zorder=100)
     
-    plt.text(gr.xl[ng+nzones/2], 1.15, r"$F(U_{i+1/2}^{n+1/2})$", color="red",
+    plt.text(gr.xl[ng+nzones/2], 1.15, r"$F(U(q_{i+1/2}^{n+1/2}))$", color="red",
                horizontalalignment="center")
 
 
@@ -55,7 +55,8 @@ def riemann():
 
     plt.tight_layout()
 
-    plt.savefig("riemann_comp.pdf")
+    plt.savefig("riemann_comp_q.pdf")
+    plt.savefig("riemann_comp_q.png")
 
 
 if __name__== "__main__":

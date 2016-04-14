@@ -317,7 +317,6 @@ $L$ and $R$ regions are simply the left and right input states---the
 waves have not had time to reach here, so they are unmodified.
 
 
-\subsubsection{Jumps across waves}
 
 The middle wave will always be a contact.  We know from the eigenvectors
 that the pressure is constant across the contact.
@@ -326,7 +325,9 @@ The left and right waves can be either a rarefaction or a shock.  It will
 be a shock if the flow is compressive and a rarefaction otherwise.
 
 
-The conditions across the rarefaction can be understood by considering
+\subsection{Rarefactions}
+
+The conditions across a rarefaction can be understood by considering
 a system where entropy replaces pressure, $q_s = (\rho, u, s)^\intercal$.
 The entropy equation is simply $Ds/Dt = 0$.  We need to express the
 pressure gradient in the velocity equation in terms of $q_s$.
@@ -370,6 +371,9 @@ r_s^\evp = \left ( \begin{array}{c} 1 \\ c/\rho \\ 0 \end{array} \right )
 Since the jump in $q_s$ is proportional to these eigenvectors, we see that
 entropy does not change across the left, $(-)$, and right, $(+)$, waves.
 
+
+\subsection{Shocks}
+
 Entropy is not constant across a shock---there is dissipation, so we
 need a different way to connect the states across the shock.  As with
 Burgers' equation, we can understand the shock by looking at the
@@ -399,7 +403,7 @@ where the curves intersect.\\
 \end{figure}
 
 
-\subsubsection{Interface solution}
+\subsection{Interface solution}
 
 We are interested in the state at the interface.  To
 determine this, we need to determine which region we are in.  That
