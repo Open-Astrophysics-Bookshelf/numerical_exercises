@@ -54,7 +54,7 @@ time (since the righthand side is not centered in time).
 
 As with the advection equation, when differenced explicitly, there is
 a constraint on the timestep required for stability.  Looking at the
-growth of a single Fourier mode, $\phi^n = A^n e^{ij\theta}$ with $j =
+growth of a single Fourier mode, $\phi^n_i = A^n e^{ij\theta}$ with $j =
 \sqrt{-1}$, we find:
 \begin{equation}
 \label{eq:diff:amplitude}
@@ -77,7 +77,7 @@ restrictive.
 
 \begin{exercise}
 [Explicit diffusion stability condition]
-Derive Eq.~\ref{eq:diff:amplitude} by inserting $\phi^n = A^n e^{ij\theta}$
+Derive Eq.~\ref{eq:diff:amplitude} by inserting $\phi^n_i = A^n e^{ij\theta}$
 into Eq.~\ref{eq:diff:explicitdiff}
 \end{exercise}
 
@@ -204,7 +204,7 @@ The implicit method can use any $C > 0$.
 
 We specify boundary conditions by modifying the stencil
 (Eq.~\ref{eq:diff:implicit}) for the updates to $\mathrm{lo}$ and
-$\mathrm{hi}$.  For example, Neumann BCs on the left mean:
+$\mathrm{hi}$.  For example, homogeneous Neumann BCs on the left mean:
 \begin{equation}
 \phi_\mathrm{lo-1} = \phi_\mathrm{lo}
 \end{equation}
@@ -288,7 +288,7 @@ and grouping together the the $n+1$ terms by zone, we have:
   = \phi^n_i + \frac{\alpha}{2} \left ( \phi^n_{i+1} - 2 \phi^n_i + \phi^n_{i-1} \right )
 \end{equation}
 
-Considering Neumann boundary conditions on the left, we again have
+Considering homogeneous Neumann boundary conditions on the left, we again have
 $\phi^{n+1}_\mathrm{lo-1} = \phi^{n+1}_\mathrm{lo}$, and our stencil at the boundary 
 becomes
 \begin{equation}

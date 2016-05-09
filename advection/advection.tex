@@ -199,10 +199,10 @@ phase.  A method is stable if $|A^{n+1}/A^n| \le 1$.  FTCS appears as:
 \end{equation}
 Examining a Fourier mode shows that:
 \begin{align}
-  A^{n+1}e^{ji\theta} &= A^n e^{ji\theta} + \frac{C}{2} \left (
+  A^{n+1}e^{ji\theta} &= A^n e^{ji\theta} - \frac{C}{2} \left (
       A^n e^{j(i+1)\theta} - A^n e^{j(i-1)\theta} \right ) \\
-  A^{n+1} &= A^n  + \frac{C}{2} A^n \left ( e^{j\theta} - e^{-j\theta}\right ) \\
-  A^{n+1} &= A^n \left ( 1 + j C \sin\theta \right )
+  A^{n+1} &= A^n  - \frac{C}{2} A^n \left ( e^{j\theta} - e^{-j\theta}\right ) \\
+  A^{n+1} &= A^n \left ( 1 - j C \sin\theta \right )
 \end{align}
 so the magnitude of the amplification is
 \begin{equation}
@@ -688,6 +688,11 @@ Eq. 191).
   Eq.~\ref{eq:fo}.  }
 \end{exercise}
 
+It is common to express the slope simply as the change in the state variable:
+\begin{equation}
+\Delta a_i = \left . \frac{\partial a}{\partial x} \right |_i \Delta x
+\end{equation}
+and the limited slope is indicated as $\overline{\Delta a}_i$.
 
 
 
@@ -905,18 +910,23 @@ just the different between the new and old state.
 We define the flux through the interface as the average over the face
 of that interface and time: \MarginPar{is there a way to illustrate this, as some space-time diagram?}
 \begin{align}
-(ua)_{i+\myhalf,j} &= \frac{1}{\Delta y \Delta t}
+\langle (ua)_{i+\myhalf,j}\rangle_{(t)} &= \frac{1}{\Delta y \Delta t}
     \int_{t^n}^{t^{n+1}} \int_{y_{j-\myhalf}}^{y_{j+\myhalf}} (ua)_{i+\myhalf,j}\, dy dt  \\
-(va)_{i,j+\myhalf} &= \frac{1}{\Delta x \Delta t}
+\langle (va)_{i,j+\myhalf}\rangle_{(t)} &= \frac{1}{\Delta x \Delta t}
     \int_{t^n}^{t^{n+1}} \int_{x_{i-\myhalf}}^{x_{i+\myhalf}} (va)_{i,j+\myhalf}\, dx dt 
 \end{align}
+where $\langle . \rangle_{(t)}$ denotes the time-average.
 For a second-order accurate method in time, we replace the average in
-time with the flux at the midpoint in time, and in space, we replace
+time with the flux at the midpoint in time, 
+\begin{equation}
+(ua)_{i+\myhalf,j}^{n+\myhalf} \approx \langle (ua)_{i+\myhalf,j} \rangle_{(t)}
+\end{equation}
+and in space, we replace
 the average over the face of the zone with the flux at the center of the face.  Then we have:
 \begin{equation}
-a_{i,j}^{n+1} = a_{i,j}^n - 
+a_{i,j}^{n+1} = a_{i,j}^n - \Delta t \left [
    \frac{(ua)_{i+\myhalf,j}^{n+\myhalf} - (ua)_{i-\myhalf,j}^{n+\myhalf}}{\Delta x} -
-   \frac{(va)_{i,j+\myhalf}^{n+\myhalf} - (va)_{i,j-\myhalf}^{n+\myhalf}}{\Delta y}
+   \frac{(va)_{i,j+\myhalf}^{n+\myhalf} - (va)_{i,j-\myhalf}^{n+\myhalf}}{\Delta y} \right ]
 \end{equation}
 
 For the advection problem, since $u$ and $v$ are constant, we need

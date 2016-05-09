@@ -23,7 +23,7 @@ introduces yet more approximation.
 
 Blindly trusting the numbers that come out of the code is a recipe
 for disaster.  You don't stop being a physicist the moment you execute
-the code---you job as a computational scientist is to make sure that
+the code---your job as a computational scientist is to make sure that
 the code is producing reasonable results, by testing it against known
 problems and your physical intuition.  
 
@@ -33,7 +33,7 @@ Because the systems we solve are so nonlinear, small changes in the
 code or the programming environment (compilers, optimization, etc.)
 can produce large differences in the numbers coming out of the code.
 That's not a reason to panic.
-As such its best not to obsess about precise numbers, but rather the
+As such it is best not to obsess about precise numbers, but rather the
 trends.  To really understand the limits of your simulations, you
 should do parameter and convergence studies.
 
@@ -70,7 +70,7 @@ numbers is provided in \cite{goldberg:1991}.
 \begin{exercise}[Machine epsilon]
 To see roundoff error in action, write a program to find the value of
 $\epsilon$ for which $1 + \epsilon = 1$.  Start with $\epsilon = 1$
-and iterate, halving $\epsilon$ each iteration unit $1 + \epsilon =
+and iterate, halving $\epsilon$ each iteration until $1 + \epsilon =
 1$. This last value of $\epsilon$ for which this was not true is
 the {\em machine epsilon}.  You will get a different value for
 single- vs.\ double-precision floating point arithmetic.
@@ -433,6 +433,17 @@ If we take the coordinate system such that the Sun is at the origin,
 then, ${\bf x} = (x, y)^\intercal$ is the position of the Earth
 and ${\bf r} = x {\bf \hat{x}} + y {\bf \hat{y}}$ is the radius 
 vector pointing from the Sun to the Earth.
+
+Take as initial conditions the planet at perihelion:
+\begin{align*}
+x_0 &= 0 \\
+y_0 &= a (1-e) \\
+({\bf v}\cdot {\bf \hat{x}})_0 &= -\sqrt{\frac{GM}{a} \frac{1+e}{1-e}} \\
+({\bf v}\cdot {\bf \hat{y}})_0 &= 0
+\end{align*}
+where $a$ is the semi-major axis and $e$ is the eccentricity of the orbit
+(these expressions can be found in any introductory astronomy text that
+discusses Kepler's laws).
 
 Integrate this system for a single orbital period with the first-order
 Euler and the RK4 method and measure the convergence by integrating at

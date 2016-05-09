@@ -73,8 +73,10 @@ multiplications in Fourier space, which makes the solution process in
 Fourier space straightforward.
 
 We now express $\phi_{i,j}$ and $f_{i,j}$ as sums over their Fourier
-components.  Note, because we are using $i$ as the grid index, we will
-use $\imag$ as the imaginary unit:
+components.  Here we define $M$ as the number of grid points in the
+$x$-direction and $N$ as the number of grid points in the
+$y$-direction.  Note, because we are using $i$ as the grid index, we
+will use $\imag$ as the imaginary unit:
 \begin{align}
 \phi_{i,j} &= \frac{1}{MN} \sum_{k_x = 0}^{M-1} \sum_{k_y = 0}^{N-1}
   \Phi_{k_x,k_y} e^{2\pi\imag i k_x/M} e^{2\pi\imag j k_y/N} \\
@@ -265,7 +267,7 @@ A single ghost cell is sufficient.  The common types of boundary
 conditions are {\em Dirichlet} (specified value on the boundary), {\em
   Neumann} (specified first derivative on the boundary), and periodic.
 Some restrictions apply.  For example, consider $\phi_{xx} = 0$.  The
-solution to this is a line, $\phi = ax + b$.  We can specify different
+solution to this is a line, $\phi = ax + b$.  We cannot specify different
 Neumann boundary conditions on each end, $\phi_x |_{x=x_l} = p$,
 $\phi_x |_{x = x_r} = q$, because this specifies two incompatible
 slopes for our line.
@@ -353,6 +355,28 @@ L e = L\phi^\mathrm{true} - L\phi = f - L\phi = r
 so the error in our solution obeys a Poisson equation with the residual
 as the source.
 
+\subsection{Norms}
+
+There are several different norms that are typically used in defining
+errors on the grid.  The $L_\infty$ norm (or `inf'-norm) is just the
+maximum error on the grid:
+\begin{equation}
+\|e\|_\infty = \max \{ |e_{i,j}| \}
+\end{equation}
+This will pick up on local errors.  
+
+The $L_1$ norm and $L_2$ norms are more global. 
+\begin{eqnarray}
+\|e\|_1 &=& \frac{1}{N} \sum_{i,j} |e_{i,j} | \\
+\|e\|_2 &=& \left ( \frac{1}{N} \sum_{i,j} |e_{i,j} |^2 \right )^{1/2}
+\end{eqnarray}
+Generally, the measure in $L_2$ falls between $L_\infty$ and $L_1$.
+Regardless of the norm used, if the problem converges, it should
+converge in all norms.  
+For reference, the BoxLib library uses $L_\infty$ in its multigrid solvers.
+
+
+
 \subsection{Performance}
 
 
@@ -396,6 +420,21 @@ In practice, we can only monitor the residual error, not the true
 error, and we hope that small residual error implies a small true
 error.
 
+Figure~\ref{fig:smoothnorms} shows the error
+with respect to the true solution and of the residual for pure smoothing
+in three different norms.
+
+% this figure can be created with figures/multigrid/smooth-separate.py
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{smooth-error-norms}
+\caption[Convergence of smoothing in different norms]{\label{fig:smoothnorms} 
+  Gauss-Seidel relaxation applied to $\phi_{xx} = \sin(x)$ with
+  $\phi(0) = \phi(1) = 0$.  This is like figure \ref{fig:smooth}, but
+  now we show the error in 3 different norms: $L_1$, $L_2$, and $L_\infty$.
+  \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/multigrid/smooth-norms.py}{smooth-norms.py}}}
+\end{figure}
+
 Figure~\ref{fig:smooth-badbcs} shows the norm of the true error for
 the same problem, but this time with a naive implementation of the 
 boundary conditions (simply initializing the ghost cell to the boundary
@@ -404,7 +443,7 @@ mistake at the boundaries, the error of the entire solution is
 affected, and we get only first-order convergence with resolution
 (this can be seen by looking at the spacing of the curves).  The previous
 solution, with the correct BCs is shown for reference, and shows 
-second-order convergence.  It is important to not that because every
+second-order convergence.  It is important to note that because every
 zone is linked to every other zone (and the boundary) in elliptic
 problems, an error at the boundary pollutes the global solution.
 
@@ -414,9 +453,9 @@ problems, an error at the boundary pollutes the global solution.
 \caption[Convergence of smoothing in first-order BCs]{\label{fig:smooth-badbcs} 
   The same problem as in figure \ref{fig:smooth}, but
   now we done with a naive first-order boundary conditions (just initializing
-  the ghost cell to the boundary value; solid lines).  We see that this 
+  the ghost cell to the boundary value; dotted lines).  We see that this 
   achieves only first-order convergence in the true error.  The correct
-  second-order implmentation is shown as the dotted lines.
+  second-order implmentation is shown as the solid lines.
   \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/multigrid/smooth-badbcs.py}{smooth-badbcs.py}}}
 \end{figure}
 
@@ -751,42 +790,6 @@ elliptic equation---the expressions derived above apply only for
 $\nabla^2 \phi = f$.
 
 
-\subsection{Norms}
-
-There are several different norms that are typically used in defining
-errors on the grid.  The $L_\infty$ norm (or `inf'-norm) is just the
-maximum error on the grid:
-\begin{equation}
-\|e\|_\infty = \max \{ |e_{i,j}| \}
-\end{equation}
-This will pick up on local errors.  
-
-The $L_1$ norm and $L_2$ norms are more global. 
-\begin{eqnarray}
-\|e\|_1 &=& \frac{1}{N} \sum_{i,j} |e_{i,j} | \\
-\|e\|_2 &=& \left ( \frac{1}{N} \sum_{i,j} |e_{i,j} |^2 \right )^{1/2}
-\end{eqnarray}
-Generally, the measure in $L_2$ falls between $L_\infty$ and $L_1$.
-Regardless of the norm used, if the problem converges, it should
-converge in all norms.  Figure~\ref{fig:smoothnorms} shows the error
-with respect to the true solution and of the residual for pure smoothing
-in three different norms.
-
-% this figure can be created with figures/multigrid/smooth-separate.py
-\begin{figure}
-\centering
-\includegraphics[width=\linewidth]{smooth-error-norms}
-\caption[Convergence of smoothing in different norms]{\label{fig:smoothnorms} 
-  Gauss-Seidel relaxation applied to $\phi_{xx} = \sin(x)$ with
-  $\phi(0) = \phi(1) = 0$.  This is like figure \ref{fig:smooth}, but
-  now we show the error in 3 different norms: $L_1$, $L_2$, and $L_\infty$.
-  \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/multigrid/smooth-norms.py}{smooth-norms.py}}}
-\end{figure}
-
-
-For reference, the BoxLib library uses $L_\infty$ in its multigrid solvers.
-
-
 
 \subsection{More General Elliptic Equations}
 
@@ -805,7 +808,6 @@ be restricted to the coarser grids (some on edges).  This is explored in
  \begin{equation}
  \nabla \cdot (\beta \nabla \phi) = f
  \end{equation}
+\ifdefined\debugmode
 and in \S~\ref{sec:rad:generalelliptic} for an equation with $\zeta = 0$.
-
-
-
+\fi

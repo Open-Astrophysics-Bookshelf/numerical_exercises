@@ -233,7 +233,7 @@ the wave speed $\lambda^\enu$.
 
 The basic idea of hyperbolic systems of PDEs is that there is one wave
 for each eigenvalue, and these define the characteristic curves,
-$dx/dt = \lambda_i$.  Along the characteristics, the solution is
+$dx/dt = \lambda^\enu$.  Along the characteristics, the solution is
 constant.  Across them, the solution jumps.  For a linear system, the
 characteristics are straight lines.
 
@@ -468,7 +468,7 @@ where $e$ is the specific internal energy.
 Applying this to a Lagrangian fluid element, we have:
 \begin{align}
 \frac{De}{Dt} + p \frac{D(1/\rho)}{Dt} &= 0 \\
-\frac{De}{Dt} - \frac{1}{\rho^2} \frac{D\rho}{Dt} &= 0 \\
+\frac{De}{Dt} - \frac{p}{\rho^2} \frac{D\rho}{Dt} &= 0 \\
 \rho \frac{De}{Dt} + p \nabla \cdot U &= 0
 \end{align}
 where we used the continuity equation in the last step to eliminate
@@ -502,7 +502,7 @@ The temperature evolution equation appears as:
 constant pressure, $c_p = \partial h/\partial T|_p$ and $h_p \equiv
 \partial h / \partial p |_T$, with $h = e + p/\rho$ the specific
 enthalpy.  We can use the standard pressure evolution equation
-(Eq.~\ref{eq:pres}) to eliminate the Lagrangian pressure term,
+(Eq.~\ref{eq:euler:pgeneral}) to eliminate the Lagrangian pressure term,
 resulting in:
 \begin{equation}
 \frac{\partial T}{\partial t} = -u\ddx{T} - \eta \ddx{u}

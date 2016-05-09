@@ -11,7 +11,7 @@ The key idea in solvers for low Mach number flows is that, as a fluid
 element advects, its pressure remains the same as the background
 state.  For an atmosphere, this background state is a hydrostatic
 profile.  For a smallscale combustion flow, this background state is a
-spatially constant pressure (and constaint-in-time if the domain is
+spatially constant pressure (and constant-in-time if the domain is
 open).  We'll denote this background pressure as $p_0(r,t)$, where 
 $r$ is a radial coordinate.
 
@@ -561,18 +561,18 @@ across a zone width.
 
 First we need to make sure that the initial velocity field satisfies our constraint
 
-Next we need to find $\nabla \pi^{n-1/2}$ for the first step.
+Next we need to find $\nabla {p^\prime}^{n-1/2}$ for the first step.
 
 
 
 \section{Combustion}
 
 
-Taking $p = p_0 + \pi$, with $p_0 = \mathrm{constant}$, the system 
+Taking $p = p_0 + p^\prime$, with $p_0 = \mathrm{constant}$, the system 
 becomes:
 \begin{align}
 \frac{\partial \rho}{\partial t} + \nabla \cdot (\rho U) &= 0 \\
-\frac{\partial \rho U}{\partial t} + \nabla \cdot (\rho U U) + \nabla \pi &= 0 \\
+\frac{\partial \rho U}{\partial t} + \nabla \cdot (\rho U U) + \nabla p^\prime &= 0 \\
 \nabla \cdot U &= S
 \end{align}
 

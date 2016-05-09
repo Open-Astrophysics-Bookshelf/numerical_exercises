@@ -305,7 +305,7 @@ us how much of the quantity $q_{i+1/2,L}^{n+1/2} - q_\mathrm{ref}$
 reaches the interface.  Colella \& Glaz (p.\ 278) and Colella
 (Eq.\ 2.11) suggest
 \begin{equation}
-q_\mathrm{ref} = \tilde{q}_{i,L} \equiv q_i +
+q_\mathrm{ref} = \tilde{q}_{i,L} \equiv q_i^n +
    \frac{1}{2} \left [ 1 - \frac{\Delta t}{\Delta x}
  \max(\lambda_i^\evp, 0) \right ] \overline{\Delta q}_i \label{eq:qref}
 \end{equation}
@@ -649,7 +649,7 @@ This is equivalent to Eq.~31b in the Castro paper.
 
 Recent work \cite{colellasekora} has formulated improved limiters for
 PPM that do not clip the profiles at extrema.  This only changes the
-limiting process in defining $q_+$ and $q_i$, and does not affect the
+limiting process in defining $q_+$ and $q_-$, and does not affect the
 subsequent parts of the algorithm.
 
 
@@ -1221,7 +1221,7 @@ Alternately, the Castro paper~\cite{almgren:2010} relies on an idea
 from an unpublished manuscript by Colella, Glaz, and Ferguson that
 predicts $\rho e$ to edges in addition to $\rho$, $u$, and $p$.  Since
 $\rho e$ comes from a conservation-like equation
-(Eq.~\ref{eq:euler:econs}, predicting it to the interface in the
+(Eq.~\ref{eq:euler:econs}), predicting it to the interface in the
 unsplit formulation is straightforward.  This over-specifies the
 thermodynamics, but eliminates the need for $\gamma_e$.
 
@@ -1325,7 +1325,7 @@ to the normal states of $p$.
   create a volume.}
 \end{figure}
 
-It is common to so 2-d axisymmetric models---here
+It is common to do 2-d axisymmetric models---here
 the $r$ and $z$ coordinates from a cylindrical geometry are modeled.  This
 appears Cartesian, except there is a volume factor implicit in the
 divergence that must be accounted for.  Our system in cylindrical
