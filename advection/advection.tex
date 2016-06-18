@@ -837,6 +837,21 @@ Gaussian initial condition for 5 periods.}
         \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/advection/advection.py}{advection.py}}}
 \end{figure}
 
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.8\linewidth]{fv-gaussian-limiters} \\[1em]
+\includegraphics[width=0.8\linewidth]{fv-tophat-limiters} 
+\caption[Effect of different limiters on evolution]
+        {\label{fig:limiter_panel} The effect of different limiters on the
+          evolution of a Gaussian initial profile (top) and a tophat initial
+          profile (bottom), using $C = 0.8$ and 5 periods. \\
+        \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/advection/advection.py}{advection.py}}}
+\end{figure}
+
+As seen in figure~\ref{fig:advnorm}, the choice of limiters can have a great
+effect on the accuracy.  Figure~\ref{fig:limiter_panel} shows the Gaussian and
+tophat profiles with several different limiters.
+
 \section{Multi-dimensional advection}
 
 The two-dimensional linear advection equation is:
