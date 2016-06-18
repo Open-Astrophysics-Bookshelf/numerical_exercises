@@ -206,7 +206,7 @@ Examining a Fourier mode shows that:
 \end{align}
 so the magnitude of the amplification is
 \begin{equation}
- \left | \frac{A^{n+1}}{A^n}\right |^2 = 1 + C\sin^2\theta
+ \left | \frac{A^{n+1}}{A^n}\right |^2 = 1 + C^2\sin^2\theta
 \end{equation}
 We see that there is no value of $C$ that can make the method stable
 ($|A^{n+1}/A^n| > 1$ always).  Doing the same analysis for
@@ -819,10 +819,11 @@ each resolution and observe that it converges in a first-order fashion
 (i.e.\ $\epsilon$ decreases by 2 when we decrease $\Delta x$ by a factor of 2).
 
 \noindent Do the same with the second-order solver and observe that it
-converges as second-order. However: you may find less than second-order
-is your initial conditions have discontinuities and you are limiting. 
-Figure~\ref{fig:advnorm} shows the convergence of the method with minmod
-limiting, $C = 0.8$, and a Gaussian initial condition.}
+converges as second-order. However: you may find less than
+second-order if your initial conditions have discontinuities and you
+are limiting.  Figure~\ref{fig:advnorm} shows the convergence of the
+method with no limiting, MC, and minmod limiting, $C = 0.8$, and a
+Gaussian initial condition for 5 periods.}
 \end{exercise}
 
 % figure from codes/advection/fv/fv_advection.py
@@ -831,8 +832,8 @@ limiting, $C = 0.8$, and a Gaussian initial condition.}
 \includegraphics[width=0.8\linewidth]{plm-converge}
 \caption[Convergence of second-order finite-volume advection]
         {\label{fig:advnorm} Convergence for the second-order
-          finite-volume method with minmod limiting advecting a
-          Gaussian initial profile with $C = 0.8$. \\
+          finite-volume method with no limiting, MC, and minmod limiting advecting a
+          Gaussian initial profile with $C = 0.8$ for 5 periods. \\
         \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/advection/advection.py}{advection.py}}}
 \end{figure}
 
