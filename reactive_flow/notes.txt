@@ -1,0 +1,13 @@
+-- mass fractions, partial density
+
+-- ODEs for reaction network
+
+-- number density
+
+-- coupling (Strang splitting vs. SDC)
+
+-- flames
+
+-- detonations
+
+
