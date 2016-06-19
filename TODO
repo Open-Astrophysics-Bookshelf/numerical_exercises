@@ -144,3 +144,13 @@ Chapter 7:
 reference for the choice of epsilon in numerical derivatives as
 \sqrt{machine epsilon} -- this gives some suggestions:
 http://mathoverflow.net/questions/28463/optimum-small-number-for-numerical-differentiation
+
+
+----
+
+tcolorbox for exercises:
+
+http://tex.stackexchange.com/questions/172475/how-can-i-define-a-custom-tcolorbox-environment-with-color-as-a-parameter
+
+
+http://www.scriptscoop2.com/t/e6de0140d668/counters-for-chapter-and-section-environments-when-using-tcolorbox-for.html
