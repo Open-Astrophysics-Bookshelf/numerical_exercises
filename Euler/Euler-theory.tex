@@ -4,13 +4,13 @@
 %-----------------------------------------------------------------------------
 \section{Euler equation properties}
 
-The Euler equations\footnote{ We focus on the Euler equations, which
+The Euler equations\footnote{ We focus on the Euler equations, which  \MarginPar{need to add a discussion of the N-S equations and dimensionless numbers}
 are the most commonly modeled set of fluid equations in astrophysics.
 The more general equation set, the Navier-Stokes equations, includes
 dissipative terms.  However, for astophysical flows, the scales on
 which these dissipative terms operate are usually much smaller than
 the system of interest (equivalently, Reynolds numbers of
-astrophysical flows are very large).}  in one dimension appear as:
+astrophysical flows are very large).}  in one dimension appear\footnote{assuming Cartesian coordinates} as:
 \begin{align}
 \frac{\partial \rho}{\partial t} +
     \frac{\partial (\rho u)}{\partial x} &= 0 \\
@@ -56,7 +56,7 @@ U = \left ( \begin{array}{c} \rho \\ \rho u \\ \rho E \end{array} \right )
 F(U) = \left ( \begin{array}{c} \rho u \\ \rho uu + p \\ \rho u E + up \end{array} \right )
 \end{equation}
 %
-We can write this in {\em quasi-linear} form by first expressing the flux
+We can write this in {\em quasi-linear} form by first expressing the flux \MarginPar{what about for a general EOS?}
 vector in terms of the conserved variables directly.  Taking
 $m \equiv \rho u$, $\mathcal{E} \equiv \rho E$, and expressing
 \begin{equation}
@@ -132,13 +132,17 @@ equation of state, we can get the appropriate expression by writing $p
      \left . \frac{\partial p}{\partial s} \right |_\rho
      \cancelto{0}{\frac{Ds}{Dt}}
 \end{equation}
-where $Ds/Dt = 0$ when no entropy sources are present.  Recognizing
+where $Ds/Dt = 0$ when no entropy sources are present (we will relax this
+assumption in \S~\ref{ch:lm:constraints}).  Recognizing
 that $\Gamma_1 \equiv \partial \log p/\partial \log \rho |_s$, we have:
 \begin{equation}
 \frac{\partial p}{\partial t} + u \frac{\partial p}{\partial x}
   + \Gamma_1 p \frac{\partial u}{\partial x} = 0  \label{eq:euler:pgeneral}
 \end{equation}
-as the generalization of the pressure equation.
+as the generalization of the pressure equation\footnote{$\Gamma_1$ is one of the
+many adiabatic indices that describe the coupling between different
+thermodynamic quantities under compression/expansion.  Any stellar structure
+book should give a good background.  Note that for an ideal gas, $\Gamma_1 = \gamma$}.
 
 We'll use the symbols $\{-,\circ,+\}$ to denote the eigenvalues and their
 corresponding eigenvectors throughout these notes.
