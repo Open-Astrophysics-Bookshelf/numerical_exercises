@@ -191,16 +191,17 @@
 {% begin code
   %
   % this indents our text from the left and right
-  \begin{adjustwidth}{1.0cm}{1.0cm}
+  \begin{adjustwidth}{1.0cm}{1.0cm}%
   %
   % this skips a line before
-  \par\vspace{\baselineskip}\noindent
+  %\par\vspace{\baselineskip}\noindent
   %
   % this increments our counter
   \refstepcounter{exercise}%
+  \begin{tcolorbox}[enhanced, breakable, title={\sffamily Exercise \theexercise}]
   %
   % this displays the exercise number and starts italics
-  \textbf{\sffamily Exercise \theexercise:}\ \begin{itshape}%
+  \begin{itshape}%
   %
   % this adds an entry to our custom List of Exercises
   \addcontentsline{exc}{exercise}{\protect\numberline{\theexercise}~~ #1}
@@ -210,11 +211,12 @@
   % stop the italics
   \end{itshape}%
   %
+  \end{tcolorbox}
   % this stops our custom margins
   \end{adjustwidth}%
   %
   % this skips a line at the end
-  \vspace{\baselineskip}\ignorespacesafterend
+  %\vspace{\baselineskip}\ignorespacesafterend
 }
 
 % this makes the List of Exercises have a line break before each chapter,
@@ -278,6 +280,7 @@
 
 \newcommand{\hydroex}{{\sf hydro\_examples}}
 \newcommand{\hydroexdoit}[1]{{\color{red} \LARGE \Keyboard}\/ \hydroex: {\tt #1}}
+\newcommand{\hydroexsymb}{{\color{red} \LARGE \Keyboard}}
 
 \usepackage{multirow}
 

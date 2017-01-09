@@ -25,29 +25,33 @@ Blindly trusting the numbers that come out of the code is a recipe
 for disaster.  You don't stop being a physicist the moment you execute
 the code---your job as a computational scientist is to make sure that
 the code is producing reasonable results, by testing it against known
-problems and your physical intuition.  
+problems and your physical intuition.
 
 Simulations should be used to gain insight and provide a physical
-understanding.  
-Because the systems we solve are so nonlinear, small changes in the
-code or the programming environment (compilers, optimization, etc.)
-can produce large differences in the numbers coming out of the code.
-That's not a reason to panic.
-As such it is best not to obsess about precise numbers, but rather the
-trends.  To really understand the limits of your simulations, you
-should do parameter and convergence studies.
+understanding.  Because the systems we solve are so nonlinear, small
+changes in the code or the programming environment (compilers,
+optimization, etc.)  can produce large differences in the numbers
+coming out of the code.  That's not a reason to panic.  As such it is
+best not to obsess about precise numbers, but rather the trends our
+simulations reveal.  To really understand the limits of your
+simulations, you should do parameter and convergence studies.
 
-There is no ``\"uber-code''.  Every algorithm begins with approximations
-and has limitations.  Comparisons between different codes are
-important and common in our field, and build confidence in the
-results that we are on the right track.
+There is no ``\"uber-code''.  Every algorithm begins with
+approximations and has limitations.  Comparisons between different
+codes are important and common in our field (see, for example,
+\cite{frenk:1999,dimonte:2004,devalborro:2006}), and build confidence
+in the results that we are on the right track.
 
 To really understand your simulations, you need to know what the code
-your are using is doing under the hood.  This means understanding the 
-core methods used in our field.  These notes are designed to provide
-a basic tour of some of the more popular methods, referring to the 
-key papers for full derivations and details.  A companion python code,
-{\sf pyro} is available to help. 
+your are using is doing under the hood.  This means understanding the
+core methods used in our field.  These notes are designed to provide a
+basic tour of some of the more popular methods, referring to the key
+papers for full derivations and details.  The best way to learn is to
+code up these methods for yourself.  A companion python code, {\sf
+  pyro} is available to help, and most of the exercises (or
+corresponding figures) have links to simple codes that are part of the \hydroex\
+repository\footnote{look for the \hydroexsymb\ symbol.}. Descriptions
+and links to these codes are found in the appendices.
 
 
 \section{Numerical Basics}
@@ -60,12 +64,24 @@ texts by Garcia~\cite{garcia} and Pang~\cite{pang}.
 \subsection{Sources of Error}
 
 With any algorithm, there are two sources of error we are concerned
-with: {\em roundoff error} and {\em truncation error}.  
+with: {\em roundoff error} and {\em truncation error}.
 
 Roundoff arises from the error inherent in representing a floating
 point number with a finite number of bits in the computer memory.  An
 excellent introduction to the details of how computers represent
-numbers is provided in \cite{goldberg:1991}.  
+numbers is provided in \cite{goldberg:1991}.
+
+\begin{exercise}[Floating point]
+In your choice of programming language, create a floating point
+variable and initialize it to 0.1.  Now, print it out in full
+precision (you may need to use format specifiers in your language to
+get all significant digits the computer tracks).  
+
+You should see that it is not exactly 0.1 to the computer---this is
+the floating point error.  The number 0.1 is not exactly representable
+in the binary format used for floating point.
+\end{exercise}
+
 
 \begin{exercise}[Machine epsilon]
 To see roundoff error in action, write a program to find the value of
@@ -91,7 +107,7 @@ the quantity we expand about truly is small, then the error is small.
 A simple example is to consider the Taylor series representation of
 $\sin(x)$:
 \begin{equation}
-\sin(x) = \sum_{n=1}^\infty (-1)^{n-1} \frac{x^{2n-1}}{(2n-1)!} 
+\sin(x) = \sum_{n=1}^\infty (-1)^{n-1} \frac{x^{2n-1}}{(2n-1)!}
 \end{equation}
 For $|x| \ll 1$, we can approximate this as:
 \begin{equation}
@@ -106,8 +122,11 @@ We will be concerned with the order-of-accuracy of our methods, and a
 good way to test whether our method is behaving properly is to perform
 a convergence test.  Consider our $5^\mathrm{th}$-order accurate
 approximation to $\sin(x)$ above.  Pick a range of $x$'s ($< 1$), and
-compute the error in our approximation as $\epsilon \equiv \sin(x) - [
-  x - x^3/6 ]$, and show that as you cut $x$ in half, $|\epsilon|$
+compute the error in our approximation as
+\begin{equation*}
+\epsilon \equiv \sin(x) - [  x - x^3/6 ]
+\end{equation*}
+and show that as you cut $x$ in half, $|\epsilon|$
 reduces by $2^5$---demonstrating $5^\mathrm{th}$-order accuracy.
 \end{exercise}
 
@@ -123,16 +142,17 @@ encounter:
   number of points, $x_0$, $x_1$, $\ldots$, and we want to compute the
   derivative at a point or integration over a range of points.
 \item We know a function analytically and we want to construct a
-  derivative or integral of this function numerically.  In these
-  notes, we'll be concerned only with the first case.
+  derivative or integral of this function numerically. 
 \end{enumerate}
 
-\subsubsection{Differentiation}
+ In these notes, we will mainly be concerned with the first case.
+
+\subsubsection{Differentiation of Discretely-Sampled Function}
 \label{ch:intro:diff}
 Consider a collection of equally spaced points, labeled with an index
-$i$, with the physical spacing between them denoted $\Delta x$.  We
-can express the first derivative of a quantity $a$ at 
-$i$ as:
+$i$, with the physical spacing between them denoted $\Delta
+x$.  \MarginPar{show a figure} We can express the first derivative of
+a quantity $a$ at $i$ as:
 \begin{equation}
 \left . \frac{\partial a}{\partial x} \right |_i \approx \frac{a_i - a_{i-1}}{\Delta x}
 \end{equation}
@@ -141,27 +161,36 @@ or
 \left . \frac{\partial a}{\partial x} \right |_i \approx \frac{a_{i+1} - a_i}{\Delta x}
 \end{equation}
 %
-(Indeed, as $\Delta x \rightarrow 0$, this is the definition of a derivative from calculus.)
-Both of these are {\em one-sided differences}.  By Taylor expanding the data
-about $x_i$, we see
+(Indeed, as $\Delta x \rightarrow 0$, this is the definition of a
+derivative we learned in calculus.)  Both of these are {\em one-sided
+  differences}.  By Taylor expanding the data about $x_i$, we see
 \begin{equation}
 a_{i+1} = a_i + \Delta x \left . \frac{\partial a}{\partial x} \right |_i + \frac{1}{2} \Delta x^2 \left . \frac{\partial^2 a}{\partial x^2} \right |_i + \ldots
 \end{equation}
 Solving for ${\partial a}/{\partial x} |_i$, we see
-\begin{equation}
-\left . \frac{\partial a}{\partial x} \right |_i = \frac{a_i - a_{i-1}}{\Delta x} + \mathcal{O}(\Delta x)
-\end{equation}
-where $\mathcal{O}(\Delta x)$ indicates that the order of accuracy of
-this approximation is $\sim \Delta x$.  We say that this is {\em first
-  order accurate}.  This means that we are neglecting terms that scale
-as $\Delta x$.  This is our truncation error (just as discussed above,
-arising because our numerical approximation throws away higher order
-terms).  The approximation ${\partial a}/{\partial x} |_i = ({a_{i+1}
-  - a_i})/{\Delta x}$ has the same order of accuracy.
+\begin{align}
+\left . \frac{\partial a}{\partial x} \right |_i &= 
+    \frac{a_i - a_{i-1}}{\Delta x} - \frac{1}{2}\Delta x \left . \frac{\partial^2 a}{\partial x^2} \right |_i + \ldots \\ 
+%
+ &= \frac{a_i - a_{i-1}}{\Delta x} + \mathcal{O}(\Delta x)
+\end{align}
+where $\mathcal{O}(\Delta x)$ indicates that the leading term in the
+error for this approximation is $\sim \Delta x$\footnote{in some
+  texts, you see this $\mathcal{O}(\Delta x^n)$ referred to as ``big O
+  notation''}.  We say that this is {\em first order accurate}.  This
+means that we are neglecting terms that scale as $\Delta x$ or to
+higher powers.  This is fine if $\Delta x$ is small.  This error is our
+truncation error---just as discussed above, it arises because our
+numerical approximation threws away higher order terms.  The
+approximation ${\partial a}/{\partial x} |_i = ({a_{i+1} -
+  a_i})/{\Delta x}$ has the same order of accuracy.
 
 \begin{exercise}[Truncation error]
-{Show that a centered difference, ${\partial a}/
-  {\partial x} |_i = ({a_{i+1} - a_{i-1}})/({2 \Delta x})$, is second order
+{Show that a centered difference,
+ \begin{equation*}
+\left .\frac{\partial a}{\partial x} \right |_i = \frac{a_{i+1} - a_{i-1}}{2 \Delta x}
+\end{equation*}
+is second order
 accurate, i.e.\ its truncation error is $\mathcal{O}(\Delta x^2)$.}
 \end{exercise}
 
@@ -180,6 +209,15 @@ $\sin(x)$. Generally speaking, higher-order methods have lower
 numerical error associated with them, and also involve a wider range
 of data points.
 
+Second- and higher-order derivatives can be constructed in the same fashion.
+
+\begin{exercise}[Second derivative]
+{Using the Taylor expansions for $a_{i+1}$ and $a_{i-1}$, find a difference
+approximation to the second derivative at $i$.}
+\end{exercise}
+
+\subsubsection{Differentiation of an Analytic Function}
+
 An alternate scenario is when you know the analytic form of the
 function, $f(x)$, and are free to choose the points where you evaluate
 it.  Here you can pick a $\delta x$ and evaluate the derivative as
@@ -187,14 +225,19 @@ it.  Here you can pick a $\delta x$ and evaluate the derivative as
 \left . \frac{df}{dx} \right |_{x=x_0} =  \frac{f(x_0+\delta x) - f(x_0)}{\delta x}
 \end{equation}
 An optimal value for $\delta x$ requires a balance of truncation error
-(which wants a small $\delta x$)  and roundoff error (which becomes large
-when $\delta x$ is close to machine $\epsilon$).  Figure~\ref{fig:deriv_error}
-shows the error for the numerical derivative of $f(x) = \sin(x)$ at the
-point $x_0 = 1$, as a function of $\delta x$.  A nice discussion of
-this is given in \cite{yak}.  Comparing the result with different choices
-of $\delta x$ allows for error estimation and an improvement of the result
-by combining the estimates using $\delta x$ and $\delta x/2$ (this is the
-basis for a method called {\em Richardson extrapolation}).
+(which wants a small $\delta x$) and roundoff error (which becomes
+large when $\delta x$ is close to machine $\epsilon$).
+Figure~\ref{fig:deriv_error} shows the error for the numerical
+derivative of $f(x) = \sin(x)$ at the point $x_0 = 1$, as a function
+of $\delta x$.  A nice discussion of this is given in \cite{yak}.  A
+good rule-of-thumb is to pick $\delta x \approx \sqrt{\epsilon}$,
+where $\epsilon$ is machine epsilon, to balance roundoff and
+truncation error.
+
+Comparing the result with different choices of $\delta x$ allows for
+error estimation and an improvement of the result by combining the
+estimates using $\delta x$ and $\delta x/2$ (this is the basis for a
+method called {\em Richardson extrapolation}).
 
 % this figure is generated by figures/intro/deriv_error.py
 \begin{figure}
@@ -207,14 +250,14 @@ basis for a method called {\em Richardson extrapolation}).
     approximation.  For large $\delta x$, truncation error dominates.}
 \end{figure}
 
-Second- and higher-order derivatives can be constructed in the same fashion.
+
 
 
 \subsubsection{Integration}
 
 In numerical analysis, any integration method that is composed as a
 weighted sum of the function evaluated at discrete points is called a
-{\em quadrature rule}.  
+{\em quadrature rule}.
 
 If we have a function sampled at a number of
 equally-spaced points, $x_0 \equiv a, x_1, \ldots, x_N \equiv
@@ -238,14 +281,14 @@ $f(x_0), f(x_1), \ldots, f(x_N)$ with a line, creating a trapezoid in
 each interval, and then simply add up the area of all of the
 trapezoids:
 \begin{equation}
-I \equiv \int_a^b f(x) dx \approx 
+I \equiv \int_a^b f(x) dx \approx
   \Delta x \sum_{i = 0}^{N-1} \frac{f(x_i) + f(x_{i+1})}{2}
 \end{equation}
 This is called the {\em trapezoid rule}.  Note here we assume that
 the points are equally spaced.
 
 One can keep going, but practically speaking, a quadratic interpolation
-is as high as one usually encounters.  Fitting a quadratic polynomial 
+is as high as one usually encounters.  Fitting a quadratic polynomial
 requires three points.
 
 \begin{exercise}[Simpson's rule for integration]
@@ -266,7 +309,7 @@ Note that $(\gamma-\alpha)/6 = \Delta x/3$
 For a number of samples, $N$, in $[a,b]$, we will
 consider every two intervals together.  The resulting expression is:
 \begin{align}
-I &\equiv \int_a^b f(x) dx 
+I &\equiv \int_a^b f(x) dx
 \approx  \frac{\Delta x}{3} \sum_{i = 0}^{(N-2)/2} \left [f(x_{2i}) + 4 f(x_{2i+1}) + f(x_{2i+2}) \right ] \\
 &= f(x_0) + 4f(x_1) + 2f(x_2) + 4f(x_3) + 2f(x_4) + \ldots + \nonumber 2f(x_{N-2}) + 4f(x_{N-1}) + f(x_N)
 \end{align}
@@ -315,7 +358,7 @@ can improve the guess to the root by an amount $\delta x$ as:
 \begin{equation}
 f(x_0 + \delta x) \sim f(x_0) + f^\prime(x_0) \delta x + \ldots = 0
 \end{equation}
-Keeping only to $\mathcal{O}(\delta x)$, 
+Keeping only to $\mathcal{O}(\delta x)$,
 \begin{equation}
 \label{eq:intro:newtonsmethod}
   \delta x = -\frac{f(x_0)}{f^\prime(x_0)}
@@ -330,7 +373,7 @@ some tolerance.
 \includegraphics[width=0.49\linewidth]{newton_00}
 \includegraphics[width=0.49\linewidth]{newton_01} \\[1em]
 \includegraphics[width=0.49\linewidth]{newton_02}
-\includegraphics[width=0.49\linewidth]{newton_03} 
+\includegraphics[width=0.49\linewidth]{newton_03}
 \caption[Convergence of Newton's method for root finding]{\label{fig:newtonsmethod} The convergence of Newton's method
 for finding the root.  In each pane, the red point is the current guess
 for the root.  The solid gray line is the extrapolation of the slope
@@ -343,7 +386,7 @@ slope that will be used for extrapolation in the next iteration.}
 The main `gotya' with this technique is that you need a good initial guess.
 In the Taylor expansion, we threw away the $\delta x^2$ term, but if our
 guess was far from the root, this (and higher-orders) term may not be small.
-Obviously, the derivative must be non-zero in the region around the 
+Obviously, the derivative must be non-zero in the region around the
 root that you search as well.
 
 The {\em secant method} for root finding is essentially
@@ -360,7 +403,7 @@ several different methods to produce a robust procedure for root-finding.
 
 \subsection{ODEs}
 
-Consider a system 
+Consider a system
 \begin{equation}
 \dot{y}_k = f_k(t, {\bf y}(t))
 \end{equation}
@@ -373,7 +416,7 @@ first-order explicit update ({\em Euler's method}) appears as:
 \begin{equation}
 y^{n+1}_k = y^n_k + \Delta t f_k(t^n, {\bf y}^n)
 \end{equation}
-where $\Delta t$ is the stepsize. 
+where $\Delta t$ is the stepsize.
 
 Perhaps the most popular explicit method for ODEs is the 4th-order
 Runge-Kutta method (RK4).  This is a multistep method where several
@@ -423,7 +466,7 @@ fourth-order accurate overall.
 Consider the orbit of Earth around the Sun.  If we work in the units
 of astronomical units, years, and solar masses, then Newton's gravitational
 constant and the solar mass together are simply $G M = 4\pi^2$ (this
-should look famaliar as Kepler's third law).  We 
+should look famaliar as Kepler's third law).  We
 can write the ODE system describing the motion of Earth as:
 \begin{align}
 \dot{\bf x} &= {\bf v} \\
@@ -431,7 +474,7 @@ can write the ODE system describing the motion of Earth as:
 \end{align}
 If we take the coordinate system such that the Sun is at the origin,
 then, ${\bf x} = (x, y)^\intercal$ is the position of the Earth
-and ${\bf r} = x {\bf \hat{x}} + y {\bf \hat{y}}$ is the radius 
+and ${\bf r} = x {\bf \hat{x}} + y {\bf \hat{y}}$ is the radius
 vector pointing from the Sun to the Earth.
 
 Take as initial conditions the planet at perihelion:
@@ -479,23 +522,23 @@ close, to the solution and we will solve for a correction, $\Delta
 Using this approximation, we can expand the righthand side vector,
 \begin{equation}
 {\bf f}(t^{n+1},{\bf y}^{n+1}) = {\bf f}(t^{n+1}, {\bf y}^{n+1}_0) +
-     \left . \frac{\partial {\bf f}}{\partial {\bf y}} \right |_0 \Delta {\bf y}_0 + \ldots 
-\end{equation} 
+     \left . \frac{\partial {\bf f}}{\partial {\bf y}} \right |_0 \Delta {\bf y}_0 + \ldots
+\end{equation}
 Here we recognize the Jacobin matrix, ${\bf J} \equiv \partial {\bf
   f}/\partial {\bf y}$,
 \begin{equation}
 \renewcommand\arraystretch{1.5}
-{\bf J} = \left ( 
+{\bf J} = \left (
 \begin{array}{ccccc}
-\partial f_1/\partial y_1 & \partial f_1/\partial y_2 & 
+\partial f_1/\partial y_1 & \partial f_1/\partial y_2 &
 \partial f_1/\partial y_3 & \ldots & \partial f_1/\partial y_n \\
 %
-\partial f_2/\partial y_1 & \partial f_2/\partial y_2 & 
+\partial f_2/\partial y_1 & \partial f_2/\partial y_2 &
 \partial f_2/\partial y_3 & \ldots & \partial f_2/\partial y_n \\
 %
 \vdots  & \vdots & \vdots & \ddots & \vdots \\
 %
-\partial f_n/\partial y_1 & \partial f_n/\partial y_2 & 
+\partial f_n/\partial y_1 & \partial f_n/\partial y_2 &
 \partial f_n/\partial y_3 & \ldots & \partial f_n/\partial y_n \\
 \end{array}
 \right )
@@ -561,7 +604,7 @@ analysis, as well as for solving certain linear problems (see, e.g.,
 \S~\ref{elliptic:sec:fft}).
 
 For a function, $f(x)$ sampled at $N$ equally-spaced points (such that
-$f_n = f(x_n)$, the discrete Fourier transform, $\mathcal{F}_k$ is 
+$f_n = f(x_n)$, the discrete Fourier transform, $\mathcal{F}_k$ is
 written as:
 \begin{equation}
 \mathcal{F}_k = \sum_{n=0}^{N-1} f_n e^{-2\pi i n k /N}
@@ -570,7 +613,7 @@ The exponential in the sum brings in a real (cosine terms, symmetric
 functions) and imaginary (sine terms, antisymmetric functions) part.
 \begin{align}
 \mathrm{Re}(\mathcal{F}_k) &= \sum_{n=0}^{N-1} f_n \cos\left(\frac{2\pi n k}{N}\right) \\
-\mathrm{Im}(\mathcal{F}_k) &= \sum_{n=0}^{N-1} f_n \sin\left(\frac{2\pi n k}{N}\right) 
+\mathrm{Im}(\mathcal{F}_k) &= \sum_{n=0}^{N-1} f_n \sin\left(\frac{2\pi n k}{N}\right)
 \end{align}
 Alternately, it is sometimes useful to combine the real and imaginary
 parts into an amplitude and phase.
@@ -592,9 +635,9 @@ the $\mathcal{F}_k$'s are reduntant (and $\mathcal{F}_{-k} =
 \mathcal{F}^\star_k$).
 
 Directly computing $\mathcal{F}_k$ for each $k$ takes $\mathcal{O}(N^2)$
-operations.  The fast Fourier transform (FFT) is a reordering of the 
+operations.  The fast Fourier transform (FFT) is a reordering of the
 sums in the discrete Fourier transform to reuse partial sums and compute
-the same result in $\mathcal{O}(N\log N)$ work. 
+the same result in $\mathcal{O}(N\log N)$ work.
 
 
 
