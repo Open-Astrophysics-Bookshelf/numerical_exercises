@@ -266,10 +266,11 @@ construct a discrete approximation to an integral as:
 \begin{equation}
 I \equiv \int_a^b f(x) dx \approx \Delta x \sum_{i = 0}^{N-1} f(x_i)
 \end{equation}
-where $\Delta x \equiv (b-a)/N$ is the width of the intervals.  This
-is a very crude method, but in the limit that $\Delta x \rightarrow 0$
-(or $N \rightarrow \infty$), this will converge to the true integral.
-This method is called the {\em rectangle rule}.  Note that here we
+where $\Delta x \equiv (b-a)/N$ is the width of the intervals (see the
+top-left panel in Figure~\ref{fig:integration}).  This is a very crude
+method, but in the limit that $\Delta x \rightarrow 0$ (or $N
+\rightarrow \infty$), this will converge to the true integral.  This
+method is called the {\em rectangle rule}.  Note that here we
 expressing the integral over the $N$ intervals using a simple
 quadrature rule in each interval.  Summing together the results of the
 integral over each interval to get the result in our domain is called
@@ -284,8 +285,9 @@ trapezoids:
 I \equiv \int_a^b f(x) dx \approx
   \Delta x \sum_{i = 0}^{N-1} \frac{f(x_i) + f(x_{i+1})}{2}
 \end{equation}
-This is called the {\em trapezoid rule}.  Note here we assume that
-the points are equally spaced.
+This is called the {\em trapezoid rule} (see the top-right panel in
+Figure~\ref{fig:integration}).  Note here we assume that the points
+are equally spaced.
 
 One can keep going, but practically speaking, a quadratic interpolation
 is as high as one usually encounters.  Fitting a quadratic polynomial
@@ -336,6 +338,7 @@ these different approximations for the case of two intervals (three points).
 
 
 Analogous expressions exist for the case of unequally-spaced points.
+
 The compound trapezoid rule converges as second-order over the
 interval $[a,b]$, while Simpson's rule converges as fourth-order.
 
@@ -351,21 +354,22 @@ Garcia~\cite{garcia} for a nice introduction to these methods.
 
 Often we want to find the root of a function (or the vector that zeros
 a vector of functions).  The most popular method for root finding is
-the {\em Newton-Raphson method}.  This arises from a Taylor expansion.
-If you wish to find $x$, such that $f(x) = 0$, and start with an
-initial guess $x_0$ that you believe is close to the root, then you
-can improve the guess to the root by an amount $\delta x$ as:
+the {\em Newton-Raphson method}.  We want to find $x$, such that $f(x)
+= 0$.  Start with an initial guess $x_0$ that you believe is close to
+the root, then you can improve the guess to the root by an amount
+$\delta x$ by looking at the Taylor expansion about $x_0$:
 \begin{equation}
 f(x_0 + \delta x) \sim f(x_0) + f^\prime(x_0) \delta x + \ldots = 0
 \end{equation}
-Keeping only to $\mathcal{O}(\delta x)$,
+Keeping only to $\mathcal{O}(\delta x)$, we can solve for the correction, $\delta x$:
 \begin{equation}
 \label{eq:intro:newtonsmethod}
   \delta x = -\frac{f(x_0)}{f^\prime(x_0)}
 \end{equation}
 This can be used to correct out guess as $x_0 \leftarrow x_0 + \delta
 x$, and we can iterate on this procedure until $\delta x$ falls below
-some tolerance.
+some tolerance.  Figure~\ref{fig:newtonsmethod} illustrates this
+iteration.
 
 % these figures were made with figures/intro/roots-plot.py
 \begin{figure}
@@ -374,40 +378,58 @@ some tolerance.
 \includegraphics[width=0.49\linewidth]{newton_01} \\[1em]
 \includegraphics[width=0.49\linewidth]{newton_02}
 \includegraphics[width=0.49\linewidth]{newton_03}
-\caption[Convergence of Newton's method for root finding]{\label{fig:newtonsmethod} The convergence of Newton's method
-for finding the root.  In each pane, the red point is the current guess
-for the root.  The solid gray line is the extrapolation of the slope
-at the guess to the $x$-axis, which defines the next approximation
-to the root.  The vertical dotted line to the function shows the new
-slope that will be used for extrapolation in the next iteration.}
+\caption[Convergence of Newton's method for root
+  finding]{\label{fig:newtonsmethod} The convergence of Newton's
+  method for finding the root.  In each pane, the red point is the
+  current guess for the root.  The solid gray line is the
+  extrapolation of the slope at the guess to the $x$-axis, which
+  defines the next approximation to the root.  The vertical dotted
+  line to the function shows the new slope that will be used for
+  extrapolation in the next iteration.}
 \end{figure}
 
 
-The main `gotya' with this technique is that you need a good initial guess.
-In the Taylor expansion, we threw away the $\delta x^2$ term, but if our
-guess was far from the root, this (and higher-orders) term may not be small.
-Obviously, the derivative must be non-zero in the region around the
-root that you search as well.
+The main ``gotya'' with this technique is that you need a good initial
+guess.  In the Taylor expansion, we threw away the $\delta x^2$ term,
+but if our guess was far from the root, this (and higher-orders) term
+may not be small.  Obviously, the derivative must be non-zero in the
+region around the root that you search as well.
 
+\begin{exercise}[Newton's method]
+{Code up Newton's method for finding the root of a function $f(x)$
+and test it on several different test functions.}
+\end{exercise}
 The {\em secant method} for root finding is essentially
 Newton-Raphson, but instead of using an analytic derivative,
 $f^\prime$ is estimated as a numerical difference.
 
 Newton's method has pathologies---it is possible to get into a cycle
-where you don't converge but simply pass through the same set of
-root approximations.
-Many other root finding methods exist, including bisection, which
-iteratively halves an interval known to contain a root by looking for
-the change in sign of the function $f(x)$.  Brendt's method combines
-several different methods to produce a robust procedure for root-finding.
+where you don't converge but simply pass through the same set of root
+approximations.  Many other root finding methods exist, including {\em
+  bisection}, which iteratively halves an interval known to contain a
+root by looking for the change in sign of the function $f(x)$.  {\em
+  Brent's method} combines several different methods to produce a
+robust procedure for root-finding.  Most numerical analysis texts will
+give a description of these.
 
 \subsection{ODEs}
 
-Consider a system
+Consider a system of first-order ordinary differential equations,
+\begin{equation}
+\dot{\bf y} = {\bf f}(t, {\bf y}(t))
+\end{equation}
+If $k$ represents an index into the vector ${\bf y}$, then the
+$k^\mathrm{th}$ ODE is
 \begin{equation}
 \dot{y}_k = f_k(t, {\bf y}(t))
 \end{equation}
-We want to solve for the vector ${\bf y}$ as a function of time.
+We want to solve for the vector ${\bf y}$ as a function of time.  Note
+higher-order ODEs can always be written as a system of first-order
+ODEs by introducting new variables\footnote{As an example, consider
+  Newton's second law, $\ddot{x} = F/m$.  We can write this as a system
+  of two ODEs by introducing the velocity, $v$, giving us: $\dot{v} =
+  F/m$, $\dot{x} = v$.}.
+
 Broadly speaking, methods for integrating ODEs can be broken down into
 explicit and implicit methods.  Explicit methods difference the system
 to form an update that uses only the current (and perhaps previous)
@@ -416,7 +438,9 @@ first-order explicit update ({\em Euler's method}) appears as:
 \begin{equation}
 y^{n+1}_k = y^n_k + \Delta t f_k(t^n, {\bf y}^n)
 \end{equation}
-where $\Delta t$ is the stepsize.
+where $\Delta t$ is the stepsize.  Implicit methods instead evaluate
+the righthand side, ${\bf f}$ using the new-time value of ${\bf y}$
+we are solving for.
 
 Perhaps the most popular explicit method for ODEs is the 4th-order
 Runge-Kutta method (RK4).  This is a multistep method where several
