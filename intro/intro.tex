@@ -412,6 +412,51 @@ root by looking for the change in sign of the function $f(x)$.  {\em
 robust procedure for root-finding.  Most numerical analysis texts will
 give a description of these.
 
+\subsection{Norms}
+
+Often we will need to measure the ``size'' of an error to a discrete
+approximation.  For example, imagine that we know the exact function,
+$f(x)$ and we have have an approximation, $f_i$ defined at $N$ points,
+$i = 0, \ldots, N-1$.  The error at each point $i$ is $\epsilon_i =
+|f_i - f(x_i)|$.  But this is $N$ separate errors---we want a single
+number that represents the error of our approximation.  This is the
+job of a vector norm.  
+
+There are many different norms we can define.  For a vector ${\bf q}$,
+we write the norm as $\|q\|$.  Often, we'll put a subscript after the
+norm brackets to indicate which norm was used.  Some popular norms
+are:
+\begin{itemize}
+\item {\em inf norm}: 
+  \begin{equation} 
+    \| q \|_\infty = \max_i |q_i|
+  \end{equation}
+
+\item {\em L1 norm}:
+  \begin{equation}
+    \| q \|_1 = \frac{1}{N} \sum_{i=0}^{N-1} |q_i|
+  \end{equation}
+
+\item {\em L2 norm}:
+  \begin{equation}
+    \| q \|_2 = \left [ \frac{1}{N} \sum_{i=0}^{N-1} |q_i|^2 \right ]^{1/2}
+  \end{equation}
+
+\item {\em general p-norm}
+  \begin{equation}
+    \| q \|_p = \left [ \frac{1}{N} \sum_{i=0}^{N-1} |q_i|^p \right ]^{1/p}
+  \end{equation}
+
+\end{itemize}
+
+Note that these norms are defined such that they are normalized---if
+you double the number of elements ($N$), the normalization gives you a
+number that can still be meaningfully compared to the smaller set.
+For this reason, we will use these norms when we look at the
+convergence with resolution of our numerical methods.
+
+
+
 \subsection{ODEs}
 
 Consider a system of first-order ordinary differential equations,
@@ -443,7 +488,7 @@ the righthand side, ${\bf f}$ using the new-time value of ${\bf y}$
 we are solving for.
 
 Perhaps the most popular explicit method for ODEs is the 4th-order
-Runge-Kutta method (RK4).  This is a multistep method where several
+Runge-Kutta method (RK4).  This is a multistage method where several
 extrapolations to the midpoint and endpoint of the interval are
 made to estimate slopes and then a weighted average of these slopes
 are used to advance the solution.  The various slopes
@@ -501,7 +546,7 @@ then, ${\bf x} = (x, y)^\intercal$ is the position of the Earth
 and ${\bf r} = x {\bf \hat{x}} + y {\bf \hat{y}}$ is the radius
 vector pointing from the Sun to the Earth.
 
-Take as initial conditions the planet at perihelion:
+Take as initial conditions the planet at perihelion:\MarginPar{show figure}
 \begin{align*}
 x_0 &= 0 \\
 y_0 &= a (1-e) \\
@@ -518,6 +563,14 @@ a number of different $\Delta t$'s.  Note: you'll need to define some
 measure of error, you can consider a number of different metrics, e.g.,
 the change in radius after a single orbit.
 \end{exercise}
+
+The choice of the stepsize, $\Delta t$, in the method greatly affects
+the accuracy.  In practice you want to balance the desire for accuracy
+with the expense of taking lots of small steps.  A powerful technique
+for doing this is to use error estimation and an adaptive stepsize with
+your ODE integrator.  This monitors the size of the truncation error
+and adjusts the stepsize, as needed, to achieve a desired accuracy.  A
+nice introduction to how this works for RK4 is given in \cite{garcia}.
 
 \subsubsection{Implicit methods}
 
@@ -541,10 +594,12 @@ To solve this, we pick a guess, ${\bf y}^{n+1}_0$, that we think is
 close, to the solution and we will solve for a correction, $\Delta
 {\bf y}_0$ such that
 \begin{equation}
+\label{eq:impl_correction}
   {\bf y}^{n+1} = {\bf y}^{n+1}_0 + \Delta {\bf y}_0
 \end{equation}
 Using this approximation, we can expand the righthand side vector,
 \begin{equation}
+\label{eq:impl_rhs_expansion}
 {\bf f}(t^{n+1},{\bf y}^{n+1}) = {\bf f}(t^{n+1}, {\bf y}^{n+1}_0) +
      \left . \frac{\partial {\bf f}}{\partial {\bf y}} \right |_0 \Delta {\bf y}_0 + \ldots
 \end{equation}
@@ -568,7 +623,8 @@ Here we recognize the Jacobin matrix, ${\bf J} \equiv \partial {\bf
 \right )
 \end{equation}
 %
-Putting this into Eq.~\ref{eq:backwardeuler}, we have:
+Putting Eqs.~\ref{eq:impl_correction} and \ref{eq:impl_rhs_expansion}
+into Eq.~\ref{eq:backwardeuler}, we have:
 \begin{equation}
 {\bf y}^{n+1}_0 + \Delta {\bf y}_0 = {\bf y}^n + \Delta t \left [
   {\bf f}(t^{n+1}, {\bf y}^{n+1}_0) +
@@ -580,16 +636,18 @@ Writing this as a system for the unknown correction, $\Delta {\bf
   \left ({\bf I} - \Delta t \left . {\bf J} \right |_0 \right ) \Delta {\bf y}_0 =
    {\bf y}^n - {\bf y}_0^{n+1} + \Delta t {\bf f}(t^{n+1}, {\bf y}^{n+1}_0)
 \end{equation}
-This is a linear system (a matrix $\times$ vector $=$ vector)
-that can be solved using standard matrix techniques.  After solving,
-we can correct our initial guess:
+This is a linear system (a matrix $\times$ vector $=$ vector) that can
+be solved using standard matrix techniques (numerical methods for
+linear algebra can be found in most numerical analysis texts).  After
+solving, we can correct our initial guess:
 \begin{equation}
   {\bf y}^{n+1}_1 = {\bf y}^{n+1}_0 + \Delta {\bf y}_0
 \end{equation}
 
-Written this way, we see that we can iterate.  To kick things off, we need
-a suitable guess---a good choice is ${\bf y}^{n+1}_0 = {\bf y}^n$.   Then
-we correct this guess by iterating, with the $k$-th iteration looking like:
+Written this way, we see that we can iterate.  To kick things off, we
+need a suitable guess---an obvious choice is ${\bf y}^{n+1}_0 = {\bf
+  y}^n$.  Then we correct this guess by iterating, with the $k$-th
+iteration looking like:
 \begin{align}
   \left ({\bf I} - \Delta t \left . {\bf J} \right |_{k-1} \right ) \Delta {\bf y}_{k-1} &=
         {\bf y}^n - {\bf y}_{k-1}^{n+1} + \Delta t {\bf f}(t^{n+1}, {\bf y}^{n+1}_{k-1}) \\
@@ -610,12 +668,13 @@ Explicit methods are easier to program and run faster (for a given $
 \Delta t$), but implicit methods work better for {\em stiff}
 problems---those characterized by widely disparate timescales over
 which the solution changes~\cite{byrnehindmarsh}\footnote{Defining
-  whether a problem is stiff can be tricky.  For a system of ODEs, a
-  large range in the eigenvalues of the Jacobian usually means it is
-  stiff.}.  A good example of this issue in astrophysical problems is
-with nuclear reaction networks (see, e.g., \cite{timmes_networks}).
-As with the explicit case, higher-order methods exist that can provide
-better accuracy at reduced cost.
+  whether a problem is stiff can be tricky (see \cite{byrnehindmarsh}
+  for some definitions).  For a system of ODEs, a large range in the
+  eigenvalues of the Jacobian usually means it is stiff.}.  A good
+example of this issue in astrophysical problems is with nuclear
+reaction networks (see, e.g., \cite{timmes_networks}).  As with the
+explicit case, higher-order methods exist that can provide better
+accuracy at reduced cost.
 
 
 
@@ -661,7 +720,33 @@ the $\mathcal{F}_k$'s are reduntant (and $\mathcal{F}_{-k} =
 Directly computing $\mathcal{F}_k$ for each $k$ takes $\mathcal{O}(N^2)$
 operations.  The fast Fourier transform (FFT) is a reordering of the
 sums in the discrete Fourier transform to reuse partial sums and compute
-the same result in $\mathcal{O}(N\log N)$ work.
+the same result in $\mathcal{O}(N\log N)$ work.  Many numerical methods
+books can give a good introduction to how to design an FFT algorithm.
+
+\begin{exercise}[FFTs]
+{Learn how to use a FFT library or the built-in FFT method in your
+  programming language of choice.  There are various ways to define
+  the normalization in the FFT, that can vary from one library to the
+  next.  To ensure that you are doing things correctly, compute the
+  following transforms:
+  \begin{itemize}
+  \item $\sin(2\pi f_0 x)$ with $f_0 = 0.2$.  The transform should
+    have all of the power in the imaginary component only at the 
+    frequency $0.2$.
+
+  \item $\cos(2\pi f_0 x)$ with $f_0 = 0.2$.  The transform should
+    have all of the power in the real component only at the 
+    frequency $0.2$.
+
+  \item $\sin(2\pi f_0 x + \pi/4)$ with $f_0 = 0.2$.  The transform should
+    have equal power in the real and imaginary components, only at the 
+    frequency $0.2$.  Since the power is 1, the amplitude of the real and
+    imaginary parts will be $1/\sqrt{2}$.
+  \end{itemize}
+}
+\end{exercise}
+
+      
 
 
 

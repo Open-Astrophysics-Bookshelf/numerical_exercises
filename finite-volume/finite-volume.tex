@@ -173,10 +173,11 @@ To second-order accuracy,
 \begin{exercise}[Finite-volume vs.\ finite-difference centering]
 {Show that Eq.~\ref{eq:fv_cc} is true to $O(\Delta x^2)$ by expanding
 $f(x)$ as a Taylor series in the integral, e.g., as:
-\begin{equation}
-f(x) = f(x_i) + f^\prime(x_i) (x - x_i) + \frac{1}{2} f^{\prime\prime}(x_i) (x - x_i)^2 +
-  \frac{1}{6} f^{\prime\prime\prime}(x_i) (x - x_i)^3 + \ldots
-\end{equation}
+\begin{align}
+f(x) = f(x_i) &+ f^\prime(x_i) (x - x_i) + \frac{1}{2} f^{\prime\prime}(x_i) (x - x_i)^2 \nonumber \\
+%
+ &+ \frac{1}{6} f^{\prime\prime\prime}(x_i) (x - x_i)^3 + \ldots
+\end{align}
 }
 \end{exercise}
 
