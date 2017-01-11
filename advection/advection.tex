@@ -360,6 +360,12 @@ a variety of CFL numbers. \\
 \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/advection/fdadvect_implicit.py}{fdadvect\_implicit.py}}}
 \end{figure}
 
+\begin{exercise}[Implicit advection]
+{Code up the implicit advection scheme, but using outflow instead of
+periodic boundary conditions.  This will change the form of the
+matrix.  You can use the code from Figure~\ref{fig:fdadvect-implicit}
+as a starting point.}
+\end{exercise}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -451,6 +457,7 @@ is second-order accurate:
 To evaluate the fluxes at the half-time, we need the state at the
 half-time, that is, we do :
 \begin{equation}
+\label{adv:eq:fluxeval}
 \left [f(a) \right ]_{i+\myhalf}^{n+\myhalf} = f(a_{i+\myhalf}^{n+\myhalf}) \enskip .
 \end{equation}
 We construct a second-order accurate approximation to
@@ -510,8 +517,9 @@ the left state (this is another example of upwinding).  That is we do:
 \mathcal{R}(a_{i+\myhalf,L}^{n+\myhalf},a_{i+\myhalf,R}^{n+\myhalf}) = \left \{ \begin{array}{ccc} a_{i+\myhalf,L}^{n+\myhalf} & u > 0 \\[2mm] a_{i+\myhalf,R}^{n+\myhalf} & u < 0 \end{array} \right .
 \label{eq:riemannsolve}
 \end{equation}
-To complete the update, we use this interface state to evaluate the flux
-and update the advected quantity via Eq.~\ref{eq:consupdate1d}.
+To complete the update, we use this interface state to evaluate the
+flux and update the advected quantity via Eq.~\ref{eq:consupdate1d}
+and \ref{adv:eq:fluxeval}.
 
 Boundary conditions are implemented by filling the ghost cells outside
 each end of the domain based on data in the interior.  Note that at
@@ -618,12 +626,13 @@ oscillations go away---see Figure~\ref{fig:fvadvect}.}
 
 We can get a feel for what happens with and without limiting pictorially. \MarginPar{add a discussion on how a limiter is designed/constructed}
 Figures~\ref{fig:limitingex} and \ref{fig:limitingexb} show the evolution
-of an initial discontinuity with and without limiting.  See the text
-by LeVeque~\cite{leveque:2002} for alternate choices of
-limiters. Note: most limiters will have some sort of test on the product
-of a left-sided and right-sided difference ($a\cdot
-b$ above)---this is $< 0$ at an extremum, which is precisely where we want to
-limit. 
+of an initial discontinuity with and without limiting.  
+
+See the text by LeVeque~\cite{leveque:2002} for alternate choices of
+limiters. Note: most limiters will have some sort of test on the
+product of a left-sided and right-sided difference ($a\cdot b$
+above)---this is $< 0$ at an extremum, which is precisely where we
+want to limit.
 
 % these two sets of figures can be created with
 % figures/advection/rea-limitex.py
@@ -721,7 +730,7 @@ It is common to express the slope simply as the change in the state variable:
 \begin{equation}
 \Delta a_i = \left . \frac{\partial a}{\partial x} \right |_i \Delta x
 \end{equation}
-and the limited slope is indicated as $\overline{\Delta a}_i$.
+and to indicate the limited slope as $\overline{\Delta a}_i$.
 
 
 
@@ -786,10 +795,14 @@ The final part of the R-E-A procedure is to average the over the
 advected profiles in the new cell.  The weighted average of the
 amount brought in from the left of the interface and that that remains
 in the cell is
-\begin{equation}
-a_i^{n+1} = C \mathcal{I}_< + (1 - C) \mathcal{I}_> 
-\end{equation}          
-This is identical to Eq.~\ref{eq:rea_orig}.  \MarginPar{write this out} This demonstrates that the
+\begin{align}
+a_i^{n+1} &= C \mathcal{I}_< + (1 - C) \mathcal{I}_>  \\
+          &= C \left [ a^n_{i-1} + \frac{1}{2} \Delta a_{i-1} (1 - C) \right ]
+   + (1-C) \left [ a^n_i - \frac{1}{2} \Delta a_i C \right ] \\
+          &= a^n_i + C \left [a^n_{i-1} + \frac{1}{2}(1 - C) \Delta a_{i-1} \right ]
+           - C \left [ a^n_i + \frac{1}{2} (1-C) \Delta a_i \right ]
+\end{align}          
+This is identical to Eq.~\ref{eq:rea_orig}.  This demonstrates that the
 R-E-A procedure is equivalent to our reconstruction, prediction of the
 interface states, solving the Riemann problem, and doing the 
 conservative flux update.
@@ -825,7 +838,8 @@ simply propagate the initial profile to the right.  This means that
 with periodic boundary conditions, after advecting for one period, our
 numerical solution should be identical to the initial conditions.  Any
 differences are our numerical error.  We can quantify the error by
-taking the norm of error as: 
+taking the norm of error\footnote{see \S~\ref{intro:sec:norm} for the
+  definition of the norms} as:
 \begin{equation}
 \epsilon^\mathrm{abs} = \| a^\mathrm{final} - a^\mathrm{init} \|_2 \equiv
    \left [ \frac{1}{N} \sum_{i=1}^N 
@@ -838,11 +852,13 @@ to get a measure of the relative error:
 \epsilon^\mathrm{rel} \equiv \frac{\| a^\mathrm{final} - a^\mathrm{init} \|_2}
    {\| a^\mathrm{init} \|_2}
 \end{equation}
-Note that it is important in these definitions to normalize by the number
-of zones, $N$, otherwise our error will be resolution-dependent.
+Note that for the absolute norm, it is important in these definitions
+to normalize by the number of zones, $N$, otherwise our error will be
+resolution-dependent.  For the relative norm, since we scale by a norm
+on the same grid, this normalization will cancel.
 %
 \begin{exercise}[Convergence testing]
-{ Run the first-order solver for several different $\Delta x$s,
+{ Run the first-order solver for several different values of $\Delta x$,
 each a factor of 2 smaller than the previous.  Compute $\epsilon$ for
 each resolution and observe that it converges in a first-order fashion
 (i.e.\ $\epsilon$ decreases by 2 when we decrease $\Delta x$ by a factor of 2).
