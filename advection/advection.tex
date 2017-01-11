@@ -26,6 +26,31 @@ the solution is constant along the lines $x = u t$
 characteristics).}
 \end{exercise}
 
+Figure~\ref{fig:advection_char} shows an initial profile, $a(x)$, and
+the corresponding characteristics in the $t$-$x$ plane.  With time,
+since the solution is constant along these charactersitics, it simply
+each point simply follows the characteristic curve, resulting in a
+shift of the profile to the right.
+
+An important concept that we will discuss shortly is {\em stability}.
+Not every discretization that we write down will be well behaved.  For
+some, our initial state will begin to ``blow-up'', and take on
+obscenely large and unphysical values after just a few steps.  This is
+the hallmark of a method that is unstable.  Some methods have
+restrictions on the size of the timestep that result in a stable
+methods as well.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.6\linewidth]{advection-characteristics}
+\caption[Characteristics for linear advection]
+{\label{fig:advection_char} (top) Initially sinusoidal
+distribution (bottom) Characteristic
+structure for the linear advection equation $u = 1$.  Note
+that for this linear equation the characteristics are all parallel
+(they have the same slope in the $t$-$x$ plane.}
+\end{figure}
+
 \section{First-order advection in 1-d and finite-differences}
 
 To get a flavor of the methods for advection, we will use a simple
@@ -1132,6 +1157,9 @@ See \cite{colella:1990} for more details on this unsplit method.
 \MarginPar{The extension to 3-d is a little more complex}
 
 
+\section{Method-of-Lines approach}
+
+
 \section{Going further}
 
 \begin{itemize}
@@ -1206,14 +1234,23 @@ domain for a single period.
 
 To get a feel for the advection algorithm, here are some suggested
 exercises:
-\begin{itemize}
-\item Implement a tophat initial profile and run with and without limiters
-  (this is controlled by the {\tt advection.limiter} runtime parameter.
 
-\item Look at the solution when you advect purely in the $x$- or $y$-direction
-and compare to the diagonal case---notice how the direction affects the
-error in the solution.
+\begin{exercise}[Role of limiters]
+{Implement a tophat initial profile and run with and without limiters
+  (this is controlled by the {\tt advection.limiter} runtime
+  parameter).}
+\end{exercise}
 
-\item Implement a dimensionally-split version of the advection algorithm
-and compare the results to the unsplit version.
-\end{itemize}
+\begin{exercise}[Grid effects]
+{Look at the solution when you advect purely in the $x$- or
+  $y$-direction and compare to the diagonal case---notice how the
+  direction affects the error in the solution.  This is the imprint
+  of the grid we discretize on.}
+\end{exercise}
+
+\begin{exercise}[Split vs.\ unsplit]
+{Implement a dimensionally-split version of the advection algorithm
+and compare the results to the unsplit version.  Pick a suitable norm
+and measure the convergence of the methods.}
+\end{exercise}
+

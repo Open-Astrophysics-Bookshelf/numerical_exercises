@@ -1,3 +1,10 @@
+
+import matplotlib
+# Use LaTeX for rendering
+matplotlib.rcParams["text.usetex"] = True
+# load the xfrac package
+matplotlib.rcParams["text.latex.preamble"].append(r'\usepackage{xfrac}')
+
 import matplotlib.pyplot as plt
 import numpy as np
 import grid_plot as gp

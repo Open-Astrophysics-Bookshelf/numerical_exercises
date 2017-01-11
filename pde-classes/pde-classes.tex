@@ -18,17 +18,31 @@ The canonical hyperbolic PDE is the wave equation:
 \end{equation}   
 The general solution to this is traveling waves in either direction:
 \begin{equation}
+\label{eq:pde:wavesol}
   \phi(x,t) = \alpha f_0(x - ct) + \beta g_0(x + ct)
 \end{equation}
 Here $f_0$ and $g_0$ are set by the initial
 conditions, and the solution propages $f_0$ to the right and $g_0$ to
 the left at a speed $c$.
 
+\begin{exercise}[Wave equation]
+{Show by substitution that Eq.~\ref{eq:pde:wavesol} is a solution
+to the wave equation}
+\end{exercise}
+
+A simple first-order hyperbolic PDE is the linear advection equation:
+\begin{equation}
+a_t + u a_x = 0
+\end{equation}
+This simply propagates any initial profile to the right at the speed
+$u$.  We will use linear advection as our model equation for numerical
+methods for hyperbolic PDEs.
+
 A system of first-order hyperbolic PDEs takes the form:
 \begin{equation}
-a_t + A a_x = 0
+{\bf a}_t + A {\bf a}_x = 0
 \end{equation}
-where $a = (a_0, a_1, \ldots a_{N-1})^\intercal$ and $A$ is a matrix.
+where ${\bf a} = (a_0, a_1, \ldots a_{N-1})^\intercal$ and $A$ is a matrix.
 This system is hyperbolic if the eigenvalues of $A$ are real (see
 \cite{leveque:2002} for an excellent introduction).
 
@@ -62,6 +76,7 @@ arises as the Poisson equation describing the gravitational potential.
 
 The canonical parabolic PDE is the heat equation:
 \begin{equation}
+\label{eq:pde:heat}
   \frac{\partial \phi}{\partial t} = k \frac{\partial^2 f}{\partial x^2}
 \end{equation}
 This has aspects of both hyperbolic and elliptic PDEs.
@@ -73,3 +88,7 @@ diffusion and other types of diffusion (like species, mass), and with
 viscosity.
 
 
+\begin{exercise}[Diffusion timescale]
+{Using dimensional analysis, estimate the characteristic timescale for
+  diffusion from Eq.~\ref{eq:pde:heat}.}
+\end{exercise}

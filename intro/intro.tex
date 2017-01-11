@@ -455,7 +455,10 @@ number that can still be meaningfully compared to the smaller set.
 For this reason, we will use these norms when we look at the
 convergence with resolution of our numerical methods.
 
-
+We'll look into how the choice of norm influences you convergence
+criterion, but inspection shows that the inf-norm is local---a element
+in your vector is given the entire weight, whereas the other norms are
+more global.
 
 \subsection{ODEs}
 
@@ -743,7 +746,8 @@ An example of the transform of a pure sine wave is shown in Figure~\ref{fig:intr
 \begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{fft-sine-phase}
-\caption{\label{fig:intro:fft} The Fourier transform of a sine wave
+\caption[Fourier transform of $f(x) = \sin(2\pi k_0 x +
+  \pi/4)$]{\label{fig:intro:fft} The Fourier transform of a sine wave
   with a phase of $\pi/4$, $f(x) = \sin(2\pi k_0 x + \pi/4)$ with $k_0
   = 0.2$.  The top shows the original function.  The second panel
   shows the real and imaginary components---we see all of the power is
