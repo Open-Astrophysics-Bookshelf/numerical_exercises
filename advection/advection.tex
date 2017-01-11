@@ -246,14 +246,14 @@ C \le 1$.
     \left | \frac{A^{n+1}}{A^n} \right |^2 = 
            1 - 2C(1-C)(1-\cos\theta)
   \end{equation}
-  and stability requires $2C(1-C) \ge 0$.
+  and stability requires $2C(1-C) \ge 0$ or $0 \le C \le 1$.
 }
 \end{exercise}
 
 It is important to note that this stability analysis only works for
 linear equations, where the different Fourier modes are decoupled,
 nevertheless, we use its ideas for nonlinear advection problems as
-well).
+well.
 
 Truncation analysis can also help us understand stability.  The idea
 here is to keep the higher order terms in the Taylor series to understand
@@ -272,18 +272,22 @@ $O(\Delta t^3)$ and $O(\Delta x^3)$.  Replacing $\partial a/\partial t$
 with $-u \partial a/ \partial x$ in the higher-order terms, show 
 that our difference equation more closely corresponds to 
 \begin{eqnarray}
+\label{eq:advect_trunc_analysis}
 a_t + u a_x &=& \frac{u \Delta x}{2} \left ( 1 - \frac{\Delta t u}{\Delta x} \right ) \frac{\partial^2 a}{\partial x^2} \\
             &=& \frac{u \Delta x}{2} (1 - C) \frac{\partial^2 a}{\partial x^2}
 \end{eqnarray}
-
-\noindent Notice that the righthand side looks like a diffusion term, however,
-if $C > 1$, then the coefficient of the diffusion is negative---this is
-unphysical.  This means that the diffusion would act to take smooth
-features and make them more strongly peaked---the opposite of physical
-diffusion.
-
 }
 \end{exercise}
+
+
+Notice that the righthand side of Eq.~\ref{eq:advect_trunc_analysis}
+looks like a diffusion term, however, if $C > 1$, then the coefficient
+of the diffusion is negative---this is unphysical.  This means that
+the diffusion would act to take smooth features and make them more
+strongly peaked---the opposite of physical diffusion.
+
+For FTCS, a similar truncation analysis would show that the diffusion term
+is always negative.
 
 \subsection{Implicit-in-time}
 
