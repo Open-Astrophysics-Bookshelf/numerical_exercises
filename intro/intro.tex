@@ -721,23 +721,37 @@ books can give a good introduction to how to design an FFT algorithm.
   next.  To ensure that you are doing things correctly, compute the
   following transforms:
   \begin{itemize}
-  \item $\sin(2\pi f_0 x)$ with $f_0 = 0.2$.  The transform should
+  \item $\sin(2\pi k_0 x)$ with $k_0 = 0.2$.  The transform should
     have all of the power in the imaginary component only at the 
     frequency $0.2$.
 
-  \item $\cos(2\pi f_0 x)$ with $f_0 = 0.2$.  The transform should
+  \item $\cos(2\pi k_0 x)$ with $k_0 = 0.2$.  The transform should
     have all of the power in the real component only at the 
     frequency $0.2$.
 
-  \item $\sin(2\pi f_0 x + \pi/4)$ with $f_0 = 0.2$.  The transform should
+  \item $\sin(2\pi k_0 x + \pi/4)$ with $k_0 = 0.2$.  The transform should
     have equal power in the real and imaginary components, only at the 
     frequency $0.2$.  Since the power is 1, the amplitude of the real and
     imaginary parts will be $1/\sqrt{2}$.
   \end{itemize}
+
+An example of the transform of a pure sine wave is shown in Figure~\ref{fig:intro:fft}.
+
 }
 \end{exercise}
 
-      
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{fft-sine-phase}
+\caption{\label{fig:intro:fft} The Fourier transform of a sine wave
+  with a phase of $\pi/4$, $f(x) = \sin(2\pi k_0 x + \pi/4)$ with $k_0
+  = 0.2$.  The top shows the original function.  The second panel
+  shows the real and imaginary components---we see all of the power is
+  at our input wavenumber, split equally between the real and
+  imaginary parts.  The third pane shows the power (the absolute value
+  of the transform).  Finally, the bottom panel shows the inverse
+  transform of our transform, giving us back our original function.}
+\end{figure}
 
 
 

@@ -1,7 +1,14 @@
-Partial differential equations are usually grouped into one of 
-three different classes: {\em hyperbolic}, {\em parabolic}, 
-or {\em elliptic}.
+Partial differential equations (PDEs) are usually grouped into one of
+three different classes: {\em hyperbolic}, {\em parabolic}, or {\em
+  elliptic}.  You can find the precise mathematical definition of
+these classifications in most books on PDEs, but this formal defintion
+is not very intuitive or useful.  Instead, it is helpful to look at
+some prototypical examples of each type of PDE.
 
+When we are solving multiphysics problems, we will see that our 
+system of PDEs spans these different types.  Nevertheless, we will
+look at solutions methods for each type separately first, and then
+use what we learn to solve more complex systems of equations.
 
 \section{Hyperbolic PDEs}
 
@@ -22,12 +29,16 @@ A system of first-order hyperbolic PDEs takes the form:
 a_t + A a_x = 0
 \end{equation}
 where $a = (a_0, a_1, \ldots a_{N-1})^\intercal$ and $A$ is a matrix.
-This system is hyperbolic is the eigenvalues of $A$ are real.
+This system is hyperbolic if the eigenvalues of $A$ are real (see
+\cite{leveque:2002} for an excellent introduction).
 
-An important concept for hyperbolic PDEs are {\em characteristics}---this are
-curves in a space-time diagram along which the solution is constant.  For
-a linear PDE (or system of PDEs), these will tell you everything you need to 
-know about the solution.  
+An important concept for hyperbolic PDEs are {\em
+  characteristics}---these are curves in a space-time diagram along
+which the solution is constant.  Associated with these curves is a
+speed---this is the wave speed at which information on how the
+solution changes is communicated.  For a linear PDE (or system of
+PDEs), these will tell you everything you need to know about the
+solution.
 
 
 \section{Elliptic PDEs}
@@ -40,6 +51,12 @@ Note that there is no time-variable here.  This is a pure boundary
 value problem.  The solution, $\phi$ is determined completely by the
 source, $f$, and the boundary conditions.
 
+In contrast to the hyperbolic case, there is no propagation of
+information here.  The potential, $\phi$, is known instantaneously
+everywhere in the domain.  For astrophysical flows, this commonly
+arises as the Poisson equation describing the gravitational potential.
+
+
 
 \section{Parabolic PDEs}
 
@@ -49,5 +66,10 @@ The canonical parabolic PDE is the heat equation:
 \end{equation}
 This has aspects of both hyperbolic and elliptic PDEs.
 
+The heat equation represents diffusion---an initially sharp feature
+will spread out into a smoother profile on a timescale that depends on
+the coefficient $k$.  We'll encounter parabolic equations for thermal
+diffusion and other types of diffusion (like species, mass), and with
+viscosity.
 
 
