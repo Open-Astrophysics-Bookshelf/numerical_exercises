@@ -568,7 +568,7 @@ cells.
       \item get timestep (Eq.~\ref{eq:timestep})
       \item compute interface states (Eqs.~\ref{eq:statel} and \ref{eq:stater})
       \item solve Riemann problem at all interfaces (Eq.~\ref{eq:riemannsolve})
-      \item do conservative update (Eq.~\ref{eq:consupdate1d})
+      \item do conservative update (Eqs.~\ref{eq:consupdate1d} and \ref{adv:eq:fluxeval})
     \end{itemize}
   \end{itemize}
 Use both the top-hat and Gaussian initial conditions and periodic boundary
@@ -593,7 +593,7 @@ $C=0.7$. \\
 The second-order method likely showed some oscillations in the
 solution, especially for the top-hat initial conditions.  {\em
   Godunov's theorem} says that any monotonic linear method for
-advection is first-order accurate (see, e.g,~\cite{laney}).  In this
+advection is first-order accurate (see, e.g.,~\cite{laney}).  In this
 context, monotonic means that no new minima or maxima are introduced.
 The converse is true too, which suggests that in order to have a
 second-order accurate method for this linear equation, the algorithm
@@ -624,9 +624,18 @@ Use this slope in your second-order advection code and notice that the
 oscillations go away---see Figure~\ref{fig:fvadvect}.}
 \end{exercise}
 
-We can get a feel for what happens with and without limiting pictorially. \MarginPar{add a discussion on how a limiter is designed/constructed}
-Figures~\ref{fig:limitingex} and \ref{fig:limitingexb} show the evolution
-of an initial discontinuity with and without limiting.  
+We can get a feel for what happens with and without limiting
+pictorially. \MarginPar{add a discussion on how a limiter is
+  designed/constructed} Figures~\ref{fig:limitingex} and
+\ref{fig:limitingexb} show the evolution of an initial discontinuity
+with and without limiting.  Without limiting, we see an overshoot
+behind the discontinuity and an undershoot ahead of it---these develop
+after only a single step.  With each additional step, the overshoots
+and undershoots move further away from the discontinuity.  In
+contrast, the case with limiting shows no over- or undershoots around
+the initial discontinuity.  By the end of the evolution, we see that
+the profile is much narrower in the limiting case than in the case
+without limiting.
 
 See the text by LeVeque~\cite{leveque:2002} for alternate choices of
 limiters. Note: most limiters will have some sort of test on the
@@ -951,6 +960,7 @@ Integrating Eq.~\ref{eq:advect2d-cons} over $x$ and $y$, we have:
 \end{align}
 or using the divergence theorem,
 \begin{align}
+\label{eq:adv:multiddivergence}
  \frac{\partial a_{i,j}}{\partial t} =
   &- \frac{1}{\Delta x\Delta y} \int_{y_{j-\myhalf}}^{y_{j+\myhalf}}
      \left \{ (u a)_{i+\myhalf,j} - (u a)_{i-\myhalf,j} \right \} dy \nonumber \\
@@ -959,7 +969,7 @@ or using the divergence theorem,
 \end{align}
 
 Now we integrate over time---the left side of our expression becomes
-just the different between the new and old state.
+just the difference between the new and old state.
 \begin{align}
  a_{i,j}^{n+1} - a_{i,j}^n = 
   &- \frac{1}{\Delta x\Delta y} \int_{t^n}^{t^{n+1}} \int_{y_{j-\myhalf}}^{y_{j+\myhalf}}
@@ -970,20 +980,26 @@ just the different between the new and old state.
 \end{align}
 We define the flux through the interface as the average over the face
 of that interface and time: \MarginPar{is there a way to illustrate this, as some space-time diagram?}
-\begin{align}
-\langle (ua)_{i+\myhalf,j}\rangle_{(t)} &= \frac{1}{\Delta y \Delta t}
-    \int_{t^n}^{t^{n+1}} \int_{y_{j-\myhalf}}^{y_{j+\myhalf}} (ua)_{i+\myhalf,j}\, dy dt  \\
-\langle (va)_{i,j+\myhalf}\rangle_{(t)} &= \frac{1}{\Delta x \Delta t}
-    \int_{t^n}^{t^{n+1}} \int_{x_{i-\myhalf}}^{x_{i+\myhalf}} (va)_{i,j+\myhalf}\, dx dt 
-\end{align}
-where $\langle . \rangle_{(t)}$ denotes the time-average.
-For a second-order accurate method in time, we replace the average in
-time with the flux at the midpoint in time, 
+\begin{itemize}
+\item x-face:
 \begin{equation}
-(ua)_{i+\myhalf,j}^{n+\myhalf} \approx \langle (ua)_{i+\myhalf,j} \rangle_{(t)}
+\langle (ua)_{i+\myhalf,j}\rangle_{(t)} = \frac{1}{\Delta y \Delta t}
+    \int_{t^n}^{t^{n+1}} \int_{y_{j-\myhalf}}^{y_{j+\myhalf}} (ua)_{i+\myhalf,j}\, dy dt
 \end{equation}
-and in space, we replace
-the average over the face of the zone with the flux at the center of the face.  Then we have:
+\item y-face
+\begin{equation}
+\langle (va)_{i,j+\myhalf}\rangle_{(t)} = \frac{1}{\Delta x \Delta t}
+    \int_{t^n}^{t^{n+1}} \int_{x_{i-\myhalf}}^{x_{i+\myhalf}} (va)_{i,j+\myhalf}\, dx dt 
+\end{equation}
+\end{itemize}
+where $\langle . \rangle_{(t)}$ denotes the time-average over the face.
+For a second-order accurate method in time, we replace the average in
+time with the flux at the midpoint in time and the average over the face
+with the flux at the center of the face: 
+\begin{equation}
+\langle (ua)_{i+\myhalf,j} \rangle_{(t)} \approx (ua)_{i+\myhalf,j}^{n+\myhalf}
+\end{equation}
+Then we have:
 \begin{equation}
 a_{i,j}^{n+1} = a_{i,j}^n - \Delta t \left [
    \frac{(ua)_{i+\myhalf,j}^{n+\myhalf} - (ua)_{i-\myhalf,j}^{n+\myhalf}}{\Delta x} +
@@ -1089,9 +1105,9 @@ a_{i+\myhalf,j,L}^{n+\myhalf} &=& a_{i,j}^n +
    - u \left .\frac{\partial a}{\partial x} \right |_{i,j} 
    - v \left .\frac{\partial a}{\partial y} \right |_{i,j} \right
    ) + \ldots \nonumber \\
-    &=& a_{i,j}^n + 
+    &=& \underbrace{a_{i,j}^n + 
    \frac{\Delta x}{2} \left ( 1 - \frac{\Delta t}{\Delta x} u \right ) 
-   \left .\frac{\partial a}{\partial x} \right |_{i,j} \underbrace{-
+   \left .\frac{\partial a}{\partial x} \right |_{i,j}}_{\hat{a}_{i+\myhalf,j,L}^{n+\myhalf}} \underbrace{-
    \frac{\Delta t}{2} v \left .\frac{\partial a}{\partial y} \right |_{i,j}}_{\mathrm{``transverse~flux~difference''}} +
    \ldots \label{eq:statelu}
 \end{eqnarray}
@@ -1177,19 +1193,71 @@ See \cite{colella:1990} for more details on this unsplit method.
 \MarginPar{The extension to 3-d is a little more complex}
 
 
+\subsection{Examples}
+
+
+
 \section{Method-of-Lines approach}
+
+In the above constructions, we computed a time-centered flux by
+predicting the interface state to the half-time (by Taylor-expanding
+in time through $\Delta t /2$).  Instead, we can discretize our
+equation in space only, giving us an ordinary differential equation
+in time that can then be solved using standard ODE techniques.
+
+For example, we can start with Eq.~\ref{eq:adv:multiddivergence}, and define
+the fluxes over though a face as:
+\begin{itemize}
+\item x-face:
+\begin{equation}
+\langle (ua)_{i+\myhalf,j} \rangle = \frac{1}{\Delta y}
+    \int_{y_{j-\myhalf}}^{y_{j+\myhalf}} (ua)_{i+\myhalf,j}\, dy 
+\end{equation}
+\item y-face
+\begin{equation}
+\langle (va)_{i,j+\myhalf} \rangle = \frac{1}{\Delta x}
+    \int_{x_{i-\myhalf}}^{x_{i+\myhalf}} (va)_{i,j+\myhalf}\, dx 
+\end{equation}
+\end{itemize}
+These are similar to the expressions above, except there is no
+integral over time.  Again, to second order in space, we can just
+use the flux evaluated at the midpoint in the face:
+\begin{equation}
+\langle (ua)_{i+\myhalf,j} \rangle \approx (ua)_{i+\myhalf,j}
+\end{equation}
+The result is the ODE:
+\begin{equation}
+\frac{d a_{i,j}}{d t} =
+   - \frac{(ua)_{i+\myhalf,j} - (ua)_{i-\myhalf,j}}{\Delta x}
+   - \frac{(va)_{i,j+\myhalf} - (va)_{i,j-\myhalf}}{\Delta y}
+\end{equation}
+
+Note that there is no time-level indicated on the righthand side.  We
+find the interface values of $a$ by interpolating in space only, like:
+\begin{align}
+a_{i+\myhalf,j,L} &= a_{i,j} + \frac{1}{2} \Delta a_{i,j} \\
+a_{i+\myhalf,j,R} &= a_{i+1,j} - \frac{1}{2} \Delta a_{i+1,j}
+\end{align}
+As usual, we resolve the left-right degeneracy on the interface by solving 
+the Riemann problem:
+\begin{equation}
+a_{i+\myhalf,j} = \mathcal{R}(a_{i+\myhalf,j,L}, a_{i+\myhalf,j,R})
+\end{equation}
+A similar construction is done in the y-direction.  With these
+interface states, we have the method for evaluating the righthand side
+of our ODE.  We can then evolve the ODE using a Runge-Kutta
+integration method.  At each stage of the RK integration, we do the
+same construction of the interface states, solve the Riemann problem,
+etc.
+
+This construction is a lot simpler than the unsplit method described
+previously.  The cost of this simplicity is a reduced range of
+stability.  \MarginPar{need to write out the stability}
 
 
 \section{Going further}
 
 \begin{itemize}
-\item {\em Stability analysis}: many texts provide more details of von
-  Neumann stability analysis for the linear advection equation.
-  \MarginPar{A good example is ...}
-  There, you will see how a Fourier analysis can be used to derive the
-  CFL condition.  Note: this stability analysis is restricted to
-  linear equations, but we nevertheless use the resulting limits for
-  nonlinear equations (like the Euler equations).
 
 \item {\em Slope limiting}: there are a wide variety of slope limiters.
   All of them are designed to reduce oscillations in the presence
