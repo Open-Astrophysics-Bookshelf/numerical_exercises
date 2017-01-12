@@ -1252,19 +1252,49 @@ etc.
 
 This construction is a lot simpler than the unsplit method described
 previously.  The cost of this simplicity is a reduced range of
-stability.  \MarginPar{need to write out the stability}
+stability.  For simplicity, consider a simple first-order upwind
+scheme in two-dimensions.  Higher order time integrators (like RK4)
+will have separate stages that look like a first-order-in-time update,
+so this stability analysis can be thought of as applying to a single
+stage.  Our difference equation is:
+\begin{equation}
+\frac{a^{n+1}_{i,j} - a^n_{i,j}}{\Delta t} = - u \frac{a^n_{i,j} - a^n_{i-1,j}}{\Delta x}
+- v \frac{a^n_{i,j} - a^n_{i,j-1}}{\Delta y}
+\end{equation}
+We introduce a single-mode Fourier function, as before, but this time
+in a direction in index space of $\vec{n} = i \hat{i} + j \hat{j}$:
+\begin{equation}
+a^n_{i,j} = A^n e^{Ii\theta}e^{Ij\theta}
+\end{equation}
+Inserting this into our difference equation gives:
+\begin{equation}
+\frac{A^{n+1}}{A^n} = 1 - 2C \left (1 - e^{I\theta} \right )
+\end{equation}
+and the amplitude of this is:
+\begin{equation}
+\left | \frac{A^{n+1}}{A^n} \right |^2 = 1 - 4C(1-2C)(1-\cos\theta)
+\end{equation}
 
+This form looks very close to the one-dimensional case, except the
+numerical coefficients are different.  For this to be $\le 1$, we
+require that $4C(1-2C) > 0$, or $0 \le C \le 1/2$.  In general, for
+$d$-dimensional advection using this scheme, the stability criteria is
+\begin{equation}
+C \le \frac{1}{d}
+\end{equation}
+See \cite{titarevtoro} for some discussion.  Alternate integrators and
+stencils may be able to allievate this.
 
 \section{Going further}
 
 \begin{itemize}
 
-\item {\em Slope limiting}: there are a wide variety of slope limiters.
-  All of them are designed to reduce oscillations in the presence
-  of discontinuities or extrema, but some are higher-order and can be
-  less restrictive when dealing with smooth flows.  Most hydro
-  texts (e.g.\ \cite{leveque:2002,toro:1997}) provide an introduction to the design
-  of such limiters.
+\item {\em Slope limiting}: there are a wide variety of slope
+  limiters.  All of them are designed to reduce oscillations in the
+  presence of discontinuities or extrema, but some are higher-order
+  and can be less restrictive when dealing with smooth flows.  Most
+  hydro texts (e.g.\ \cite{leveque:2002,toro:1997}) provide an
+  introduction to the design of such limiters.
 
 \item {\em Multi-dimensional limiting}: the procedure described above
   still does the limiting in each dimension independent of the other
