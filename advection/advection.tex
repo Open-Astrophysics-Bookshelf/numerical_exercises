@@ -1188,14 +1188,38 @@ a_{i+\myhalf,j}^{n+\myhalf} = \mathcal{R}(a_{i+\myhalf,j,L}^{n+\myhalf},
 \end{equation}
 The final conservative update is then done via Eq.~\ref{eq:update2du}.
 
-See \cite{colella:1990} for more details on this unsplit method.
+See \cite{colella:1990} for more details on this unsplit method, 
+and \cite{saltzman:1994} for details of the extension to 3-d.
 
-\MarginPar{The extension to 3-d is a little more complex}
+Figures~\ref{fig:adv:gaussian-2d} and \ref{fig:adv:tophat-2d} show the
+advection of a smooth Gaussian and a discontinuos tophat diagonally on
+a coarse $32\times 32$ zone domain.  Each show a diffusion of the
+initial function, similar to what we saw in 1-d.  In the tophat, we
+also see a slight undershoot on the trailing side of the tophat after
+one period.
 
 
-\subsection{Examples}
 
 
+% run as: ./pyro.py advection smooth inputs.smooth
+% visualized as: ./plot.py -W 7.7 -H 6 -o smooth_init.pdf advection smooth_0000
+\begin{figure}
+\centering
+\includegraphics[width=0.48\linewidth]{smooth_init}\hspace{1em}
+\includegraphics[width=0.48\linewidth]{smooth_final}
+\caption{\label{fig:adv:gaussian-2d} Advection of a Gaussian profile
+  with $u = v = 1$ for one period on a $32\times 32$ grid.  This
+was run as {\tt ./pyro.py advection smooth inputs.smooth}}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics[width=0.48\linewidth]{tophat_init}\hspace{1em}
+\includegraphics[width=0.48\linewidth]{tophat_final}
+\caption{\label{fig:adv:tophat-2d} Advection of a tophat function
+ with $u = v = 1$ for one period on a $32\times 32$ grid.  This
+was run as {\tt ./pyro.py advection tophat inputs.tophat}}
+\end{figure}
 
 \section{Method-of-Lines approach}
 
