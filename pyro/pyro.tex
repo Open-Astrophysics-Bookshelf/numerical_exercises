@@ -102,47 +102,57 @@ available in the {\tt multigrid/} directory that illustrate its use.
 
 
 
-\begin{table*}[t]
+\begin{sidewaystable*}
 \centering
 \renewcommand{\arraystretch}{1.2}
-\begin{tabular}{llp{2.5in}}
+\begin{tabular}{lp{1in}lp{4.0in}}
 \hline
-{\bf solver} & {\bf problem} 
+{\bf solver} & {\bf section} & {\bf problem} 
    & {\bf problem description} \\
 \hline
 %
 \multirow{2}{*}{\tt advection}
+   & \multirow{2}{*}{\S~\ref{adv:sec:unsplit_2d}}
    & {\tt smooth} & advect a smooth Gaussian profile \\
-   & {\tt tophat} & advect a discontinuous tophat profile \\
+   & & {\tt tophat} & advect a discontinuous tophat profile \\
 \hline
 %
-\multirow{6}{*}{\tt compressible}
+\multirow{2}{*}{\tt advection\_rk} 
+   & \multirow{2}{*}{\S~\ref{adv:sec:mol_2d}}
+   & {\tt smooth} & advect a smooth Gaussian profile \\
+   & & {\tt tophat} & advect a discontinuous tophat profile \\
+\hline
+%
+\multirow{7}{*}{\tt compressible} 
+   & \multirow{7}{*}{Ch.~\ref{ch:compressible}}
    & {\tt advect} & a Gaussian profile in the density field advected diagonally (in constant pressure background) \\
-   & {\tt bubble} & a buoyant bubble in a stratified atmosphere \\
-   & {\tt kh} & setup a shear layer to drive Kelvin-Helmholtz instabilities \\
-   & {\tt quad} & 2-d Riemann problem based on \cite{schulz-rinne:1993}  \\
-   & {\tt rt}  & a simple Rayleigh-Taylor instability\\
-   & {\tt sedov} & the classic Sedov-Taylor blast wave \\
-   & {\tt sod} & the Sod shock tube problem  \\
+   & & {\tt bubble} & a buoyant bubble in a stratified atmosphere \\
+   & & {\tt kh} & setup a shear layer to drive Kelvin-Helmholtz instabilities \\
+   & & {\tt quad} & 2-d Riemann problem based on \cite{schulz-rinne:1993}  \\
+   & & {\tt rt}  & a simple Rayleigh-Taylor instability\\
+   & & {\tt sedov} & the classic Sedov-Taylor blast wave \\
+   & & {\tt sod} & the Sod shock tube problem  \\
 \hline
 %
-{\tt diffusion}& {\tt gaussian}
+{\tt diffusion} & \S~\ref{diff:sec:implicit_mg} & {\tt gaussian} 
    & diffuse an initial Gaussian profile \\
 \hline
 %
-\multirow{2}{*}{\tt incompressible}
+\multirow{2}{*}{\tt incompressible} 
+   & \multirow{2}{*}{Ch.~\ref{ch:incompressible}}
    & {\tt converge} & A simple incompressible problem with known
                       analytic solution.\\
-   & {\tt shear} & a doubly-periodic shear layer \\
+   & & {\tt shear} & a doubly-periodic shear layer \\
 \hline
 %
-\multirow{2}{*}{\tt lm\_atm}
+\multirow{1}{*}{\tt lm\_atm} 
+   & \multirow{1}{*}{Ch.~\ref{sec:lm:atm}}
    & {\tt bubble} & a buoyant bubble in a stratified atmosphere \\
 \hline
 \end{tabular}
-\caption{\label{tab:problems} Solvers and their distributed problems}
+\caption{\label{tab:problems} \pyro\ solvers and their distributed problems.  The relevant section in these notes that describes the implementation is also given.}
 \renewcommand{\arraystretch}{1.0}
-\end{table*}
+\end{sidewaystable*}
 
 
 

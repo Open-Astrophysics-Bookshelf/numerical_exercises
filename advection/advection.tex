@@ -1085,6 +1085,7 @@ Furthermore, this pair of sweeps should use the same timestep, $\Delta t$.
 
 
 \subsection{Unsplit multi-dimensional advection}
+\label{adv:sec:unsplit_2d}
 
 The unsplit case differs from the dimensionally split case in two
 ways: (1) in predicting the interface states, we use knowledge of the
@@ -1221,7 +1222,10 @@ was run as {\tt ./pyro.py advection smooth inputs.smooth}}
 was run as {\tt ./pyro.py advection tophat inputs.tophat}}
 \end{figure}
 
+
+
 \section{Method-of-Lines approach}
+\label{adv:sec:mol_2d}
 
 In the above constructions, we computed a time-centered flux by
 predicting the interface state to the half-time (by Taylor-expanding
