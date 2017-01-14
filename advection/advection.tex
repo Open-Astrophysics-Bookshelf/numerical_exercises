@@ -1208,7 +1208,8 @@ one period.
 \centering
 \includegraphics[width=0.48\linewidth]{smooth_init}\hspace{1em}
 \includegraphics[width=0.48\linewidth]{smooth_final}
-\caption{\label{fig:adv:gaussian-2d} Advection of a Gaussian profile
+\caption[Advection of Gaussian profile in 2-d]
+  {\label{fig:adv:gaussian-2d} Advection of a Gaussian profile
   with $u = v = 1$ for one period on a $32\times 32$ grid, with $C =
   0.8$.  This was run as {\tt ./pyro.py advection smooth
     inputs.smooth}}
@@ -1218,7 +1219,7 @@ one period.
 \centering
 \includegraphics[width=0.48\linewidth]{tophat_init}\hspace{1em}
 \includegraphics[width=0.48\linewidth]{tophat_final}
-\caption{\label{fig:adv:tophat-2d} Advection of a tophat function with
+\caption[Advection of tophat profile in 2-d]{\label{fig:adv:tophat-2d} Advection of a tophat function with
   $u = v = 1$ for one period on a $32\times 32$ grid, with $C = 0.8$.
   This was run as {\tt ./pyro.py advection tophat inputs.tophat}}
 \end{figure}
@@ -1323,7 +1324,8 @@ stencils may be able to alleviate this.
 \centering
 \includegraphics[width=0.48\linewidth]{tophat_rk4_cfl08}\hspace{1em}
 \includegraphics[width=0.48\linewidth]{tophat_rk4_cfl04}
-\caption{\label{fig:adv:tophat-2d-rk4} Advection of a tophat function using
+\caption[Advection of tophat function with method-of-lines integration]
+  {\label{fig:adv:tophat-2d-rk4} Advection of a tophat function using
   the method-of-lines approach with 4th-order Runge-Kutta time integration.
   We use $u = v = 1$ for one period on a $32\times 32$ grid.  On the left
   is $C = 0.8$---this is clearly unstable.  On the right is $C = 0.4$,
