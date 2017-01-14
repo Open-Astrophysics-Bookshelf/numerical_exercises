@@ -7,23 +7,40 @@ equation:
 \begin{equation}
 u_t + u u_x = 0
 \end{equation}
-Here $u$ is both the quantity being advected and the speed at which 
+Here $u$ is both the quantity being advected and the speed at which
 it is moving.  Recall that for the linear advection equation, we saw
 that the solution was constant along lines $x = ut + x_0$, which are
-parallel, since $u$ is spatially constant.  For Burgers' equation, 
+parallel, since $u$ is spatially constant.  For Burgers' equation,
 this is no longer the case, and the characteristic lines are now
 given by $dx/dt = u$, with $x(0) = x_0$.  Since $u = u(t)$, we cannot
-integrate this directly.   
+integrate this directly.
+
+\begin{exercise}[Burgers' characteristics]
+{To find the lines along which the solution to Burgers' equation is
+constant, consider the full change in $u$:
+\begin{equation}
+du = \left . \frac{\partial u}{\partial t} \right |_x dt +
+     \left . \frac{\partial u}{\partial x} \right |_t dx = 0
+\end{equation}
+Here, we seek $u = \mathrm{constant}$, so we set $du = 0$.  Now,
+using the Burgers' equation itself, show that this implies that
+the lines along which the solution is constant are:
+\begin{equation}
+\frac{dx}{dt} = u(x,t)
+\end{equation}
+}
+\end{exercise}
 
 If we take $u_0 = u(t=0)$, then we can look at how the characteristic
-behave initially (before $u(x,t)$ changes a lot).
-Figure~\ref{fig:burgers_char} shows the behavior of an initial
-sinusoidal velocity.  We see that after a short period of time, the
-characteristics intersect.  At the point, $(x_s, t_s)$ where they 
-intersect, there is no way to trace backwards along the characteristics to
-find a unique initial state.  This merging of the characteristics in 
-the $x$-$t$ plane is a shock, and represents just one way that nonlinear
-problems can differ from linear ones.
+behave over a small time interval (before $u(x,t)$ changes
+significantly).  Figure~\ref{fig:burgers_char} shows the behavior for
+an initial velocity with sinusoidal profile.  We see that after a
+short period of time, the characteristics intersect.  At the point,
+$(x_s, t_s)$ where they intersect, there is no way to trace backwards
+along the characteristics to find a unique initial state.  This
+merging of the characteristics in the $x$-$t$ plane is a {\em shock}, and
+represents just one way that nonlinear problems can differ from linear
+ones.
 
 \begin{figure}[t]
 \centering
@@ -42,25 +59,26 @@ In conservative form, Burgers' equation appears as:
 \begin{equation}
 u_t + \left [\tfrac{1}{2} u^2 \right ]_x = 0
 \end{equation}
-The solution of this follows the same methodology as outlined above.
-The interface states are predicted as:
+The solution of this follows the same methodology as described in
+Chapter~\ref{ch:advection}.  The interface states are predicted as to
+second order by Taylor expanding in space and time:
 \begin{eqnarray}
-u^{n+1}_{i+1/2,L} 
+u^{n+1}_{i+1/2,L}
  &=& u^n_i + \frac{\Delta x}{2} \frac{\partial u}{\partial x}
     + \frac{\Delta t}{2} \left . \frac{\partial u}{\partial t} \right |_i
     + \ldots \\
  &=& u^n_i + \frac{\Delta x}{2} \frac{\partial u}{\partial x}
-    + \frac{\Delta t}{2} \left . \left (-u_i \frac{\partial u}{\partial x} 
-         \right ) \right |_i 
+    + \frac{\Delta t}{2} \left . \left (-u_i \frac{\partial u}{\partial x}
+         \right ) \right |_i
     + \ldots \\
- &=& u^n_i + \frac{\Delta x}{2} 
-   \left ( 1 - \frac{\Delta t}{\Delta x} u_i \right ) 
+ &=& u^n_i + \frac{\Delta x}{2}
+   \left ( 1 - \frac{\Delta t}{\Delta x} u_i \right )
    \left . \frac{\partial u}{\partial x} \right |_i + \ldots
 \end{eqnarray}
 The only difference with the linear advection equation is that now
 $u_i \Delta t/\Delta x$ varies from zone to zone, whereas with linear
 advection, it is the constant $C$.  The slopes are computed using
-the same limiters as with linear advection. 
+the same limiters as with linear advection.
 
 The Riemann problem differs from linear advection.  As we saw above,
 the characteristic curves can intersect in the $x$-$t$ plane, and it
@@ -85,16 +103,19 @@ $u_l$.  The shock moves with a speed $S = \Delta x/\Delta t$ in this
 figure.  To determine the speed, we integrate our conservation law over
 both space and time (and normalize by $\Delta x = x_r - x_l$):
 \begin{equation}
-\frac{1}{\Delta x} \int_{x_l}^{x_r} dx \int_{t^n}^{t^{n+1}} dt u_t = 
+\frac{1}{\Delta x} \int_{x_l}^{x_r} dx \int_{t^n}^{t^{n+1}} dt u_t =
   - \frac{1}{\Delta x} \int_{x_l}^{x_r} dx \int_{t^n}^{t^{n+1}} dt \left [ f(u) \right ]_x
 \end{equation}
 Doing the $t$ integral on the left and $x$ integral on the right, we have
 \begin{equation}
-\frac{1}{\Delta x} \int_{x_l}^{x_r}\left \{ u(t^{n+1}) - u(t^n) \right \} dx = 
+\frac{1}{\Delta x} \int_{x_l}^{x_r}\left \{ u(t^{n+1}) - u(t^n) \right \} dx =
   - \frac{1}{\Delta x} \int_{t^n}^{t^{n+1}} \left \{ f(u) |_{x=x_r} - f(u) |_{x=x_l} \right \} dt
 \end{equation}
 Recognizing that at $t=t^n$, $u = u_r$ and at $t=t^{n+1}$, $u = u_l$,
-$\{ u(t^{n+1}) - u(t^n) \}$ in the left side becomes $\{ u_l -u_r \}$.
+in the left side becomes
+\begin{equation}
+\frac{1}{\Delta x} \int_{x_l}^{x_r}\left \{ u(t^{n+1}) - u(t^n) \right \} dx = \{ u(t^{n+1}) - u(t^n) \} =  u_l -u_r \enskip .
+\end{equation}
 For the right side, we see that all along $x=x_l$ the flux is $f =
 f(u_l)$ for $t\in [t^n, t^{n+1}]$.  Likewise, all along $x=x_r$, the
 flux is $f = f(u_r)$ in the same time interval (see the figure).
@@ -120,27 +141,28 @@ ambiguity as to how to trace backwards in time to the correct state.
 Putting this together, we have:
 \begin{eqnarray}
 \mathrm{if~} \underset{\text{(shock)}}{u_l > u_r}:&& u_s = \left \{ \begin{array}{cl}
-                u_l & \mathrm{if~} S > 0 \\ 
+                u_l & \mathrm{if~} S > 0 \\
                 u_r & \mathrm{if~} S < 0 \\
                 0   & \mathrm{if~} S = 0 \end{array} \right .   \\[1em]
 %
 \mathrm{otherwise:}&& u_s = \left \{ \begin{array}{clc}
-                u_l & \mathrm{if~} u_l > 0 \\  
-                u_r & \mathrm{if~} u_r < 0 \\  
-                0   & \mathrm{otherwise} \end{array} \right .   
+                u_l & \mathrm{if~} u_l > 0 \\
+                u_r & \mathrm{if~} u_r < 0 \\
+                0   & \mathrm{otherwise} \end{array} \right .
 \end{eqnarray}
-               
+\MarginPar{other forms of this from incompressible?}
+
 Once the interface states are constructed, the flux is calculated as:
 \begin{equation}
 F^{n+1/2}_{i+1/2} = \frac{1}{2} \left (u_{i+1/2}^{n+1/2} \right )^2
 \end{equation}
 and the conservative update is
 \begin{equation}
-u_i^{n+1} = u_i^n + \frac{\Delta t}{\Delta x} 
+u_i^{n+1} = u_i^n + \frac{\Delta t}{\Delta x}
    \left ( F_{i-1/2}^{n+1/2} - F_{i+1/2}^{n+1/2} \right )
 \end{equation}
 
-The timestep constraint now must consider the most restrictive Courant 
+The timestep constraint now must consider the most restrictive Courant
 condition over all the zones:
 \begin{equation}
 \Delta t = \min_i \left \{ \Delta x / u_i \right \}
@@ -149,7 +171,7 @@ condition over all the zones:
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.8\linewidth]{fv-burger-rarefaction} 
+\includegraphics[width=0.8\linewidth]{fv-burger-rarefaction}
 \caption[Rarefaction solution to the inviscid Burgers'
   equation]{\label{fig:burgers-rarefaction} Solution to the inviscid
   Burgers' equation with 256 zones and a Courant number, $C = 0.8$ for
@@ -185,11 +207,12 @@ the state on the left, and spread out like a fan.  This is called a
 Figure~\ref{fig:burgers-shock} shows the solution to Burgers'
 equation with initially sinusoidal data:
 \begin{equation}
+\label{eq:burgers:shockic}
 \renewcommand{\arraystretch}{1.75}
 u(x, t=0) = \left \{ \begin{array}{cc}
     1   & x < 1/3 \\
     1 + \frac{1}{2} \sin\left (\frac{2\pi (x - 1/3)}{1/3}\right ) & 1/3 \le x \le 2/3 \\
-    1   & x > 2/3 
+    1   & x > 2/3
 \end{array}
 \right .
 \renewcommand{\arraystretch}{1.0}
@@ -221,8 +244,39 @@ u_t + u u_x = 0
 \end{equation}
 If you did this (for instance, using a finite difference scheme and an
 upwind difference for $u_x$), you would find that you get the wrong
-shock speed.  Try it.
+shock speed.
 
+\begin{exercise}[Conservative form of Burgers' equation]
+{
+Using a simple first-order finite-difference method like we described
+in Ch.~\ref{ch:advection} for linear advection, difference the
+conservative and non-conservation formulations of Burgers' equation
+as:
+\begin{equation}
+\frac{u^{n+1}_i - u^n_i}{\Delta t} = 
+   -\frac{1}{2} \frac{(u^n_i)^2 - (u^n_{i-1})^2}{\Delta x}
+\end{equation}
+and
+\begin{equation}
+  \frac{u_{i}^{n+1} - u_i^n}{\Delta t} = - 
+      \frac{u_i^n (u_i^n - u_{i-1}^n)}{\Delta x}
+\end{equation}
+(Note: these discretizations are upwind so long as $u > 0$).
+
+Run these with the shock initial Riemann conditions:
+\begin{equation}
+\renewcommand{\arraystretch}{1.75}
+u(x, t=0) = \left \{ \begin{array}{cc}
+    2   & x < 1/2 \\
+    1   & x > 1/2
+\end{array}
+\right .
+\renewcommand{\arraystretch}{1.0}
+\end{equation}
+and measure the shock speed from your solution by simply differencing
+the location of the discontinuity at two different times.  Compare to
+the analytic solution for a shock for the Riemann problem.}
+\end{exercise}
 
 \section{Characteristic tracing}
 
@@ -231,31 +285,36 @@ A concept that will be useful in the next section is {\em
 information in the interface states if the characteristic that carries
 that information is moving toward the interface.  For Burgers equation,
 this is simple, since there is only a single characteristic---the velocity.
-So for the left state on an interface, we'd only add the change if 
+So for the left state on an interface, we'd only add the change if
 the velocity $u_i > 0$ (moving toward the interface $i+1/2$):
 \begin{equation}
-u^{n+1}_{i+1/2,L} 
- = u^n_i + \frac{\Delta x}{2} 
-   \left ( 1 - \frac{\Delta t}{\Delta x} \max(0, u_i) \right ) 
+u^{n+1}_{i+1/2,L}
+ = u^n_i + \frac{\Delta x}{2}
+   \left ( 1 - \frac{\Delta t}{\Delta x} \max(0, u_i) \right )
    \left . \frac{\partial u}{\partial x} \right |_i + \ldots
 \end{equation}
 Notice that the effect of this is to set the interface state simply to
 the value given by the piecewise linear reconstruction on the interface
-if the wave isn't moving to the interface.  
+if the wave isn't moving to the interface.
 
 \section{Going further}
 
 \begin{itemize}
-\item The equation we've been dealing with here is the {\em inviscid} Burgers' equation. 
-The full Burgers' equation includes viscosity (a velocity diffusion):
-\begin{equation}
-u_t + u u_x = \epsilon u_{xx}
-\end{equation}
-To solve this, we need to first learn about techniques for diffusion, and then how to
-solve equations that span multiple PDE types.  This will be described in \S \ref{ch:multiphysics:sec:adburgers}.
+\item The equation we've been dealing with here is the {\em inviscid}
+  Burgers' equation.  The full Burgers' equation includes viscosity (a
+  velocity diffusion):
+  \begin{equation}
+    u_t + u u_x = \epsilon u_{xx}
+  \end{equation}
+  To solve this, we need to first learn about techniques for
+  diffusion, and then how to solve equations that span multiple PDE
+  types.  This will be described in \S
+  \ref{ch:multiphysics:sec:adburgers}.
 
-\item Aside from pedagogical interest, Burgers' equation can be used as a simple
-model of traffic flow (where shocks can arise from people slamming on the brakes).
-Many sources discuss this application, including the text by~\cite{leveque:2002}.
+\item Aside from pedagogical interest, Burgers' equation can be used
+  as a simple model of traffic flow (where shocks can arise from
+  people slamming on the brakes).  Many sources discuss this
+  application, including the text by~\cite{leveque:2002}.
+\MarginPar{more refs?}
 
 \end{itemize}
