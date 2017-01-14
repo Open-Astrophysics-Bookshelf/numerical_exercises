@@ -28,7 +28,7 @@ characteristics).}
 
 Figure~\ref{fig:advection_char} shows an initial profile, $a(x)$, and
 the corresponding characteristics in the $t$-$x$ plane.  With time,
-since the solution is constant along these charactersitics, it simply
+since the solution is constant along these characteristics, it simply
 each point simply follows the characteristic curve, resulting in a
 shift of the profile to the right.
 
@@ -198,7 +198,7 @@ derivative.
 \caption[FTCS finite-difference solution to linear advection]
 {\label{fig:fdadvect-ftcs} Finite-difference solution using the FTCS
 finite-difference method for advection using 65 points, modeling for
-only 1/10$^\mathrm{th}$ of a period.  THe panel of the left is
+only 1/10$^\mathrm{th}$ of a period.  The panel of the left is
 with $C = 0.1$ and the panel on the right is $C = 0.5$.\\
 \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/advection/fdadvect.py}{fdadvect.py}}}
 \end{figure}
@@ -217,17 +217,17 @@ simply gets the physics wrong.
 
 The classic method for understanding stability is to consider the growth 
 of a single Fourier mode in our discretization.  That is, substitute in
-$a_i^n = A^n e^{ji\theta}$, where $j = \sqrt{-1}$, and $\theta$ represents a
+$a_i^n = A^n e^{Ii\theta}$, where $I = \sqrt{-1}$\footnote{our use of $i$ and $j$ as spatial indices presents an unfortunate clash of notation here, hence the use of $I$ for the imaginary unit}, and $\theta$ represents a
 phase.  A method is stable if $|A^{n+1}/A^n| \le 1$.  FTCS appears as:
 \begin{equation}
   a_i^{n +1} = a_i^n - \frac{C}{2} (a_{i+1}^n - a_{i-1}^n)
 \end{equation}
 Examining a Fourier mode shows that:
 \begin{align}
-  A^{n+1}e^{ji\theta} &= A^n e^{ji\theta} - \frac{C}{2} \left (
-      A^n e^{j(i+1)\theta} - A^n e^{j(i-1)\theta} \right ) \\
-  A^{n+1} &= A^n  - \frac{C}{2} A^n \left ( e^{j\theta} - e^{-j\theta}\right ) \\
-  A^{n+1} &= A^n \left ( 1 - j C \sin\theta \right )
+  A^{n+1}e^{Ii\theta} &= A^n e^{Ii\theta} - \frac{C}{2} \left (
+      A^n e^{I(i+1)\theta} - A^n e^{I(i-1)\theta} \right ) \\
+  A^{n+1} &= A^n  - \frac{C}{2} A^n \left ( e^{I\theta} - e^{-I\theta}\right ) \\
+  A^{n+1} &= A^n \left ( 1 - I C \sin\theta \right )
 \end{align}
 so the magnitude of the amplification is
 \begin{equation}
@@ -1193,7 +1193,7 @@ See \cite{colella:1990} for more details on this unsplit method,
 and \cite{saltzman:1994} for details of the extension to 3-d.
 
 Figures~\ref{fig:adv:gaussian-2d} and \ref{fig:adv:tophat-2d} show the
-advection of a smooth Gaussian and a discontinuos tophat diagonally on
+advection of a smooth Gaussian and a discontinuous tophat diagonally on
 a coarse $32\times 32$ zone domain.  Each show a diffusion of the
 initial function, similar to what we saw in 1-d.  In the tophat, we
 also see a slight undershoot on the trailing side of the tophat after
@@ -1317,7 +1317,7 @@ time with 4th order Runge-Kutta.  We see that the case with $C = 0.8$
 is unstable, but the $C = 0.4$ case is stable.
 
 See \cite{titarevtoro} for some discussion.  Alternate integrators and
-stencils may be able to allievate this.
+stencils may be able to alleviate this.
 
 \begin{figure}
 \centering

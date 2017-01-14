@@ -181,7 +181,7 @@ error for this approximation is $\sim \Delta x$\footnote{in some
 means that we are neglecting terms that scale as $\Delta x$ or to
 higher powers.  This is fine if $\Delta x$ is small.  This error is our
 truncation error---just as discussed above, it arises because our
-numerical approximation threws away higher order terms.  The
+numerical approximation throws away higher order terms.  The
 approximation ${\partial a}/{\partial x} |_i = ({a_{i+1} -
   a_i})/{\Delta x}$ has the same order of accuracy.
 
@@ -389,7 +389,7 @@ iteration.
 \end{figure}
 
 
-The main ``gotya'' with this technique is that you need a good initial
+The main ``got-ya'' with this technique is that you need a good initial
 guess.  In the Taylor expansion, we threw away the $\delta x^2$ term,
 but if our guess was far from the root, this (and higher-orders) term
 may not be small.  Obviously, the derivative must be non-zero in the
@@ -475,7 +475,7 @@ $k^\mathrm{th}$ ODE is
 \end{equation}
 We want to solve for the vector ${\bf y}$ as a function of time.  Note
 higher-order ODEs can always be written as a system of first-order
-ODEs by introducting new variables\footnote{As an example, consider
+ODEs by introducing new variables\footnote{As an example, consider
   Newton's second law, $\ddot{x} = F/m$.  We can write this as a system
   of two ODEs by introducing the velocity, $v$, giving us: $\dot{v} =
   F/m$, $\dot{x} = v$.}.
@@ -531,7 +531,7 @@ fourth-order accurate overall.
 Consider the orbit of Earth around the Sun.  If we work in the units
 of astronomical units, years, and solar masses, then Newton's gravitational
 constant and the solar mass together are simply $G M = 4\pi^2$ (this
-should look famaliar as Kepler's third law).  We
+should look familiar as Kepler's third law).  We
 can write the ODE system describing the motion of Earth as:
 \begin{align}
 \dot{\bf x} &= {\bf v} \\
@@ -710,7 +710,7 @@ Note that if $f(x)$ is real-valued, then the transform $\mathcal{F}_k$
 has 2 numbers (the real and imaginary parts) for each of our original
 $N$ real values.  Since we cannot create information in frequency
 space where there was no corresponding real-space information, half of
-the $\mathcal{F}_k$'s are reduntant (and $\mathcal{F}_{-k} =
+the $\mathcal{F}_k$'s are redundant (and $\mathcal{F}_{-k} =
 \mathcal{F}^\star_k$).
 
 Directly computing $\mathcal{F}_k$ for each $k$ takes $\mathcal{O}(N^2)$
