@@ -657,7 +657,58 @@ subsequent parts of the algorithm.
 
 
 %-----------------------------------------------------------------------------
-\section{Approximate Riemann solvers}
+\section{Riemann solvers}
+
+
+\subsection{Interface solution}
+
+We are interested in the state at the interface.  To
+determine this, we need to determine which region we are in.  That
+requires an estimation of the wave speeds.  Since these are nonlinear
+waves, we cannot in general just use the eigenvalues (although some
+approximate solvers do).  Different Riemann solvers will have
+different approximations for finding the speeds of the left, center,
+and right wave.  Note the figure shows only one possible configuration
+for the waves---they can all be on one side of the interface (for
+all supersonic waves), or the contact (the middle wave) can be on either
+side.
+
+Once the wave speeds are known, we look at the sign of the speeds to
+determine which of the 4 regions is on the interface.  In the `star'
+region, only $\rho$ jumps across the middle (contact) wave, the
+pressure and velocity are constant across that wave (see $r^\evz$).
+We determine the state in the star region ($\rho_l^*, \rho_r^*, u^*,
+p^*$) by using the jump conditions for the Euler equations.  In
+general, these differ depending on whether the waves are shocks or
+rarefactions.  In practice, approximate Riemann solvers often assume
+one or the other (for example, the two-shock Riemann solver used
+in~\cite{colellaglaz:1985}).  With the wave speeds and the states
+known in each region, we can evaluate the state on the interface,
+$q_{i+1/2}^{n+1/2}$.
+
+Recall that a rarefaction involves diverging flow---it spreads out
+with time.  Special consideration needs to be taken if the rarefaction
+wave spans the interface (a {\em transonic rarefaction}).  In this
+case, most Riemann solvers interpolate between the left or right state
+and the appropriate star state.
+
+Then the fluxes are computed from this state as:
+\begin{equation}
+\renewcommand{\arraystretch}{1.5}
+F_{i+1/2}^{n+1/2} = \left ( \begin{array}{c}
+                             \rho_{i+1/2}^{n+1/2} u_{i+1/2}^{n+1/2} \\
+                             \rho_{i+1/2}^{n+1/2} (u_{i+1/2}^{n+1/2})^2 + p_{i+1/2}^{n+1/2} \\
+                             u_{i+1/2}^{n+1/2} p_{i+1/2}^{n+1/2} / (\gamma - 1)  +
+                             \frac{1}{2} \rho_{i+1/2}^{n+1/2} (u_{i+1/2}^{n+1/2})^3 +
+                             u_{i+1/2}^{n+1/2} p_{i+1/2}^{n+1/2}
+                            \end{array} \right )
+\renewcommand{\arraystretch}{1.0}
+\end{equation}
+
+Note that instead of returning an approximate state at the interface,
+some Riemann solvers (e.g.\ the HLL(C) solvers) instead approximate the
+fluxes directly.  These use estimates of the wave speeds together with
+the Rankine-Hugoniot jump conditions to give the fluxes.
 
 
 %-----------------------------------------------------------------------------
