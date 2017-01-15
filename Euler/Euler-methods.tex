@@ -362,6 +362,8 @@ using $q_i$ as the starting point.}
 
 \subsection{Piecewise parabolic}
 
+\label{sec:hydro:ppm}
+
 The piecewise parabolic method uses a parabolic reconstruction in each
 cell.  This is more accurate than the linear reconstruction.
 Figure~\ref{fig:ppm} shows the reconstructed parabolic profiles within
@@ -952,7 +954,7 @@ of the first valid zone in the domain (just inside the left boundary).
 
 
 %-----------------------------------------------------------------------------
-\section{Higher Order}
+\section{Higher order}
 
 In the methods above, we predicted a time-centered interface state and
 used this to evaluate the fluxes through the interface.  There are
@@ -1031,7 +1033,7 @@ but higher-order is more tricky.
 
 \label{sec:euler:further}
 
-\subsection{Flattening and Contact Steepening}
+\subsection{Flattening and contact steepening}
 
   Shocks are self-steepening (this is how we
   detect them in the Riemann solver---we look for converging characteristics).
