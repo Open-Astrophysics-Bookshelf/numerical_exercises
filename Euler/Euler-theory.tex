@@ -10,21 +10,18 @@ The more general equation set, the Navier-Stokes equations, includes
 dissipative terms.  However, for astophysical flows, the scales on
 which these dissipative terms operate are usually much smaller than
 the system of interest (equivalently, Reynolds numbers of
-astrophysical flows are very large).}  in one dimension appear\footnote{assuming Cartesian coordinates} as:
+astrophysical flows are very large).} describe conservation of 
+mass, momentum, and energy in the fluid approximation.  Their general
+form, without any source terms, is:
 \begin{align}
-\frac{\partial \rho}{\partial t} +
-    \frac{\partial (\rho u)}{\partial x} &= 0 \\
-%
-\frac{\partial(\rho u)}{\partial t} +
-    \frac{\partial (\rho uu + p)}{\partial x} &= 0 \\
-%
-\frac{\partial(\rho E)}{\partial t} +
-    \frac{\partial(\rho u E + u p)}{\partial x} &= 0
+\frac{\partial \rho}{\partial t} + \nabla \cdot (\rho \Ub) &= 0 \\
+\frac{\partial \rho \Ub}{\partial t} + \nabla \cdot (\rho \Ub \Ub) + \nabla p &= 0 \\
+\frac{\partial \rho E}{\partial t} + \nabla \cdot (\rho E \Ub + p \Ub ) &= 0 
 \end{align}
-These represent conservation of mass, momentum, and energy.  Here $\rho$ is the
+Here $\rho$ is the
 density, $u$ is the one-dimensional velocity, $p$ is the pressure, and $E$
 is the total energy / mass, and can be expressed in terms of the
-specific internal energy and kinetic energy as:
+specific internal energy, $e$, battery alarmand kinetic energy as:
 \begin{equation}
 E = e + \frac{1}{2} u^2
 \end{equation}
@@ -36,6 +33,18 @@ p = \rho e(\gamma - 1)
 where $\gamma$ is the ratio of specific heats for the gas/fluid (for
 an ideal, monatomic gas, $\gamma = 5/3$), but any relation of the form
 $p = p(\rho, e)$ will work.
+
+In one dimension, they appear as\footnote{assuming Cartesian coordinates}:
+\begin{align}
+\frac{\partial \rho}{\partial t} +
+    \frac{\partial (\rho u)}{\partial x} &= 0 \\
+%
+\frac{\partial(\rho u)}{\partial t} +
+    \frac{\partial (\rho uu + p)}{\partial x} &= 0 \\
+%
+\frac{\partial(\rho E)}{\partial t} +
+    \frac{\partial(\rho u E + u p)}{\partial x} &= 0
+\end{align}
 
 One thing that we can notice immediately is that there is no need for
 temperature in this equation set, although often, when source terms
@@ -56,9 +65,10 @@ U = \left ( \begin{array}{c} \rho \\ \rho u \\ \rho E \end{array} \right )
 F(U) = \left ( \begin{array}{c} \rho u \\ \rho uu + p \\ \rho u E + up \end{array} \right )
 \end{equation}
 %
-We can write this in {\em quasi-linear} form by first expressing the flux \MarginPar{what about for a general EOS?}
-vector in terms of the conserved variables directly.  Taking
-$m \equiv \rho u$, $\mathcal{E} \equiv \rho E$, and expressing
+We can write this in {\em quasi-linear} form by first expressing the
+flux \MarginPar{what about for a general EOS?}  vector in terms of the
+conserved variables directly.  Taking $m \equiv \rho u$, $\mathcal{E}
+\equiv \rho E$, and assuming a gamma-law EOS,
 \begin{equation}
 p = \rho e (\gamma-1) =  \left (\mathcal{E} - \frac{1}{2} \frac{m^2}{\rho}\right )(\gamma - 1)
 \end{equation}
@@ -142,15 +152,19 @@ that $\Gamma_1 \equiv \partial \log p/\partial \log \rho |_s$, we have:
 as the generalization of the pressure equation\footnote{$\Gamma_1$ is one of the
 many adiabatic indices that describe the coupling between different
 thermodynamic quantities under compression/expansion.  Any stellar structure
-book should give a good background.  Note that for an ideal gas, $\Gamma_1 = \gamma$}.
+book should give a good background, e.g., \cite{HKT}.  Note that for an ideal gas, $\Gamma_1 = \gamma$}.
+The sound speed is then $c^2 = \Gamma_1 p /\rho$.
+
+These eigenvalues are the speeds at which information propagates
+through the fluid.  Since the eigenvalues are real, this system (the
+Euler equations) is said to be {\em hyperbolic}.  Additionally, since
+$A = A(q)$, the system is said to be {\em quasi-linear}.  Note,
+physically, these eigenvalues are telling us that information is
+communicated at the speed of the fluid ($u$), as well as the speed of
+sound moving with respect to the fluid ($u \pm c$).
 
 We'll use the symbols $\{-,\circ,+\}$ to denote the eigenvalues and their
 corresponding eigenvectors throughout these notes.
-These eigenvalues are the speeds at which information propagates through
-the fluid.
-Since the eigenvalues are real, this system (the Euler equations) is said
-to be {\em hyperbolic}.  Additionally, since $A = A(q)$, the system is
-said to be {\em quasi-linear}.
 %
 The right and left eigenvectors can be found via:
 \begin{equation}
@@ -165,6 +179,7 @@ there is one right and one left eigenvector for each of the eigenvalues.
 {
 Show that the right eigenvectors are:
 \begin{equation}
+\label{eq:euler:primRevs}
 r^\evm = \left ( \begin{array}{c} 1 \\ -c/\rho \\ c^2 \end{array} \right )
 %
 \qquad
@@ -189,10 +204,10 @@ eigenvector.  Here they are normalized such that
 $l^{(i)} \cdot r^{(j)} = \delta_{ij}$.
 }
 \end{exercise}
-A {\sf IPython} notebook using {\sf SymPy} that derives these is available here:
+A {\sf Jupyter} notebook using {\sf SymPy} that derives these
+eigenvectors is available here:
 \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/compressible/euler.ipynb}{euler.ipynb}}
-\footnote{if you don't have {\sf IPython}, you can view this rendered online via {\sf nbviewer}:\\
-\url{http://nbviewer.ipython.org/github/zingale/hydro_examples/blob/master/compressible/euler.ipynb}}
+\footnote{if you don't have {\sf Juypter}, you can view this rendered online via the github link.}
 
 A final form of the equations is called the {\em characteristic form}.  Here,
 we wish to diagonalize the matrix $A$.  We take the matrix $R$ to be the
@@ -224,36 +239,54 @@ simply the 3 eigenvalues we found above:
 \end{equation}
 }
 \end{exercise}
-Defining $dw = L dq$, we can write our system as:
+To transform our primitive variable system into the characteristic form, we 
+start by multiplying by $L$:
+\begin{equation}
+Lq_t + L A q_x = 0
+\end{equation}
+Next, recalling that $RL = I$ (we can insert
+the identity matrix where we please), we can rewrite our system as:
+\begin{equation}
+Lq_t + L A R L q_x = 0
+\end{equation}
+Finally, defining $dw = L dq$,
 \begin{equation}
 w_t + \Lambda w_x = 0
 \end{equation}
 Here, the $w$ are the {\em characteristic variables}.  Note that we cannot
 in general integrate $dw = L dq$ to write down the characteristic
 quantities.  Since $\Lambda$ is diagonal, this system is a set of
-decoupled advection-like equations.  If the system were linear, then the
-solution to each would simply be to advect the quantity $w^\enu$ at
-the wave speed $\lambda^\enu$.
+decoupled advection-like equations:
+\begin{align}
+w_t^\evm + \lambda^\evm w_x^\evm &= 0 \\
+w_t^\evz + \lambda^\evz w_x^\evz &= 0 \\
+w_t^\evp + \lambda^\evp w_x^\evp &= 0 
+\end{align}
+
+If the system were linear, then the solution to each would simply be
+to advect the quantity $w^\enu$ at the wave speed $\lambda^\enu$.  We
+could then get back the primitive variables as $dq = L^{-1} dw = R dw$.
 
 The basic idea of hyperbolic systems of PDEs is that there is one wave
 for each eigenvalue, and these define the characteristic curves,
-$dx/dt = \lambda^\enu$.  Along the characteristics, the solution is
+$dx/dt = \lambda^\enu$.  As we discussed with linear advection
+and Burgers' equation, along the characteristics the solution is
 constant.  Across them, the solution jumps.  For a linear system, the
 characteristics are straight lines.
 
 Imagine initial conditions consisting of a jump in the primitive
-variables, $\Delta q$.  The corresponding characteristic variables are
-$\Delta w \sim L \Delta q$ (where the $\sim$ accounts for the fact
-that in a nonlinear system, $L = L(q)$).  The characteristic form
-of the equations says that each of the waves will carry with it
-a jump in $w$.  Since $dq = L^{-1}dw = R dw$, the jump
-in the primitive variable across each wave is proportional to the
-right-eigenvector associated with that wave.  So, for example, since
-$r^\evz$ is only non-zero for the density element, this then means
-that only density jumps across the $\lambda^\evz = u$ wave---pressure
-and velocity are constant across this wave (see for example,
-Toro~\cite{toro:1997}, Ch.\ 2, 3 or LeVeque~\cite{leveque:2002} for a
-thorough discussion).
+variables, $\Delta q$.  The corresponding jumps in characteristic
+variables are $\Delta w \sim L \Delta q$ (where the $\sim$ accounts
+for the fact that in a nonlinear system, $L = L(q)$).  The
+characteristic form of the equations says that each of the waves will
+carry its respective jump, $\Delta w$.  Since $dq = L^{-1}dw = R dw$,
+the jump in the primitive variable across each wave is proportional to
+the right-eigenvector associated with that wave.  So, for example,
+since $r^\evz$ is only non-zero for the density element (see
+Eq.~\ref{eq:euler:primRevs}), this then means that only density jumps
+across the $\lambda^\evz = u$ wave---pressure and velocity are
+constant across this wave (see for example, Toro~\cite{toro:1997},
+Ch.\ 2, 3 or LeVeque~\cite{leveque:2002} for a thorough discussion).
 
 Figure~\ref{fig:sod} shows the three waves emanating from an initial
 discontinuity.  This is a classic problem called the Sod
@@ -361,7 +394,7 @@ A_s =
         0 & 0 & u \end{array} \right )
 \end{equation}
 The eigenvalues of $A_s$ are again $u$, $u-c$, and $u+c$.  The right eigenvectors
-are\footnote{Again, see the {\sf SymPy} {\sf IPython} notebook:
+are\footnote{Again, see the {\sf SymPy} {\sf Jupyter} notebook:
 \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/compressible/euler.ipynb}{euler.ipynb}}}
 \begin{align}
 r_s^\evm = \left ( \begin{array}{c} 1 \\ -c/\rho \\ 0 \end{array} \right )
