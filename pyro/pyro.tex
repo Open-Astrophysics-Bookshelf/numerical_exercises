@@ -4,12 +4,13 @@
 %% \includegraphics[width=0.125\linewidth]{pyro-sm}
 %% \end{center}
 
-\begin{quote}
-\noindent {\em Here we describe the basic structure and use of the
-pyro code that implements many of the algorithms described in these
-notes.}
-\end{quote}
 
+\section{Introduction}
+
+\pyro\ is a simple two-dimensional code that implements the core
+solvers described in these notes.  It is written primarily in python,
+with some kernels in Fortran.  Clarity of the methods is emphasized
+over performance.
 
 
 \section{Getting \pyro}
@@ -19,15 +20,31 @@ notes.}
 git clone https://github.com/zingale/pyro2
 \end{verbatim}
 
-The structure of the code and descriptions of the various runtime
-parameters is found on the pyro webpage,
-\url{http://zingale.github.io/pyro2/}, and described
-in \cite{pyro}.
-
 \pyro\ uses the {\sf matplotlib} and {\sf numpy} libraries.
 Several routines are written in Fortran and need to be compiled.  The
 script {\tt mk.sh} will build the packages.  This requires that {\tt
-f2py} is installed.  
+f2py} is installed.  By default, \pyro\ will use python 3.  
+The following sequence will setup \pyro:
+\begin{itemize}
+\item Set the {\tt PYRO\_HOME} environment variable to point to the
+  main {\tt pyro2/} directory, e.g.,
+  \begin{verbatim}
+  export PYRO_HOME=/path/to/pyro2
+  \end{verbatim}
+
+\item Set the {\tt PYTHONPATH} environment variable to point to the
+  main {\tt pyro2/} directory, e.g.,
+  \begin{verbatim}
+  export PYTHONPATH="$PYTHONPATH:$PYRO_HOME"
+  \end{verbatim}
+
+\item Build the Fortran source using the {\tt mk.sh} script.  In the
+  {\tt pyro2/} directory, simply do
+  \begin{verbatim}
+  ./mk.sh
+  \end{verbatim}
+\end{itemize}
+
 
 
 \section{\pyro\ solvers}
@@ -37,8 +54,17 @@ f2py} is installed.
 \item {\em advection}: an unsplit, second-order method for linear advection,
   following the ideas from Chapter~\ref{ch:advection}.
 
-\item {\em compressible}: an unsplit, second-order compressible hydrodynamics
-  solver using the piecewise linear reconstruction discussed in Chapter~\ref{ch:compressible}.
+\item {\em advection\_rk}: an alternate advection algorithm using
+  method-of-lines time integration, again following the ideas
+  from Chapter~\ref{ch:advection}.
+
+\item {\em compressible}: an unsplit, second-order compressible
+  hydrodynamics solver using the piecewise linear reconstruction
+  discussed in Chapter~\ref{ch:compressible}.
+
+\item {\em compressible\_rk}: an alternate compressible algorithm
+  using method-of-lines time integration, using the piecewise
+  linear reconstruction discussed in Chapter~\ref{ch:compressible}.
 
 \item {\em diffusion}: a second-order implicit diffusion solver, based
   on the ideas from Chapter~\ref{ch:diffusion}.
@@ -58,6 +84,11 @@ f2py} is installed.
 
 \section{\pyro 's structure}
 
+The structure of the code and descriptions of the various runtime
+parameters is found on the pyro webpage,
+\url{http://zingale.github.io/pyro2/}, and described
+in \cite{pyro}.  Here we provide a summary.
+
 The grid structure is managed by the {\tt patch.Grid2d} class.  Data
 is that lives on the grid is contained in a {\tt
   patch.CellCenterData2d} object.  Methods are available to provide
@@ -71,13 +102,16 @@ in time.  Each solver has one or more sets of initial conditions
 defined in the solver's {\tt problems/} directory.
 
 All time-dependent problems are run through the {\tt pyro.py} script.
-The general form is: \\[0.5em]
-{\tt ./pyro.py} {\em solver problem inputs} \\[0.5em]
-where {\em solver} is one of {\tt advection}, {\tt compressible},
-{\tt diffusion}, {\tt incompressible}, {\em problem} is
-one of the problems defined in the solver's {\tt problems/}
-directory, and {\em inputs} is the name of an input file
-that defines the values of runtime parameter. 
+The general form is:
+\begin{verbatim}
+./pyro.py solver problem inputs
+\end{verbatim}
+ where {\em solver} is one of \{{\tt advection}, {\tt advection\_rk},
+ {\tt compressible}, {\tt compressible\_rk}, {\tt diffusion}, {\tt
+   incompressible}, {\tt lm\_atm}\}, {\em problem} is one of the
+ problems defined in the solver's {\tt problems/} directory, and {\em
+   inputs} is the name of an input file that defines the values of
+ runtime parameter.
 
 The possible runtime parameters and their defaults are defined in the
 {\tt \_defaults} files in the main directory and each solver and
