@@ -4,11 +4,12 @@
 %% \includegraphics[width=0.125\linewidth]{pyro-sm}
 %% \end{center}
 
-\section{\hydrooned}
+\section{Introduction}
 
 \hydrooned\ is a one-dimensional compressible hydrodynamics code written
 in modern Fortran.  In particular, it implements the piecewise parabolic
-method described in \S~\ref{sec:hydro:ppm}
+method described in \S~\ref{sec:hydro:ppm}, in both Cartesian and spherical
+geometries.  It assumes a gamma-law equation of state.
 
 
 \section{Getting \hydrooned}
@@ -23,9 +24,30 @@ Some details on the code can be found on its webpage:
 
 
 
-\section{\hydrooned 's structure}
+%\section{\hydrooned 's structure}
 
 
 
 \section{Running \hydrooned}
+
+Each problem is in it's own directory, and the code is built and run
+there.  For example, to run the Sod shock tube problem, do:
+\begin{verbatim}
+cd hydro1d/sod
+make
+./hydro1d inputs-sod-xp
+\end{verbatim}
+
+As the code is built, object files and modules will be output into the
+{\tt \_build} subdirectory.  {\tt make realclean} will clean up the
+objects.  Things are setup for {\tt gfortran} by default---you will
+need to edit the {\tt Ghydro.mak} with different options for different
+compilers. Some bits of Fortran 2003 and 2008 are used, so an
+up-to-date compiler is needed.
+
+A number of runtime options can be set---these are listed in {\tt
+  params.f90} and {\tt probparams.f90} (the latter is problem-specific
+parameters).
+
+
 
