@@ -68,7 +68,7 @@ Chapter 2:
 
 =======================
 
-Chapter 3:
+Chapter 4:
 
  -- add a notebook showing FTCS and upwind on a simple FV grid
  
@@ -79,17 +79,15 @@ Chapter 3:
 
 =======================
 
-Chapter 4:
+Chapter 5:
 
- -- draw a figure showing the intersecting characteristics and the 
-    condition for a shock
 
  -- exercise: notebook showing burgers' solution
 
 
 =======================
 
-Chapter 5:
+Chapter 6/7:
 
  -- add a figure for section 5.2.1, showing piecewise constant
     reconstruction
@@ -117,7 +115,7 @@ Chapter 5:
 
 =======================
 
-Chapter 6:
+Multigrid chapter:
 
  examples:
 
@@ -127,10 +125,8 @@ Chapter 6:
 
 =======================
 
-Chapter 7:
+Diffusion chapter:
 
-  -- show the output from diffusion
-  -- show the problems with C-N discretization (from 688 notes)
 
   examples:
     
