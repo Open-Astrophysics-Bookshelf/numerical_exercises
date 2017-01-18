@@ -2,6 +2,8 @@
 #
 # M. Zingale (2013-02-14)
 
+from __future__ import print_function
+
 import math
 import numpy
 import matplotlib as mpl
@@ -37,19 +39,21 @@ for n, x in enumerate(xeval):
     plt.plot(xfine, r.fprime(x)*(xfine-x) + r.f(x), color="0.5")
 
     xintercept = -r.f(x)/r.fprime(x) + x
-    print "xintercept = ", xintercept
+    print("xintercept = ", xintercept)
     plt.plot([xintercept, xintercept], [0, r.f(xintercept)], color="0.5", ls=":")
 
     if n%2 == 0:
-        plt.text(x, r.f(x)-0.3, `n`, color="r", fontsize="16",
-                   verticalalignment="top", horizontalalignment="center")
+        plt.text(x, r.f(x)-0.3, "{}".format(n), 
+                 color="r", fontsize="16",
+                 verticalalignment="top", horizontalalignment="center")
     else:
-        plt.text(x, r.f(x)+0.3, `n`, color="r", fontsize="16",
-                   verticalalignment="bottom", horizontalalignment="center")
+        plt.text(x, r.f(x)+0.3, "{}".format(n), 
+                 color="r", fontsize="16",
+                 verticalalignment="bottom", horizontalalignment="center")
 
     F = plt.gcf()
-    plt.text(0.5, 0.02, "root approx = %s" % (`x`),
-               transform = F.transFigure, color="k", fontsize="16")
+    plt.text(0.5, 0.02, "root approx = {}".format(x), 
+             transform = F.transFigure, color="k", fontsize="16")
 
     # axes through origin
     ax = plt.gca()
@@ -86,11 +90,13 @@ for n, x in enumerate(xeval):
     axins.plot([xintercept, xintercept], [0, r.f(xintercept)], color="0.5", ls=":")
 
     if n%2 == 0:
-        axins.text(x, r.f(x)-0.05, `n`, color="r", fontsize="10",
+        axins.text(x, r.f(x)-0.05, "{}".format(n), 
+                   color="r", fontsize="10",
                    verticalalignment="top", horizontalalignment="center",
                    clip_on=True)
     else:
-        axins.text(x, r.f(x)+0.05, `n`, color="r", fontsize="10",
+        axins.text(x, r.f(x)+0.05, "{}".format(n), 
+                   color="r", fontsize="10",
                    verticalalignment="bottom", horizontalalignment="center",
                    clip_on=True)
 

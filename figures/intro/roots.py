@@ -2,6 +2,8 @@
 #
 # M. Zingale (2013-02-14)
 
+from __future__ import print_function
+
 import math
 
 
@@ -125,7 +127,7 @@ def main():
     #roots = r.secant(10.0, 9.0)
     
     #print "Bisection: ", rootb
-    print "Newton:    ", rootn, xeval
+    print("Newton:    ", rootn, xeval)
     #print "Secant:    ", roots
 
 
