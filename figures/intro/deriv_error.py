@@ -1,8 +1,11 @@
 #!/usr/bin/env python
 
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 import numpy as np
 
+mpl.rcParams['mathtext.fontset'] = 'cm'
+mpl.rcParams['mathtext.rm'] = 'serif'
 
 def f(x):
     return np.sin(x)

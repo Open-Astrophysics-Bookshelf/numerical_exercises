@@ -1,8 +1,13 @@
 from __future__ import print_function
 
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 import numpy as np
 import math
+
+mpl.rcParams['mathtext.fontset'] = 'cm'
+mpl.rcParams['mathtext.rm'] = 'serif'
+
 
 # see: http://glowingpython.blogspot.com/2011/08/how-to-plot-frequency-spectrum-with.html
 # and
@@ -21,54 +26,38 @@ import math
 # M. Zingale (2013-03-03)
 
 
-def single_freq_sine(npts):
+def single_freq_sine(npts, xmax, f_0):
 
     # a pure sine with no phase shift will result in pure imaginary
     # signal
-    f_0 = 0.2
 
-    xmax = 10.0/f_0
     xx = np.linspace(0.0, xmax, npts, endpoint=False)
-    
     return xx, np.sin(2.0*math.pi*f_0*xx)
 
-def single_freq_sine_plus_shift(npts):
+def single_freq_sine_plus_shift(npts, xmax, f_0):
 
     # a pure sine with no phase shift will result in pure imaginary
     # signal
-    f_0 = 0.2
-
-    xmax = 10.0/f_0
     xx = np.linspace(0.0, xmax, npts, endpoint=False)
-
     return xx, np.sin(2.0*math.pi*f_0*xx + math.pi/4)
 
-def two_freq_sine(npts):
+def two_freq_sine(npts, xmax, f_0, f_1):
 
     # a pure sine with no phase shift will result in pure imaginary
     # signal
-    f_0 = 0.2
-    f_1 = 0.5
-
-    xmax = 10.0/f_0
     xx = np.linspace(0.0, xmax, npts, endpoint=False)
-
     f = 0.5*(np.sin(2.0*math.pi*f_0*xx) + np.sin(2.0*math.pi*f_1*xx))
     return xx, f
 
-def single_freq_cosine(npts):
+def single_freq_cosine(npts, xmax, f_0):
 
     # a pure cosine with no phase shift will result in pure real
     # signal
-    f_0 = 0.2
-
-    xmax = 10.0/f_0
     xx = np.linspace(0.0, xmax, npts, endpoint=False)
-
     f = np.cos(2.0*math.pi*f_0*xx)
     return xx, f
 
-def plot_FFT(xx, f, outfile):
+def plot_FFT(xx, xmax, f, outfile):
 
     plt.clf()
 
@@ -112,6 +101,7 @@ def plot_FFT(xx, f, outfile):
     plt.xlabel("x")
     plt.ylabel("$f(x)$")
 
+    plt.xlim(0, xmax)
 
     plt.subplot(412)
 
@@ -120,7 +110,7 @@ def plot_FFT(xx, f, outfile):
     plt.xlabel(r"$k$")
     plt.ylabel("$\mathcal{F}_k$")
 
-    plt.legend(fontsize="small", frameon=False)
+    plt.legend(fontsize="small", frameon=False, ncol=2, loc="upper right")
 
     plt.subplot(413)
 
@@ -135,6 +125,8 @@ def plot_FFT(xx, f, outfile):
     plt.xlabel(r"$x$")
     plt.ylabel(r"$\mathcal{F}^{-1}(\mathcal{F}_k)$")
 
+    plt.xlim(0, xmax)
+
     plt.tight_layout()
 
     plt.savefig(outfile)
@@ -145,21 +137,25 @@ def plot_FFT(xx, f, outfile):
 
 npts = 256  #64  #256
 
+f_0 = 0.2
 
+xmax = 10.0/f_0
+    
 # FFT of sine
-xx, f = single_freq_sine(npts)
-plot_FFT(xx, f, "fft-sine.pdf")
+xx, f = single_freq_sine(npts, xmax, f_0)
+plot_FFT(xx, xmax, f, "fft-sine.pdf")
 
 
 # FFT of cosine
-xx, f = single_freq_cosine(npts)
-plot_FFT(xx, f, "fft-cosine.pdf")
+xx, f = single_freq_cosine(npts, xmax, f_0)
+plot_FFT(xx, xmax, f, "fft-cosine.pdf")
 
 # FFT of sine with pi/4 phase
-xx, f = single_freq_sine_plus_shift(npts)
-plot_FFT(xx, f, "fft-sine-phase.pdf")
+xx, f = single_freq_sine_plus_shift(npts, xmax, f_0)
+plot_FFT(xx, xmax, f, "fft-sine-phase.pdf")
 
 # FFT of two sines
-xx, f = two_freq_sine(npts)
-plot_FFT(xx, f, "fft-two-sines.pdf")
+f_1 = 0.5
+xx, f = two_freq_sine(npts, xmax, f_0, f_1)
+plot_FFT(xx, xmax, f, "fft-two-sines.pdf")
 

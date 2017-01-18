@@ -6,6 +6,11 @@ from __future__ import print_function
 
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib as mpl
+
+mpl.rcParams['mathtext.fontset'] = 'cm'
+mpl.rcParams['mathtext.rm'] = 'serif'
+
 
 def rhs(y):
     """ return dy/dt """

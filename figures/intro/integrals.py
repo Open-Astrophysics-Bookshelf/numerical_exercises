@@ -1,6 +1,10 @@
 import numpy as np
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 from matplotlib.patches import Polygon
+
+mpl.rcParams['mathtext.fontset'] = 'cm'
+mpl.rcParams['mathtext.rm'] = 'serif'
 
 
 def f(x):
@@ -10,7 +14,7 @@ def f(x):
 
 plt.rcParams.update({'xtick.labelsize': 18,
                      'ytick.labelsize': 18,
-                     'text.fontsize': 18})
+                     'font.size': 18})
 
 
 
@@ -47,13 +51,13 @@ for x1, x2 in [(a, (a+b)/2), ((a+b)/2, b)]:
     fl = f(x1)
 
     verts = [(x1, 0), (x1, fl), (x2, fl), (x2, 0)]
-    ax.add_patch(Polygon(verts, facecolor="0.8"))
+    ax.add_patch(Polygon(verts, facecolor="0.8", edgecolor="k"))
 
 
 fmax = fp.max()
 
 for xl in xp:
-    plt.plot([xl,xl], [0.0, 1.2*fmax], ls="--", color="0.5")
+    plt.plot([xl,xl], [0.0, 1.2*fmax], ls="--", color="0.5", zorder=-1)
 
 plt.scatter(xp, fp, marker="o", color="r", zorder=100)
 
@@ -91,12 +95,12 @@ for x1, x2 in [(a, (a+b)/2), ((a+b)/2, b)]:
     f2 = f(x2)
 
     verts = [(x1, 0), (x1, f1), (x2, f2), (x2, 0)]
-    ax.add_patch(Polygon(verts, facecolor="0.8"))
+    ax.add_patch(Polygon(verts, facecolor="0.8", edgecolor="k"))
 
 fmax = fp.max()
 
 for xl in xp:
-    plt.plot([xl,xl], [0.0, 1.2*fmax], ls="--", color="0.5")
+    plt.plot([xl,xl], [0.0, 1.2*fmax], ls="--", color="0.5", zorder=-1)
 
 
 ax.add_patch(Polygon(verts, facecolor="0.8"))
@@ -147,12 +151,12 @@ fsimp = A*(xsimp-a)**2  + B*(xsimp-a) + C
 simpvert = list(zip(xsimp, fsimp))
 
 verts = [(a, 0)] + simpvert + [(b, 0)]
-ax.add_patch(Polygon(verts, facecolor="0.8"))
+ax.add_patch(Polygon(verts, facecolor="0.8", edgecolor="k"))
 
 fmax = fp.max()
 
 for xl in xp:
-    plt.plot([xl,xl], [0.0, 1.2*fmax], ls="--", color="0.5")
+    plt.plot([xl,xl], [0.0, 1.2*fmax], ls="--", color="0.5", zorder=-1)
 
 plt.scatter(xp, fp, marker="o", color="r", zorder=100)
 
