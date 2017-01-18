@@ -10,6 +10,7 @@ import matplotlib as mpl
 mpl.rcParams["text.usetex"] = True
 # load the xfrac package
 mpl.rcParams["text.latex.preamble"].append(r'\usepackage{xfrac}')
+mpl.rcParams["text.latex.preamble"].append(r'\newcommand{\myhalf}{\sfrac{1}{2}}')
 mpl.rcParams['mathtext.fontset'] = 'cm'
 mpl.rcParams['mathtext.rm'] = 'serif'
 
@@ -117,11 +118,18 @@ class FDGrid(object):
                  horizontalalignment="center")
 
             
-    def clean_axes(self, padding=True, ylim=None):
+    def clean_axes(self, show_ghost=False, padding=True, ylim=None, pad_fac=1.0):
+        xmin = self.xmin
+        xmax = self.xmax
+        if show_ghost:
+            xmin -= self.ng*self.dx
+            xmax += self.ng*self.dx
         if padding:
-            plt.xlim(self.xmin-self.dx, self.xmax+self.dx)
-        else:
-            plt.xlim(self.xmin, self.xmax)
+            xmin -= pad_fac*self.dx
+            xmax += pad_fac*self.dx
+
+        plt.xlim(xmin, xmax)
+
         if ylim is not None:
             plt.ylim(ylim)
         plt.axis("off")

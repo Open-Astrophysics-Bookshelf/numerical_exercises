@@ -18,25 +18,21 @@ pl = gp.PiecewiseLinear(gr, a)
 
 gr.draw_grid()
 
-gr.label_center(nzones/2,   r"$i$")
-gr.label_center(nzones/2-1, r"$i-1$")
-gr.label_center(nzones/2+1, r"$i+1$")
-gr.label_center(nzones/2-2, r"$i-2$")
-gr.label_center(nzones/2+2, r"$i+2$")
+gr.label_center(nzones//2,   r"$i$")
+gr.label_center(nzones//2-1, r"$i-1$")
+gr.label_center(nzones//2+1, r"$i+1$")
+gr.label_center(nzones//2-2, r"$i-2$")
+gr.label_center(nzones//2+2, r"$i+2$")
 
-#labelEdge(gr, nzones/2,   r"$i-1/2$")
-#labelEdge(gr, nzones/2+1, r"$i+1/2$")
+#labelEdge(gr, nzones//2,   r"$i-1/2$")
+#labelEdge(gr, nzones//2+1, r"$i+1/2$")
 
 for n in range(nzones):
     pl.draw_cell_avg(n, ls=":", color="0.5")
     pl_nolim.draw_slope(n, color="0.5")
     pl.draw_slope(n, color="r")
 
-
-plt.axis([gr.xmin-0.5*gr.dx,gr.xmax+0.5*gr.dx, -0.25, 1.2])
-plt.axis("off")
-
-plt.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
+gr.clean_axes(ylim=(-0.25, 1.2))
 
 f = plt.gcf()
 f.set_size_inches(8.0,2.0)

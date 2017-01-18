@@ -1,4 +1,3 @@
-import math
 import numpy as np
 import matplotlib.pyplot as plt
 import grid_plot as gp
@@ -35,7 +34,7 @@ def riemann():
     gr.label_center(gr.ng, r"$\mathrm{lo}$", fontsize="medium")
     gr.label_center(gr.ng+1, r"$\mathrm{lo+1}$", fontsize="medium")
 
-    gr.label_edge(gr.ng, r"$\mathrm{lo}-1/2$", fontsize="medium")
+    gr.label_edge(gr.ng, r"$\mathrm{lo}-\myhalf$", fontsize="medium")
     
     # draw cell averages
     for n in range(0, gr.ng+gr.nx-1):
@@ -53,11 +52,11 @@ def riemann():
     ar = a[gr.ilo] - 0.5*gr.dx*(1.0 + C)*pl.slope[gr.ilo]
 
     # L
-    gr.mark_cell_right_state(ng-1, r"$a_{\mathrm{lo}+1/2,L}^{n+1/2}$", 
+    gr.mark_cell_right_state(ng-1, r"$a_{\mathrm{lo}+\myhalf,L}^{n+\myhalf}$", 
                              value=al, vertical="top", color="b")
 
     # R
-    gr.mark_cell_left_state(ng, r"$a_{\mathrm{lo}+1/2,R}^{n+1/2}$", 
+    gr.mark_cell_left_state(ng, r"$a_{\mathrm{lo}+\myhalf,R}^{n+\myhalf}$", 
                             value=ar, vertical="top", color="b")
 
 

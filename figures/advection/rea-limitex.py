@@ -1,7 +1,8 @@
 # reconstruct - evolve - average: demonstrate what happens when we don't
 # limit
 
-import math
+from __future__ import print_function
+
 import numpy as np
 import matplotlib.pyplot as plt
 import grid_plot as gp
@@ -15,20 +16,17 @@ def evolve(pl, C, num, nolimit=1):
 
     pl.gr.draw_grid()
 
-    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2,   r"$i$", fontsize="medium")
-    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2-1, r"$i-1$", fontsize="medium")
-    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2+1, r"$i+1$", fontsize="medium")
-    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2-2, r"$i-2$", fontsize="medium")
-    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2+2, r"$i+2$", fontsize="medium")
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx//2,   r"$i$", fontsize="medium")
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx//2-1, r"$i-1$", fontsize="medium")
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx//2+1, r"$i+1$", fontsize="medium")
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx//2-2, r"$i-2$", fontsize="medium")
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx//2+2, r"$i+2$", fontsize="medium")
 
     # draw cell averages
     for n in range(pl.gr.ilo, gr.ihi+1):
         pl.draw_cell_avg(n, color="r")
 
-    plt.axis([pl.gr.xmin-0.5*pl.gr.dx,pl.gr.xmax+0.5*pl.gr.dx, -0.25, 1.2])
-    plt.axis("off")
-
-    plt.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
+    pl.gr.clean_axes(ylim=(-0.25, 1.2))
 
     f = plt.gcf()
     f.set_size_inches(8.0,2.0)
@@ -46,11 +44,11 @@ def evolve(pl, C, num, nolimit=1):
 
     pl.gr.draw_grid()
 
-    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2,   r"$i$", fontsize="medium")
-    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2-1, r"$i-1$", fontsize="medium")
-    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2+1, r"$i+1$", fontsize="medium")
-    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2-2, r"$i-2$", fontsize="medium")
-    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2+2, r"$i+2$", fontsize="medium")
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx//2,   r"$i$", fontsize="medium")
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx//2-1, r"$i-1$", fontsize="medium")
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx//2+1, r"$i+1$", fontsize="medium")
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx//2-2, r"$i-2$", fontsize="medium")
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx//2+2, r"$i+2$", fontsize="medium")
 
     # draw cell averages and slopes
     for n in range(pl.gr.ilo, gr.ihi+1):
@@ -78,11 +76,11 @@ def evolve(pl, C, num, nolimit=1):
 
     pl.gr.draw_grid()
 
-    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2,   r"$i$", fontsize="medium")
-    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2-1, r"$i-1$", fontsize="medium")
-    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2+1, r"$i+1$", fontsize="medium")
-    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2-2, r"$i-2$", fontsize="medium")
-    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2+2, r"$i+2$", fontsize="medium")
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx//2,   r"$i$", fontsize="medium")
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx//2-1, r"$i-1$", fontsize="medium")
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx//2+1, r"$i+1$", fontsize="medium")
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx//2-2, r"$i-2$", fontsize="medium")
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx//2+2, r"$i+2$", fontsize="medium")
 
     # draw cell averages and slopes
     for n in range(pl.gr.ilo, gr.ihi+1):
@@ -94,10 +92,7 @@ def evolve(pl, C, num, nolimit=1):
     for n in range(pl.gr.ilo, pl.gr.ihi+1):
         pl.evolve_to_right(n, C, color="r")
 
-    plt.axis([pl.gr.xmin-0.5*pl.gr.dx,pl.gr.xmax+0.5*pl.gr.dx, -0.25, 1.2])
-    plt.axis("off")
-
-    plt.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
+    pl.gr.clean_axes(ylim=(-0.25, 1.2))
 
     f = plt.gcf()
     f.set_size_inches(8.0,2.0)
@@ -129,11 +124,11 @@ def evolve(pl, C, num, nolimit=1):
 
     pl.gr.draw_grid()
 
-    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2,   r"$i$", fontsize="medium")
-    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2-1, r"$i-1$", fontsize="medium")
-    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2+1, r"$i+1$", fontsize="medium")
-    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2-2, r"$i-2$", fontsize="medium")
-    pl.gr.label_center(pl.gr.ng + pl.gr.nx/2+2, r"$i+2$", fontsize="medium")
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx//2,   r"$i$", fontsize="medium")
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx//2-1, r"$i-1$", fontsize="medium")
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx//2+1, r"$i+1$", fontsize="medium")
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx//2-2, r"$i-2$", fontsize="medium")
+    pl.gr.label_center(pl.gr.ng + pl.gr.nx//2+2, r"$i+2$", fontsize="medium")
 
 
     # show old evolved profiles and new averages
@@ -147,11 +142,7 @@ def evolve(pl, C, num, nolimit=1):
     for n in range(pl.gr.ilo, pl.gr.ihi+1):
         pl.draw_cell_avg(n, color="r")
 
-
-    plt.axis([pl.gr.xmin-0.5*pl.gr.dx,pl.gr.xmax+0.5*pl.gr.dx, -0.25, 1.2])
-    plt.axis("off")
-
-    plt.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
+    pl.gr.clean_axes(ylim=(-0.25, 1.2))
 
     f = plt.gcf()
     f.set_size_inches(8.0,2.0)
@@ -184,6 +175,6 @@ pl = gp.PiecewiseLinear(gr, a, nolimit=nolimit)
 for i in range(1,9):
 
     pl.fill_zero_gradient()
-    print i, pl.a[:]
+    print(i, pl.a[:])
     evolve(pl, C, i, nolimit=nolimit)
 

@@ -32,18 +32,9 @@ for i in range(gr.ilo, gr.ihi+1):
 gr.label_value(gr.ilo+4, a[gr.ilo+4-gr.ng], r"$a_i$", color="r")
 
 # label dx
-plt.plot([gr.xc[gr.ng+nzones/2-1], gr.xc[gr.ng+nzones/2-1]], [-0.35,-0.25], color="k")
-plt.plot([gr.xc[gr.ng+nzones/2], gr.xc[gr.ng+nzones/2]], [-0.35,-0.25], color="k")
-plt.plot([gr.xc[gr.ng+nzones/2-1], gr.xc[gr.ng+nzones/2]], [-0.3,-0.3], color="k")
-plt.text(0.5*(gr.xc[gr.ng+nzones/2-1] + gr.xc[gr.ng+nzones/2]), -0.45, 
-           r"$\Delta x$", 
-           horizontalalignment="center", fontsize=16)
+gr.label_dx(gr.ng+nzones//2)
 
-
-plt.axis([gr.xmin-1.1*gr.dx,gr.xmax+1.1*gr.dx, -0.5, 1.3])
-plt.axis("off")
-
-plt.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
+gr.clean_axes(pad_fac=0.1, show_ghost=True, ylim=(-0.5, 1.3))
 
 f = plt.gcf()
 f.set_size_inches(10.0,3.0)
