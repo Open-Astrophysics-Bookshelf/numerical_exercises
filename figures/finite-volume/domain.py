@@ -1,64 +1,55 @@
-import pylab
-import numpy
+import matplotlib.pyplot as plt
 
-
-def drawBox(ll, uu, nx, ny, gridColor="0.5", ng=0):
+def draw_box(ll, uu, nx, ny, gridColor="0.5", ng=0):
 
     # draw the frame
-    pylab.plot([ll[0], ll[0], uu[0], uu[0], ll[0]],
-               [ll[1], uu[1], uu[1], ll[1], ll[1]], color="k", lw=2)
+    plt.plot([ll[0], ll[0], uu[0], uu[0], ll[0]],
+             [ll[1], uu[1], uu[1], ll[1], ll[1]], color="k", lw=2)
 
     # draw the x grid lines
     dx = (uu[0] - ll[0])/nx
-    n = 1
-    while (n < nx):
-        pylab.plot([ll[0]+n*dx, ll[0]+n*dx],
-                   [ll[1], uu[1]], color=gridColor, ls=":")
-
-        n += 1
+    for n in range(1, nx):
+        plt.plot([ll[0]+n*dx, ll[0]+n*dx],
+                   [ll[1], uu[1]], color=gridColor, ls=":", lw=1)
 
     # draw the y grid lines
     dy = (uu[1] - ll[1])/ny
-    n = 1
-    while (n < ny):
-        pylab.plot([ll[0], uu[0]],
-                   [ll[1]+n*dy, ll[1]+n*dy], color=gridColor, ls=":")
-
-        n += 1
+    for n in range(1, ny):
+        plt.plot([ll[0], uu[0]],
+                   [ll[1]+n*dy, ll[1]+n*dy], color=gridColor, ls=":", lw=1)
     
     # ghostcells?  
-    if (ng > 0):
-        print "here"
+    if ng > 0:
         xmin = ll[0]-ng*dx
         xmax = uu[0]+ng*dx
         ymin = ll[1]-ng*dy
         ymax = uu[1]+ng*dy
-        pylab.plot([xmin, xmin, xmax, xmax, xmin], 
-                   [ymin, ymax, ymax, ymin, ymin], 
-                   ls="--", color="r")
+        plt.plot([xmin, xmin, xmax, xmax, xmin], 
+                 [ymin, ymax, ymax, ymin, ymin], 
+                 ls="--", color="r")
 
 
-pylab.clf()
+plt.clf()
 
-drawBox([0., 0.], [1., 1.], 5, 5, ng=1)
-drawBox([1., 0.], [2., 1.], 5, 5)
-drawBox([2., 0.], [3., 1.], 5, 5)
+draw_box([0., 0.], [1., 1.], 5, 5, ng=1)
+draw_box([1., 0.], [2., 1.], 5, 5)
+draw_box([2., 0.], [3., 1.], 5, 5)
 
-drawBox([0., 1.], [1., 2.], 5, 5)
-drawBox([1., 1.], [2., 2.], 5, 5)
-drawBox([2., 1.], [3., 2.], 5, 5)
+draw_box([0., 1.], [1., 2.], 5, 5)
+draw_box([1., 1.], [2., 2.], 5, 5)
+draw_box([2., 1.], [3., 2.], 5, 5)
 
-pylab.xlim(-0.25,3.25)
-pylab.ylim(-0.25,2.25)
+plt.xlim(-0.25,3.25)
+plt.ylim(-0.25,2.25)
 
-a = pylab.gca()
+a = plt.gca()
 a.set_aspect("equal", "datalim")
-pylab.axis("off")
+plt.axis("off")
 
-f = pylab.gcf()
+f = plt.gcf()
 f.set_size_inches(7.0,4.25)
 
 
-pylab.savefig("domain.pdf", bbox_inches="tight")
+plt.savefig("domain.pdf", bbox_inches="tight")
 
 

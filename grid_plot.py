@@ -4,6 +4,16 @@
 import math
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib as mpl
+
+# Use LaTeX for rendering
+mpl.rcParams["text.usetex"] = True
+# load the xfrac package
+mpl.rcParams["text.latex.preamble"].append(r'\usepackage{xfrac}')
+mpl.rcParams['mathtext.fontset'] = 'cm'
+mpl.rcParams['mathtext.rm'] = 'serif'
+
+
 import sys
 
 class FDGrid(object):
@@ -97,6 +107,25 @@ class FDGrid(object):
         plt.scatter([self.xc[idx]], [self.voff+value], 
                     color=color, marker=marker, zorder=100)
 
+
+    def label_dx(self, idx):
+        # idx is the right edge of the dx interval drawn
+        plt.plot([self.xc[idx-1], self.xc[idx-1]], [-0.35,-0.25], color="k")
+        plt.plot([self.xc[idx], self.xc[idx]], [-0.35,-0.25], color="k")
+        plt.plot([self.xc[idx-1], self.xc[idx]], [-0.3,-0.3], color="k")
+        plt.text(0.5*(self.xc[idx-1] + self.xc[idx]), -0.45, r"$\Delta x$",
+                 horizontalalignment="center")
+
+            
+    def clean_axes(self, padding=True, ylim=None):
+        if padding:
+            plt.xlim(self.xmin-self.dx, self.xmax+self.dx)
+        else:
+            plt.xlim(self.xmin, self.xmax)
+        if ylim is not None:
+            plt.ylim(ylim)
+        plt.axis("off")
+        plt.subplots_adjust(left=0.05, right=0.95, bottom=0.05, top=0.95)
 
 
 class FVGrid(object):
@@ -225,12 +254,38 @@ class FVGrid(object):
                  horizontalalignment='right', verticalalignment=vertical, color=color,
                  fontsize=fontsize)
 
-    def clean_axes(self, padding=True):
+    def label_dx(self, idx):
+        # idx is the right edge of the dx interval drawn
+        plt.plot([self.xr[idx-1], self.xr[idx-1]], [-0.35,-0.25], color="k")
+        plt.plot([self.xr[idx], self.xr[idx]], [-0.35,-0.25], color="k")
+        plt.plot([self.xr[idx-1], self.xr[idx]], [-0.3,-0.3], color="k")
+        plt.text(self.xc[idx], -0.45, r"$\Delta x$", horizontalalignment="center")
+
+    def label_center_dx(self, idx):
+        # idx is the right edge of the dx interval drawn
+        plt.plot([self.xc[idx-1], self.xc[idx-1]], [-0.35,-0.25], color="k")
+        plt.plot([self.xc[idx], self.xc[idx]], [-0.35,-0.25], color="k")
+        plt.plot([self.xc[idx-1], self.xc[idx]], [-0.3,-0.3], color="k")
+        plt.text(0.5*(self.xc[idx-1] + self.xc[idx]), -0.45, r"$\Delta x$",
+                 horizontalalignment="center")
+
+    def clean_axes(self, show_ghost=False, padding=True, ylim=None, pad_fac=0.5):
+        xmin = self.xmin
+        xmax = self.xmax
+        if show_ghost:
+            xmin -= self.ng*self.dx
+            xmax += self.ng*self.dx
         if padding:
-            plt.xlim(self.xmin-0.5*self.dx, self.xmax+0.5*self.dx)
-        else:
-            plt.xlim(self.xmin, self.xmax)
+            xmin -= pad_fac*self.dx
+            xmax += pad_fac*self.dx
+
+        plt.xlim(xmin, xmax)
+
+        if ylim is not None:
+            plt.ylim(ylim)
+
         plt.axis("off")
+        plt.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
 
 
 class CellCentered(object):
