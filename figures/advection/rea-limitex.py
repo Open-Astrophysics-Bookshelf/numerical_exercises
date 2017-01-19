@@ -162,19 +162,19 @@ nzones = len(ainit)
 
 # CFL number
 C = 0.7
-nolimit = 1
+for nolimit in range(2):
 
-gr = gp.FVGrid(nzones, ng=4)
+    gr = gp.FVGrid(nzones, ng=4)
 
-a = gr.scratch_array()
-a[gr.ilo:gr.ihi+1] = ainit[:]
+    a = gr.scratch_array()
+    a[gr.ilo:gr.ihi+1] = ainit[:]
 
-pl = gp.PiecewiseLinear(gr, a, nolimit=nolimit)
+    pl = gp.PiecewiseLinear(gr, a, nolimit=nolimit)
 
-# loop
-for i in range(1,9):
+    # loop
+    for i in range(1,9):
 
-    pl.fill_zero_gradient()
-    print(i, pl.a[:])
-    evolve(pl, C, i, nolimit=nolimit)
+        pl.fill_zero_gradient()
+        print(i, pl.a[:])
+        evolve(pl, C, i, nolimit=nolimit)
 

@@ -1,6 +1,5 @@
 # reconstruct - evolve - average
 
-import math
 import numpy as np
 import matplotlib.pyplot as plt
 import grid_plot as gp
@@ -13,7 +12,6 @@ nzones = len(atemp)
 
 # CFL number
 C = 0.6
-
 
 
 gr = gp.FVGrid(nzones, ng=4)
@@ -33,7 +31,8 @@ plt.clf()
 gr.draw_grid()
 
 labels = ["$i-2$", "$i-1$", "$i$", "$i+1$", "$i+2$"]
-indices = [gr.ng+nzones/2-2, gr.ng+nzones/2-1, gr.ng+nzones/2, gr.ng+nzones/2+1, gr.ng+nzones/2+2]
+indices = [gr.ng+nzones//2-2, gr.ng+nzones//2-1, 
+           gr.ng+nzones//2, gr.ng+nzones//2+1, gr.ng+nzones//2+2]
 
 for i, l in zip(indices, labels):
     gr.label_center(i, l)
@@ -42,10 +41,7 @@ for i, l in zip(indices, labels):
 for n in range(gr.ilo, gr.ihi+1):
     pl.draw_cell_avg(n, color="r")
 
-plt.axis([gr.xmin-0.5*gr.dx,gr.xmax+0.5*gr.dx, -0.25, 1.2])
-plt.axis("off")
-
-plt.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
+gr.clean_axes(ylim=(-0.25, 1.2))
 
 f = plt.gcf()
 f.set_size_inches(8.0,2.0)
@@ -69,10 +65,7 @@ for n in range(gr.ilo, gr.ihi+1):
     pl.draw_slope(n, color="r")
 
 
-plt.axis([gr.xmin-0.5*gr.dx,gr.xmax+0.5*gr.dx, -0.25, 1.2])
-plt.axis("off")
-
-plt.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
+gr.clean_axes(ylim=(-0.25, 1.2))
 
 f = plt.gcf()
 f.set_size_inches(8.0,2.0)
@@ -96,14 +89,11 @@ for n in range(gr.ilo, gr.ihi+1):
 
 
 # shade regions
-ii = gr.ng + nzones/2-1
+ii = gr.ng + nzones//2-1
 pl.slope_trace_left(ii, C, color="0.75")
 pl.slope_trace_right(ii+1, 1.0-C, color="0.75")
 
-plt.axis([gr.xmin-0.5*gr.dx,gr.xmax+0.5*gr.dx, -0.25, 1.2])
-plt.axis("off")
-
-plt.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
+gr.clean_axes(ylim=(-0.25, 1.2))
 
 f = plt.gcf()
 f.set_size_inches(8.0,2.0)
@@ -126,10 +116,7 @@ for n in range(gr.ilo, gr.ihi+1):
     pl.draw_slope(n, color="0.75", ls=":")
     pl.evolve_to_right(n, C, color="r")
 
-plt.axis([gr.xmin-0.5*gr.dx,gr.xmax+0.5*gr.dx, -0.25, 1.2])
-plt.axis("off")
-
-plt.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
+gr.clean_axes(ylim=(-0.25, 1.2))
 
 f = plt.gcf()
 f.set_size_inches(8.0,2.0)
@@ -175,10 +162,7 @@ for n in range(pl.gr.ilo, pl.gr.ihi+1):
     pl.draw_cell_avg(n, color="r")
 
 
-plt.axis([gr.xmin-0.5*gr.dx,gr.xmax+0.5*gr.dx, -0.25, 1.2])
-plt.axis("off")
-
-plt.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
+gr.clean_axes(ylim=(-0.25, 1.2))
 
 f = plt.gcf()
 f.set_size_inches(8.0,2.0)
