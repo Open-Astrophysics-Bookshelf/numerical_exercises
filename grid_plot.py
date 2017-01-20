@@ -14,6 +14,10 @@ mpl.rcParams["text.latex.preamble"].append(r'\newcommand{\myhalf}{\sfrac{1}{2}}'
 mpl.rcParams['mathtext.fontset'] = 'cm'
 mpl.rcParams['mathtext.rm'] = 'serif'
 
+# font sizes
+mpl.rcParams['font.size'] = 12
+mpl.rcParams['legend.fontsize'] = 'large'
+mpl.rcParams['figure.titlesize'] = 'medium'
 
 import sys
 
