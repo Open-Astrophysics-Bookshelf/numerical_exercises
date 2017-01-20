@@ -1321,6 +1321,13 @@ is unstable, but the $C = 0.4$ case is stable.
 See \cite{titarevtoro} for some discussion.  Alternate integrators and
 stencils may be able to alleviate this.
 
+
+% run as: 
+%   ./pyro.py advection_rk tophat inputs.tophat
+%   ./plot.py -W 7.7 -H 6 -o tophat_rk4_cfl08.pdf advection_rk tophat_0040
+%
+%   ./pyro.py advection_rk tophat inputs.tophat driver.cfl=0.4
+%   ./plot.py -W 7.7 -H 6 -o tophat_rk4_cfl04.pdf advection_rk tophat_0080
 \begin{figure}
 \centering
 \includegraphics[width=0.48\linewidth]{tophat_rk4_cfl08}\hspace{1em}
