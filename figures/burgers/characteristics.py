@@ -1,5 +1,9 @@
 import numpy as np
+import matplotlib as mpl
 import matplotlib.pyplot as plt
+
+mpl.rcParams['mathtext.fontset'] = 'cm'
+mpl.rcParams['mathtext.rm'] = 'serif'
 
 
 def fun(x):

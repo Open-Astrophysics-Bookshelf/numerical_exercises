@@ -1,6 +1,13 @@
-import math
 import numpy as np
 import matplotlib.pylab as plt
+import matplotlib as mpl
+
+mpl.rcParams['mathtext.fontset'] = 'cm'
+mpl.rcParams['mathtext.rm'] = 'serif'
+
+mpl.rcParams['font.size'] = 12
+mpl.rcParams['legend.fontsize'] = 'large'
+mpl.rcParams['figure.titlesize'] = 'medium'
 
 def rh():
 
@@ -23,7 +30,7 @@ def rh():
     plt.arrow(0, 0, 1.3*dx, 0,
               shape="full", head_width=0.04, head_length=0.06,
               lw=1, width=0.005,
-              edgecolor="none", facecolor="k",
+              facecolor="k",
               length_includes_head=True, zorder=100)
 
     plt.text(1.35*dx, 0, r"$x$", fontsize=20, verticalalignment="center")
@@ -35,13 +42,13 @@ def rh():
     plt.arrow(0, 0, 0, 1.3*dt,
               shape="full", head_width=0.04, head_length=0.06,
               lw=1, width=0.005,
-              edgecolor="none", facecolor="k",
+              facecolor="k",
               length_includes_head=True, zorder=100)
 
     plt.text(0, 1.35*dt, r"$t$", fontsize=20, horizontalalignment="center")
 
-    plt.text(-0.15, dt, r"$t^{n+1}$", fontsize=20)
-    plt.text(-0.15, 0, r"$t^n$", fontsize=20)
+    plt.text(-0.17, dt, r"$t^{n+1}$", fontsize=20)
+    plt.text(-0.17, 0, r"$t^n$", fontsize=20)
 
     
     # space-time volume
@@ -67,7 +74,7 @@ def rh():
     plt.arrow(-0.1*dx, 0.5*dt, 0.2*dx, 0,
               shape="full", head_width=0.04, head_length=0.06,
               lw=1, width=0.005,
-              edgecolor="none", facecolor="r",
+              edgecolor="r", facecolor="r",
               length_includes_head=True, zorder=100)
 
     plt.text(-0.12*dx, 0.5*dt, r"$f = f(u_l)$",
@@ -76,8 +83,8 @@ def rh():
 
     plt.arrow(0.9*dx, 0.5*dt, 0.2*dx, 0,
               shape="full", head_width=0.04, head_length=0.06,
-              lw=1, width=0.005,
-              edgecolor="none", facecolor="r",
+              lw=1, width=0.005, 
+              edgecolor="r", facecolor="r",
               length_includes_head=True, zorder=100)
 
     plt.text(1.12*dx, 0.5*dt, r"$f = f(u_r)$",
