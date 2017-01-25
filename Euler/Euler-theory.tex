@@ -436,7 +436,7 @@ or
 \end{equation}
 Expanding these, we have the system:
 \begin{align}
-du + \frac{1}{rho c} dp &= 0 \\
+du + \frac{1}{\rho c} dp &= 0 \\
 d\rho - \frac{1}{c^2} dp &= 0 
 \end{align}
 Defining the {\em Lagrangian sound speed}, $C \equiv \rho c$, and the 
@@ -450,12 +450,15 @@ Similar arguments would give the condition across the right wave as:
 du = \frac{dp}{C} , \,\,\, d\tau = -\frac{dp}{C^2} \quad \mbox{across the right wave}
 \end{equation}
 
-These are completely general at this point.  Finding the solution
-across the rarefaction then involves integrating the system from
-$p_{l,r}$ to $p_\star$, where $l, r$ is the original left or right
-state, depending on which wave you are considering.  Coupled with
-this, we need our equation of state to provide $C = C(\tau, p)$.
-These solutions are called the {\em Riemann invariants}.
+These are completely general at this point.  Note that the condition
+of the second wave, $d\tau/dp$ is essentially the definition of the
+adibatic index $\Gamma_1$, $dp/p - \Gamma_1 d\rho/\rho = 0$ for
+constant entropy.  Finding the solution across the rarefaction then
+involves integrating the system from $p_{l,r}$ to $p_\star$, where $l,
+r$ is the original left or right state, depending on which wave you
+are considering.  Coupled with this, we need our equation of state to
+provide $C = C(\tau, p)$.  These solutions are called the {\em Riemann
+  invariants}.
 
 Considerable simplification can be made if we assume a gamma-law gas.
 The eigensystem with entropy showed us that entropy is constant across
@@ -463,7 +466,8 @@ the solution.  This allows us to write our equation of state as:
 \begin{equation}
 p = K \rho^\gamma
 \end{equation}
-where $K$ is a constant that depends on the entropy.
+where $K$ is a constant that depends on the entropy, and do the 
+integrals analytically.
 
 \begin{exercise}[Riemann invariants for gamma-law gas]
 Assume a gamma-law gas, then you only need to integrate a single
@@ -494,6 +498,10 @@ A similar construction can be done for the right rarefaction.
 
 For a general equation of state, there is not a closed form, but we would need
 to integrate our system to get $u_\star = u(p_\star)$.
+
+We'll denote the solution across the left rarefaction as $u_\star =
+u_l^{rare}(p_\star)$ and across the right rarefaction as $u_\star =
+u_r^{rare}(p_\star)$.
 
 \subsection{Shocks}
 
