@@ -662,6 +662,12 @@ subsequent parts of the algorithm.
 \section{Riemann solvers}
 
 
+Once the interface states are created, the Riemann solver is called.  This
+returns the solution at the interface:
+\begin{equation}
+q_{i+1/2}^{n+1/2} = \mathcal{R}(q_{i+1/2,L}^{n+1/2}, q_{i+1/2,R}^{n+1/2})
+\end{equation}
+
 \subsection{Interface solution}
 
 We are interested in the state at the interface.  To

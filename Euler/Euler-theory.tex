@@ -318,7 +318,7 @@ the initial conditions.  \MarginPar{we need a python version of the riemann exac
   discontinuity at $x = 0.5$.  These particular conditions are called
   the {\em Sod problem}, and in general, a setup with two states
   separated by a discontinuity is called a shock-tube problem.  We see three
-  waves carrying changes in the solution. }
+  waves carrying changes in the solution.{ \color{red}  redo}}
 \end{figure}
 
 
@@ -329,40 +329,40 @@ the initial conditions.  \MarginPar{we need a python version of the riemann exac
 %-----------------------------------------------------------------------------
 \section{The Riemann problem}
 
-Once the interface states are created, the Riemann solver is called.  This
-returns the solution at the interface:
-\begin{equation}
-q_{i+1/2}^{n+1/2} = \mathcal{R}(q_{i+1/2,L}^{n+1/2}, q_{i+1/2,R}^{n+1/2})
-\end{equation}
-
-Solving the Riemann problem for the Euler equations can be a complex
-operation, but the general ideas are straightforward.  Here we review
-the basic outline of operations, and refer to Toro~\cite{toro:1997} for
-full details on a variety of methods for solving the Riemann problem.
+Just like with advection and Burgers' equation, we will need to solve
+a Riemann problem.  However, as our system is nonlinear, and has 3
+waves, the solution is considerably more complex, but the general
+ideas are straightforward.  Here we review the basic outline of
+operations, and refer to Toro~\cite{toro:1997} for full details on a
+variety of methods for solving the Riemann problem.
 
 The Riemann problem consists of a left and right state separated by an
-interface.  For the Euler equations, there are three eigenvalues, which
-are the speeds at which information propagates.  Each of these
+interface.  For the Euler equations, there are three eigenvalues,
+which are the speeds at which information propagates.  Each of these
 correspond to a wave that will move out from the interface with time,
-and each wave will carry with it a jump in the characteristic variables.  The
-figure below shows the three waves moving out from the interface,
-separating space into 4 regions, marked: $L$, $L^*$, $R^*$, and $R$.
+and each wave will carry with it a jump in the characteristic
+variables.  Figure~\ref{fig:riemann:waves} shows the
+three waves moving out from the interface, separating space into 4
+regions, marked: $L$, $L^*$, $R^*$, and $R$.
 \begin{figure}[h]
 \centering
 \includegraphics[width=\linewidth]{riemann-waves}
 \caption[The Riemann problem wave structure for the Euler
-  equations]{The wave structure and 4 distinct regions for the
-  Riemann problem.  Time can be thought of as the vertical axis here,
-  so we see the waves moving outward from the interface.}
+  equations]{\label{fig:riemann:waves} The wave structure and 4
+  distinct regions for the Riemann problem.  Time can be thought of as
+  the vertical axis here, so we see the waves moving outward from the
+  interface.}
 \end{figure}
 We typically work in terms of primitive variables.  The states in the
 $L$ and $R$ regions are simply the left and right input states---the
 waves have not had time to reach here, so they are unmodified.
 
-
-
-The middle wave will always be a contact.  We know from the eigenvectors
-that the pressure is constant across the contact.
+Looking at the middle right eigenvector, $r^\evz$, we identify the
+middle wave as a {\em contact discontinuity}.  There is neither
+compression nor expansion across this wave (since the velocity does
+not jump across it) and it simply separates two states.  We also know
+from the eigenvectors that the pressure is constant across the
+contact.
 
 The left and right waves can be either a rarefaction or a shock.  It will
 be a shock if the flow is compressive and a rarefaction otherwise.
@@ -411,9 +411,89 @@ r_s^\evz = \left ( \begin{array}{c} 1 \\ 0 \\ -c^2/p_s  \end{array} \right )
 \qquad
 r_s^\evp = \left ( \begin{array}{c} 1 \\ c/\rho \\ 0 \end{array} \right )
 \end{align}
+Here, we define $p_s \equiv \partial p/\partial s |_\rho$.
 Since the jump in $q_s$ is proportional to these eigenvectors, we see that
 entropy does not change across the left, $(-)$, and right, $(+)$, waves.
 
+Consider the $\evp$ wave, which moves at a speed $\lambda^\evp = u
++c$.  Across this wave, the characteristic variable $w^\evp$ will
+jump, but the others will not.  Similarly, $w^\evp$ will be constant
+across the $\evm$ wave.  So we can use this constancy to tell us how
+the evolution behaves across that wave.  The constancy of the middle and right characteristic variables across the left
+wave gives us the conditions (using our original primitive variable system):
+\begin{align}
+l^\evp \cdot dq &= 0 \\
+l^\evz \cdot dq &= 0 
+\end{align}
+or 
+\begin{equation}
+\left ( \begin{array}{ccc} 0 & \frac{\rho}{2c} & \frac{1}{2c^2} \end{array} \right)
+   \left ( \begin{array}{c} d\rho \\ du \\ dp \end{array} \right ) = 0
+\qquad
+%
+\left ( \begin{array}{ccc} 1 & 0 & -\frac{1}{c^2} \end{array} \right)
+   \left ( \begin{array}{c} d\rho \\ du \\ dp \end{array} \right ) = 0
+\end{equation}
+Expanding these, we have the system:
+\begin{align}
+du + \frac{1}{rho c} dp &= 0 \\
+d\rho - \frac{1}{c^2} dp &= 0 
+\end{align}
+Defining the {\em Lagrangian sound speed}, $C \equiv \rho c$, and the 
+specific volume, $\tau = 1/\rho$, we can rewrite this system as:
+\begin{equation}
+du = -\frac{dp}{C} , \,\,\, d\tau = -\frac{dp}{C^2} \quad \mbox{across the left wave}
+\end{equation}
+
+Similar arguments would give the condition across the right wave as:
+\begin{equation}
+du = \frac{dp}{C} , \,\,\, d\tau = -\frac{dp}{C^2} \quad \mbox{across the right wave}
+\end{equation}
+
+These are completely general at this point.  Finding the solution
+across the rarefaction then involves integrating the system from
+$p_{l,r}$ to $p_\star$, where $l, r$ is the original left or right
+state, depending on which wave you are considering.  Coupled with
+this, we need our equation of state to provide $C = C(\tau, p)$.
+These solutions are called the {\em Riemann invariants}.
+
+Considerable simplification can be made if we assume a gamma-law gas.
+The eigensystem with entropy showed us that entropy is constant across
+the solution.  This allows us to write our equation of state as:
+\begin{equation}
+p = K \rho^\gamma
+\end{equation}
+where $K$ is a constant that depends on the entropy.
+
+\begin{exercise}[Riemann invariants for gamma-law gas]
+Assume a gamma-law gas, then you only need to integrate a single
+equation to find the solution across the left rarefaction:
+\begin{equation}
+u = - \int \frac{dp}{\rho c}
+\end{equation}
+where $c = \sqrt{\gamma p/\rho}$.  Using $p = K\rho^\gamma$, show that
+\begin{equation}
+u + \frac{2c}{\gamma - 1} = \mbox{constant} \quad \mbox{across the left rarefaction}
+\end{equation}
+
+This allows you to link the state to the left of the rarefaction to the star state:
+\begin{equation}
+u_l + \frac{2c_l}{\gamma - 1} = u_\star + \frac{2c_\star}{\gamma -1}
+\end{equation}
+and
+\begin{equation}
+\frac{p_l}{\rho_l^\gamma} = \frac{p_\star}{\rho_\star^\gamma}
+\end{equation}
+from our constant-entropy equation of state.  Together, show that this
+gives:
+\begin{equation}
+u_\star = u_l + \frac{2c_l}{\gamma - 1} \left [ 1 - \left ( \frac{p_\star}{p_l}\right )^{(\gamma - 1)/2\gamma} \right ]
+\end{equation}
+A similar construction can be done for the right rarefaction.
+\end{exercise}
+
+For a general equation of state, there is not a closed form, but we would need
+to integrate our system to get $u_\star = u(p_\star)$.
 
 \subsection{Shocks}
 
