@@ -20,7 +20,7 @@ def simplegrid():
     gr.label_center(0, r"$i$")
     gr.label_center(1, r"$i+1$")
 
-    gr.label_edge(1, r"$q_{i+1/2,R}^{n+1/2}$")
+    gr.label_edge(1, r"$q_{i+\myhalf,R}^{n+\myhalf}$")
 
 
     # draw waves
