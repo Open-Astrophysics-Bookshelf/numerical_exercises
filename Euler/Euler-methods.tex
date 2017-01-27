@@ -720,9 +720,9 @@ F_{i+1/2}^{n+1/2} = \left ( \begin{array}{c}
 \end{equation}
 
 Note that instead of returning an approximate state at the interface,
-some Riemann solvers (e.g.\ the HLL(C) solvers) instead approximate the
-fluxes directly.  These use estimates of the wave speeds together with
-the Rankine-Hugoniot jump conditions to give the fluxes.
+some Riemann solvers (e.g.\ the HLL(C) solvers) instead approximate
+the fluxes directly.  These use estimates of the wave speeds together
+with the Rankine-Hugoniot jump conditions to give the fluxes.
 
 
 %-----------------------------------------------------------------------------
@@ -730,14 +730,20 @@ the Rankine-Hugoniot jump conditions to give the fluxes.
 
 Once we have the fluxes, the conservative update is done as
 \begin{equation}
-U^{n+1}_i = U^n_i + \frac{\Delta t}{\Delta x} \left ( F_{i-1/2}^{n+1/2} - F_{i+1/2}^{n+1/2} \right )
+U^{n+1}_i = U^n_i + \frac{\Delta t}{\Delta x} 
+   \left ( F_{i-1/2}^{n+1/2} - F_{i+1/2}^{n+1/2} \right )
 \end{equation}
-The timestep, $\Delta t$ is determined by the time it takes for the fastest
-wave to cross a single zone:
+The timestep, $\Delta t$ is determined by the time it takes for the
+fastest wave to cross a single zone:
 \begin{equation}
 \Delta t < \max_i \frac{\Delta x}{|u_i| + c}
 \end{equation}
 
+
+%-----------------------------------------------------------------------------
+\section{Test problems}
+
+Shock tubes
 
 %-----------------------------------------------------------------------------
 \section{Multidimensional problems}
@@ -966,14 +972,12 @@ of the first valid zone in the domain (just inside the left boundary).
 
 
 %-----------------------------------------------------------------------------
-\section{Higher order}
+\section{Method of lines integration and the higher order}
 
-In the methods above, we predicted a time-centered interface state and
-used this to evaluate the fluxes through the interface.  There are
-alternate techniques however.  For instance, we could do a method of
-lines approach where we discretize the system in space, leading to a
-system of ODEs in time, and the we can use a Runge-Kutta integrator to
-evolve the system in time.
+Just like we explored with linear advection (\S~\ref{adv:sec:mol_2d}),
+instead of doing the characteristic tracing, we could rely on the
+integrator to do the work for us.
+
 
 Discretizing our system in space leads to the following system:
 \begin{equation}
@@ -1036,74 +1040,7 @@ There are standard methods to do this with second-order accuracy in time,
 but higher-order is more tricky.
 
 
-
-
-
-
-%-----------------------------------------------------------------------------
-\section{Going further}
-
-\label{sec:euler:further}
-
-\subsection{Flattening and contact steepening}
-
-  Shocks are self-steepening (this is how we
-  detect them in the Riemann solver---we look for converging characteristics).
-  This can cause trouble with the methods here, because the shocks may become
-  too steep.
-
-  Flattening is a procedure to add additional dissipation at shocks,
-  to ensure that they are smeared out over $\sim 2$ zones.  The
-  flattening procedure is a multi-dimensional operation that looks at
-  the pressure and velocity profiles and returns a coefficient, $\chi
-  \in [0,1]$ that multiplies the limited slopes.  The convention most
-  sources use is that $\chi = 1$ means no flattening (the slopes are
-  unaltered), while $\chi = 0$ means complete flattening---the slopes
-  are zeroed, dropping us to a first-order method.
-  See for example in Saltzman~\cite{saltzman:1994}.  Once the flattening
-  coefficient is determined, the interface state is blended with the
-  cell-centered value via:
-  \begin{equation}
-  q_{i+1/2,\{L,R\}}^{n+1/2} \leftarrow (1 - \chi) q_i + \chi q_{i+1/2,\{L,R\}}^{n+1/2}
-  \end{equation}
-
-  Note that the flattening algorithm increases the stencil size of
-  piecewise-linear and piecewise-parabolic reconstruction to 4 ghost cells
-  on each side.  This is because the flattening procedure itself looks
-  at the pressure 2 zones away, and we need to construct the flattening
-  coefficient in both the first ghost cell (since we need the interface
-  values there) and the second ghost cell (since the flattening procedure
-  looks at the coefficients in its immediate upwinded neighbor).
-
-  In contrast to shocks, contact waves
-  do not steepen (they are associated with the middle characteristic
-  wave, and the velocity does not change across that, meaning there
-  cannot be any convergence).  The original PPM
-  paper advocates a contact steepening method to artificially steepen
-  contact waves.  While it shows good results in 1-d, it can be
-  problematic in multi-dimensions.
-
-  Overall, the community seems split over whether this term should be
-  used.  Many people advocate that if you reach a situation where you
-  think contact steepening may be necessary, it is more likely that
-  the issue is that you do not have enough resolution.
-
-
-\subsection{Artificial viscosity}
-
-  Colella and Woodward argue discuss
-  that behind slow-moving shocks these methods can have oscillations.
-  The fix they propose is to use some artificial viscosity---this is
-  additional dissipation that kicks in at shocks.  (They argue that
-  flattening alone is not enough).
-
-  We use a multidimensional analog of their artificial viscosity
-  (\cite{colellawoodward:1984}, Eq.\ 4.5) which modifies the fluxes.
-  By design, it only kicks in for converging flows, such that you
-  would find around a shock.
-
-
-\subsection{Species}
+\section{Species}
 
 For multifluid flows, the Euler equations are
 augments with continuity equations for each of the (chemical or nuclear)
@@ -1176,7 +1113,7 @@ slope and applying this same slope to all the species.
 \end{itemize}
 
 
-\subsection{Source terms}
+\section{Source terms}
 
 Adding source terms is straightforward.  For
 a system described by
@@ -1252,7 +1189,8 @@ t/2) g$ for constant g---this matches the result from the Taylor
 expansion above (Eq.~\ref{eq:Utaylorstatesource}).
 
 
-\subsection{General equation of state}
+
+\section{General equation of state}
 
 The above methods were formulated
 with a constant gamma equation of state.  A general equation of state
@@ -1377,6 +1315,73 @@ deals with a conserved state of $U = (\rho, \rho U, \rho E, p)$, and
 explicitly adds the transverse terms found in the multi-dimensional form
 of Eq.~\ref{eq:euler:pgeneral}
 to the normal states of $p$.
+
+
+
+
+%-----------------------------------------------------------------------------
+\section{Going further}
+
+\label{sec:euler:further}
+
+\subsection{Flattening and contact steepening}
+
+  Shocks are self-steepening (this is how we
+  detect them in the Riemann solver---we look for converging characteristics).
+  This can cause trouble with the methods here, because the shocks may become
+  too steep.
+
+  Flattening is a procedure to add additional dissipation at shocks,
+  to ensure that they are smeared out over $\sim 2$ zones.  The
+  flattening procedure is a multi-dimensional operation that looks at
+  the pressure and velocity profiles and returns a coefficient, $\chi
+  \in [0,1]$ that multiplies the limited slopes.  The convention most
+  sources use is that $\chi = 1$ means no flattening (the slopes are
+  unaltered), while $\chi = 0$ means complete flattening---the slopes
+  are zeroed, dropping us to a first-order method.
+  See for example in Saltzman~\cite{saltzman:1994}.  Once the flattening
+  coefficient is determined, the interface state is blended with the
+  cell-centered value via:
+  \begin{equation}
+  q_{i+1/2,\{L,R\}}^{n+1/2} \leftarrow (1 - \chi) q_i + \chi q_{i+1/2,\{L,R\}}^{n+1/2}
+  \end{equation}
+
+  Note that the flattening algorithm increases the stencil size of
+  piecewise-linear and piecewise-parabolic reconstruction to 4 ghost cells
+  on each side.  This is because the flattening procedure itself looks
+  at the pressure 2 zones away, and we need to construct the flattening
+  coefficient in both the first ghost cell (since we need the interface
+  values there) and the second ghost cell (since the flattening procedure
+  looks at the coefficients in its immediate upwinded neighbor).
+
+  In contrast to shocks, contact waves
+  do not steepen (they are associated with the middle characteristic
+  wave, and the velocity does not change across that, meaning there
+  cannot be any convergence).  The original PPM
+  paper advocates a contact steepening method to artificially steepen
+  contact waves.  While it shows good results in 1-d, it can be
+  problematic in multi-dimensions.
+
+  Overall, the community seems split over whether this term should be
+  used.  Many people advocate that if you reach a situation where you
+  think contact steepening may be necessary, it is more likely that
+  the issue is that you do not have enough resolution.
+
+
+\subsection{Artificial viscosity}
+
+  Colella and Woodward argue discuss
+  that behind slow-moving shocks these methods can have oscillations.
+  The fix they propose is to use some artificial viscosity---this is
+  additional dissipation that kicks in at shocks.  (They argue that
+  flattening alone is not enough).
+
+  We use a multidimensional analog of their artificial viscosity
+  (\cite{colellawoodward:1984}, Eq.\ 4.5) which modifies the fluxes.
+  By design, it only kicks in for converging flows, such that you
+  would find around a shock.
+
+
 
 
 \subsection{Axisymmetry}
