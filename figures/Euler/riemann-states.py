@@ -21,11 +21,11 @@ def riemann():
     # label a few
     gr.label_center(0, r"$i$", fontsize="medium")
     gr.label_center(1, r"$i+1$", fontsize="medium")
-    gr.label_edge(1, r"$i+1/2$", fontsize="medium")
+    gr.label_edge(1, r"$i+\myhalf$", fontsize="medium")
 
-    gr.mark_cell_left_state(1, r"$U_{i+1/2,L}^{n+1/2}$", fontsize="large",
+    gr.mark_cell_left_state(1, r"$U_{i+\myhalf,L}^{n+\myhalf}$", fontsize="large",
                             color="b")
-    gr.mark_cell_right_state(0, r"$U_{i+1/2,R}^{n+1/2}$", fontsize="large",
+    gr.mark_cell_right_state(0, r"$U_{i+\myhalf,R}^{n+\myhalf}$", fontsize="large",
                              color="b")
 
     gr.label_cell_center(0, r"$U_i$")
@@ -34,13 +34,13 @@ def riemann():
 
 
     # flux
-    plt.arrow(gr.xl[ng+nzones/2]-0.25*gr.dx, 1.05, 0.5*gr.dx, 0, 
+    plt.arrow(gr.xl[ng+nzones//2]-0.25*gr.dx, 1.05, 0.5*gr.dx, 0, 
                 shape='full', head_width=0.075, head_length=0.05, 
                 lw=1, width=0.03,
                 edgecolor="none", facecolor="red",
                 length_includes_head=True, zorder=100)
     
-    plt.text(gr.xl[ng+nzones/2], 1.15, r"$F(U_{i+1/2}^{n+1/2})$", color="red",
+    plt.text(gr.xl[ng+nzones//2], 1.15, r"$F(U_{i+\myhalf}^{n+\myhalf})$", color="red",
                horizontalalignment="center")
 
 

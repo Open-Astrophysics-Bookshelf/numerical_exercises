@@ -17,11 +17,11 @@ plt.clf()
 
 gr.draw_grid()
 
-gr.label_center(nzones/2,   r"$i$")
-gr.label_center(nzones/2-1, r"$i-1$")
-gr.label_center(nzones/2+1, r"$i+1$")
-gr.label_center(nzones/2-2, r"$i-2$")
-gr.label_center(nzones/2+2, r"$i+2$")
+gr.label_center(nzones//2,   r"$i$")
+gr.label_center(nzones//2-1, r"$i-1$")
+gr.label_center(nzones//2+1, r"$i+1$")
+gr.label_center(nzones//2-2, r"$i-2$")
+gr.label_center(nzones//2+2, r"$i+2$")
 
 
 pc = gp.PiecewiseConstant(gr, a)
@@ -47,11 +47,11 @@ plt.clf()
 
 gr.draw_grid()
 
-gr.label_center(nzones/2,   r"$i$")
-gr.label_center(nzones/2-1, r"$i-1$")
-gr.label_center(nzones/2+1, r"$i+1$")
-gr.label_center(nzones/2-2, r"$i-2$")
-gr.label_center(nzones/2+2, r"$i+2$")
+gr.label_center(nzones//2,   r"$i$")
+gr.label_center(nzones//2-1, r"$i-1$")
+gr.label_center(nzones//2+1, r"$i+1$")
+gr.label_center(nzones//2-2, r"$i-2$")
+gr.label_center(nzones//2+2, r"$i+2$")
 
 
 # not limited and limited
@@ -83,11 +83,11 @@ plt.clf()
 
 gr.draw_grid()
 
-gr.label_center(nzones/2,   r"$i$")
-gr.label_center(nzones/2-1, r"$i-1$")
-gr.label_center(nzones/2+1, r"$i+1$")
-gr.label_center(nzones/2-2, r"$i-2$")
-gr.label_center(nzones/2+2, r"$i+2$")
+gr.label_center(nzones//2,   r"$i$")
+gr.label_center(nzones//2-1, r"$i-1$")
+gr.label_center(nzones//2+1, r"$i+1$")
+gr.label_center(nzones//2-2, r"$i-2$")
+gr.label_center(nzones//2+2, r"$i+2$")
 
 for n in range(nzones):
     pc.draw_cell_avg(n, color="0.5")
