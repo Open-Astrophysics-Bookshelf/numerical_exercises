@@ -42,6 +42,7 @@ through a simple algebraic transformation,
 U_{i+1/2,L}^{n+1/2} = U(q_{i+1/2,L}^{n+1/2})
 \end{equation}
 
+% figure made with figures/Euler/riemann-states.py
 \begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{riemann_comp}
@@ -103,6 +104,8 @@ approximated by a line with non-zero slope within each cell.
 Figure~\ref{fig:plm} shows the piecewise linear reconstruction of some
 data.
 
+
+% figure made with figures/Euler/ppm.py
 \begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{piecewise-linear}
@@ -353,6 +356,7 @@ codes usually compute the eigenvectors/eigenvalues for that zone and
 then compute $q_{i-1/2,R}^{n+1/2}$ together with $q_{i+1/2,L}^{n+1/2}$
 in a loop over the zone centers.
 
+% figure made by figures/Euler/states.py
 \begin{figure}
 \centering
 \includegraphics[width=3.5in]{states}
@@ -375,6 +379,7 @@ straightforward.  Note: even though a parabolic profile could be
 third-order accurate, the temporal discretization and prediction in
 this method is still only second-order.
 %
+% figure made by figures/Euler/ppm.py
 \begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{piecewise-parabolic}
@@ -419,6 +424,7 @@ t$, moving at the wavespeed $\lambda$.  This suggests that we can
 replace the linear reconstruction of $q$ with a parabolic one, and
 keep our expressions for the interface states.
 
+% figure made by figures/Euler/ppm-trace.py
 \begin{figure}
 \centering
 \includegraphics[width=3.5in]{ppm-trace}
