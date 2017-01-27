@@ -177,8 +177,8 @@ class FVGrid(object):
 
         if not draw_ghost:
             if center_only == 1:
-                nstart = self.ng + self.nx/2-1
-                nstop = self.ng + self.nx/2
+                nstart = self.ng + self.nx//2-1
+                nstop = self.ng + self.nx//2
             else:
                 nstart = self.ilo
                 nstop = self.ihi
