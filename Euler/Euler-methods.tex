@@ -700,6 +700,24 @@ in~\cite{colellaglaz:1985}).  With the wave speeds and the states
 known in each region, we can evaluate the state on the interface,
 $q_{i+1/2}^{n+1/2}$.
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.9\linewidth]{riemann-2shock-sod-phase}
+\caption[The approximate (2-shock) Hugoniot curves corresponding to
+  the Sod problem]{\label{fig:euler:riemann-2shock-curve} The
+  approximate Hugoniot curves under the 2-shock approximation
+  corresponding to the Sod problem.  Also shown as the gray dotted
+  line is the exact Hugoniot curves (compare to
+  Figure~\ref{fig:euler:riemann-curve}).  We see that the 2-shock
+  approximation does a reasonable job near the intersection and only
+  diverges significantly for small $p$ (which is where the solution
+  should really be a
+  rarefaction).\\ 
+  \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/compressible/riemann-2shock.py}{riemann-2shock.py}}}
+\end{figure}
+
+
+
 Recall that a rarefaction involves diverging flow---it spreads out
 with time.  Special consideration needs to be taken if the rarefaction
 wave spans the interface (a {\em transonic rarefaction}).  In this
