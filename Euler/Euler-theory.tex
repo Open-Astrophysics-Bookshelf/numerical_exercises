@@ -512,7 +512,142 @@ Burgers' equation, we can understand the shock by looking at the
 Rankine-Hugoniot jump conditions.  There will be one condition for
 each of our conservation laws, and together they tell us the speed of
 the shock and how density and pressure jump across
-it.  \MarginPar{derive jump conditions}
+it.  
+
+The Rankine-Hugoniot conditions are:
+\begin{equation}
+\frac{F(U_\star) - F(U_s)}{U_\star - U_s} = S
+\end{equation}
+where $S$ is the shock speed.  It is easiest to work in the frame of the shock.  If the shock speed
+is $S$, then we define the velocity in the shock frame as:
+\begin{align}
+\hat{u}_s &= u_s - S  \\
+\hat{u}_\star &= u_\star - S
+\end{align}
+and the Rankine-Hugoniot conditions become:
+\begin{equation}
+\frac{F(\hat{U}_\star) - F(\hat{U}_s)}{\hat{U}_\star - \hat{U}_s} = 0
+\end{equation}
+
+For the one-dimensional system of Euler equations, we have the conditions:
+\begin{align}
+\rho_\star \hat{u}_\star &= \rho_s \hat{u}_s \\
+\rho_\star \hat{u}_\star^2 + p_\star &= \rho_s \hat{u}_s^2 + p_s \\
+\rho_\star \hat{u}_\star e_\star + \frac{1}{2} \rho_\star \hat{u}_\star^3 + \hat{u}_\star p_\star &= 
+  \rho_s \hat{u}_s e_s + \frac{1}{2} \rho_s \hat{u}_s^3 + \hat{u}_s p_s
+\end{align}
+Our goal is to find how each variable jumps across the shock.
+
+Starting with the mass flux, we can express:
+\begin{equation}
+\hat{u}_\star = \frac{\rho_s}{\rho_\star} \hat{u}_s
+\end{equation}
+and then insert this into the momentum equation to get:
+\begin{equation}
+\rho_s^2 \left ( \frac{1}{\rho_s} - \frac{1}{\rho_\star} \right ) \hat{u}_s^2 = p_\star - p_s
+\end{equation}
+Introducing compact notation for the jump across the shock:
+\begin{equation}
+[q] \equiv q_\star - q
+\end{equation}
+we have:
+\begin{equation}
+-[\tau] = \frac{[p]}{\rho_s^2 \hat{u}_s^2}
+\end{equation}
+
+We now introduce the mass flux, $W_s$.  For a shock separating
+$L$/$L\star$ (the 1-shock), mass will be moving through the shock to the
+right, so, in the frame of the shock, the mass flux is
+\begin{equation}
+W_L \equiv \rho_L \hat{u}_L = \rho_\star \hat{u}_\star
+\end{equation}
+Likewise, for a shock separating $R$/$R\star$ (the 3-shock), mass will
+move to the left passing through the shock, and in the frame of the
+shock, the mass flux is
+\begin{equation}
+W_R \equiv -\rho_R \hat{u}_R = -\rho_\star \hat{u}_\star
+\end{equation}
+
+Thus, our first jump condition becomes
+\begin{equation}
+-[\tau] = \frac{[p]}{W_s^2}
+\end{equation}
+
+Next, going back to the momentum equation, we can substitute in the
+mass flux.  For the left (1-shock), we have:
+\begin{equation}
+W_L \hat{u}_\star + p_\star = W_L \hat{u}_L + p_L
+\end{equation}
+giving
+\begin{equation}
+[u] = -\frac{[p]}{W_L}
+\end{equation}
+where we recognized that $\hat{u}_\star - \hat{u}_L = u_\star - u_L =
+[u]$, since the shock speed is the same for $u_\star$ and $u$.
+
+Likewise, for the right (3-shock), we have:
+\begin{equation}
+-W_R \hat{u}_\star + p_\star = -W_R \hat{u}_R + p_R
+\end{equation}
+giving
+\begin{equation}
+[u] = \frac{[p]}{W_R}
+\end{equation}
+
+The last jump condition is for energy.  Since all the terms in the 
+energy equation are proportional to velocity, there will be no sign
+difference between the left and right shock jump conditions.  
+We start by introducing the mass flux:
+\begin{equation}
+W_s e_\star + \frac{1}{2} W_s \hat{u}_\star^2 + \frac{W_s}{\rho_\star} p_\star =
+  W_s e_s + \frac{1}{2} W_s \hat{u}_s^2 + \frac{W_s}{\rho_s} p_s
+\end{equation}
+The mass flux cancels, leaving
+\begin{equation}
+[e] + \frac{p_\star}{\rho_\star} - \frac{p_s}{\rho_s} + \frac{1}{2} \left ( \hat{u}_\star^2 - \hat{u}_s^2 \right ) = 0
+\end{equation}
+getting rid of the velocities using $\hat{u}_\star^2 = W_s^2/\rho_\star^2$ and 
+$\hat{u}_s^2 = W_s^2/\rho_s^2$, we have:
+\begin{equation}
+[e] + \frac{p_\star}{\rho_\star} - \frac{p_s}{\rho_s} + \frac{1}{2} W_s^2 \left ( \frac{1}{\rho_\star^2} - \frac{1}{\rho_s^2} \right ) = 0
+\end{equation}
+Then introducing $W_s^2 = -[p]/[\tau]$, and after a lot of algebra, we arrive at:
+\begin{equation}
+[e] = -\frac{p_\star + p_s}{2} [\tau]
+\end{equation}
+Some sources write $\bar{p} \equiv (p_\star + p_s)/2$.
+
+To summarize, our jump conditions across the shock are:
+\begin{align}
+[\tau] &= -\frac{[p]}{W_s^2} \\
+[u] &= \mp \frac{[p]}{W_s} \quad\mbox{`-' for left, `+' for right}\\
+[e] &= - \frac{p_\star + p_s}{2} [\tau]
+\end{align}
+
+As with the rarefaction, the goal is to express this as a function, $u_\star
+= u_\star^\mathrm{shock}(p_\star)$.  The general solution procedure is starts with
+a proposed value for $p_\star$, then:
+\begin{enumerate}
+\item root find to find $\rho_\star$ corresponding to the $p_\star$:
+  \begin{enumerate}
+  \item guess a value for $\rho_\star$
+  \item using the equation of state, express $e_\star = e(p_\star, \rho_\star)$
+  \item use Newton's method (or another technique) with $[e] = -\bar{p} [\tau]$
+     to find a correction to $\rho_\star$
+  \end{enumerate}
+\item compute 
+  \begin{equation}
+    \frac{1}{W_s^2} = - \frac{[\tau]}{[p]}
+  \end{equation}
+\item find the star velocity:
+  \begin{equation}
+    u_\star = u_s \mp \frac{[p]}{W_s}
+  \end{equation}
+  where we use `-' for the left shock, and `+' for the right shock
+\end{enumerate}
+
+  
+\subsection{Finding the Star State}
 
 The left and right states are connected to the state in the star
 region by a Hugoniot curve---this is a curve in the $u$-$p$ plane that
