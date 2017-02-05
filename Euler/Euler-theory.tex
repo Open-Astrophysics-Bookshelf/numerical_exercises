@@ -536,7 +536,8 @@ For the one-dimensional system of Euler equations, we have the conditions:
 \rho_\star \hat{u}_\star e_\star + \frac{1}{2} \rho_\star \hat{u}_\star^3 + \hat{u}_\star p_\star &= 
   \rho_s \hat{u}_s e_s + \frac{1}{2} \rho_s \hat{u}_s^3 + \hat{u}_s p_s
 \end{align}
-Our goal is to find how each variable jumps across the shock.
+Our goal is to find how each variable jumps across the shock.  We'll 
+work this out for the general EOS case, following the ideas in \cite{colellaglaz:1985}.
 
 Starting with the mass flux, we can express:
 \begin{equation}
@@ -621,7 +622,7 @@ To summarize, our jump conditions across the shock are:
 \begin{align}
 [\tau] &= -\frac{[p]}{W_s^2} \\
 [u] &= \mp \frac{[p]}{W_s} \quad\mbox{`-' for left, `+' for right}\\
-[e] &= - \frac{p_\star + p_s}{2} [\tau]
+[e] &= - \frac{p_\star + p_s}{2} [\tau] \label{eq:euler:shock:ejump}
 \end{align}
 
 As with the rarefaction, the goal is to express this as a function, $u_\star
@@ -646,6 +647,46 @@ a proposed value for $p_\star$, then:
   where we use `-' for the left shock, and `+' for the right shock
 \end{enumerate}
 
+The one other piece of information we need is the shock speed.  We can
+get this from the mass flux, $W_s$, definition, e.g., $W_L = \rho_L
+\hat{u}_L = \rho_L (u_L - S)$,:
+\begin{equation}
+S = u_s \mp \frac{W_s}{\rho_s} \quad\mbox{`-' for left, `+' for right}\\
+\end{equation}
+
+Just as with the rarefaction, considerable simplification can be made if 
+we assume a gamma-law gas.
+
+\begin{exercise}[Shock jump conditions for $\gamma$-law EOS]
+{
+Introducing 
+\begin{equation}
+e = \frac{p}{\rho} \frac{1}{\gamma -1}
+\end{equation}
+into the jump condition for energy, Eq.~\ref{eq:euler:shock:ejump},
+show that we can express the jump in density in terms of the
+ratio of pressure, $p_\star/p_s$, as:
+\begin{equation}
+\rho_\star = \rho_s \left [ \frac{ \frac{p_\star}{p_s} (\gamma + 1) + (\gamma - 1)}
+   {(\gamma + 1) + \frac{p_\star}{p_s} (\gamma -1)} \right ]
+\end{equation}
+}
+
+Now, compute the mass flux, $W_s$ starting with
+\begin{equation}
+W_s^2 = -\frac{[p]}{[\tau]}
+\end{equation}
+use the $\gamma$-law equation of state and show that
+\begin{equation}
+W_s^2 = \frac{1}{2} p_s \rho_s \left [ \left(\frac{p_\star}{p_s}\right) (\gamma + 1) + (\gamma -1) \right ]
+\end{equation}
+
+With this, show that the shock speed is:
+\begin{equation}
+S = u_s \mp c \left [ \left ( \frac{p_\star}{p_s} \right ) \frac{\gamma+1}{2\gamma} + \frac{\gamma-1}{2\gamma} \right ]^{1/2}
+\end{equation}
+with the `-' or the left shock and the `+' for the right shock.
+\end{exercise}
   
 \subsection{Finding the Star State}
 
@@ -671,6 +712,7 @@ where we are a shock or rarefaction.  Where $p > p_s$, where $s \in {L,R}$, we h
 \end{figure}
 
 
+\subsection{Complete Solution}
 
 
 
