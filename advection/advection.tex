@@ -115,26 +115,26 @@ This is called the {\em Courant-Friedrichs-Lewy} or {\em CFL}
 condition.  A dimensionless quantity called the {\em CFL number} is 
 defined as 
 \begin{equation}
-C = \frac{\Delta t u }{\Delta x} 
+\cfl = \frac{\Delta t u }{\Delta x} 
 \end{equation}
-Stability requires $C \le 1$.
+Stability requires $\cfl \le 1$.
 %
 We traditionally write the timestep as
 \begin{equation}
 \label{eq:timestep}
-\Delta t = C \frac{\Delta x}{u}
+\Delta t = \cfl \frac{\Delta x}{u}
 \end{equation}
-and specify $C$ as part of the problem (a typical value may be $C = 0.7$).
+and specify $\cfl$ as part of the problem (a typical value may be $\cfl = 0.7$).
 
 \begin{exercise}[Perfect advection with a Courant number of 1]
-{Show analytically that when you use $C=1$ in the
+{Show analytically that when you use $\cfl=1$ in the
   first-order differenced advection equation (Eq.~\ref{eq:fo}) that
   you advect the profile exactly, without any numerical error.}
 \end{exercise}
 
 Keep in mind that, in general, we will be solving a non-linear
-system of equations, so it is not possible to run with $C=1$, 
-since $u$ (and therefore $C$) will change from zone to zone.
+system of equations, so it is not possible to run with $\cfl=1$, 
+since $u$ (and therefore $\cfl$) will change from zone to zone.
 Instead, one looks at the most restrictive timestep over all the
 zones and uses that for the entire system.
 
@@ -200,11 +200,11 @@ derivative.
 {\label{fig:fdadvect-ftcs} Finite-difference solution using the FTCS
 finite-difference method for advection using 65 points, modeling for
 only 1/10$^\mathrm{th}$ of a period.  The panel of the left is
-with $C = 0.1$ and the panel on the right is $C = 0.5$.\\
+with $\cfl = 0.1$ and the panel on the right is $\cfl = 0.5$.\\
 \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/advection/fdadvect.py}{fdadvect.py}}}
 \end{figure}
 
-You will find that no matter what value of $C$ you choose with the
+You will find that no matter what value of $\cfl$ you choose with the
 FTCS method, the solution is unconditionally {\em unstable} (see
 Figure~\ref{fig:fdadvect-ftcs}).  If you continue to evolve the
 equation with this method, you would find that the amplitude grows
@@ -221,23 +221,23 @@ of a single Fourier mode in our discretization.  That is, substitute in
 $a_i^n = A^n e^{Ii\theta}$, where $I = \sqrt{-1}$\footnote{our use of $i$ and $j$ as spatial indices presents an unfortunate clash of notation here, hence the use of $I$ for the imaginary unit}, and $\theta$ represents a
 phase.  A method is stable if $|A^{n+1}/A^n| \le 1$.  FTCS appears as:
 \begin{equation}
-  a_i^{n +1} = a_i^n - \frac{C}{2} (a_{i+1}^n - a_{i-1}^n)
+  a_i^{n +1} = a_i^n - \frac{\cfl}{2} (a_{i+1}^n - a_{i-1}^n)
 \end{equation}
 Examining a Fourier mode shows that:
 \begin{align}
-  A^{n+1}e^{Ii\theta} &= A^n e^{Ii\theta} - \frac{C}{2} \left (
+  A^{n+1}e^{Ii\theta} &= A^n e^{Ii\theta} - \frac{\cfl}{2} \left (
       A^n e^{I(i+1)\theta} - A^n e^{I(i-1)\theta} \right ) \\
-  A^{n+1} &= A^n  - \frac{C}{2} A^n \left ( e^{I\theta} - e^{-I\theta}\right ) \\
-  A^{n+1} &= A^n \left ( 1 - I C \sin\theta \right )
+  A^{n+1} &= A^n  - \frac{\cfl}{2} A^n \left ( e^{I\theta} - e^{-I\theta}\right ) \\
+  A^{n+1} &= A^n \left ( 1 - I \cfl \sin\theta \right )
 \end{align}
 so the magnitude of the amplification is
 \begin{equation}
- \left | \frac{A^{n+1}}{A^n}\right |^2 = 1 + C^2\sin^2\theta
+ \left | \frac{A^{n+1}}{A^n}\right |^2 = 1 + \cfl^2\sin^2\theta
 \end{equation}
-We see that there is no value of $C$ that can make the method stable
+We see that there is no value of $\cfl$ that can make the method stable
 ($|A^{n+1}/A^n| > 1$ always).  Doing the same analysis for
 Eq.~\ref{eq:fo} would show that the upwind method is stable for $0\le
-C \le 1$. 
+\cfl \le 1$. 
 
 \begin{exercise}[Stability of the upwind method]
 {Using the above stability analysis, considering the amplitude of a
@@ -245,9 +245,9 @@ C \le 1$.
   method (Eq.~\ref{eq:fo}) is:
   \begin{equation}
     \left | \frac{A^{n+1}}{A^n} \right |^2 = 
-           1 - 2C(1-C)(1-\cos\theta)
+           1 - 2\cfl(1-\cfl)(1-\cos\theta)
   \end{equation}
-  and stability requires $2C(1-C) \ge 0$ or $0 \le C \le 1$.
+  and stability requires $2\cfl(1-\cfl) \ge 0$ or $0 \le \cfl \le 1$.
 }
 \end{exercise}
 
@@ -275,14 +275,14 @@ that our difference equation more closely corresponds to
 \begin{eqnarray}
 \label{eq:advect_trunc_analysis}
 a_t + u a_x &=& \frac{u \Delta x}{2} \left ( 1 - \frac{\Delta t u}{\Delta x} \right ) \frac{\partial^2 a}{\partial x^2} \\
-            &=& \frac{u \Delta x}{2} (1 - C) \frac{\partial^2 a}{\partial x^2}
+            &=& \frac{u \Delta x}{2} (1 - \cfl) \frac{\partial^2 a}{\partial x^2}
 \end{eqnarray}
 }
 \end{exercise}
 
 
 Notice that the righthand side of Eq.~\ref{eq:advect_trunc_analysis}
-looks like a diffusion term, however, if $C > 1$, then the coefficient
+looks like a diffusion term, however, if $\cfl > 1$, then the coefficient
 of the diffusion is negative---this is unphysical.  This means that
 the diffusion would act to take smooth features and make them more
 strongly peaked---the opposite of physical diffusion.
@@ -299,7 +299,7 @@ discretization.  Here our upwind method would appear as:
 \end{equation}
 We can write this as a linear system with coupled equations:
 \begin{equation}
--C a^{n+1}_{i-1} + (1 + C) a^{n+1}_i = a_i^n
+-\cfl a^{n+1}_{i-1} + (1 + \cfl) a^{n+1}_i = a_i^n
 \end{equation}
 The only change here is that the righthand side is evaluated at the new timelevel,
 $n+1$.
@@ -309,13 +309,13 @@ identical, so we only need to update one of these.  Taking $u_0^{n+1} = u_{N-1}^
 \begin{equation}
 \renewcommand{\arraystretch}{1.5}
 \left ( \begin{array}{ccccccc} 
-1+C & & & & & & -C \\
--C  & 1+C &  \\
- &  -C & 1+C &  \\
- & & -C & 1+C &  \\
+1+\cfl & & & & & & -\cfl \\
+-\cfl  & 1+\cfl &  \\
+ &  -\cfl & 1+\cfl &  \\
+ & & -\cfl & 1+\cfl &  \\
 &&&\ddots&\ddots &\\
-&&&&-C & 1+C & \\
-&&&&& -C &1+C
+&&&&-\cfl & 1+\cfl & \\
+&&&&& -\cfl &1+\cfl
 \end{array}
 \right )
 %
@@ -343,9 +343,9 @@ u_{N-1}^{n}
 \end{equation}
 This requires a matrix solve---this makes implicit methods generally more
 expensive than explicit methods.  However, stability analysis would show
-that this implicit discretization is stable for any choice of $C$. (But
+that this implicit discretization is stable for any choice of $\cfl$. (But
 one must not confuse stability with accuracy---the most accurate solutions
-with this method will still have a small $C$).  Also note that the form of 
+with this method will still have a small $\cfl$).  Also note that the form of 
 the matrix will change depending on the choice of boundary conditions.
 Figure~\ref{fig:fdadvect-implicit} shows the result of solving this
 implicit system.
@@ -585,7 +585,7 @@ conditions and compare to the first-order method.  See Figure~\ref{fig:fvadvect}
 {\label{fig:fvadvect} Second-order finite volume advection showing the
 result of advecting a tophat profile through five periods with both
 unlimited and limited slopes.  This calculation used 64 zones and
-$C=0.7$. \\ 
+$\cfl=0.7$. \\ 
 \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/advection/advection.py}{advection.py}}}
 \end{figure}
 
@@ -754,14 +754,14 @@ We can write the conservative update as:
 \begin{align}
 a_i^{n+1} &= a_i^n + \frac{\Delta t}{\Delta x} 
     (u a^{n+\myhalf}_{i-\myhalf} - u a^{n+\myhalf}_{i+\myhalf} ) \\
-          &= a_i^n + C (a^{n+\myhalf}_{i-\myhalf} - a^{n+\myhalf}_{i+\myhalf} ) 
+          &= a_i^n + \cfl (a^{n+\myhalf}_{i-\myhalf} - a^{n+\myhalf}_{i+\myhalf} ) 
 \end{align}
 If we take $u > 0$, then the Riemann problem will always choose the
 left state, so we can write this as:
 \begin{equation}
 a_i^{n+1} = a_i^n + 
-     C \biggl [\underbrace{\left (a_{i-1}^n + \frac{1}{2} (1-C) \Delta a_{i-1} \right )}_{a_{i-\myhalf,L}} -
-              \underbrace{\left (a_{i}^n + \frac{1}{2} (1-C) \Delta a_{i} \right )}_{a_{i+\myhalf,L}}
+     \cfl \biggl [\underbrace{\left (a_{i-1}^n + \frac{1}{2} (1-\cfl) \Delta a_{i-1} \right )}_{a_{i-\myhalf,L}} -
+              \underbrace{\left (a_{i}^n + \frac{1}{2} (1-\cfl) \Delta a_{i} \right )}_{a_{i+\myhalf,L}}
        \biggr ] \label{eq:rea_orig}
 \end{equation}
 
@@ -771,34 +771,34 @@ $a$ in each zone in the form of a piecewise linear polynomial
 a_i(x) = a_i + \frac{\Delta a_i}{\Delta x} (x - x_i)
 \end{equation}
 Consider zone $i$.  
-If we are advecting with a CFL number $C$, then that means that the fraction
-$C$ of the zone immediately to the left of the $i-\myhalf$ interface will advect
-into zone $i$ over the timestep.  And only the fraction $1-C$ in zone $i$
+If we are advecting with a CFL number $\cfl$, then that means that the fraction
+$\cfl$ of the zone immediately to the left of the $i-\myhalf$ interface will advect
+into zone $i$ over the timestep.  And only the fraction $1-\cfl$ in zone $i$
 immediately to the right of the interface will stay in that zone.  This 
 is indicated by the shaded regions in Figure~\ref{fig:rea}. 
 
 The average of the quantity $a$ from zone $i-1$ that will advect into
 zone $i$ is 
 \begin{eqnarray}
-\mathcal{I}_< &=& \frac{1}{C \Delta x} 
-   \int_{x_{i-\myhalf} - C\Delta x}^{x_{i-\myhalf}} a_{i-1}(x) dx \\
+\mathcal{I}_< &=& \frac{1}{\cfl \Delta x} 
+   \int_{x_{i-\myhalf} - \cfl\Delta x}^{x_{i-\myhalf}} a_{i-1}(x) dx \\
 %
- &=& \frac{1}{C \Delta x} 
-   \int_{x_{i-\myhalf} - C\Delta x}^{x_{i-\myhalf}}
+ &=& \frac{1}{\cfl \Delta x} 
+   \int_{x_{i-\myhalf} - \cfl\Delta x}^{x_{i-\myhalf}}
         \left [ a_{i-1} + \frac{\Delta a_{i-1}}{\Delta x} (x - x_{i-1} ) \right ] dx  \\
- &=& a_{i-1} + \frac{1}{2} \Delta a_{i-1} (1-C)
+ &=& a_{i-1} + \frac{1}{2} \Delta a_{i-1} (1-\cfl)
 \end{eqnarray}
 
 And the average of the quantity $a$ in zone $i$ that will remain in zone $i$
 is
 \begin{eqnarray}
-\mathcal{I}_> &=& \frac{1}{(1-C) \Delta x} 
-   \int_{x_{i-\myhalf}}^{x_{i-\myhalf} + (1-C) \Delta x} a_{i}(x) dx \\
+\mathcal{I}_> &=& \frac{1}{(1-\cfl) \Delta x} 
+   \int_{x_{i-\myhalf}}^{x_{i-\myhalf} + (1-\cfl) \Delta x} a_{i}(x) dx \\
 %
- &=& \frac{1}{(1-C) \Delta x} 
-   \int_{x_{i-\myhalf}}^{x_{i-\myhalf} + (1-C)\Delta x} 
+ &=& \frac{1}{(1-\cfl) \Delta x} 
+   \int_{x_{i-\myhalf}}^{x_{i-\myhalf} + (1-\cfl)\Delta x} 
         \left [ a_{i} + \frac{\Delta a_{i}}{\Delta x} (x - x_{i} ) \right ] dx  \\
- &=& a_{i} - \frac{1}{2} \Delta a_{i} C
+ &=& a_{i} - \frac{1}{2} \Delta a_{i} \cfl
 \end{eqnarray}
 
 The final part of the R-E-A procedure is to average the over the 
@@ -806,11 +806,11 @@ advected profiles in the new cell.  The weighted average of the
 amount brought in from the left of the interface and that that remains
 in the cell is
 \begin{align}
-a_i^{n+1} &= C \mathcal{I}_< + (1 - C) \mathcal{I}_>  \\
-          &= C \left [ a^n_{i-1} + \frac{1}{2} \Delta a_{i-1} (1 - C) \right ]
-   + (1-C) \left [ a^n_i - \frac{1}{2} \Delta a_i C \right ] \\
-          &= a^n_i + C \left [a^n_{i-1} + \frac{1}{2}(1 - C) \Delta a_{i-1} \right ]
-           - C \left [ a^n_i + \frac{1}{2} (1-C) \Delta a_i \right ]
+a_i^{n+1} &= \cfl \mathcal{I}_< + (1 - \cfl) \mathcal{I}_>  \\
+          &= \cfl \left [ a^n_{i-1} + \frac{1}{2} \Delta a_{i-1} (1 - \cfl) \right ]
+   + (1-\cfl) \left [ a^n_i - \frac{1}{2} \Delta a_i \cfl \right ] \\
+          &= a^n_i + \cfl \left [a^n_{i-1} + \frac{1}{2}(1 - \cfl) \Delta a_{i-1} \right ]
+           - \cfl \left [ a^n_i + \frac{1}{2} (1-\cfl) \Delta a_i \right ]
 \end{align}          
 This is identical to Eq.~\ref{eq:rea_orig}.  This demonstrates that the
 R-E-A procedure is equivalent to our reconstruction, prediction of the
@@ -877,7 +877,7 @@ each resolution and observe that it converges in a first-order fashion
 converges as second-order. However: you may find less than
 second-order if your initial conditions have discontinuities and you
 are limiting.  Figure~\ref{fig:advnorm} shows the convergence of the
-method with no limiting, MC, and minmod limiting, $C = 0.8$, and a
+method with no limiting, MC, and minmod limiting, $\cfl = 0.8$, and a
 Gaussian initial condition for 5 periods.}
 \end{exercise}
 
@@ -888,7 +888,7 @@ Gaussian initial condition for 5 periods.}
 \caption[Convergence of second-order finite-volume advection]
         {\label{fig:advnorm} Convergence for the second-order
           finite-volume method with no limiting, MC, and minmod limiting advecting a
-          Gaussian initial profile with $C = 0.8$ for 5 periods. \\
+          Gaussian initial profile with $\cfl = 0.8$ for 5 periods. \\
         \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/advection/advection.py}{advection.py}}}
 \end{figure}
 
@@ -899,7 +899,7 @@ Gaussian initial condition for 5 periods.}
 \caption[Effect of different limiters on evolution]
         {\label{fig:limiter_panel} The effect of different limiters on the
           evolution of a Gaussian initial profile (top) and a tophat initial
-          profile (bottom), using $C = 0.8$ and 5 periods. \\
+          profile (bottom), using $\cfl = 0.8$ and 5 periods. \\
         \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/advection/advection.py}{advection.py}}}
 \end{figure}
 
@@ -1211,7 +1211,7 @@ one period.
 \includegraphics[width=0.48\linewidth]{smooth_final}
 \caption[Advection of Gaussian profile in 2-d]
   {\label{fig:adv:gaussian-2d} Advection of a Gaussian profile
-  with $u = v = 1$ for one period on a $32\times 32$ grid, with $C =
+  with $u = v = 1$ for one period on a $32\times 32$ grid, with $\cfl =
   0.8$.  This was run as {\tt ./pyro.py advection smooth
     inputs.smooth}}
 \end{figure}
@@ -1221,7 +1221,7 @@ one period.
 \includegraphics[width=0.48\linewidth]{tophat_init}\hspace{1em}
 \includegraphics[width=0.48\linewidth]{tophat_final}
 \caption[Advection of tophat profile in 2-d]{\label{fig:adv:tophat-2d} Advection of a tophat function with
-  $u = v = 1$ for one period on a $32\times 32$ grid, with $C = 0.8$.
+  $u = v = 1$ for one period on a $32\times 32$ grid, with $\cfl = 0.8$.
   This was run as {\tt ./pyro.py advection tophat inputs.tophat}}
 \end{figure}
 
@@ -1299,24 +1299,24 @@ a^n_{i,j} = A^n e^{Ii\theta}e^{Ij\theta}
 \end{equation}
 Inserting this into our difference equation gives:
 \begin{equation}
-\frac{A^{n+1}}{A^n} = 1 - 2C \left (1 - e^{I\theta} \right )
+\frac{A^{n+1}}{A^n} = 1 - 2\cfl \left (1 - e^{I\theta} \right )
 \end{equation}
 and the amplitude of this is:
 \begin{equation}
-\left | \frac{A^{n+1}}{A^n} \right |^2 = 1 - 4C(1-2C)(1-\cos\theta)
+\left | \frac{A^{n+1}}{A^n} \right |^2 = 1 - 4\cfl(1-2\cfl)(1-\cos\theta)
 \end{equation}
 
 This form looks very close to the one-dimensional case, except the
 numerical coefficients are different.  For this to be $\le 1$, we
-require that $4C(1-2C) > 0$, or $0 \le C \le 1/2$.  In general, for
+require that $4\cfl(1-2\cfl) > 0$, or $0 \le \cfl \le 1/2$.  In general, for
 $d$-dimensional advection using this scheme, the stability criteria is
 \begin{equation}
-C \le \frac{1}{d}
+\cfl \le \frac{1}{d}
 \end{equation}
 We demonstrate this in Figure~\ref{fig:adv:tophat-2d-rk4}, using
 piecewise linear reconstruction and the method-of-lines integration in
-time with 4th order Runge-Kutta.  We see that the case with $C = 0.8$
-is unstable, but the $C = 0.4$ case is stable.
+time with 4th order Runge-Kutta.  We see that the case with $\cfl = 0.8$
+is unstable, but the $\cfl = 0.4$ case is stable.
 
 See \cite{titarevtoro} for some discussion.  Alternate integrators and
 stencils may be able to alleviate this.
@@ -1336,7 +1336,7 @@ stencils may be able to alleviate this.
   {\label{fig:adv:tophat-2d-rk4} Advection of a tophat function using
   the method-of-lines approach with 4th-order Runge-Kutta time integration.
   We use $u = v = 1$ for one period on a $32\times 32$ grid.  On the left
-  is $C = 0.8$---this is clearly unstable.  On the right is $C = 0.4$,
+  is $\cfl = 0.8$---this is clearly unstable.  On the right is $\cfl = 0.4$,
   which is stable.  
   This was run as {\tt ./pyro.py advection\_rk tophat inputs.tophat}}
 \end{figure}

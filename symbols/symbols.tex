@@ -1,0 +1,97 @@
+
+\renewcommand{\arraystretch}{1.5}
+%
+\begin{center}
+\begin{longtable}{|l|p{4.0in}|l|}
+\caption[Definition of symbols.]{Definition of symbols.} \label{table:sym} \\
+%
+\hline \multicolumn{1}{|c|}{\textbf{symbol}} & 
+       \multicolumn{1}{ c|}{\textbf{meaning}} & 
+       \multicolumn{1}{ c|}{\textbf{units}} \\ \hline 
+\endfirsthead
+
+\multicolumn{3}{c}%
+{{\tablename\ \thetable{}---continued}} \\
+\hline \multicolumn{1}{|c|}{\textbf{symbol}} & 
+       \multicolumn{1}{ c|}{\textbf{meaning}} & 
+       \multicolumn{1}{ c|}{\textbf{units}} \\ \hline 
+\endhead
+
+\multicolumn{3}{|r|}{{\em continued on next page}} \\ \hline
+\endfoot
+
+\hline 
+\endlastfoot
+$A$     & Jacobian matrix  & N/A \\
+%
+$c$     & sound speed, $c = \sqrt{\Gamma_1 p/\rho}$  & m~s$^{-1}$ \\
+%
+$C$       & Lagrangian sound speed, $C = \sqrt{\Gamma_1 p \rho}$ & g~m$^{-2}$~s$^{-1}$\\
+%
+$\cfl$    & CFL number & --\\
+%
+$c_p$   & specific heat at constant pressure
+          ($c_p \equiv \left . \partial h / \partial T \right |_{p,X_k}$)
+        & erg~g$^{-1}$~K$^{-1}$ \\
+%
+$c_v$   & specific heat at constant density
+          ($c_v \equiv \left . \partial e / \partial T \right |_{\rho,X_k}$)
+        & erg~g$^{-1}$~K$^{-1}$ \\
+%
+$E$     & specific total energy                      & erg~g$^{-1}$ \\
+%
+$e$     & specific internal energy                   & erg~g$^{-1}$ \\
+%
+$F$     & flux vector                                & N/A \\
+%
+$g$     & gravitational acceleration                 & cm~s$^{-2}$ \\
+%
+$\gamma$ & ratio of specific heats, $\gamma = c_p/c_v$ & -- \\
+%
+$\Gamma_1$ & first adiabatic exponent ($\Gamma_1 \equiv \left . d \log p/d \log \rho \right |_s$) & -- \\
+%
+$h$     & specific enthalpy                          & erg~g$^{-1}$ \\
+%
+$\Ic$   & integral under a (piecewise) parabolic polynomial reconstruction & N/A \\
+%
+$l$     & left eigenvector                           & N/A \\
+%
+$\lambda$ & eigenvalue                               & N/A \\
+% 
+$p$     & pressure                                   & erg~cm$^{-3}$ \\
+%
+$r$     & right eigenvector                          & N/A \\
+%
+$\riemann(q_L, q_R)$ & Riemann problem between states $q_L$ and $q_R$ & N/A \\
+%
+$s$     & specific entropy                           & erg~g$^{-1}$~K$^{-1}$ \\
+%
+$S$     & source term to the divergence constraint   & s$^{-1}$ \\
+%
+$t$     & time                                       & s \\
+%
+$T$     & temperature                                & K \\
+%
+$\tau$  & specific volume ($\tau = 1/\rho$)          & cm$^3$~g$^{-1}$ \\
+%
+$X_k$   & mass fraction of the species ($\sum_k X_k = 1$) & -- \\
+%
+$\rho$  & mass density  & g~cm$^{-3}$ \\
+%
+$q$     & primitive variable vector                 & N/A \\
+%
+$\Ub$   & total velocity vector, $\Ub = (u, v)^\intercal$ in 2-d & cm~s$^{-1}$ \\
+%
+$\Ucons$ & conserved variable vector & N/A \\
+%
+$u$     & x-velocity   & cm~s$^{-1}$ \\
+%
+$v$     & y-velocity   & cm~s$^{-1}$ \\
+%
+$w$     & characteristic variable                   & N/A \\
+%
+\end{longtable}
+\end{center}
+\renewcommand{\arraystretch}{1.0}
+
+

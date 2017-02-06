@@ -15,6 +15,8 @@
 
 \graphicspath{{preface/}{intro/}{finite-volume/}{advection/}{burgers/}{diffusion/}{Euler/}{incompressible/}{multigrid/}{multiphysics/}{low_mach/}{radiation/}{pyro/}}
 
+\usepackage{longtable}
+
 % AMS symbols
 \usepackage{amsmath,amssymb}
 
@@ -256,21 +258,6 @@
 % computer keyboard symbol
 \usepackage{marvosym}
 
-\newcommand{\evm}{{(-)}}
-\newcommand{\evz}{{(\circ)}}
-\newcommand{\evp}{{(+)}}
-\newcommand{\enu}{{(\nu)}}
-
-% shortcuts
-\newcommand{\Dux}{\overline{\Delta u}^{(x)}}
-\newcommand{\Duy}{\overline{\Delta u}^{(y)}}
-
-\newcommand{\Dvx}{\overline{\Delta v}^{(x)}}
-\newcommand{\Dvy}{\overline{\Delta v}^{(y)}}
-
-% vector stuff
-\newcommand{\Ub}{{\bf U}}
-
 % for dotted lines in the matrics/arrays
 \usepackage{arydshln}
 
@@ -345,6 +332,7 @@ keepaspectratio]{images/cover.png}%
 
 \newcommand{\imag}{\mathsf{i}}
 
+\input mysymbols
 
 \begin{document}
 

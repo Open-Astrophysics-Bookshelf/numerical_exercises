@@ -434,33 +434,33 @@ keep our expressions for the interface states.
   the cell that they cross in a timestep, and $\sigma^\enu \Delta x =
   \lambda^\enu \Delta t$ is the distance they can travel.  Here we are
   integrating under the parabola to the right interface of cell $i$ to
-  define $\mathcal{I}_+^\enu$ (this is indicated by the shaded
-  region).  The $\mathcal{I}_+^\enu$ carried by this wave will be
+  define $\Ic_+^\enu$ (this is indicated by the shaded
+  region).  The $\Ic_+^\enu$ carried by this wave will be
   added to those carried by the other waves to form the left state at
   interface $i+1/2$.}
 \end{figure}
 
 In particular, we define
 \begin{equation}
-\mathcal{I}_+^{(\nu)}(q_i) = \frac{1}{\sigma^{(\nu)} \Delta x} \int _{x_{i+1/2} - \sigma^{(\nu)} \Delta x}^{x_{i+1/2}} q(x) dx
+\Ic_+^{(\nu)}(q_i) = \frac{1}{\sigma^{(\nu)} \Delta x} \int _{x_{i+1/2} - \sigma^{(\nu)} \Delta x}^{x_{i+1/2}} q(x) dx
 \end{equation}
 with $\sigma^{(\nu)} = |\lambda^{(\nu)}|\Delta t / \Delta x$ (see Almgren et
 al. Eq. 31)  (see Figure~\ref{fig:ppm_trace}).  Then
 \begin{equation}
 q_{i+1/2,L}^{n+1/2} = \tilde{q}_+ -
    \sum_{\nu;\lambda^{(\nu)}\ge 0} l_i^{(\nu)} \cdot \left (
-        \tilde{q}_+ - \mathcal{I}_+^{(\nu)}(q_i)
+        \tilde{q}_+ - \Ic_+^{(\nu)}(q_i)
        \right ) r_i^{(\nu)}  \label{eq:ppmtrace}
 \end{equation}
 Miller \& Colella choose the reference state as
 \begin{equation}
 \tilde{q}_+ = \left \{ \begin{array}{cc}
-       \mathcal{I}_+^{(+)}(q_i) & \mathrm{if~} u + c > 0 \\
+       \Ic_+^{(+)}(q_i) & \mathrm{if~} u + c > 0 \\
        q_i                    & \mathrm{otherwise}
 \end{array}
 \right .
 \end{equation}
-where the superscript $(+)$ on $\mathcal{I}$ indicates that the
+where the superscript $(+)$ on $\Ic$ indicates that the
 fastest eigenvalue ($\lambda^\evp = u + c$) is used.  This is similar in
 spirit to Eq.~\ref{eq:qref}.  Note: in the original PPM paper, if the
 wave is not approaching the interface, instead of using the
@@ -489,9 +489,9 @@ and
 To complete the description, we need to determine the parameters of
 the parabola.  The values of $q_-$ and $q_+$ are computed and limited
 as described in the original PPM paper.  With this definition, we can
-do the integral $\mathcal{I}_+$:
+do the integral $\Ic_+$:
 \begin{equation}
-\mathcal{I}_+^{(\nu)}(q_i) = q_{+,i} - \frac{\sigma_i^{(\nu)}}{2}
+\Ic_+^{(\nu)}(q_i) = q_{+,i} - \frac{\sigma_i^{(\nu)}}{2}
    \left [ \Delta q_i - q_{6,i} \left ( 1 - \frac{2}{3} \sigma_i^{(\nu)} \right ) \right ]
 \end{equation}
 Figure~\ref{fig:ppm_trace} illustrates the process of integrating under
@@ -515,7 +515,7 @@ Figure~\ref{fig:ppm}.  }
 \noindent\makebox[\linewidth]{\rule{0.9\textwidth}{1pt}}
 {\em Aside}:
 Note that this characteristic projection of $\tilde{q}_+ -
-\mathcal{I}_+^{(\nu)}$ is discussed in the original PPM paper in the
+\Ic_+^{(\nu)}$ is discussed in the original PPM paper in the
 paragraph following Eq. 3.5.  They do not keep things in this form
 however, and instead explicitly multiply out the $l\cdot [\ldots] r$
 terms to arrive at Eq. 3.6.  For example, starting with
@@ -525,7 +525,7 @@ subscripts on the vectors):
 \begin{equation}
 u_{i+1/2,L}^{n+1/2} =
   \tilde{u}_+ - \sum_\nu l^{(\nu)} \cdot
-      ( \tilde{q}_+ -  \mathcal{I}_+^{(\nu)}(q) )
+      ( \tilde{q}_+ -  \Ic_+^{(\nu)}(q) )
     \underbrace{r^{(\nu)}}_{\begin{smallmatrix}\mathrm{only~the}\\ u~\mathrm{`slot'} \end{smallmatrix}}
 \end{equation}
 (where, as above, the $\sim$ indicates the reference state).
@@ -541,9 +541,9 @@ Putting in the eigenvectors and writing out the sum, we have:
                   0 & -\frac{\rho}{2c} & \frac{1}{2c^2} \end{array}
        \right )
     \left ( \begin{array}{c}
-           \tilde{\rho}_+ - \mathcal{I}_+^\evm(\rho) \\
-           \tilde{u}_+ - \mathcal{I}_+^\evm(u) \\
-           \tilde{p}_+ - \mathcal{I}_+^\evm(p)
+           \tilde{\rho}_+ - \Ic_+^\evm(\rho) \\
+           \tilde{u}_+ - \Ic_+^\evm(u) \\
+           \tilde{p}_+ - \Ic_+^\evm(p)
             \end{array} \right )
     {\color{mygray} \left ( \begin{array}{c}
            1  \\
@@ -555,9 +555,9 @@ Putting in the eigenvectors and writing out the sum, we have:
                   1 & 0 & -\frac{1}{c^2} \end{array}
        \right )
     \left ( \begin{array}{c}
-           \tilde{\rho}_+ - \mathcal{I}_+^\evz(\rho) \\
-           \tilde{u}_+ - \mathcal{I}_+^\evz(u) \\
-           \tilde{p}_+ - \mathcal{I}_+^\evz(p)
+           \tilde{\rho}_+ - \Ic_+^\evz(\rho) \\
+           \tilde{u}_+ - \Ic_+^\evz(u) \\
+           \tilde{p}_+ - \Ic_+^\evz(p)
             \end{array} \right )
     {\color{mygray} \left ( \begin{array}{c}
            1  \\
@@ -569,9 +569,9 @@ Putting in the eigenvectors and writing out the sum, we have:
                   0 & \frac{\rho}{2c} & \frac{1}{2c^2} \end{array}
        \right )
     \left ( \begin{array}{c}
-           \tilde{\rho}_+ - \mathcal{I}_+^\evp(\rho) \\
-           \tilde{u}_+ - \mathcal{I}_+^\evp(u) \\
-           \tilde{p}_+ - \mathcal{I}_+^\evp(p)
+           \tilde{\rho}_+ - \Ic_+^\evp(\rho) \\
+           \tilde{u}_+ - \Ic_+^\evp(u) \\
+           \tilde{p}_+ - \Ic_+^\evp(p)
             \end{array} \right )
     {\color{mygray} \left ( \begin{array}{c}
            1  \\
@@ -584,16 +584,16 @@ Here again we show the entire right eigenvector for illustration, but
 only the element that comes into play is drawn in black.  This shows
 that the second term is $0$---the contact wave does not carry a jump
 in velocity.  Multiplying out $l^{(\nu)} \cdot (\tilde{q}_+ -
-\mathcal{I}_+^{(\nu)})$ we have:
+\Ic_+^{(\nu)})$ we have:
 \begin{align}
 u_{i+1/2,L}^{n+1/2} =
    \tilde{u}_+
   &- \frac{1}{2} \left [
-      (\tilde{u}_+ - \mathcal{I}_+^\evm(u) ) -
-       \frac{\tilde{p}_+ - \mathcal{I}_+^\evm(p)}{C} \right ] \nonumber \\
+      (\tilde{u}_+ - \Ic_+^\evm(u) ) -
+       \frac{\tilde{p}_+ - \Ic_+^\evm(p)}{C} \right ] \nonumber \\
   &- \frac{1}{2} \left [
-      (\tilde{u}_+ - \mathcal{I}_+^\evp(u) ) +
-       \frac{\tilde{p}_+ - \mathcal{I}_+^\evp(p)}{C} \right ]
+      (\tilde{u}_+ - \Ic_+^\evp(u) ) +
+       \frac{\tilde{p}_+ - \Ic_+^\evp(p)}{C} \right ]
 \label{eq:ufull}
 \end{align}
 where $C$ is the Lagrangian sound speed ($C = \sqrt{\gamma p \rho}$).
@@ -601,13 +601,13 @@ Defining
 \begin{align}
 \beta^{+} &= - \frac{1}{2C}
   \left [
-      (\tilde{u}_+ - \mathcal{I}_+^\evp(u) ) +
-       \frac{\tilde{p}_+ - \mathcal{I}_+^\evp(p)}{C} \right ] \\
+      (\tilde{u}_+ - \Ic_+^\evp(u) ) +
+       \frac{\tilde{p}_+ - \Ic_+^\evp(p)}{C} \right ] \\
 %
 \beta^{-} &= + \frac{1}{2C}
   \left [
-      (\tilde{u}_+ - \mathcal{I}_+^\evm(u) ) -
-       \frac{\tilde{p}_+ - \mathcal{I}_+^\evm(p)}{C} \right ]
+      (\tilde{u}_+ - \Ic_+^\evm(u) ) -
+       \frac{\tilde{p}_+ - \Ic_+^\evm(p)}{C} \right ]
 \end{align}
 we can write our left state as:
 \begin{equation}
@@ -628,27 +628,27 @@ of the zone ($q_{i-1/2,R}^{n+1/2}$).  Here, the integral under the parabolic
 reconstruction is done over the region of each wave that can reach the left
 interface over our timestep:
 \begin{equation}
-\mathcal{I}_-^{(\nu)}(q) = \frac{1}{\sigma^{(\nu)} \Delta x}
+\Ic_-^{(\nu)}(q) = \frac{1}{\sigma^{(\nu)} \Delta x}
   \int_{x_{i-1/2}}^{x_{i-1/2} + \sigma^{(\nu)} \Delta x} q(x) dx
 \end{equation}
 The right state at $i-1/2$ using zone $i$ data is:
 \begin{equation}
 q_{i-1/2,R}^{n+1/2} = \tilde{q}_- - \sum_{\nu; \lambda_\nu \le 0}
-   l_i^{(\nu)} \cdot \left ( \tilde{q}_- - \mathcal{I}_-^{(\nu)}(q_i) \right ) r_i^{(\nu)}
+   l_i^{(\nu)} \cdot \left ( \tilde{q}_- - \Ic_-^{(\nu)}(q_i) \right ) r_i^{(\nu)}
 \end{equation}
 where the reference state is now:
 \begin{equation}
 \tilde{q}_- = \left \{ \begin{array}{cc}
-   \mathcal{I}_-^{(-)}(q_i) & \mathrm{if~} u - c < 0 \\
+   \Ic_-^{(-)}(q_i) & \mathrm{if~} u - c < 0 \\
     q_i                   & \mathrm{otherwise}
 \end{array} \right .
 \end{equation}
-where the $(-)$ superscript on $\mathcal{I}$ indicates that the most
+where the $(-)$ superscript on $\Ic$ indicates that the most
 negative eigenvalue $(\lambda^- = u - c)$ is used.  The integral
-$\mathcal{I}_-^{(\nu)}(q)$ can be computed analytically by
+$\Ic_-^{(\nu)}(q)$ can be computed analytically by
 substituting in the parabolic interpolant, giving:
 \begin{equation}
-\mathcal{I}_-^{(\nu)}(q_i) = q_{-,i} + \frac{\sigma_i^{(\nu)}}{2}
+\Ic_-^{(\nu)}(q_i) = q_{-,i} + \frac{\sigma_i^{(\nu)}}{2}
    \left [ \Delta q_i + q_{6,i} \left ( 1 - \frac{2}{3} \sigma_i^{(\nu)} \right ) \right ]
 \end{equation}
 This is equivalent to Eq.~31b in the Castro paper.
@@ -1175,11 +1175,11 @@ $u$, not $\rho$ or $p$.  Note that in the PPM paper, they put $G$ on
 the lefthand side of the primitive variable equation, so our signs are
 opposite.  Our projections are now:
 \begin{equation}
-\sum_{\nu; \lambda^\enu \ge 0}l^\enu \cdot (\tilde{q} - \mathcal{I}^\enu_+(q) - \tfrac{\Delta t}{2} G) r^\enu
+\sum_{\nu; \lambda^\enu \ge 0}l^\enu \cdot (\tilde{q} - \Ic^\enu_+(q) - \tfrac{\Delta t}{2} G) r^\enu
 \end{equation}
 for the left state, and
 \begin{equation}
-\sum_{\nu; \lambda^\enu \le 0} l^\enu \cdot (\tilde{q} - \mathcal{I}^\enu_-(q) - \tfrac{\Delta t}{2} G) r^\enu
+\sum_{\nu; \lambda^\enu \le 0} l^\enu \cdot (\tilde{q} - \Ic^\enu_-(q) - \tfrac{\Delta t}{2} G) r^\enu
 \end{equation}
 for the right state.  Since $G$ is only non-zero for velocity, only
 the velocity changes.  Writing out the sum (and performing the vector products), we
@@ -1188,21 +1188,21 @@ get:
 u_{i+1/2,L}^{n+1/2} =
    \tilde{u}_+
   &- \frac{1}{2} \left [
-      \left (\tilde{u}_+ - \mathcal{I}_+^\evm(u) - \frac{\Delta t}{2} \mathcal{I}^\evm_+(g) \right ) -
-       \frac{\tilde{p}_+ - \mathcal{I}_+^\evm(p)}{C} \right ] \nonumber \\
+      \left (\tilde{u}_+ - \Ic_+^\evm(u) - \frac{\Delta t}{2} \Ic^\evm_+(g) \right ) -
+       \frac{\tilde{p}_+ - \Ic_+^\evm(p)}{C} \right ] \nonumber \\
   &- \frac{1}{2} \left [
-      \left (\tilde{u}_+ - \mathcal{I}_+^\evp(u) - \frac{\Delta t}{2} \mathcal{I}^\evp_+(g) \right ) +
-       \frac{\tilde{p}_+ - \mathcal{I}_+^\evp(p)}{C} \right ]
+      \left (\tilde{u}_+ - \Ic_+^\evp(u) - \frac{\Delta t}{2} \Ic^\evp_+(g) \right ) +
+       \frac{\tilde{p}_+ - \Ic_+^\evp(p)}{C} \right ]
 \end{align}
 where the only change from Eq.~\ref{eq:ufull} are the
-$\mathcal{I}^\evm_+(g)$ and $\mathcal{I}^\evp_+(g)$ terms.
+$\Ic^\evm_+(g)$ and $\Ic^\evp_+(g)$ terms.
 
 These differ from the expression in the PPM paper, where $\Delta t G$,
 not $\Delta t/2 G$ is used in the projection, however this appears to
 be a typo.  To see this, notice that if both waves are moving toward
 the interface, then the source term that is added to the interface
-state is $(\Delta t/4) (\mathcal{I}_+^\evm(g) +
-\mathcal{I}_+^\evp(g))$ for the left state, which reduces to $(\Delta
+state is $(\Delta t/4) (\Ic_+^\evm(g) +
+\Ic_+^\evp(g))$ for the left state, which reduces to $(\Delta
 t/2) g$ for constant g---this matches the result from the Taylor
 expansion above (Eq.~\ref{eq:Utaylorstatesource}).
 
@@ -1308,16 +1308,16 @@ Working through the sum for the $(\rho e)$ state, and using a $\sim$ to
 denote the reference states, we arrive at:
 \begin{align}
 (\rho e)_{i+1/2,L}^{n+1/2} = \widetilde{(\rho e)} &-
-   \frac{1}{2} \left [ -\frac{\rho}{c} \left (\tilde{u} - \mathcal{I}^{(1)}_+(u) \right )
-                       +\frac{1}{c^2} \left (\tilde{p} - \mathcal{I}^{(1)}_+(p) \right )
+   \frac{1}{2} \left [ -\frac{\rho}{c} \left (\tilde{u} - \Ic^{(1)}_+(u) \right )
+                       +\frac{1}{c^2} \left (\tilde{p} - \Ic^{(1)}_+(p) \right )
                \right ] h \nonumber \\
   &-
-    \left [ -\frac{h}{c^2} \left (\tilde{p} - \mathcal{I}^{(3)}_+(p) \right )
-                       + \left (\widetilde{(\rho e)} - \mathcal{I}^{(3)}_+(\rho e) \right )
+    \left [ -\frac{h}{c^2} \left (\tilde{p} - \Ic^{(3)}_+(p) \right )
+                       + \left (\widetilde{(\rho e)} - \Ic^{(3)}_+(\rho e) \right )
                \right ] \nonumber \\
   &-
-   \frac{1}{2} \left [ \frac{\rho}{c} \left (\tilde{u} - \mathcal{I}^{(4)}_+(u) \right )
-                       +\frac{1}{c^2} \left (\tilde{p} - \mathcal{I}^{(4)}_+(p) \right )
+   \frac{1}{2} \left [ \frac{\rho}{c} \left (\tilde{u} - \Ic^{(4)}_+(u) \right )
+                       +\frac{1}{c^2} \left (\tilde{p} - \Ic^{(4)}_+(p) \right )
                \right ] h
 \end{align}
 This is the expression that is found in the Castro code.

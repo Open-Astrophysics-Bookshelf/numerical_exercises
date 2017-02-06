@@ -25,6 +25,7 @@ DIRS := preface \
         pyro \
         hydro_examples \
         software-engineering \
+        symbols \
         radiation
 
 # dependencies
