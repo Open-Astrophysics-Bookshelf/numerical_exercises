@@ -28,10 +28,13 @@
 % Palatino font (and math symbols) -- looks nicer than the standard
 % LaTeX font
 \usepackage{mathpazo}
-%\usepackage{helvet}
+\linespread{1.05}        % Palatino needs more leading
+\usepackage[scaled]{helvet} % ss
+\normalfont
+\usepackage[T1]{fontenc}
 
 % URLs (special font for monospace)
-%\usepackage{inconsolata}
+\usepackage{inconsolata}
 %\usepackage[T1]{fontenc}
 
 
@@ -322,14 +325,14 @@ keepaspectratio]{images/cover.png}%
     width=\textwidth,
     arc=0mm,
     auto outer arc,
-    boxsep=0cm,
+    boxsep=0.05cm,
     toprule=2pt,
     leftrule=2pt,
     bottomrule=2pt,
     rightrule=2pt,
     colframe=black,
     colback=white,
-    fontupper=\centering\fontsize{40pt}{40pt}\sffamily,
+    fontupper=\centering\fontsize{28pt}{28pt}\sffamily,
     breakable,
     nobeforeafter,
     enhanced jigsaw,
@@ -366,9 +369,9 @@ keepaspectratio]{images/cover.png}%
 
 \begin{mybox}[]
 \vskip 3mm
-{Introduction to} \\[-0.75em]
-{Computational Hydrodynamics \\[-0.75em]
-for Astrophysics}\\[-0.75em]
+{Introduction to} \\%[-0.75em]
+{Computational Hydrodynamics \\%[-0.75em]
+for Astrophysics}\\%[-0.75em]
 {\normalsize \rmfamily Michael Zingale}
 \end{mybox}
 \end{center}
