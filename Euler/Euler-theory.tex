@@ -4,7 +4,7 @@
 %-----------------------------------------------------------------------------
 \section{Euler equation properties}
 
-The Euler equations\footnote{ We focus on the Euler equations, which  \MarginPar{need to add a discussion of the N-S equations and dimensionless numbers}
+The Euler equations\footnote{ We focus on the Euler equations, which
 are the most commonly modeled set of fluid equations in astrophysics.
 The more general equation set, the Navier-Stokes equations, includes
 dissipative terms.  However, for astophysical flows, the scales on
@@ -12,18 +12,18 @@ which these dissipative terms operate are usually much smaller than
 the system of interest (equivalently, Reynolds numbers of
 astrophysical flows are very large).} describe conservation of 
 mass, momentum, and energy in the fluid approximation.  Their general
-form, without any source terms, is:
+form, without any source terms, is:  \MarginPar{need to add a discussion of the N-S equations and dimensionless numbers}
 \begin{align}
-\frac{\partial \rho}{\partial t} + \nabla \cdot (\rho \Ub) &= 0 \\
-\frac{\partial \rho \Ub}{\partial t} + \nabla \cdot (\rho \Ub \Ub) + \nabla p &= 0 \\
-\frac{\partial \rho E}{\partial t} + \nabla \cdot (\rho E \Ub + p \Ub ) &= 0 
+\ddt{\rho} + \nabla \cdot (\rho \Ub) &= 0 \\
+\ddt{(\rho \Ub)} + \nabla \cdot (\rho \Ub \Ub) + \nabla p &= 0 \\
+\ddt{(\rho E)} + \nabla \cdot (\rho E \Ub + p \Ub ) &= 0 
 \end{align}
-Here $\rho$ is the
-density, $u$ is the one-dimensional velocity, $p$ is the pressure, and $E$
-is the total energy / mass, and can be expressed in terms of the
-specific internal energy, $e$, battery alarmand kinetic energy as:
+Here $\rho$ is the density, $\Ub$ is the velocity vector, $\Ub =
+u\hat{x} + v\hat{y}$, $p$ is the pressure, and $E$ is the total energy
+/ mass, and can be expressed in terms of the specific internal energy,
+$e$, and kinetic energy as:
 \begin{equation}
-E = e + \frac{1}{2} u^2
+E = e + \frac{1}{2} |\Ub|^2
 \end{equation}
 The equations are closed with the addition of an equation of state.  A common
 choice is the gamma-law EOS:
@@ -33,6 +33,10 @@ p = \rho e(\gamma - 1)
 where $\gamma$ is the ratio of specific heats for the gas/fluid (for
 an ideal, monatomic gas, $\gamma = 5/3$), but any relation of the form
 $p = p(\rho, e)$ will work.
+
+For a derivation of the equations of hydrodynamics using moments of
+the Boltzmann equation see \cite{shu,choudhuri}.  For a
+physically-motivated derivation from conservation, see \cite{leveque:2002}.
 
 In one dimension, they appear as\footnote{assuming Cartesian coordinates}:
 \begin{align}
@@ -66,9 +70,9 @@ F(U) = \left ( \begin{array}{c} \rho u \\ \rho uu + p \\ \rho u E + up \end{arra
 \end{equation}
 %
 We can write this in {\em quasi-linear} form by first expressing the
-flux \MarginPar{what about for a general EOS?}  vector in terms of the
-conserved variables directly.  Taking $m \equiv \rho u$, $\mathcal{E}
-\equiv \rho E$, and assuming a gamma-law EOS%
+flux vector in terms of the conserved variables directly.  Taking $m
+\equiv \rho u$, $\mathcal{E} \equiv \rho E$, and assuming a gamma-law
+EOS%
 \footnote{we can relax this assumption by writing $p = p(\rho, e)$, and then
 taking the derivatives of this as needed:  $\partial p/\partial \rho$, 
 $\partial p/\partial m = \partial p /\partial e|_\rho \partial e/\partial m$,
@@ -86,7 +90,21 @@ F(U) = \left ( \begin{array}{c}
           \mathcal{E} (\gamma - 1) \\
       \frac{m\mathcal{E}}{\rho} \gamma -\frac{1}{2} \frac{m^3}{\rho^2} (\gamma -1) \end{array} \right )
 \end{equation}
-The Jacobian of this flux vector can now be computed as $A = \partial
+The Jacobian%
+\footnote{
+The Jacobian, $J$ of a vector $F(U)$ with $F = (f_1, f_2, \ldots, f_n)^\intercal$ and
+$U = (u_1, u_2, \ldots, u_n)^\intercal$ is 
+\begin{equation*}
+J \equiv \frac{\partial F}{\partial U} = \left (
+  \begin{array}{cccc}
+     \partial f_1/\partial u_1 & \partial f_1/\partial u_2 & \ldots & \partial f_1/\partial u_n \\
+     \partial f_2/\partial u_1 & \partial f_2/\partial u_2 & \ldots & \partial f_2/\partial u_n \\
+     \vdots                    & \vdots                    & \ddots & \vdots \\
+     \partial f_n/\partial u_1 & \partial f_n/\partial u_2 & \ldots & \partial f_n/\partial u_n 
+  \end{array} \right )
+\end{equation*}
+}
+of this flux vector can now be computed as $A = \partial
 F/\partial U$:
 \begin{equation}
 A(U) = \left ( \begin{array}{ccc}
@@ -111,6 +129,15 @@ An alternate way to express these equations is using the {\em
 \begin{exercise}[Primitive variable form of the Euler equations]
 {Show that the Euler equations in primitive form can
   be written as
+\begin{align}
+\ddt{\rho} + u \ddx{\rho} + \rho \ddx{u} &= 0 \\
+\ddt{u} + u \ddx{u} + \frac{1}{\rho} \ddx{p} &= 0 \\
+\ddt{p} + u \ddx{p} + \gamma p \ddx{u} &= 0
+\end{align}
+}
+\end{exercise}
+%
+The primitive variable system can be written compactly as:
 \begin{equation}
 q_t + A(q) q_x = 0
 \end{equation}
@@ -124,9 +151,9 @@ A(q) = \left ( \begin{array}{ccc} u  & \rho     & 0 \\
                                   0  & \gamma p & u \end{array} \right )
 \label{eq:primitivesystem}
 \end{equation}
-}
-\end{exercise}
-%
+
+
+
 The eigenvalues of $A$ can be found via $| A - \lambda I | = 0$,
 where $|\ldots|$ indicates the determinant and $\lambda$ are the eigenvalues.
 \begin{exercise}[The eigenvalues of the Euler system]
