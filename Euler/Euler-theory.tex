@@ -741,7 +741,33 @@ where we are a shock or rarefaction.  Where $p > p_s$, where $s \in {L,R}$, we h
 
 \subsection{Complete Solution}
 
+To complete the solution, we need to find which of the 4 regions, $L,
+L\star, R\star, R$ we fall in.  For hydrodynamics, we are usually
+interested only in the solution on the interface, but we can look
+along any ray in the $x$-$t$ plane by defining $\xi = (x -
+x_\mathrm{interface})/t$.  The initial discontinuity it on the
+interface, corresponding to $\xi = 0$.
 
+\begin{figure}
+\centering
+\includegraphics[width=0.49\linewidth]{riemann_waves_ifc_R}
+\includegraphics[width=0.49\linewidth]{riemann_waves_ifc_Rstar} \\
+\includegraphics[width=0.49\linewidth]{riemann_waves_ifc_Lstar}
+\includegraphics[width=0.49\linewidth]{riemann_waves_ifc_L} 
+\caption{\label{fig:euler:riemann_sample} An illustration of the 3
+  waves eminating from an initial discontinuity (the origin of the
+  axes).  The 4 cases show all possible cases of waves being to the
+  left or right of the interface.  In all cases, the middle wave is a
+  contact and the left (1) and right (3) waves are either a shock or a
+  rarefaction.  The state on the interface is: $R$ (top-left);
+  $R\star$ (top-right); $L\star$ (bottom-left); $L$ (bottom-right).}
+\end{figure}
+
+Figure~\ref{fig:euler:riemann_sample} shows the possible
+configurations of the waves.  Note that the middle wave is always a
+contact but the left (1) and right (3) waves can be either a shock or
+rarefaction.  To find out which region the interface falls in, we simply
+look at the speeds.  
 
 %-----------------------------------------------------------------------------
 \section{Other thermodynamic equations}
