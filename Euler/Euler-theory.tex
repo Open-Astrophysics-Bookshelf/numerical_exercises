@@ -814,13 +814,13 @@ Applying this to a Lagrangian fluid element, we have:
 \begin{align}
 \frac{De}{Dt} + p \frac{D(1/\rho)}{Dt} &= 0 \\
 \frac{De}{Dt} - \frac{p}{\rho^2} \frac{D\rho}{Dt} &= 0 \\
-\rho \frac{De}{Dt} + p \nabla \cdot U &= 0
+\rho \frac{De}{Dt} + p \nabla \cdot \Ub &= 0
 \end{align}
 where we used the continuity equation in the last step to eliminate
 $D\rho/Dt$.  This can be rewritten by adding $e \times$ the continuity
 equation to give:
 \begin{equation}
-\frac{\partial (\rho e)}{\partial t} + \nabla \cdot (\rho U e) + p \nabla \cdot U = 0 \label{eq:euler:econs}
+\frac{\partial (\rho e)}{\partial t} + \nabla \cdot (\rho \Ub e) + p \nabla \cdot \Ub = 0 \label{eq:euler:econs}
 \end{equation}
 
 
