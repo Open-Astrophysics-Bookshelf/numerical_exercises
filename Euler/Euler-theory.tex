@@ -648,12 +648,12 @@ Some sources write $\bar{p} \equiv (p_\star + p_s)/2$.
 To summarize, our jump conditions across the shock are:
 \begin{align}
 [\tau] &= -\frac{[p]}{W_s^2} \\
-[u] &= \mp \frac{[p]}{W_s} \quad\mbox{`-' for left, `+' for right}\\
+[u] &= \mp \frac{[p]}{W_s} \quad\mbox{`$-$' for left, `+' for right}\\
 [e] &= - \frac{p_\star + p_s}{2} [\tau] \label{eq:euler:shock:ejump}
 \end{align}
 
 As with the rarefaction, the goal is to express this as a function, $u_\star
-= u_\star^\mathrm{shock}(p_\star)$.  The general solution procedure is starts with
+= u_s^\mathrm{shock}(p_\star)$.  The general solution procedure is starts with
 a proposed value for $p_\star$, then:
 \begin{enumerate}
 \item root find to find $\rho_\star$ corresponding to the $p_\star$:
@@ -671,14 +671,14 @@ a proposed value for $p_\star$, then:
   \begin{equation}
     u_\star = u_s \mp \frac{[p]}{W_s}
   \end{equation}
-  where we use `-' for the left shock, and `+' for the right shock
+  where we use `$-$' for the left shock, and `+' for the right shock
 \end{enumerate}
 
 The one other piece of information we need is the shock speed.  We can
 get this from the mass flux, $W_s$, definition, e.g., $W_L = \rho_L
 \hat{u}_L = \rho_L (u_L - S)$,:
 \begin{equation}
-S = u_s \mp \frac{W_s}{\rho_s} \quad\mbox{`-' for left, `+' for right}\\
+S = u_s \mp \frac{W_s}{\rho_s} \quad\mbox{`$-$' for left, `+' for right}\\
 \end{equation}
 
 Just as with the rarefaction, considerable simplification can be made if 
@@ -708,11 +708,16 @@ use the $\gamma$-law equation of state and show that
 W_s^2 = \frac{1}{2} p_s \rho_s \left [ \left(\frac{p_\star}{p_s}\right) (\gamma + 1) + (\gamma -1) \right ]
 \end{equation}
 
-With this, show that the shock speed is:
+With this, show that the star velocity is:
 \begin{equation}
-S = u_s \mp c \left [ \left ( \frac{p_\star}{p_s} \right ) \frac{\gamma+1}{2\gamma} + \frac{\gamma-1}{2\gamma} \right ]^{1/2}
+u_\star = u_s \pm c_s \left (\frac{2}{\gamma(\gamma - 1)}\right)^{1/2} \frac{1 - \frac{p_\star}{p_s}}{\left ( \frac{p_\star}{p_s} \frac{\gamma + 1}{\gamma - 1} + 1\right)^{1/2}}
 \end{equation}
-with the `-' or the left shock and the `+' for the right shock.
+with `+` for the left shock and `$-$` for the right shock.
+Also show that the shock speed is:
+\begin{equation}
+S = u_s \mp c_s \left [ \left ( \frac{p_\star}{p_s} \right ) \frac{\gamma+1}{2\gamma} + \frac{\gamma-1}{2\gamma} \right ]^{1/2}
+\end{equation}
+with the `$-$' or the left shock and the `+' for the right shock.
 \end{exercise}
   
 \subsection{Finding the Star State}
@@ -721,10 +726,36 @@ The left and right states are connected to the state in the star
 region by a Hugoniot curve---this is a curve in the $u$-$p$ plane that
 shows all of the possible states one can reach from the current state
 through either a shock or rarefaction.  There are two such curves, one
-corresponding to the left and one to the right state, and the solution
+corresponding to the left and one to the right state:
+\begin{equation}
+u_{\star,l}(p) = \begin{cases}
+   u_{\star,l}^\mathrm{shock}(p) & p > p_l \\
+   u_{\star,l}^\mathrm{rare}(p) & p \le p_l 
+   \end{cases}
+\qquad
+u_{\star,r}(p) = \begin{cases}
+   u_{\star,r}^\mathrm{shock}(p) & p > p_r \\
+   u_{\star,r}^\mathrm{rare}(p) & p \le p_r 
+   \end{cases}
+\end{equation}
+The solution
 to the Riemann problem is the point in the $u$-$p$ plane where these
-two curves intersect.  Figure~\ref{fig:euler:riemann-curve} shows the
-Hugoniot curves for the Sod problem.
+two curves intersect, e.g., we solve for $p_\star$ in:
+\begin{equation}
+u_{\star,l}(p_\star) - u_{\star,r}(p_\star) = 0
+\end{equation}
+
+
+Figure~\ref{fig:euler:riemann-curve} shows the
+Hugoniot curves for the Sod problem.  
+
+\begin{exercise}[Hugoniot curves]
+Download the code demonstrated in Figure~\ref{fig:euler:riemann-curve}
+and experiment with different initial conditions to see how the
+solution changes based on the states.  Try to create initial states
+that give rise to two rarefactions and a separate set of states that
+give rise to two shocks.
+\end{exercise}
 
 \begin{figure}[t]
 \centering
