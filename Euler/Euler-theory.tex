@@ -746,8 +746,10 @@ u_{\star,l}(p_\star) - u_{\star,r}(p_\star) = 0
 \end{equation}
 
 
-Figure~\ref{fig:euler:riemann-curve} shows the
-Hugoniot curves for the Sod problem.  
+Figure~\ref{fig:euler:riemann-curve} shows the Hugoniot curves for the
+Sod problem.  Comparing to Figure~\ref{fig:sod}, we see that the right
+state is linked to the star state with a shock while the left state is
+linked to the star state with a rarefaction.
 
 \begin{exercise}[Hugoniot curves]
 Download the code demonstrated in Figure~\ref{fig:euler:riemann-curve}
@@ -812,17 +814,75 @@ dq = 0 = de + pd(1/\rho)
 where $e$ is the specific internal energy.
 Applying this to a Lagrangian fluid element, we have:
 \begin{align}
-\frac{De}{Dt} + p \frac{D(1/\rho)}{Dt} &= 0 \\
-\frac{De}{Dt} - \frac{p}{\rho^2} \frac{D\rho}{Dt} &= 0 \\
+\DDt{e} + p \DDt{(1/\rho)} &= 0 \\
+\DDt{e} - \frac{p}{\rho^2} \frac{D\rho}{Dt} &= 0 \\
 \rho \frac{De}{Dt} + p \nabla \cdot \Ub &= 0
 \end{align}
 where we used the continuity equation in the last step to eliminate
 $D\rho/Dt$.  This can be rewritten by adding $e \times$ the continuity
 equation to give:
 \begin{equation}
-\frac{\partial (\rho e)}{\partial t} + \nabla \cdot (\rho \Ub e) + p \nabla \cdot \Ub = 0 \label{eq:euler:econs}
+\ddt{(\rho e)} + \nabla \cdot (\rho \Ub e) + p \nabla \cdot \Ub = 0 \label{eq:euler:econs}
 \end{equation}
 
+Notice that internal energy, $(\rho e)$ is not a conserved quantity
+(in particular, the $p\nabla \cdot \Ub$ term is not in conservative
+form).  
+
+Another energy-like quantity that we can consider is specific enthalpy,
+\begin{equation}
+h = e + \frac{p}{\rho}
+\end{equation}
+Differentiating this, and using the internal energy equation,
+\begin{align}
+\DDt{h} &= \DDt{e} - \frac{p}{\rho^2} \DDt{\rho} + \frac{1}{\rho} \DDt{p} \\
+        &= \frac{p}{\rho^2}\DDt{\rho} - \frac{p}{\rho^2} \DDt{\rho} + \frac{1}{\rho} \DDt{p}
+\end{align}
+so
+\begin{equation}
+\rho \DDt{h} = \DDt{p}
+\end{equation}
+
+This form is useful for very subsonic flows (see,
+e.g.~\cite{bell:2004}), where $Dp/Dt = 0$, which then shows that
+enthalpy is conserved:
+\begin{equation}
+\ddt{(\rho h)} + \nabla \cdot (\rho h \Ub) = 0
+\end{equation}
+(here we added $h \times$ the continuity equation to transform from
+the Lagrangian derivative to a conservation equation).
+
+
+We can also look at the temperature evolution.  It is interesting to
+approach this from both the internal energy and enthalpy equations.
+Starting with internal energy, writing it as $e(\rho, T)$, we have:
+\begin{equation}
+\DDt{e} = \left . \frac{\partial e}{\partial \rho} \right |_T \DDt{\rho} +
+          \left . \frac{\partial e}{\partial T} \right |_\rho \DDt{T} = -\frac{p}{\rho} \nabla \cdot \Ub
+\end{equation}
+The specific heat at constant volume is defined as $c_v = \partial
+e/\partial T|_\rho$, allowing us to write:
+\begin{equation}
+c_v \DDt{T} = \left ( \left . \frac{\partial e}{\partial \rho} \right |_T - \frac{p}{\rho} \right ) \nabla \cdot \Ub
+\end{equation}
+
+If we alternately start with enthalpy, expressing it as $h = h(p, T)$,
+we have:
+\begin{equation}
+\DDt{h} = \left . \frac{\partial h}{\partial p} \right |_T \DDt{p} +
+          \left . \frac{\partial h}{\partial T} \right |_p \DDt{T} = \frac{1}{\rho} \DDt{p}
+\end{equation}
+The specific heat at constant pressure is defined as $c_p = \partial
+h/\partial T|_p$, letting us write:
+\begin{equation}
+c_p \DDt{T} = \left ( \frac{1}{\rho} - \left . \frac{\partial h}{\partial p} \right |_T \right ) \DDt{p}
+\end{equation}
+
+These two temperature evolution equations are equivalent, but one
+describes the evolution in terms of density and the other in terms of
+pressure.  Later, we'll see how these can be useful when we
+approximate the evolution of reactive flow under constant density or
+constant pressure behaviors.
 
 \subsection{Eigensystem with temperature}
 
