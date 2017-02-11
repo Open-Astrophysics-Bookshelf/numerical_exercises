@@ -7,7 +7,7 @@
 The Euler equations\footnote{ We focus on the Euler equations, which
 are the most commonly modeled set of fluid equations in astrophysics.
 The more general equation set, the Navier-Stokes equations, includes
-dissipative terms.  However, for astophysical flows, the scales on
+dissipative terms.  However, for astrophysical flows, the scales on
 which these dissipative terms operate are usually much smaller than
 the system of interest (equivalently, Reynolds numbers of
 astrophysical flows are very large).} describe conservation of 
@@ -244,7 +244,7 @@ $l^{(i)} \cdot r^{(j)} = \delta_{ij}$.
 A {\sf Jupyter} notebook using {\sf SymPy} that derives these
 eigenvectors is available here:
 \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/compressible/euler.ipynb}{euler.ipynb}}
-\footnote{if you don't have {\sf Juypter}, you can view this rendered online via the github link.}
+\footnote{if you don't have {\sf Jupyter}, you can view this rendered online via the github link.}
 
 A final form of the equations is called the {\em characteristic form}.  Here,
 we wish to diagonalize the matrix $A$.  We take the matrix $R$ to be the
@@ -340,7 +340,7 @@ shock. Note that all 3 primitive variables jump across the left and
 right waves, but only the density jumps across the middle wave.  This
 reflects the right eigenvectors.  Also note that no waves have reached
 the far left and far right yet, the conditions there are the same as
-the initial conditions.  \MarginPar{we need a python version of the riemann exact script}
+the initial conditions.  \MarginPar{we need a python version of the Riemann exact script}
 
 \begin{figure}
 \centering
@@ -397,7 +397,7 @@ from the eigenvectors that the pressure is constant across the
 contact.
 
 The left and right waves can be either a rarefaction or a shock.  It will
-be a shock if the flow is compressive and a rarefaction otherwise.
+be a shock if the flow is compressing and a rarefaction otherwise.
 
 
 \subsection{Rarefactions}
@@ -484,7 +484,7 @@ du = \frac{dp}{C} , \,\,\, d\tau = -\frac{dp}{C^2} \quad \mbox{across the right 
 
 These are completely general at this point.  Note that the condition
 of the second wave, $d\tau/dp$ is essentially the definition of the
-adibatic index $\Gamma_1$, $dp/p - \Gamma_1 d\rho/\rho = 0$ for
+adiabatic index $\Gamma_1$, $dp/p - \Gamma_1 d\rho/\rho = 0$ for
 constant entropy.  Finding the solution across the rarefaction then
 involves integrating the system from $p_{l,r}$ to $p_\star$, where $l,
 r$ is the original left or right state, depending on which wave you
@@ -523,9 +523,13 @@ and
 from our constant-entropy equation of state.  Together, show that this
 gives:
 \begin{equation}
-u_\star = u_l + \frac{2c_l}{\gamma - 1} \left [ 1 - \left ( \frac{p_\star}{p_l}\right )^{(\gamma - 1)/2\gamma} \right ]
+u_{\star,l} = u_l + \frac{2c_l}{\gamma - 1} \left [ 1 - \left ( \frac{p_\star}{p_l}\right )^{(\gamma - 1)/2\gamma} \right ]
 \end{equation}
-A similar construction can be done for the right rarefaction.
+A similar construction can be done for the right rarefaction, yielding:
+\begin{equation}
+u_{\star,r} = u_r - \frac{2c_r}{\gamma - 1} \left [ 1 - \left ( \frac{p_\star}{p_r}\right )^{(\gamma - 1)/2\gamma} \right ]
+\end{equation}
+
 \end{exercise}
 
 For a general equation of state, there is not a closed form, but we would need
@@ -714,7 +718,7 @@ W_s^2 = \frac{1}{2} p_s \rho_s \left [ \left(\frac{p_\star}{p_s}\right) (\gamma 
 
 With this, show that the star velocity is:
 \begin{equation}
-u_\star = u_s \pm c_s \left (\frac{2}{\gamma(\gamma - 1)}\right)^{1/2} \frac{1 - \frac{p_\star}{p_s}}{\left ( \frac{p_\star}{p_s} \frac{\gamma + 1}{\gamma - 1} + 1\right)^{1/2}}
+u_\star = u_s \pm c_s \left [\frac{2}{\gamma(\gamma - 1)}\right]^{1/2} \frac{1 - \frac{p_\star}{p_s}}{\left ( \frac{p_\star}{p_s} \frac{\gamma + 1}{\gamma - 1} + 1\right)^{1/2}}
 \end{equation}
 with `+` for the left shock and `$-$` for the right shock.
 Also show that the shock speed is:
@@ -748,6 +752,22 @@ two curves intersect, e.g., we solve for $p_\star$ in:
 \begin{equation}
 u_{\star,l}(p_\star) - u_{\star,r}(p_\star) = 0
 \end{equation}
+This is equivalent to saying that pressure and velocity do not jump
+across the contact wave.
+
+For a gamma-law equation of state, using the results from the
+exercises, we have:
+\begin{equation}
+\renewcommand{\arraystretch}{1.5}
+u_{\star,s}(p_\star) = \begin{cases}
+  u_s \pm \frac{2c_s}{\gamma - 1} \left [ 1 - \left ( \frac{p_\star}{p_s}\right )^{(\gamma - 1)/2\gamma} \right ] & p_\star \le p_s \\
+\\
+%
+  u_s \pm c_s \left [\frac{2}{\gamma(\gamma - 1)}\right]^{1/2} \frac{1 - \frac{p_\star}{p_s}}{\left ( \frac{p_\star}{p_s} \frac{\gamma + 1}{\gamma - 1} + 1\right)^{1/2}} & p_\star > p_s
+\end{cases}
+\renewcommand{\arraystretch}{1.0}
+\end{equation}
+
 
 
 Figure~\ref{fig:euler:riemann-curve} shows the Hugoniot curves for the
@@ -793,7 +813,7 @@ interface, corresponding to $\xi = 0$.
 \includegraphics[width=0.49\linewidth]{riemann_waves_ifc_L} 
 \caption[Wave configuration for the Riemann problem]
         {\label{fig:euler:riemann_sample} An illustration of the 3
-          waves eminating from an initial discontinuity (the origin of
+          waves emanating from an initial discontinuity (the origin of
           the axes).  The 4 cases show all possible cases of waves
           being to the left or right of the interface.  In all cases,
           the middle wave is a contact and the left (1) and right (3)
@@ -890,6 +910,7 @@ pressure.  Later, we'll see how these can be useful when we
 approximate the evolution of reactive flow under constant density or
 constant pressure behaviors.
 
+\if debug
 \subsection{Eigensystem with temperature}
 
 Here we illustrate how the eigensystem changes when we replace pressure with
@@ -1061,4 +1082,5 @@ Multiple species complicate things---now the replacement of the
 pressure gradient picks up a composition gradient term.
 The eigensystem will change with this addition.  We don't explore this here at this
 time.
+\fi
 
