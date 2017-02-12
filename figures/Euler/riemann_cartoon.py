@@ -26,7 +26,7 @@ class RiemannWaves(object):
         self.theta = np.radians(25)
         self.h = 1.0
 
-    def draw(self, output="plot.png"):
+    def draw(self, output="plot.png", label=None):
         """ draw the wave structure """
 
         # by default, we'll make the waves theta degrees apart
@@ -80,10 +80,15 @@ class RiemannWaves(object):
         plt.plot([-L, L], [0, 0], color="k")
         plt.plot([0, 0], [0, 1.2*self.h], color="k")
 
+        f = plt.gcf()
+
+        # label?
+        if label is not None:
+            plt.text(0.1, 0.9, label, transform=f.transFigure)
+
         plt.axis("off")
         plt.subplots_adjust(left=0.02, right=0.95, bottom=0.05, top=0.95)
 
-        f = plt.gcf()
 
         f.set_size_inches(5.0, 3.5)
 
@@ -94,13 +99,13 @@ class RiemannWaves(object):
 if __name__ == "__main__":
 
     rw = RiemannWaves(left=-1, contact=-1, right=-1)
-    rw.draw("riemann_waves_ifc_R.pdf")
+    rw.draw("riemann_waves_ifc_R.pdf", label="(a)")
 
     rw = RiemannWaves(left=-1, contact=-1, right=1)
-    rw.draw("riemann_waves_ifc_Rstar.pdf")
+    rw.draw("riemann_waves_ifc_Rstar.pdf", label="(b)")
 
     rw = RiemannWaves(left=-1, contact=1, right=1)
-    rw.draw("riemann_waves_ifc_Lstar.pdf")
+    rw.draw("riemann_waves_ifc_Lstar.pdf", label="(c)")
 
     rw = RiemannWaves(left=1, contact=1, right=1)
-    rw.draw("riemann_waves_ifc_L.pdf")
+    rw.draw("riemann_waves_ifc_L.pdf", label="(d)")

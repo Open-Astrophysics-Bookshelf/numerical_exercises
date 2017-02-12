@@ -802,8 +802,8 @@ To complete the solution, we need to find which of the 4 regions, $L,
 L\star, R\star, R$ we fall in.  For hydrodynamics, we are usually
 interested only in the solution on the interface, but we can look
 along any ray in the $x$-$t$ plane by defining $\xi = (x -
-x_\mathrm{interface})/t$.  The initial discontinuity it on the
-interface, corresponding to $\xi = 0$.
+x_\mathrm{interface})/t$.  If the initial discontinuity is on the
+interface, then $\xi = 0$.
 
 \begin{figure}
 \centering
@@ -815,11 +815,12 @@ interface, corresponding to $\xi = 0$.
         {\label{fig:euler:riemann_sample} An illustration of the 3
           waves emanating from an initial discontinuity (the origin of
           the axes).  The 4 cases show all possible cases of waves
-          being to the left or right of the interface.  In all cases,
-          the middle wave is a contact and the left (1) and right (3)
-          waves are either a shock or a rarefaction.  The state on the
-          interface is: $R$ (top-left); $R\star$ (top-right); $L\star$
-          (bottom-left); $L$ (bottom-right).}
+          being to the left or right of the interface (corresponding
+          to the choice $\xi = 0$).  In all cases, the middle wave is
+          a contact and the left (1) and right (3) waves are either a
+          shock or a rarefaction.  The state on the interface is: $R$
+          (case a); $R\star$ (case b); $L\star$ (case c); $L$ (case
+          d).}
 \end{figure}
 
 Figure~\ref{fig:euler:riemann_sample} shows the possible
@@ -827,6 +828,19 @@ configurations of the waves.  Note that the middle wave is always a
 contact but the left (1) and right (3) waves can be either a shock or
 rarefaction.  To find out which region the interface falls in, we simply
 look at the speeds.  
+
+The first speed to consider is the contact wave, that has a speed of
+simply $S_c = u_\star$.  If $S_c > \xi$, then we are choosing between
+the $L$ and $L_\star$ states (cases c and d in
+Figure~\ref{fig:euler:riemann_sample}).  If $S_c < \xi$, then we are
+choosing between $R$ and $R_\star$ states (cases a and b).
+
+This will leave just a single wave to consider: the right wave for
+cases a and b; and the left wave for cases c and d.  We need the wave
+speed for this---it will depend on whether it is a shock or a
+rarefaction.
+
+
 
 %-----------------------------------------------------------------------------
 \section{Other thermodynamic equations}
