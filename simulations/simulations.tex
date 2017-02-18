@@ -45,18 +45,39 @@ decade in wavenumber in your power spectrum at around 512 zones on a
 side of your domain (using the methods that we discussed here).  With
 fewer points than this, you are unlikely to capture turbulence.
 
-
 If nuclear burning is modeled, the steepness of the reaction rate will
-set a lengthscale.  Burning can also was out instabilities, a process
+set a lengthscale.  Burning can also wash out instabilities, a process
 sometimes called {\em fire polishing} \cite{timmeswoosley,SNrt}.
+Here, if the timescale for reactions is faster than the growth rate of
+an instability, the instability is suppressed.  This can set a small
+scale cutoff that is well above the viscous dissipation scale.
 
-Hydrostatic equilibrium also puts demands on the resolution.  A good
-rule of thumb is that you need 10 points per pressure scale height to
-get a reasonable hydrostatic balance (this is discussed at bit in
+Hydrostatic equilibrium also puts demands on the resolution.  Recall that
+the momentum equation is:
+\begin{equation}
+\rho \DDt{u} + \nabla p = \rho g
+\end{equation}
+If hydrostatic equilibrium, $\nabla p = \rho g$, is not exactly
+satisfied, then the residual will appear as a force that generates an
+acceleration and non-zero velocities will build up.  A good rule of
+thumb is that you need 10 points per pressure scale height to get a
+reasonable hydrostatic balance (this is discussed at bit in
 \cite{hse}).
 
-At the end of the day, the best thing you can do is 
-Convergence study
+Spatial resolution is often in contention with improved physics---both
+can add to the computational cost of a simulation, so for fixed cost,
+you have often have to choose between more physics (e.g., larger
+reaction network) or more resolution.
+
+An important part of the simulation process is to ensure that your
+results are converged.  In a {\em convergence study}, you run the same
+simulation at various resolutions and look to see that the major
+results (e.g., integral quantities) do not change significantly with
+resolution.  Ideally you would show that any results you are
+interested are moving toward an asymptotic value.  Even if you are
+not converged however, you could use the trends observed with resolution
+to help understand the possible error in your simulation.
+
 
 
 
