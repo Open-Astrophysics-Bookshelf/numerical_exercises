@@ -11,9 +11,18 @@ Astrophysical flows involve a range of length and timescales.  Often
 it is not possible to capture all these scales in a single simulation,
 so some comprimises must be made.  If you are interested in the
 dynamics on the full scale of the system, $L$, then you will resolve
-down to some cutoff scale $l$, where $L/l \sim O(10^3--10^4)$.  At scales
-smaller than $l$, you neglect the flow features.  The smallest
-scale of importance is the disipation scale $\lambda \ll L$.  
+down to some cutoff scale $l$, where $L/l \sim O(10^3\mbox{--}10^4)$.
+At scales smaller than $l$, you neglect the flow features.  The
+smallest scale of importance is the disipation scale $\lambda \ll L$.
+
+If you are not resolving down to the dissipation scales in our
+problem, then you are working in the realm of {\em large eddy
+  simulations} (LES; see \cite{schmidt:2014}).  Proper LES requires a
+subgrid model to treat the unresolve scales and their feedback onto
+your grid.  If you instead rely on numerical diffusion of your method
+to do the dissipation, you are doing {\em implicit large eddy
+  simulation}---for many flows, this be sufficient to capture the
+dynamics (including turbulence) that are important~\cite{aspden:2008}.
 
 \section{Picking your resolution}
 
