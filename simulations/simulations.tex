@@ -24,20 +24,36 @@ to do the dissipation, you are doing {\em implicit large eddy
   simulation}---for many flows, this be sufficient to capture the
 dynamics (including turbulence) that are important~\cite{aspden:2008}.
 
-\section{Picking your resolution}
+\section{Dimensionality and picking your resolution}
 
-To capture turbulence, you need a large range of lengthscales to get a
-high Reynolds number.  Generally, you'll just start to get a resolved
-inertial range over a decade in wavenumber in your power spectrum at
-around 512 zones on a side of your domain.  With fewer points than
-this, you are unlikely to see a turbulent cascade.
+Nature is three-dimensional, so realistic simulaitons generally
+require full 3-d modeling.  Nevertheless, 2-d simulations can be
+useful to scope out the problem space, and in particular, to get a
+feel for the timescales and resolution needed to resolve smallscale
+features.  The major place where dimensionality affects results is for
+instabilities and turbulence.  The trend in 2-d is for small scale
+vortices to merge and build larger and larger structures, while in 3-d
+motions at the largest scale cascade down to smaller scales, driving
+turbulent flow down to the smallest scales.
+
+Turbulence can be very important in astrophysical flows, and properly
+capturing it requires modeling a large range of lengthscales
+(physically, the objective is to get a large {\em Reynolds number}:
+the ratio of the advective force to the dissipative force).
+Generally, you'll just start to get a resolved inertial range over a
+decade in wavenumber in your power spectrum at around 512 zones on a
+side of your domain (using the methods that we discussed here).  With
+fewer points than this, you are unlikely to capture turbulence.
+
 
 If nuclear burning is modeled, the steepness of the reaction rate will
-set a lengthscale.
+set a lengthscale.  Burning can also was out instabilities, a process
+sometimes called {\em fire polishing} \cite{timmeswoosley,SNrt}.
 
 Hydrostatic equilibrium also puts demands on the resolution.  A good
 rule of thumb is that you need 10 points per pressure scale height to
-get a reasonable hydrostatic balance.
+get a reasonable hydrostatic balance (this is discussed at bit in
+\cite{hse}).
 
 At the end of the day, the best thing you can do is 
 Convergence study
