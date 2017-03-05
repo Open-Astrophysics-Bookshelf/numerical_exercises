@@ -37,9 +37,9 @@ def riemann():
                 length_includes_head=True, zorder=100)
 
 
-    gr.mark_cell_left_state(1, r"$a_{i+\myhalf,L}^{n+\myhalf}$", fontsize="large",
+    gr.mark_cell_left_state(1, r"$a_{i+\myhalf,R}^{n+\myhalf}$", fontsize="large",
                             color="b")
-    gr.mark_cell_right_state(0, r"$a_{i+\myhalf,R}^{n+\myhalf}$", fontsize="large",
+    gr.mark_cell_right_state(0, r"$a_{i+\myhalf,L}^{n+\myhalf}$", fontsize="large",
                              color="b")
 
     gr.label_cell_center(0, r"$a_i$")

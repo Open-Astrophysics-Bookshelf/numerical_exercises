@@ -23,9 +23,9 @@ def riemann():
     gr.label_center(1, r"$i+1$", fontsize="medium")
     gr.label_edge(1, r"$i+\myhalf$", fontsize="medium")
 
-    gr.mark_cell_left_state(1, r"$U_{i+\myhalf,L}^{n+\myhalf}$", fontsize="large",
+    gr.mark_cell_left_state(1, r"$U_{i+\myhalf,R}^{n+\myhalf}$", fontsize="large",
                             color="b")
-    gr.mark_cell_right_state(0, r"$U_{i+\myhalf,R}^{n+\myhalf}$", fontsize="large",
+    gr.mark_cell_right_state(0, r"$U_{i+\myhalf,L}^{n+\myhalf}$", fontsize="large",
                              color="b")
 
     gr.label_cell_center(0, r"$U_i$")
