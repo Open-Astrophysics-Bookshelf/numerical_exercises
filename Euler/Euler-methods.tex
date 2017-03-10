@@ -1062,11 +1062,24 @@ but higher-order is more tricky.
 
 For multifluid flows, the Euler equations are
 augments with continuity equations for each of the (chemical or nuclear)
-species:
+species.  If we denote the density of species $k$ as $\rho_k$, then conservation
+of mass for each species individually implies:
+\begin{equation}
+\label{eq:euler:partialdensitycont}
+\ddt{\rho_k} + \ddx{\rho_k u} = 0
+\end{equation}
+Summing Eq.~\ref{eq:euler:partialdensitycont} over $k$ gives us back
+the mass contunity equation.  The $\rho_k$ are sometimes called {\em
+  partial densities}.  It is often easier to define a mass fraction of species $k$,
+$X_k$, as
+\begin{equation}
+X_k = \frac{\rho_k}{\rho}
+\end{equation}
+and it is easy to see that $\sum_k X_k = 1$, and 
 \begin{equation}
 \frac{\partial (\rho X_k)}{\partial t} + \frac{\partial (\rho X_k u)}{\partial x} = 0
 \end{equation}
-here, $X_k$ are the mass fractions and obey $\sum_k X_k = 1$.  Using the
+Using the
 continuity equation, we can write this as an advection equation:
 \begin{equation}
 \frac{\partial X_k}{\partial t} + u \frac{\partial X_k}{\partial x} = 0
