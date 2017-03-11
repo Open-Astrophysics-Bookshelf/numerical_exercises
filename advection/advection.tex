@@ -1226,6 +1226,45 @@ one period.
 \end{figure}
 
 
+\section{Timestep limiter for multi-dimensions}
+
+The timestep criterion we used in one-dimension
+(Eq.~\ref{eq:timestep}) needs to be generalized for multi-dimensions.
+For the dimensionally split case, since we are basically piecing
+together two one-dimensional sweeps, the timestep limit is usually taken
+as:
+\begin{equation}
+\label{eq:adv:timestep:multid}
+\Delta t = \cfl \min \left \{ \frac{\Delta x}{|u|} , \frac{\Delta y}{|v|} \right \}
+\end{equation}
+This is, for example, the construction that is used with the
+dimensionally-split hydrodynamics solver in the original Flash
+code~\cite{flash}\footnote{although, the paper does not explicitly
+  write this out}.  \MarginPar{does the prometheus MPA 449 write it out?}
+Stability requires picking a CFL number, $\cfl \le 1$.
+
+A general extension of the timestep restriction for a
+fully-multi-dimensional algorithm is often written in the form (see,
+e.g., \cite{shuosher:1989b})
+\begin{equation}
+\label{eq:adv:timstep:mol}
+\Delta t = \cfl \left ( \sum_{i=1}^d \frac{|\Ub \cdot \mathbf{e}_d|}{\Delta x_d} \right )^{-1}
+\end{equation}
+where $d$ is the coordinate direction, $\Ub = (u, v)$ is the velocity
+vector, and $\mathbf{e}_d$ is the unit vector in direction $d$.  For
+these methods $\cfl \lesssim 1$.  This is usually more restrictive than
+Eq.~\ref{eq:adv:timestep:multid}.
+
+For the CTU method described above, \cite{colella:1990} argues that
+the inclusion of the transverse information removes some of the some
+of the instability inherent in simpler schemes, allowing for a larger
+timestep, restricted by Eq.~\ref{eq:adv:timestep:multid}.
+
+Note, because of the different form of the timestep limiters here, it
+is not enough to simply cite a CFL number when describing results, you
+must also explain which form of the timestep calculation
+(Eq.~\ref{eq:adv:timestep:multid} or Eq.~\ref{eq:adv:timstep:mol}) is
+being used.
 
 \section{Method of lines approach}
 \label{adv:sec:mol_2d}
@@ -1320,9 +1359,7 @@ is unstable, but the $\cfl = 0.4$ case is stable.
 
 This reduced $\cfl$ for stability is discussed in
 \cite{shuosher:1989b} (see section 4), and is also discussed in
-\cite{titarevtoro}.  Alternate integrators and stencils may be able to
-alleviate this.
-
+\cite{titarevtoro,mccorquodalecolella}. 
 
 % run as: 
 %   ./pyro.py advection_rk tophat inputs.tophat
