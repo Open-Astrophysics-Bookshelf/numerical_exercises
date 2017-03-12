@@ -1226,7 +1226,7 @@ one period.
 \end{figure}
 
 
-\section{Timestep limiter for multi-dimensions}
+\subsection{Timestep limiter for multi-dimensions}
 
 The timestep criterion we used in one-dimension
 (Eq.~\ref{eq:timestep}) needs to be generalized for multi-dimensions.
@@ -1322,44 +1322,46 @@ etc.
 
 This construction is a lot simpler than the unsplit method described
 previously.  The cost of this simplicity is a reduced range of
-stability.  For simplicity, consider a simple first-order upwind
-scheme in two-dimensions.  Higher order time integrators (like RK4)
-will have separate stages that look like a first-order-in-time update,
-so this stability analysis can be thought of as applying to a single
-stage.  Our difference equation is:
+stability.  
+
+Performaing the stability analysis here is much more complicated.  For
+simplicity, consider a simple first-order upwind scheme in
+two-dimensions.  Higher order time integrators (like RK4) will have
+separate stages that look like a first-order-in-time update, so this
+stability analysis can be thought of as applying to a single stage.
+Our difference equation is:
 \begin{equation}
 \frac{a^{n+1}_{i,j} - a^n_{i,j}}{\Delta t} = - u \frac{a^n_{i,j} - a^n_{i-1,j}}{\Delta x}
 - v \frac{a^n_{i,j} - a^n_{i,j-1}}{\Delta y}
 \end{equation}
 We introduce a single-mode Fourier function, as before, but this time
-in a direction in index space of $\vec{n} = i \hat{i} + j \hat{j}$:
+with a mode in each direction:
 \begin{equation}
-a^n_{i,j} = A^n e^{Ii\theta}e^{Ij\theta}
+a^n_{i,j} = A^n e^{Ii\theta}e^{Ij\phi}
 \end{equation}
+Next, to simplify things, we'll assume that $u = v$, and $\Delta x = \Delta y$, 
+then $\cfl = u \Delta t/ \Delta x = v \Delta t / \Delta y$.
 Inserting this into our difference equation gives:
 \begin{equation}
-\frac{A^{n+1}}{A^n} = 1 - 2\cfl \left (1 - e^{I\theta} \right )
+\frac{A^{n+1}}{A^n} = 1 - \cfl \left (1 - e^{-I\theta} \right ) - \cfl \left (1 - e^{-I\phi} \right )
 \end{equation}
-and the amplitude of this is:
-\begin{equation}
-\left | \frac{A^{n+1}}{A^n} \right |^2 = 1 - 4\cfl(1-2\cfl)(1-\cos\theta)
-\end{equation}
+This form looks very close to the one-dimensional case, but it is
+difficult to analytically find the values of $\cfl$, but we can
+numerically find the maximum $ | {A^{n+1}}/{A^n} |^2$ for $\theta \in
+[0, 2\pi]$ and $\phi \in [0, 2\pi]$ as a function of $\cfl$.  In doing
+this, we find that this discretization is unstable ($| {A^{n+1}}/{A^n}
+|^2 > 1$) for $\cfl > 1/2$\footnote{See the script
+  \href{https://github.com/zingale/hydro_examples/blob/master/compressible/cfl.py}{cfl.py}}.
 
-This form looks very close to the one-dimensional case, except the
-numerical coefficients are different.  For this to be $\le 1$, we
-require that $4\cfl(1-2\cfl) > 0$, or $0 \le \cfl \le 1/2$.  In general, for
-$d$-dimensional advection using this scheme, the stability criteria is
-\begin{equation}
-\cfl \le \frac{1}{d}
-\end{equation}
-We demonstrate this in Figure~\ref{fig:adv:tophat-2d-rk4}, using
-piecewise linear reconstruction and the method-of-lines integration in
-time with 4th order Runge-Kutta.  We see that the case with $\cfl = 0.8$
-is unstable, but the $\cfl = 0.4$ case is stable.
-
+This restriction is $1/d$, where $d$ is the dimensionality, and it is
+analogous to the difference between the timestep limits for stability
+from the more generous Eq.~\ref{eq:adv:timestep:multid} to the more
+restrictive Eq.~\ref{eq:adv:timstep:mol}.
 This reduced $\cfl$ for stability is discussed in
 \cite{shuosher:1989b} (see section 4), and is also discussed in
-\cite{titarevtoro,mccorquodalecolella}. 
+\cite{titarevtoro,mccorquodalecolella}.  Different reconstruction and
+integration methods can vary this limit some, for instance, the fourth-order
+method in \cite{mccorquodalecolella} allows for $\Delta t \sum_{i=1}^d (|\Ub \cdot \mathbf{e}_d|)/\Delta x_d  \lesssim 1.4$.
 
 % run as: 
 %   ./pyro.py advection_rk tophat inputs.tophat
