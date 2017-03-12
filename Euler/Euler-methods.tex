@@ -754,14 +754,51 @@ U^{n+1}_i = U^n_i + \frac{\Delta t}{\Delta x}
 The timestep, $\Delta t$ is determined by the time it takes for the
 fastest wave to cross a single zone:
 \begin{equation}
-\Delta t < \max_i \frac{\Delta x}{|u_i| + c}
+\Delta t < \min_i \frac{\Delta x}{|u_i| + c}
 \end{equation}
-
+(This is the limit for the CTU unsplit scheme here, but see the discussion
+in \S~\ref{sec:adv:timestep}).
 
 %-----------------------------------------------------------------------------
 \section{Test problems}
 
-Shock tubes
+There are a large number of standard test problems that are used to
+test out our methods.  Like we say with advection, it is best to have
+a problem with an analytic solution.  
+
+\subsection{Shock tubes}
+
+Shock tubes are Riemann problems---consider the evolution of an
+initial discontinuity in the domain.  The evolution with time will
+just be the solution to the Riemann problem that we described
+\S~\ref{euler:sec:riemann}.  The initial conditions can be varied to
+produce any combination of shocks and rarefactions as the left and
+right waves.  A popular initial condition is the Sod
+problem~\cite{sod:1978} which results is a right moving shock and
+contact and a left moving rarefaction.
+
+Note: it is a good test of your code's ability to preserve symmetry to
+flip the initial conditions left/right and rerun.  The results should
+be the same to machine precision, but atleast to roundoff error.  A
+common reason for breaking symmetry is using inequalities in your code
+that are biases in a direction, e.g.,
+\begin{lstlisting}
+if u > 0:
+   # positive velocity test case
+else:
+   # negative or zero velocity test case
+\end{lstlisting}
+This has a left-right bias, since we don't handle the case where $u =
+0$ separately.  A better construction would test on $u < 0$ alone, and
+then have a final {\em else} clause to catch $u = 0$.
+
+For a general equation of state, you can still solve the Riemann
+problem exactly and define analogous test problems to those commonly
+used for a gamma-law gas.  Some shock tube test problems for a stellar
+equation of state are shown in \cite{zingalekatz}.
+
+For the tests shown below, we use the \hydrooned\ code described in
+Appendix~\ref{app:hydro1d}.
 
 %-----------------------------------------------------------------------------
 \section{Multidimensional problems}
