@@ -661,6 +661,69 @@ limiting process in defining $q_+$ and $q_-$, and does not affect the
 subsequent parts of the algorithm.
 
 
+\subsection{Flattening and contact steepening}
+
+  Shocks are self-steepening (this is how we
+  detect them in the Riemann solver---we look for converging characteristics).
+  This can cause trouble with the methods here, because the shocks may become
+  too steep.
+
+  Flattening is a procedure to add additional dissipation at shocks,
+  to ensure that they are smeared out over $\sim 2$ zones.  The
+  flattening procedure is a multi-dimensional operation that looks at
+  the pressure and velocity profiles and returns a coefficient, $\chi
+  \in [0,1]$ that multiplies the limited slopes.  The convention most
+  sources use is that $\chi = 1$ means no flattening (the slopes are
+  unaltered), while $\chi = 0$ means complete flattening---the slopes
+  are zeroed, dropping us to a first-order method.
+  See for example in Saltzman~\cite{saltzman:1994}.  Once the flattening
+  coefficient is determined, the interface state is blended with the
+  cell-centered value via:
+  \begin{equation}
+  q_{i+1/2,\{L,R\}}^{n+1/2} \leftarrow (1 - \chi) q_i + \chi q_{i+1/2,\{L,R\}}^{n+1/2}
+  \end{equation}
+
+  Note that the flattening algorithm increases the stencil size of
+  piecewise-linear and piecewise-parabolic reconstruction to 4 ghost cells
+  on each side.  This is because the flattening procedure itself looks
+  at the pressure 2 zones away, and we need to construct the flattening
+  coefficient in both the first ghost cell (since we need the interface
+  values there) and the second ghost cell (since the flattening procedure
+  looks at the coefficients in its immediate upwinded neighbor).
+
+  In contrast to shocks, contact waves
+  do not steepen (they are associated with the middle characteristic
+  wave, and the velocity does not change across that, meaning there
+  cannot be any convergence).  The original PPM
+  paper advocates a contact steepening method to artificially steepen
+  contact waves.  While it shows good results in 1-d, it can be
+  problematic in multi-dimensions.
+
+  Overall, the community seems split over whether this term should be
+  used.  Many people advocate that if you reach a situation where you
+  think contact steepening may be necessary, it is more likely that
+  the issue is that you do not have enough resolution.
+
+
+\subsection{Limiting on characteristic variables}
+
+  Some authors (see for example, \cite{athena} Eqs.~37, 38) advocate
+  limiting on the characteristic variables rather than the primitive
+  variables.  The characteristic slopes for the quantity carried by
+  the wave $\nu$ can be found from the primitive variables
+  as: \begin{equation} \Delta w^{(\nu)} = l^{(\nu)} \cdot \Delta
+  q \end{equation} any limiting would then be done to $\Delta
+  w^{(\nu)}$ and the limited primitive variables would be recovered
+  as: \begin{equation} \overline{\Delta q} = \sum_\nu \overline{\Delta
+  w}^{(\nu)} r^{(\nu)} \end{equation} (here we use an overline to
+  indicate limiting).
+
+  This is attractive because it is more in the spirit of the linear
+  advection equation and the formalism that was developed there.  A
+  potential downside is that when you limit on the characteristic
+  variables and convert back to the primitive, the primitive variables
+  may now fall outside of valid physical ranges (for example, negative
+  density).
 
 
 
@@ -759,46 +822,91 @@ fastest wave to cross a single zone:
 (This is the limit for the CTU unsplit scheme here, but see the discussion
 in \S~\ref{sec:adv:timestep}).
 
+
+\subsection{Artificial viscosity}
+
+Colella and Woodward argue that behind slow-moving shocks these
+methods can have oscillations.  The fix they propose is to use some
+artificial viscosity---this is additional dissipation that kicks in at
+shocks.  (They argue that flattening alone is not enough).
+
+We use a multidimensional analog of their artificial viscosity
+(\cite{colellawoodward:1984}, Eq.\ 4.5) which modifies the fluxes.  By
+design, it only kicks in for converging flows, such that you would
+find around a shock.
+
+
 %-----------------------------------------------------------------------------
-\section{Test problems}
+\section{Boundary conditions}
 
-There are a large number of standard test problems that are used to
-test out our methods.  Like we say with advection, it is best to have
-a problem with an analytic solution.  
+Boundary conditions are implemented through ghost cells.  The following
+are the most commonly used boundary conditions.  For the expressions
+below, we use the subscript $\mathrm{lo}$ to denote the spatial index
+of the first valid zone in the domain (just inside the left boundary).
 
-\subsection{Shock tubes}
+\begin{itemize}
 
-Shock tubes are Riemann problems---consider the evolution of an
-initial discontinuity in the domain.  The evolution with time will
-just be the solution to the Riemann problem that we described
-\S~\ref{euler:sec:riemann}.  The initial conditions can be varied to
-produce any combination of shocks and rarefactions as the left and
-right waves.  A popular initial condition is the Sod
-problem~\cite{sod:1978} which results is a right moving shock and
-contact and a left moving rarefaction.
+\item {\em Outflow}: the idea here is that the flow should gracefully
+  leave the domain.  The simplest form is to simply give all variables
+  a zero-gradient:
+  \begin{equation}
+  \left ( \begin{array}{c} \rho_{\mathrm{lo-1},j} \\
+                           (\rho u)_{\mathrm{lo-1},j} \\
+                           (\rho v)_{\mathrm{lo-1},j} \\
+                           (\rho E)_{\mathrm{lo-1},j} \end{array} \right ) =
+  \left ( \begin{array}{c} \rho_{\mathrm{lo},j} \\
+                           (\rho u)_{\mathrm{lo},j} \\
+                           (\rho v)_{\mathrm{lo},j} \\
+                           (\rho E)_{\mathrm{lo},j} \end{array} \right )
+  \end{equation}
 
-Note: it is a good test of your code's ability to preserve symmetry to
-flip the initial conditions left/right and rerun.  The results should
-be the same to machine precision, but atleast to roundoff error.  A
-common reason for breaking symmetry is using inequalities in your code
-that are biases in a direction, e.g.,
-\begin{lstlisting}
-if u > 0:
-   # positive velocity test case
-else:
-   # negative or zero velocity test case
-\end{lstlisting}
-This has a left-right bias, since we don't handle the case where $u =
-0$ separately.  A better construction would test on $u < 0$ alone, and
-then have a final {\em else} clause to catch $u = 0$.
+  Note that these boundaries are not perfect.  At the boundary, one
+  (or more) of the waves from the Riemann problem can still enter
+  the domain.  Only for supersonic flow, do all waves point outward.
 
-For a general equation of state, you can still solve the Riemann
-problem exactly and define analogous test problems to those commonly
-used for a gamma-law gas.  Some shock tube test problems for a stellar
-equation of state are shown in \cite{zingalekatz}.
 
-For the tests shown below, we use the \hydrooned\ code described in
-Appendix~\ref{app:hydro1d}.
+\item {\em Reflect}: this is appropriate at a solid wall or symmetry
+  plane.  All variables are reflected across the boundary, with the
+  normal velocity given the opposite sign.  At the $x$-boundary, the
+  first ghost cell is:
+  \begin{equation}
+  \left ( \begin{array}{c} \rho_{\mathrm{lo-1},j} \\
+                           (\rho u)_{\mathrm{lo-1},j} \\
+                           (\rho v)_{\mathrm{lo-1},j} \\
+                           (\rho E)_{\mathrm{lo-1},j} \end{array} \right ) =
+  \left ( \begin{array}{c} \rho_{\mathrm{lo},j} \\
+                           -(\rho u)_{\mathrm{lo},j} \\
+                           (\rho v)_{\mathrm{lo},j} \\
+                           (\rho E)_{\mathrm{lo},j} \end{array} \right )
+  \end{equation}
+  The next is:
+  \begin{equation}
+  \left ( \begin{array}{c} \rho_{\mathrm{lo-2},j} \\
+                           (\rho u)_{\mathrm{lo-2},j} \\
+                           (\rho v)_{\mathrm{lo-2},j} \\
+                           (\rho E)_{\mathrm{lo-2},j} \end{array} \right ) =
+  \left ( \begin{array}{c} \rho_{\mathrm{lo+1},j} \\
+                           -(\rho u)_{\mathrm{lo+1},j} \\
+                           (\rho v)_{\mathrm{lo+1},j} \\
+                           (\rho E)_{\mathrm{lo+1},j} \end{array} \right )
+  \end{equation}
+  and so on $\ldots$
+
+
+  \item {\em Inflow}: inflow boundary conditions specify the state
+    directly on the boundary.  Technically, this state is on the
+    boundary itself, not the cell-center.  This can be accounted for
+    by modifying the stencils used in the reconstruction near inflow
+    boundaries.
+
+  \item {\em Hydrostatic}: a hydrostatic boundary can be used at the
+    base of an atmosphere to provide the pressure support necessary to
+    hold up the atmosphere against gravity while still letting
+    acoustic waves pass through.  An example of this is described
+    in \cite{hse}.
+
+\end{itemize}
+
 
 %-----------------------------------------------------------------------------
 \section{Multidimensional problems}
@@ -954,76 +1062,92 @@ U^{n+1}_{i,j} = U^n_{i,j}
 \end{equation}
 
 
+
+\subsection{3-d unsplit}
+
+The extension of the unsplit methodology to 3-d is described by
+Saltzman~\cite{saltzman:1994}.  The basic idea is the same as in 2-d,
+except now additional transverse Riemann solve are needed to fully
+couple in the corners.
+
+
 %-----------------------------------------------------------------------------
-\section{Boundary conditions}
+\section{Axisymmetry}
 
-Boundary conditions are implemented through ghost cells.  The following
-are the most commonly used boundary conditions.  For the expressions
-below, we use the subscript $\mathrm{lo}$ to denote the spatial index
-of the first valid zone in the domain (just inside the left boundary).
+\begin{figure}
+\centering
+\includegraphics[width=0.8\linewidth]{axisymmetry}
+\caption[The axisymmetric computational domain]
+{\label{fig:axisymmetri} The axisymmetric computational domain.  Here we
+  imagine that the 2-d plane rotates through the cylindrical $\theta$ angle to
+  create a volume.}
+\end{figure}
 
-\begin{itemize}
-
-\item {\em Outflow}: the idea here is that the flow should gracefully
-  leave the domain.  The simplest form is to simply give all variables
-  a zero-gradient:
-  \begin{equation}
-  \left ( \begin{array}{c} \rho_{\mathrm{lo-1},j} \\
-                           (\rho u)_{\mathrm{lo-1},j} \\
-                           (\rho v)_{\mathrm{lo-1},j} \\
-                           (\rho E)_{\mathrm{lo-1},j} \end{array} \right ) =
-  \left ( \begin{array}{c} \rho_{\mathrm{lo},j} \\
-                           (\rho u)_{\mathrm{lo},j} \\
-                           (\rho v)_{\mathrm{lo},j} \\
-                           (\rho E)_{\mathrm{lo},j} \end{array} \right )
-  \end{equation}
-
-  Note that these boundaries are not perfect.  At the boundary, one
-  (or more) of the waves from the Riemann problem can still enter
-  the domain.  Only for supersonic flow, do all waves point outward.
-
-
-\item {\em Reflect}: this is appropriate at a solid wall or symmetry
-  plane.  All variables are reflected across the boundary, with the
-  normal velocity given the opposite sign.  At the $x$-boundary, the
-  first ghost cell is:
-  \begin{equation}
-  \left ( \begin{array}{c} \rho_{\mathrm{lo-1},j} \\
-                           (\rho u)_{\mathrm{lo-1},j} \\
-                           (\rho v)_{\mathrm{lo-1},j} \\
-                           (\rho E)_{\mathrm{lo-1},j} \end{array} \right ) =
-  \left ( \begin{array}{c} \rho_{\mathrm{lo},j} \\
-                           -(\rho u)_{\mathrm{lo},j} \\
-                           (\rho v)_{\mathrm{lo},j} \\
-                           (\rho E)_{\mathrm{lo},j} \end{array} \right )
-  \end{equation}
-  The next is:
-  \begin{equation}
-  \left ( \begin{array}{c} \rho_{\mathrm{lo-2},j} \\
-                           (\rho u)_{\mathrm{lo-2},j} \\
-                           (\rho v)_{\mathrm{lo-2},j} \\
-                           (\rho E)_{\mathrm{lo-2},j} \end{array} \right ) =
-  \left ( \begin{array}{c} \rho_{\mathrm{lo+1},j} \\
-                           -(\rho u)_{\mathrm{lo+1},j} \\
-                           (\rho v)_{\mathrm{lo+1},j} \\
-                           (\rho E)_{\mathrm{lo+1},j} \end{array} \right )
-  \end{equation}
-  and so on $\ldots$
+It is common to do 2-d axisymmetric models---here
+the $r$ and $z$ coordinates from a cylindrical geometry are modeled.  This
+appears Cartesian, except there is a volume factor implicit in the
+divergence that must be accounted for.  Our system in cylindrical
+coordinates is:
+\begin{equation}
+\frac{\partial U}{\partial t}
+  + \frac{1}{r}\frac{\partial r F^{(r)}}{\partial r}
+  + \frac{\partial F^{(z)}}{\partial z} = 0
+\end{equation}
+Expanding out the $r$ derivative, we can write this as:
+\begin{equation}
+\frac{\partial U}{\partial t}
+  + \frac{\partial F^{(r)}}{\partial r}
+  + \frac{\partial F^{(z)}}{\partial z} = -\frac{F^{(r)}}{r}
+\end{equation}
+This latter form is used when predicting the interface states, with
+the volume source that appears on the right treated as a source term
+to the interface states (as described above).  Once the fluxes are
+computed, the final update uses the conservative form of the system,
+with the volume factors appearing now in the definition of the
+divergence.
 
 
-  \item {\em Inflow}: inflow boundary conditions specify the state
-    directly on the boundary.  Technically, this state is on the
-    boundary itself, not the cell-center.  This can be accounted for
-    by modifying the stencils used in the reconstruction near inflow
-    boundaries.
 
-  \item {\em Hydrostatic}: a hydrostatic boundary can be used at the
-    base of an atmosphere to provide the pressure support necessary to
-    hold up the atmosphere against gravity while still letting
-    acoustic waves pass through.  An example of this is described
-    in \cite{hse}.
+%-----------------------------------------------------------------------------
+\section{Test problems}
 
-\end{itemize}
+There are a large number of standard test problems that are used to
+test out our methods.  Like we say with advection, it is best to have
+a problem with an analytic solution.  
+
+\subsection{Shock tubes}
+
+Shock tubes are Riemann problems---consider the evolution of an
+initial discontinuity in the domain.  The evolution with time will
+just be the solution to the Riemann problem that we described
+\S~\ref{euler:sec:riemann}.  The initial conditions can be varied to
+produce any combination of shocks and rarefactions as the left and
+right waves.  A popular initial condition is the Sod
+problem~\cite{sod:1978} which results is a right moving shock and
+contact and a left moving rarefaction.
+
+Note: it is a good test of your code's ability to preserve symmetry to
+flip the initial conditions left/right and rerun.  The results should
+be the same to machine precision, but atleast to roundoff error.  A
+common reason for breaking symmetry is using inequalities in your code
+that are biases in a direction, e.g.,
+\begin{lstlisting}
+if u > 0:
+   # positive velocity test case
+else:
+   # negative or zero velocity test case
+\end{lstlisting}
+This has a left-right bias, since we don't handle the case where $u =
+0$ separately.  A better construction would test on $u < 0$ alone, and
+then have a final {\em else} clause to catch $u = 0$.
+
+For a general equation of state, you can still solve the Riemann
+problem exactly and define analogous test problems to those commonly
+used for a gamma-law gas.  Some shock tube test problems for a stellar
+equation of state are shown in \cite{zingalekatz}.
+
+For the tests shown below, we use the \hydrooned\ code described in
+Appendix~\ref{app:hydro1d}.
 
 
 %-----------------------------------------------------------------------------
@@ -1258,7 +1382,35 @@ expansion above (Eq.~\ref{eq:Utaylorstatesource}).
 
 
 
-\section{General equation of state}
+\section{Thermodynamic issues}
+
+\subsection{Defining temperature}
+
+  Although not needed for the pure
+  Euler equations, it is sometimes desirable to define the temperature
+  for source terms (like reactions) or complex equations of state.
+  The temperature can typically be found from the equation of state
+  given the internal energy:
+  \begin{eqnarray}
+  e &=& E - \frac{1}{2} u^2 \\
+  T &=& T(e, \rho)
+  \end{eqnarray}
+  Trouble can arise when you are in a region of flow where the kinetic
+  energy dominates (high Mach number flow).  In this case, the $e$ defined
+  via subtraction can become negative due to truncation error in the
+  evolution of $u$ compared to $E$.  In this instance, one must either
+  impose a floor value for $e$ or find an alternate method of deriving
+  it.
+
+  In~\cite{bryan:1995}, an alternate formulation of the Euler equations
+  is proposed.  Both the total energy equation {\em and} the internal
+  energy equation are evolved in each zone.  When the flow is dominated
+  by kinetic energy, then the internal energy from the internal energy
+  evolution equation is used.  The cost of this is conservation---the
+  internal energy is not a conserved quantity, and switching to it
+  introduces conservation of energy errors.
+
+\subsection{General equation of state}
 
 The above methods were formulated
 with a constant gamma equation of state.  A general equation of state
@@ -1386,155 +1538,3 @@ to the normal states of $p$.
 
 
 
-
-%-----------------------------------------------------------------------------
-\section{Going further}
-
-\label{sec:euler:further}
-
-\subsection{Flattening and contact steepening}
-
-  Shocks are self-steepening (this is how we
-  detect them in the Riemann solver---we look for converging characteristics).
-  This can cause trouble with the methods here, because the shocks may become
-  too steep.
-
-  Flattening is a procedure to add additional dissipation at shocks,
-  to ensure that they are smeared out over $\sim 2$ zones.  The
-  flattening procedure is a multi-dimensional operation that looks at
-  the pressure and velocity profiles and returns a coefficient, $\chi
-  \in [0,1]$ that multiplies the limited slopes.  The convention most
-  sources use is that $\chi = 1$ means no flattening (the slopes are
-  unaltered), while $\chi = 0$ means complete flattening---the slopes
-  are zeroed, dropping us to a first-order method.
-  See for example in Saltzman~\cite{saltzman:1994}.  Once the flattening
-  coefficient is determined, the interface state is blended with the
-  cell-centered value via:
-  \begin{equation}
-  q_{i+1/2,\{L,R\}}^{n+1/2} \leftarrow (1 - \chi) q_i + \chi q_{i+1/2,\{L,R\}}^{n+1/2}
-  \end{equation}
-
-  Note that the flattening algorithm increases the stencil size of
-  piecewise-linear and piecewise-parabolic reconstruction to 4 ghost cells
-  on each side.  This is because the flattening procedure itself looks
-  at the pressure 2 zones away, and we need to construct the flattening
-  coefficient in both the first ghost cell (since we need the interface
-  values there) and the second ghost cell (since the flattening procedure
-  looks at the coefficients in its immediate upwinded neighbor).
-
-  In contrast to shocks, contact waves
-  do not steepen (they are associated with the middle characteristic
-  wave, and the velocity does not change across that, meaning there
-  cannot be any convergence).  The original PPM
-  paper advocates a contact steepening method to artificially steepen
-  contact waves.  While it shows good results in 1-d, it can be
-  problematic in multi-dimensions.
-
-  Overall, the community seems split over whether this term should be
-  used.  Many people advocate that if you reach a situation where you
-  think contact steepening may be necessary, it is more likely that
-  the issue is that you do not have enough resolution.
-
-
-\subsection{Artificial viscosity}
-
-  Colella and Woodward argue discuss
-  that behind slow-moving shocks these methods can have oscillations.
-  The fix they propose is to use some artificial viscosity---this is
-  additional dissipation that kicks in at shocks.  (They argue that
-  flattening alone is not enough).
-
-  We use a multidimensional analog of their artificial viscosity
-  (\cite{colellawoodward:1984}, Eq.\ 4.5) which modifies the fluxes.
-  By design, it only kicks in for converging flows, such that you
-  would find around a shock.
-
-
-
-
-\subsection{Axisymmetry}
-
-\begin{figure}
-\centering
-\includegraphics[width=0.8\linewidth]{axisymmetry}
-\caption[The axisymmetric computational domain]
-{\label{fig:axisymmetri} The axisymmetric computational domain.  Here we
-  imagine that the 2-d plane rotates through the cylindrical $\theta$ angle to
-  create a volume.}
-\end{figure}
-
-It is common to do 2-d axisymmetric models---here
-the $r$ and $z$ coordinates from a cylindrical geometry are modeled.  This
-appears Cartesian, except there is a volume factor implicit in the
-divergence that must be accounted for.  Our system in cylindrical
-coordinates is:
-\begin{equation}
-\frac{\partial U}{\partial t}
-  + \frac{1}{r}\frac{\partial r F^{(r)}}{\partial r}
-  + \frac{\partial F^{(z)}}{\partial z} = 0
-\end{equation}
-Expanding out the $r$ derivative, we can write this as:
-\begin{equation}
-\frac{\partial U}{\partial t}
-  + \frac{\partial F^{(r)}}{\partial r}
-  + \frac{\partial F^{(z)}}{\partial z} = -\frac{F^{(r)}}{r}
-\end{equation}
-This latter form is used when predicting the interface states, with
-the volume source that appears on the right treated as a source term
-to the interface states (as described above).  Once the fluxes are
-computed, the final update uses the conservative form of the system,
-with the volume factors appearing now in the definition of the
-divergence.
-
-\subsection{Defining temperature}
-
-  Although not needed for the pure
-  Euler equations, it is sometimes desirable to define the temperature
-  for source terms (like reactions) or complex equations of state.
-  The temperature can typically be found from the equation of state
-  given the internal energy:
-  \begin{eqnarray}
-  e &=& E - \frac{1}{2} u^2 \\
-  T &=& T(e, \rho)
-  \end{eqnarray}
-  Trouble can arise when you are in a region of flow where the kinetic
-  energy dominates (high Mach number flow).  In this case, the $e$ defined
-  via subtraction can become negative due to truncation error in the
-  evolution of $u$ compared to $E$.  In this instance, one must either
-  impose a floor value for $e$ or find an alternate method of deriving
-  it.
-
-  In~\cite{bryan:1995}, an alternate formulation of the Euler equations
-  is proposed.  Both the total energy equation {\em and} the internal
-  energy equation are evolved in each zone.  When the flow is dominated
-  by kinetic energy, then the internal energy from the internal energy
-  evolution equation is used.  The cost of this is conservation---the
-  internal energy is not a conserved quantity, and switching to it
-  introduces conservation of energy errors.
-
-\subsection{Limiting on characteristic variables}
-
-  Some authors (see for example, \cite{athena} Eqs.~37, 38) advocate
-  limiting on the characteristic variables rather than the primitive
-  variables.  The characteristic slopes for the quantity carried by
-  the wave $\nu$ can be found from the primitive variables
-  as: \begin{equation} \Delta w^{(\nu)} = l^{(\nu)} \cdot \Delta
-  q \end{equation} any limiting would then be done to $\Delta
-  w^{(\nu)}$ and the limited primitive variables would be recovered
-  as: \begin{equation} \overline{\Delta q} = \sum_\nu \overline{\Delta
-  w}^{(\nu)} r^{(\nu)} \end{equation} (here we use an overline to
-  indicate limiting).
-
-  This is attractive because it is more in the spirit of the linear
-  advection equation and the formalism that was developed there.  A
-  potential downside is that when you limit on the characteristic
-  variables and convert back to the primitive, the primitive variables
-  may now fall outside of valid physical ranges (for example, negative
-  density).
-
-\subsection{3-d unsplit}
-
-The extension of the unsplit methodology to 3-d is described by
-Saltzman~\cite{saltzman:1994}.  The basic idea is the same as in 2-d,
-except now additional transverse Riemann solve are needed to fully
-couple in the corners.
