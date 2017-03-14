@@ -822,6 +822,12 @@ fastest wave to cross a single zone:
 (This is the limit for the CTU unsplit scheme here, but see the discussion
 in \S~\ref{sec:adv:timestep}).
 
+Often simulation codes will further restrict the timestep.  Commonly
+used restrictions for pure hydrodynamics include a limit on the factor
+by which a timestep can grow from one step to the next (a typical
+value is $1.2$), and an initial scaling, say of 1/10, for the first
+timestep.  Together, these will force the code to take a few initial
+steps before working up to the CFL limit.
 
 \subsection{Artificial viscosity}
 
@@ -1172,7 +1178,7 @@ Appendix~\ref{app:hydro1d}.
 \end{figure}
 
 
-\subsection{Double rarefaction}
+\subsubsection{Double rarefaction}
 
 \begin{figure}[t]
 \centering
