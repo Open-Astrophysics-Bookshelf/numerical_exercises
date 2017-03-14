@@ -1149,6 +1149,53 @@ equation of state are shown in \cite{zingalekatz}.
 For the tests shown below, we use the \hydrooned\ code described in
 Appendix~\ref{app:hydro1d}.
 
+\subsubsection{Sod problem}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.8\linewidth]{hydro1d_god_sod}
+\caption{\label{fig:Euler:sod:god} Piecewise constant reconstruction
+  with the Sod problem, using 128 zones, $\cfl = 0.8$, and the CGF
+  Riemann solver.  This was run with \hydrooned\ using the {\tt sod}
+  problem setup, setting {\tt godunov\_type=1} and visualized with the
+  {\tt sod\_compare.py} script there.}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.8\linewidth]{hydro1d_ppm_sod}
+\caption{\label{fig:Euler:sod:ppm} Piecewise parabolic reconstruction
+  with the Sod problem, using 128 zones, $\cfl = 0.8$, and the CGF
+  Riemann solver.  This was run with \hydrooned\ using the {\tt sod}
+  problem setup, setting {\tt godunov\_type=1} and visualized with the
+  {\tt sod\_compare.py} script there.}
+\end{figure}
+
+
+\subsection{Double rarefaction}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.8\linewidth]{hydro1d_god_double_rare}
+\caption{\label{fig:Euler:doublerare:god} Piecewise constant
+  reconstruction with the double rarefaction problem, using 128 zones,
+  $\cfl = 0.8$, and the CGF Riemann solver.  This was run with
+  \hydrooned\ using the {\tt sod} problem setup, setting {\tt
+    godunov\_type=1} and visualized with the {\tt sod\_compare.py}
+  script there.}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.8\linewidth]{hydro1d_ppm_double_rare}
+\caption{\label{fig:Euler:doublerare:ppm} Piecewise parabolic
+  reconstruction with the double rarefaction problem, using 128 zones,
+  $\cfl = 0.8$, and the CGF Riemann solver.  This was run with
+  \hydrooned\ using the {\tt sod} problem setup, setting {\tt
+    godunov\_type=1} and visualized with the {\tt sod\_compare.py}
+  script there.}
+\end{figure}
+
 
 %-----------------------------------------------------------------------------
 \section{Method of lines integration and the higher order}
