@@ -71,17 +71,44 @@ following scripts are available:
 \item {\tt compressible/}
 
   \begin{itemize}
+  \item {\tt cfl.py}: a simple brute force script used to find the stability 
+    limit of a multidimensional advection discretization.
+
   \item {\tt euler.ipynb}: an {\sf Jupyter} notebook using {\sf SymPy}
       that derives the eigensystem for the primitive-variable form
       of the Euler equations.
+
+  \item {\tt euler-generaleos.ipynb}: an {\sf Jupyter} notebook using
+    {\sf SymPy} that derives the eigensystem for the
+    primitive-variable form of various forms of Euler equations with a
+    general EOS (with either $(\rho e)$ or $\gamma_e$ augmenting the
+    system) and for gray radiation hydrodynamics.  Additionally, this 
+    notebook computes the full form of the interface states.
       
-  \item {\tt riemann-phase.py}: draw the Hugoniot curves in the $u$-$p$ plane
-     for a pair of states that comprise a Riemann problem.
+  \item {\tt riemann.py}: the main Riemann class for gamma-law Euler
+    equations.  The {\tt RiemannProblem} class has methods to find
+    the star state, plot the Hugoniot curves, and sample the solution.
+
+  \item {\tt riemann-2shock.py}: draw the Hugoniot curves in the $u$-$p$
+    plane for a pair of states that comprise a Riemann problem, {\em under
+      the 2-shock approximation}.
+
+  \item {\tt riemann-phase.py}: draw the Hugoniot curves in the
+    $u$-$p$ plane for a pair of states that comprise a Riemann
+    problem.
+
+  \item {\tt riemann-sod.py}: solve the Riemann problem for the Sod
+    initial conditions and plot the exact solution.
+
   \end{itemize}
 
 \item {\tt diffusion/}
 
   \begin{itemize}
+    \item {\tt diff\_converge.py}: make a convergence plot (error
+      vs.\ resolution) of different explicit and implicit diffusion
+      methods.
+
     \item {\tt diffusion\_explicit.py}: solve the constant-diffusivity
       diffusion equation explicitly.  The method is first-order
       accurate in time, but second-order in space.  A Gaussian profile
