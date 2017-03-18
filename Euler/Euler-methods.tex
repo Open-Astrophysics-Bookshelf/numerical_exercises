@@ -1077,8 +1077,145 @@ except now additional transverse Riemann solve are needed to fully
 couple in the corners.
 
 
+\section{Source terms}
+\label{euler:sec:sourceterms}
+
+Adding source terms is straightforward.  For
+a system described by
+\begin{equation}
+U_t + [F^{(x)}(U)]_x + [F^{(y)}(U)]_y = H
+\end{equation}
+we predict to the edges in the same fashion as described above, but now
+when we replace $\partial U/\partial t$ with the divergence of the
+fluxes, we also pick up the source term.  This appears as:
+\begin{align}
+U_{i+1/2,j,L}^{n+1/2} &= U_{i,j}^n
+            + \frac{\Delta x}{2} \frac{\partial U}{\partial x}
+            + \frac{\Delta t}{2} \frac{\partial U}{\partial t} + \ldots \\
+&= U_{i,j}^n + \frac{\Delta x}{2} \frac{\partial U}{\partial x}
+              - \frac{\Delta t}{2} \frac{\partial F^{(x)}}{\partial x}
+              - \frac{\Delta t}{2} \frac{\partial F^{(y)}}{\partial y}
+              + \frac{\Delta t}{2} H_{i,j} \\
+&= U_{i,j}^n
+ + \frac{1}{2} \left [1 -\frac{\Delta t}{\Delta x} A^{(x)}(U)\right ] \Delta U
+ - \frac{\Delta t}{2} \frac{\partial F^{(y)}}{\partial y}
+ + \frac{\Delta t}{2} H_{i,j}
+  \label{eq:Utaylorstatesource}
+\end{align}
+We can compute things as above, but simply add the source term to the
+$\hat{U}$'s and carry it through.
+
+Note that the source here is cell-centered.  This expansion is
+second-order accurate.  This is the approach outlined in Miller
+\& Colella \cite{millercolella:2002}.
+
+The original PPM paper does things differently.  They construct a parabolic
+profile of $g$ in each zone and integrate under that profile to determine
+the average $g$ carried by each wave to the interface.  Finally, they include
+the gravitational source term in the characteristic projection itself.
+To see this, write our system in primitive form as:
+\begin{equation}
+q_t + A(q) q_x = G
+\end{equation}
+where $G = (0, g, 0)^T$---i.e. the gravitational source only affects
+$u$, not $\rho$ or $p$.  Note that in the PPM paper, they put $G$ on
+the lefthand side of the primitive variable equation, so our signs are
+opposite.  Our projections are now:
+\begin{equation}
+\sum_{\nu; \lambda^\enu \ge 0}l^\enu \cdot (\tilde{q} - \Ic^\enu_+(q) - \tfrac{\Delta t}{2} G) r^\enu
+\end{equation}
+for the left state, and
+\begin{equation}
+\sum_{\nu; \lambda^\enu \le 0} l^\enu \cdot (\tilde{q} - \Ic^\enu_-(q) - \tfrac{\Delta t}{2} G) r^\enu
+\end{equation}
+for the right state.  Since $G$ is only non-zero for velocity, only
+the velocity changes.  Writing out the sum (and performing the vector products), we
+get:
+\begin{align}
+u_{i+1/2,L}^{n+1/2} =
+   \tilde{u}_+
+  &- \frac{1}{2} \left [
+      \left (\tilde{u}_+ - \Ic_+^\evm(u) - \frac{\Delta t}{2} \Ic^\evm_+(g) \right ) -
+       \frac{\tilde{p}_+ - \Ic_+^\evm(p)}{C} \right ] \nonumber \\
+  &- \frac{1}{2} \left [
+      \left (\tilde{u}_+ - \Ic_+^\evp(u) - \frac{\Delta t}{2} \Ic^\evp_+(g) \right ) +
+       \frac{\tilde{p}_+ - \Ic_+^\evp(p)}{C} \right ]
+\end{align}
+where the only change from Eq.~\ref{eq:ufull} are the
+$\Ic^\evm_+(g)$ and $\Ic^\evp_+(g)$ terms.
+
+These differ from the expression in the PPM paper, where $\Delta t G$,
+not $\Delta t/2 G$ is used in the projection, however this appears to
+be a typo.  To see this, notice that if both waves are moving toward
+the interface, then the source term that is added to the interface
+state is $(\Delta t/4) (\Ic_+^\evm(g) +
+\Ic_+^\evp(g))$ for the left state, which reduces to $(\Delta
+t/2) g$ for constant g---this matches the result from the Taylor
+expansion above (Eq.~\ref{eq:Utaylorstatesource}).
+
+
 %-----------------------------------------------------------------------------
-\section{Axisymmetry}
+\section{Simple geometries}
+
+So far we have been working only with Cartesian geometries, but it is
+easy to extend these methods to simple non-Cartesian geometies, like
+spherical and cylindrical.  These geometies allow us to capture 3-d
+volume expansion effects in lower dimensions.
+
+For a 1-d solver, a spherical geometry means that our coordinate is
+the radius in the sphere, and as we move outward from the origin, the
+volume of a zone (which is actually now a spherical shell) grows.
+There are two places where we need to take the geometry into account:
+the reconstruction of the interface states and the conservative update.
+
+Our 1-d system in spherical coordinates appears as:
+\begin{equation}
+\ddt{U} + \frac{1}{r^2} \ddr{r^2 F} = 0
+\end{equation}
+The geometry factors that appear are from the spherical form of the
+divergence.  Expanding out the radial derivative, we have:
+\begin{equation}
+\ddt{U} + \ddr{F} = -\frac{2F}{r}
+\end{equation}
+Likewise, the primitive variable equations now have source terms:
+\begin{align}
+\ddt{\rho} + u \ddx{\rho} + \rho \ddx{u} &= -\frac{2\rho u}{r} \\
+\ddt{u} + u \ddx{u} + \frac{1}{\rho} \ddx{p} &= 0 \\
+\ddt{p} + u \ddx{p} + \Gamma_1 p \ddx{u} &= -\frac{2\Gamma_1 p u}{r}
+\end{align}
+
+\begin{exercise}[Spherical form of primitive variable equations]
+{Derive the above system of 1-d spherical primitive variable equations
+  starting from the conservative equations.  Be sure to include the
+  geometry factors everywhere there is a divergence.}
+\end{exercise}
+
+For the prediction of the interface states, we now include these
+geometric source terms as sources to the interface state, following
+the same ideas as in \S~\ref{euler:sec:sourceterms}.
+
+The conservative update now needs to include the geometry factors.  However,
+it is complicated by the fact that in the momentum equation, the pressure 
+term is a gradient, not a divergence, and therefore has different 
+geometic factors.  The update of the system appears as:
+\begin{align}
+\rho^{n+1}_i = \rho^n_i &+ \frac{\Delta t}{V_i} 
+   \left [A_{i-1/2} \rho_{i-1/2}^{n+1/2} u_{i-1/2}^{n+1/2} - 
+          A_{i+1/2} \rho_{i+1/2}^{n+1/2} u_{i+1/2}^{n+1/2} \right ] \\
+(\rho u)^{n+1}_i = (\rho u)^n_i &+ \frac{\Delta t}{V_i} 
+   \left [ A_{i-1/2} \rho_{i-1/2}^{n+1/2} (u_{i-1/2}^{n+1/2})^2  - 
+           A_{i+1/2} \rho_{i+1/2}^{n+1/2} (u_{i+1/2}^{n+1/2})^2  \right ]\nonumber \\
+        & + \frac{\Delta t}{\Delta r} \left ( p_{i-1/2}^{n+1/2} - 
+                                              p_{i+1/2}^{n+1/2} \right ) \\
+(\rho E)^{n+1}_i = (\rho E)^n_i &+ \frac{\Delta t}{V_i} 
+   \left [ A_{i-1/2} \left (\rho_{i-1/2}^{n+1/2} E_{i-1/2}^{n+1/2}  + p_{i-1/2}^{n+1/2} \right ) u_{i-1/2}^{n+1/2} - \right . \nonumber \\
+   &\phantom{+ \frac{\Delta t}{V_i} \left[ \right.}   \left .   A_{i+1/2} \left (\rho_{i+1/2}^{n+1/2} E_{i+1/2}^{n+1/2}  + p_{i+1/2}^{n+1/2} \right ) u_{i+1/2}^{n+1/2} \right ]
+\end{align}
+Here, the geometry factors are:
+\begin{align}
+A_{i-1/2} &= (r_{i-1/2})^2\\
+V_i &= (r_i)^2 \Delta r
+\end{align}
 
 \begin{figure}
 \centering
@@ -1089,11 +1226,13 @@ couple in the corners.
   create a volume.}
 \end{figure}
 
-It is common to do 2-d axisymmetric models---here
-the $r$ and $z$ coordinates from a cylindrical geometry are modeled.  This
+It is also common to do 2-d axisymmetric models---here the $r$ and $z$
+coordinates from a cylindrical geometry are modeled.  Again, this
 appears Cartesian, except there is a volume factor implicit in the
-divergence that must be accounted for.  Our system in cylindrical
-coordinates is:
+divergence that must be accounted for.  Our system in axisymmetric
+coordinates\footnote{Some sources will call this cylindrical
+  coordinates, but note that the grid is not a polar grid---it is
+  still Cartesian} is:
 \begin{equation}
 \frac{\partial U}{\partial t}
   + \frac{1}{r}\frac{\partial r F^{(r)}}{\partial r}
@@ -1105,13 +1244,24 @@ Expanding out the $r$ derivative, we can write this as:
   + \frac{\partial F^{(r)}}{\partial r}
   + \frac{\partial F^{(z)}}{\partial z} = -\frac{F^{(r)}}{r}
 \end{equation}
-This latter form is used when predicting the interface states, with
-the volume source that appears on the right treated as a source term
-to the interface states (as described above).  Once the fluxes are
-computed, the final update uses the conservative form of the system,
-with the volume factors appearing now in the definition of the
-divergence.
-
+Again, the primitive variable version of this expanded form is used
+for the interface state prediction.  The conservative update
+follows the same idea as the 1-d spherical version.  The area
+and volume factors only differ from their Cartesian counterparts
+in the radial direction, and take the form:
+\begin{align}
+A_{i-1/2,j} &= r_{i-1/2} \Delta z \\
+A_{i,j-1/2} &= r_i \Delta z\\
+V_{i,j} &= r_i \Delta r \Delta z
+\end{align}
+These choices of geometric factors reproduce a discretized
+form of the cylindrical divergence:
+\begin{equation}
+\nabla \cdot {\boldsymbol{\phi}} = \frac{1}{r} \ddr{(r\phi^{(r)})} + \ddz{\phi^{(z)}}
+\end{equation}
+Just as with the 1-d spherical case, the pressure term in the momentum
+equation needs to be treated separately from the flux, since it enters
+as a gradient and not a divergence.
 
 
 %-----------------------------------------------------------------------------
@@ -1201,6 +1351,27 @@ Appendix~\ref{app:hydro1d}.
     godunov\_type=1} and visualized with the {\tt sod\_compare.py}
   script there.}
 \end{figure}
+
+
+\subsection{Sedov blast wave}
+
+The Sedov (or Sedov-Taylor) blast wave~\cite{sedov:1959} is a point
+explosion---a small amount of energy is placed at a point in a uniform
+domain.  A spherical shockwave propagates outward, evacuating the
+region in the center.  The Sedov problem also has an analytic
+solution, and this problem is a good way of testing out the geometric
+factors for 1-d spherical and 2-d axisymmetric geometries.
+
+\subsection{Advection}
+
+\subsection{Slow moving shock}
+
+\subsection{Odd-even decoupling}
+
+\subsection{Hydrostatic equilibrium}
+
+\subsection{Rayleigh-Taylor instability}
+
 
 
 %-----------------------------------------------------------------------------
@@ -1358,80 +1529,6 @@ slope and applying this same slope to all the species.
 \end{itemize}
 
 
-\section{Source terms}
-
-Adding source terms is straightforward.  For
-a system described by
-\begin{equation}
-U_t + [F^{(x)}(U)]_x + [F^{(y)}(U)]_y = H
-\end{equation}
-we predict to the edges in the same fashion as described above, but now
-when we replace $\partial U/\partial t$ with the divergence of the
-fluxes, we also pick up the source term.  This appears as:
-\begin{align}
-U_{i+1/2,j,L}^{n+1/2} &= U_{i,j}^n
-            + \frac{\Delta x}{2} \frac{\partial U}{\partial x}
-            + \frac{\Delta t}{2} \frac{\partial U}{\partial t} + \ldots \\
-&= U_{i,j}^n + \frac{\Delta x}{2} \frac{\partial U}{\partial x}
-              - \frac{\Delta t}{2} \frac{\partial F^{(x)}}{\partial x}
-              - \frac{\Delta t}{2} \frac{\partial F^{(y)}}{\partial y}
-              + \frac{\Delta t}{2} H_{i,j} \\
-&= U_{i,j}^n
- + \frac{1}{2} \left [1 -\frac{\Delta t}{\Delta x} A^{(x)}(U)\right ] \Delta U
- - \frac{\Delta t}{2} \frac{\partial F^{(y)}}{\partial y}
- + \frac{\Delta t}{2} H_{i,j}
-  \label{eq:Utaylorstatesource}
-\end{align}
-We can compute things as above, but simply add the source term to the
-$\hat{U}$'s and carry it through.
-
-Note that the source here is cell-centered.  This expansion is
-second-order accurate.  This is the approach outlined in Miller
-\& Colella \cite{millercolella:2002}.
-
-The original PPM paper does things differently.  They construct a parabolic
-profile of $g$ in each zone and integrate under that profile to determine
-the average $g$ carried by each wave to the interface.  Finally, they include
-the gravitational source term in the characteristic projection itself.
-To see this, write our system in primitive form as:
-\begin{equation}
-q_t + A(q) q_x = G
-\end{equation}
-where $G = (0, g, 0)^T$---i.e. the gravitational source only affects
-$u$, not $\rho$ or $p$.  Note that in the PPM paper, they put $G$ on
-the lefthand side of the primitive variable equation, so our signs are
-opposite.  Our projections are now:
-\begin{equation}
-\sum_{\nu; \lambda^\enu \ge 0}l^\enu \cdot (\tilde{q} - \Ic^\enu_+(q) - \tfrac{\Delta t}{2} G) r^\enu
-\end{equation}
-for the left state, and
-\begin{equation}
-\sum_{\nu; \lambda^\enu \le 0} l^\enu \cdot (\tilde{q} - \Ic^\enu_-(q) - \tfrac{\Delta t}{2} G) r^\enu
-\end{equation}
-for the right state.  Since $G$ is only non-zero for velocity, only
-the velocity changes.  Writing out the sum (and performing the vector products), we
-get:
-\begin{align}
-u_{i+1/2,L}^{n+1/2} =
-   \tilde{u}_+
-  &- \frac{1}{2} \left [
-      \left (\tilde{u}_+ - \Ic_+^\evm(u) - \frac{\Delta t}{2} \Ic^\evm_+(g) \right ) -
-       \frac{\tilde{p}_+ - \Ic_+^\evm(p)}{C} \right ] \nonumber \\
-  &- \frac{1}{2} \left [
-      \left (\tilde{u}_+ - \Ic_+^\evp(u) - \frac{\Delta t}{2} \Ic^\evp_+(g) \right ) +
-       \frac{\tilde{p}_+ - \Ic_+^\evp(p)}{C} \right ]
-\end{align}
-where the only change from Eq.~\ref{eq:ufull} are the
-$\Ic^\evm_+(g)$ and $\Ic^\evp_+(g)$ terms.
-
-These differ from the expression in the PPM paper, where $\Delta t G$,
-not $\Delta t/2 G$ is used in the projection, however this appears to
-be a typo.  To see this, notice that if both waves are moving toward
-the interface, then the source term that is added to the interface
-state is $(\Delta t/4) (\Ic_+^\evm(g) +
-\Ic_+^\evp(g))$ for the left state, which reduces to $(\Delta
-t/2) g$ for constant g---this matches the result from the Taylor
-expansion above (Eq.~\ref{eq:Utaylorstatesource}).
 
 
 
