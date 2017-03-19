@@ -1297,6 +1297,11 @@ This has a left-right bias, since we don't handle the case where $u =
 0$ separately.  A better construction would test on $u < 0$ alone, and
 then have a final {\em else} clause to catch $u = 0$.
 
+Since these tests start out with a discontinuity, they are not the
+best tests to use for convergence testing.  Wherever there is an
+initiali discontinuity, the limiters will kick in and drop your
+method to first-order accurate.
+
 For a general equation of state, you can still solve the Riemann
 problem exactly and define analogous test problems to those commonly
 used for a gamma-law gas.  Some shock tube test problems for a stellar
@@ -1366,9 +1371,56 @@ factors for 1-d spherical and 2-d axisymmetric geometries.
 
 \subsection{Slow moving shock}
 
+Slow moving (or stationary) shocks can be difficult to model, as
+oscillations can be setup behind the shock (this is discussed a little
+in \cite{colellawoodward:1984,leveque:2002}).  We can produce a slow
+moving shock as a shock tube, and we can use the jump conditions 
+across a shock that were derived for the Riemann problem to find the
+conditions to setup a stationary (or slow-moving) shock.  
+
+The speed of a right-moving shock was found (see
+Eq.~\ref{eq:euler:shockspeedjump}) as:
+\begin{equation}
+S = u_r + c_r \left [ \left ( \frac{p_\star}{p_r} \right ) \frac{\gamma+1}{2\gamma} + \frac{\gamma-1}{2\gamma} \right ]^{1/2}
+\end{equation}
+We want $S = 0$, which allows us to express the pre-shock velocity, $u_r$, as:
+\begin{equation}
+u_r = -c_r \left [ \left ( \frac{p_\star}{p_r} \right ) \frac{\gamma+1}{2\gamma} + \frac{\gamma-1}{2\gamma} \right ]^{1/2}
+\end{equation}.
+We have the freedom to choose the density and pressure ahead of the
+shock, $\rho_r$ and $p_r$, which in turn gives us $c_r$.  Next, we can
+pick the strength of the shock by choosing the jump in pressure,
+$p_\star/p_r$.  Together, this allows us to compute $u_r$, and thus we
+know the entire pre-shock state.  We can compute the post-shock state
+(which was the star state when we discussed the Riemann problem) using
+the jump conditions, Eqs.~\ref{eq:euler:shockrhojump} and
+\ref{eq:euler:shockujump}.\footnote{The script
+  \href{https://github.com/zingale/hydro_examples/blob/master/compressible/slow_shock.py}{\tt
+    slow\_shock.py} will find the initial conditions to generate a
+  stationary shock.}
+
+For a pressure jump of 100 across a shock, the following conditions will
+generate a stationary right-facing shock (with $\gamma = 1.4$):
+\begin{align}
+\rho_L &= 5.6698      &  \rho_R &= 1 \nonumber \\
+u_L   &= -1.9336      &  u_R    &= -10.9636   \\
+p_L    &= 100         &  p_R    &= 1 \nonumber
+\end{align}
+
+
 \subsection{Odd-even decoupling}
 
+\subsection{Gresho vortex}
+
+The Gresho vortex is a vortex in with a stabilizing pressure gradient
+designed such that the overall structure is unchanging in time.  It
+has a nice feature in that it allows you to set the Mach number of
+the flow as one of the parameters.
+
+
 \subsection{Hydrostatic equilibrium}
+
+
 
 \subsection{Rayleigh-Taylor instability}
 
