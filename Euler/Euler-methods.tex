@@ -1312,6 +1312,18 @@ Appendix~\ref{app:hydro1d}.
 
 \subsubsection{Sod problem}
 
+The initial conditions for the Sod problem \cite{sod:1978} are:
+\begin{align}
+\rho_l &= 1      &  \rho_r &= 1/8 \nonumber \\
+u_l   &= 0       &  u_r    &= 0   \\
+p_l    &= 1      &  p_r    &= 1/10 \nonumber
+\end{align}
+usually with $\gamma = 1.4$\MarginPar{double check}
+
+These result in a left wave moving contact and rightward moving
+contact and shock.  The shock is not particularly strong, but this
+problem is a nice demonstration of the types of hydrodynamic waves.
+
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.8\linewidth]{hydro1d_god_sod}
@@ -1334,6 +1346,16 @@ Appendix~\ref{app:hydro1d}.
 
 
 \subsubsection{Double rarefaction}
+
+The double rarefaction problem starts with initially diverging flow
+that creates a vacuum state in the middle.  The initial conditions (as
+given in \cite{toro:1997} are
+\begin{align}
+\rho_l &= 1      &  \rho_r &= 1 \nonumber \\
+u_l    &= -2.0   &  u_r    &= 2.0   \\
+p_l    &= 0.4    &  p_r    &= 0.4 \nonumber
+\end{align}
+
 
 \begin{figure}[t]
 \centering
@@ -1402,9 +1424,9 @@ the jump conditions, Eqs.~\ref{eq:euler:shockrhojump} and
 For a pressure jump of 100 across a shock, the following conditions will
 generate a stationary right-facing shock (with $\gamma = 1.4$):
 \begin{align}
-\rho_L &= 5.6698      &  \rho_R &= 1 \nonumber \\
-u_L   &= -1.9336      &  u_R    &= -10.9636   \\
-p_L    &= 100         &  p_R    &= 1 \nonumber
+\rho_l &= 5.6698      &  \rho_r &= 1 \nonumber \\
+u_l   &= -1.9336      &  u_r    &= -10.9636   \\
+p_l    &= 100         &  p_r    &= 1 \nonumber
 \end{align}
 
 
@@ -1427,7 +1449,7 @@ the flow as one of the parameters.
 
 
 %-----------------------------------------------------------------------------
-\section{Method of lines integration and the higher order}
+\section{Method of lines integration and higher order}
 
 Just like we explored with linear advection (\S~\ref{adv:sec:mol_2d}),
 instead of doing the characteristic tracing, we could rely on the
