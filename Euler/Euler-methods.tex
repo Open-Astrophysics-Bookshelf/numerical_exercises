@@ -1326,21 +1326,21 @@ problem is a nice demonstration of the types of hydrodynamic waves.
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.8\linewidth]{hydro1d_god_sod}
+\includegraphics[width=0.7\linewidth]{hydro1d_god_sod}
 \caption{\label{fig:Euler:sod:god} Piecewise constant reconstruction
   with the Sod problem, using 128 zones, $\cfl = 0.8$, and the CGF
   Riemann solver.  This was run with \hydrooned\ using the {\tt sod}
-  problem setup, setting {\tt godunov\_type=1} and visualized with the
+  problem setup, setting {\tt godunov\_type=0} and visualized with the
   {\tt sod\_compare.py} script there.}
 \end{figure}
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.8\linewidth]{hydro1d_ppm_sod}
+\includegraphics[width=0.7\linewidth]{hydro1d_ppm_sod}
 \caption{\label{fig:Euler:sod:ppm} Piecewise parabolic reconstruction
   with the Sod problem, using 128 zones, $\cfl = 0.8$, and the CGF
   Riemann solver.  This was run with \hydrooned\ using the {\tt sod}
-  problem setup, setting {\tt godunov\_type=1} and visualized with the
+  problem setup, setting {\tt godunov\_type=2} and visualized with the
   {\tt sod\_compare.py} script there.}
 \end{figure}
 
@@ -1359,23 +1359,23 @@ p_l    &= 0.4    &  p_r    &= 0.4 \nonumber
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.8\linewidth]{hydro1d_god_double_rare}
+\includegraphics[width=0.7\linewidth]{hydro1d_god_double_rare}
 \caption{\label{fig:Euler:doublerare:god} Piecewise constant
   reconstruction with the double rarefaction problem, using 128 zones,
   $\cfl = 0.8$, and the CGF Riemann solver.  This was run with
   \hydrooned\ using the {\tt sod} problem setup, setting {\tt
-    godunov\_type=1} and visualized with the {\tt sod\_compare.py}
+    godunov\_type=0} and visualized with the {\tt sod\_compare.py}
   script there.}
 \end{figure}
 
 \begin{figure}[t]
 \centering
-\includegraphics[width=0.8\linewidth]{hydro1d_ppm_double_rare}
+\includegraphics[width=0.7\linewidth]{hydro1d_ppm_double_rare}
 \caption{\label{fig:Euler:doublerare:ppm} Piecewise parabolic
   reconstruction with the double rarefaction problem, using 128 zones,
   $\cfl = 0.8$, and the CGF Riemann solver.  This was run with
   \hydrooned\ using the {\tt sod} problem setup, setting {\tt
-    godunov\_type=1} and visualized with the {\tt sod\_compare.py}
+    godunov\_type=2} and visualized with the {\tt sod\_compare.py}
   script there.}
 \end{figure}
 
@@ -1388,6 +1388,17 @@ domain.  A spherical shockwave propagates outward, evacuating the
 region in the center.  The Sedov problem also has an analytic
 solution, and this problem is a good way of testing out the geometric
 factors for 1-d spherical and 2-d axisymmetric geometries.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.7\linewidth]{hydro1d_sedov_1dsph}
+\caption{\label{fig:Euler:doublerare:ppm} 1-d Sedov explosion with
+  piecewise parabolic reconstruction, using 128 zones (on $r \in
+  [0,1]$), $\cfl = 0.8$, and the CGF Riemann solver.  This was run
+  with \hydrooned\ using the {\tt sedov} problem setup and visualized
+  with the {\tt sedov\_compare.py} script there.}
+\end{figure}
+
 
 \subsection{Advection}
 
