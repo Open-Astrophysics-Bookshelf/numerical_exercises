@@ -1420,7 +1420,7 @@ S = u_r + c_r \left [ \left ( \frac{p_\star}{p_r} \right ) \frac{\gamma+1}{2\gam
 We want $S = 0$, which allows us to express the pre-shock velocity, $u_r$, as:
 \begin{equation}
 u_r = -c_r \left [ \left ( \frac{p_\star}{p_r} \right ) \frac{\gamma+1}{2\gamma} + \frac{\gamma-1}{2\gamma} \right ]^{1/2}
-\end{equation}.
+\end{equation}
 We have the freedom to choose the density and pressure ahead of the
 shock, $\rho_r$ and $p_r$, which in turn gives us $c_r$.  Next, we can
 pick the strength of the shock by choosing the jump in pressure,
@@ -1454,6 +1454,21 @@ the flow as one of the parameters.
 
 \subsection{Hydrostatic equilibrium}
 
+Hydrodynamics codes can have a difficult time keeping an atmosphere in
+hydrostatic equilibrium.  This is because any departure from $\nabla p
+= \rho g$ due to truncation error in the method will be seen as an
+acceleration by the momentum equation:
+\begin{equation}
+\rho \DDt{\Ub} = \rho {\bf g} - \nabla p
+\end{equation}
+The result will be growing velocities in the atmosphere, which can
+overwhelm any signal in the flow that you are interested in studying.
+Since this acceleration is driven by truncation error, higher
+resolution will result in lower velocities.
+
+% top of the star
+
+% scale height resolved -- do uniform T atmosphere
 
 
 \subsection{Rayleigh-Taylor instability}
