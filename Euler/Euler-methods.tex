@@ -1441,6 +1441,15 @@ u_l   &= -1.9336      &  u_r    &= -10.9636   \\
 p_l    &= 100         &  p_r    &= 1 \nonumber
 \end{align}
 
+By adjusting the velocity of both the left and right state, we can
+produce a strong shock that moves slowly across the grid.  For
+instance, a shock with $S = 0.4$ results from
+\begin{align}
+\rho_l &= 5.6698      &  \rho_r &= 1 \nonumber \\
+u_l   &= -1.5336      &  u_r    &= -10.5636   \\
+p_l    &= 100         &  p_r    &= 1 \nonumber
+\end{align}
+
 
 \subsection{Odd-even decoupling}
 
@@ -1456,7 +1465,7 @@ the flow as one of the parameters.
 
 Hydrodynamics codes can have a difficult time keeping an atmosphere in
 hydrostatic equilibrium.  This is because any departure from $\nabla p
-= \rho g$ due to truncation error in the method will be seen as an
+= \rho {\bf g}$ due to truncation error in the method will be seen as an
 acceleration by the momentum equation:
 \begin{equation}
 \rho \DDt{\Ub} = \rho {\bf g} - \nabla p
