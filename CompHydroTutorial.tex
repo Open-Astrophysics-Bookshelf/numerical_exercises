@@ -37,7 +37,8 @@
 % LaTeX font
 \usepackage{mathpazo}
 \linespread{1.05}        % Palatino needs more leading
-\usepackage[scaled]{helvet} % ss
+%\usepackage[scaled]{helvet} % ss
+\usepackage{raleway}
 \normalfont
 \usepackage[T1]{fontenc}
 
@@ -81,8 +82,8 @@
 %\ChTitleVar{\raggedleft\Large\sffamily\bfseries}
 
 \usepackage[PetersLenny]{fncychap}
-\ChNameVar{\fontsize{16}{18}\usefont{OT1}{phv}{m}{n}\selectfont}
-\ChNumVar{\fontsize{60}{62}\usefont{OT1}{ptm}{m}{n}\selectfont}
+\ChNameVar{\fontsize{16}{16}\sffamily\selectfont}%usefont{OT1}{raleway}{m}{n}\selectfont}
+\ChNumVar{\fontsize{60}{62}\sffamily\selectfont}%\fontsize{60}{62}}\usefont{OT1}{raleway}{m}{n}\selectfont}
 \ChTitleVar{\Huge\bfseries\sffamily}
 \ChRuleWidth{1pt}
 
@@ -347,8 +348,8 @@ keepaspectratio]{images/crop_cover.png}%
 
 \begin{titlepage}
 
-\ \\[2.5in]
-\begin{center}
+\ \\[1.25in]
+
 %% \HRule\\[0.5em]
 %% {\Huge \textsf{{
 %% Lecture Notes on\\[0.1em]
@@ -357,23 +358,31 @@ keepaspectratio]{images/crop_cover.png}%
 %% }
 %% \HRule
 %% \\[2em]
-
+%
 %% {\Large \sf  Michael Zingale} \\ {\sf Stony Brook University}
+%
+%% \begin{mybox}[]
+%% \vskip 3mm
+%% {Introduction to} \\%[-0.75em]
+%% {Computational Hydrodynamics \\%[-0.75em]
+%% for Astrophysics}
+%% \vspace{0.5em}
+%% \end{mybox}
 
-\begin{mybox}[]
-\vskip 3mm
-{Introduction to} \\%[-0.75em]
-{Computational Hydrodynamics \\%[-0.75em]
-for Astrophysics}
-\vspace{0.5em}
-\end{mybox}
+{\sffamily \color{white}%
+\begin{center}
+\fontsize{22}{18}\selectfont
+Introduction to \\
+\fontsize{32}{26}\selectfont
+Computational Astrophysical Hydrodynamics
 \end{center}
+}
+\vspace{0.5em}
 
 \vfill
 
-\begin{flushright}
-{\color{white}Michael Zingale}
-\end{flushright}
+
+{\color{red}\sffamily the Open Astrophysics Bookshelf \hfill\color{white} Michael Zingale}
 
 \end{titlepage}
 
