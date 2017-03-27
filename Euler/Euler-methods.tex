@@ -1450,6 +1450,17 @@ u_l   &= -1.5336      &  u_r    &= -10.5636   \\
 p_l    &= 100         &  p_r    &= 1 \nonumber
 \end{align}
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.7\linewidth]{slowshock}
+\caption[1-d spherical Sedov problem]{\label{fig:Euler:slowshock:ppm} 1-d slow moving shock
+  problem with
+  piecewise parabolic reconstruction, using 128 zones (on $r \in
+  [0,1]$), $\cfl = 0.8$, and the CGF Riemann solver.  This was run
+  with \hydrooned\ using the {\tt sod} problem setup and visualized
+  with the {\tt sod\_compare.py} script there.}
+\end{figure}
+
 
 \subsection{Odd-even decoupling}
 
@@ -1591,23 +1602,23 @@ There are now 4 eigenvalues, with the new one also being simply $u$.
 This says that the species simply advect with the flow.  The right
 eigenvectors are now:
 \begin{equation}
-r^{(1)} = \left ( \begin{array}{c} 1 \\ -c/\rho \\ c^2 \\ 0\end{array} \right )
+r^\evm = \left ( \begin{array}{c} 1 \\ -c/\rho \\ c^2 \\ 0\end{array} \right )
 %
 \qquad
-r^{(2)} = \left ( \begin{array}{c} 1 \\ 0 \\ 0  \\ 0\end{array} \right )
+r^\evz = \left ( \begin{array}{c} 1 \\ 0 \\ 0  \\ 0\end{array} \right )
 %
 \qquad
-r^{(3)} = \left ( \begin{array}{c} 0 \\ 0  \\ 0 \\ 1 \end{array} \right )
+r^\evzs{X} = \left ( \begin{array}{c} 0 \\ 0  \\ 0 \\ 1 \end{array} \right )
 %
 \qquad
-r^{(4)} = \left ( \begin{array}{c} 1 \\ c/\rho \\ c^2 \\ 0 \end{array} \right )
+r^\evp = \left ( \begin{array}{c} 1 \\ c/\rho \\ c^2 \\ 0 \end{array} \right )
 \end{equation}
-corresponding to $\lambda^{(1)} = u -c$, $\lambda^{(2)} = u$,
-$\lambda^{(3)} = u$, and $\lambda^{(4)} = u + c$.  We see that for the
-species, the only non-zero element is for one of the $u$ eigenvectors.
-This means that $X_k$ only jumps over this middle wave.  In the
-Riemann solver then, there is no `star' state for the species, it just
-jumps across the contact wave.
+corresponding to $\lambda^\evm = u -c$, $\lambda^\evz = u$,
+$\lambda^\evzs{X} = u$, and $\lambda^\evp = u + c$.  We see that for
+the species, the only non-zero element is for one of the $u$
+eigenvectors ($r^\evzs{X}$).  This means that $X_k$ only jumps over
+this middle wave.  In the Riemann solver then, there is no `star'
+state for the species, it just jumps across the contact wave.
 
 To add species into the solver, you simply need to reconstruct $X_k$
 as described above, find the interface values using this new $A(q)$
@@ -1672,10 +1683,20 @@ slope and applying this same slope to all the species.
 
 \subsection{General equation of state}
 
-The above methods were formulated
-with a constant gamma equation of state.  A general equation of state
-(such as degenerate electrons) requires a more complex method.  The classic
-prescription for extending this methodology is presented by Colella and
+The above methods were formulated with a constant gamma equation of
+state.  A general equation of state (such as degenerate electrons)
+requires a more complex method.  Most methods are designed to 
+reduce the need to call a complex equation of state frequently,
+and work by augmenting the vector of primitive variables with 
+additional thermodynamic information.  There are two parts of the 
+adaption to a general equation of state: the interface states and 
+the Riemann problem. 
+
+\subsubsection{Carrying $\gamma_e$}
+
+
+The classic prescription for
+extending this methodology is presented by Colella and
 Glaz~\cite{colellaglaz:1985}.  They construct a thermodynamic index,
 \begin{equation}
 \gamma_e = \frac{p}{\rho e} + 1
@@ -1699,6 +1720,51 @@ can be brought to interfaces in a piecewise constant fashion while
 still making the overall method second order, since $\Gamma_1$ does
 not explicitly appear in the fluxes (see the discussion at the top of
 page 277).
+
+We can derive the characteristic structure of this system for use
+in the tracing in the construction of interface states%
+\footnote{A {\sf Jupyter} notebook using {\sf SymPy} that derives these
+eigenvectors is available here:
+\hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/compressible/euler-generaleos.ipynb}{euler-generaleos.ipynb}}}.
+If we write 
+our system as
+\begin{equation}
+q = \left ( \begin{array}{c} \tau \\ u \\ p \\ \gamma_e \end{array} \right )
+\end{equation}
+(we use $\tau = 1/\rho$ here for consistency with CG), we have
+\begin{equation}
+A = \left ( \begin{array}{cccc} u & -\tau    & 0      & 0 \\
+                                0 & u        & \tau   & 0 \\
+                                0 & c^2/\tau & u      & 0 \\
+                                0 & -\alpha  & 0      & u
+            \end{array} \right )
+\end{equation}
+where we define $\alpha = (\gamma_e - 1)(\gamma_e - \Gamma_1)$ for
+convenience.  The right eigenvectors are:
+\begin{equation}
+r^\evm = \left( \begin{array}{c} 1\\ {c}/{\tau}\\ -{c^{2}}/{\tau^{2}}\\ {\alpha}/{\tau}\end{array}\right)
+%
+\qquad
+r^\evz = \left( \begin{array}{c} 1\\0\\0\\0 \end{array}\right)
+%
+\qquad
+r^\evzs{\gamma_e} = \left( \begin{array}{c} 0\\0\\0\\1\end{array}\right)
+%
+\qquad
+r^\evp = \left( \begin{array}{c} 1\\ -{c}/{\tau}\\ -{c^{2}}/{\tau^{2}}\\ {\alpha}/{\tau} \end{array}\right )
+\end{equation}
+and corresponding left eigenvectors are:
+\begin{align}
+l^\evm &= \left( \begin{array}{cccc} 0 & \frac{\tau}{2 c} & - \frac{\tau^{2}}{2 c^{2}} & 0\end{array}\right) \\
+%
+l^\evz &= \left( \begin{array}{cccc} 0 & \frac{\tau}{2 c} & - \frac{\tau^{2}}{2 c^{2}} & 0\end{array}\right) \\
+%
+l^\evzs{\gamma_e} &= \left( \begin{array}{cccc} 0 & 0 & \frac{\alpha \tau}{c^{2}} & 1\end{array}\right) \\
+%
+l^\evp &= \left ( \begin{array}{cccc} 0 & - \frac{\tau}{2 c} & - \frac{\tau^{2}}{2 c^{2}} & 0\end{array}\right)
+\end{align}
+
+\subsubsection{Carrying $(\rho e)$}
 
 Alternately, the Castro paper~\cite{almgren:2010} relies on an idea
 from an unpublished manuscript by Colella, Glaz, and Ferguson that
