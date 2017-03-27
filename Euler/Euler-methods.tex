@@ -1109,18 +1109,23 @@ Note that the source here is cell-centered.  This expansion is
 second-order accurate.  This is the approach outlined in Miller
 \& Colella \cite{millercolella:2002}.
 
-The original PPM paper does things differently.  They construct a parabolic
-profile of $g$ in each zone and integrate under that profile to determine
-the average $g$ carried by each wave to the interface.  Finally, they include
-the gravitational source term in the characteristic projection itself.
-To see this, write our system in primitive form as:
+Alternately, we can include the source terms in the characteristic
+tracing of the interface states.  This is the approach taken in, e.g.,
+the original PPM paper.  To make things more concrete, let's consider just
+gravity as the source.  Our primitive variable equations in this case are:
 \begin{equation}
 q_t + A(q) q_x = G
 \end{equation}
 where $G = (0, g, 0)^T$---i.e. the gravitational source only affects
-$u$, not $\rho$ or $p$.  Note that in the PPM paper, they put $G$ on
+$u$, not $\rho$ or $p$\footnote{Note that in the PPM paper, they put $G$ on
 the lefthand side of the primitive variable equation, so our signs are
-opposite.  Our projections are now:
+opposite.}.
+
+First we construct a parabolic profile of $g$ in each zone and
+integrate under that profile to determine the average $g$ carried by
+each wave to the interface, we'll denote these as $\Ic^\enu_\pm(g)$.  Then we include the gravitational source
+term in the characteristic projection itself.  Our projections are
+now:
 \begin{equation}
 \sum_{\nu; \lambda^\enu \ge 0}l^\enu \cdot (\tilde{q} - \Ic^\enu_+(q) - \tfrac{\Delta t}{2} G) r^\enu
 \end{equation}
@@ -1153,6 +1158,41 @@ state is $(\Delta t/4) (\Ic_+^\evm(g) +
 t/2) g$ for constant g---this matches the result from the Taylor
 expansion above (Eq.~\ref{eq:Utaylorstatesource}).
 
+Regardless of how the source term information is included in the
+interface states, we also need to include it in the conservative
+update.  To second-order, we need it to be time-centered, which
+usually means averaging the time-level $n$ and $n+1$ sources:
+\begin{align}
+U^{n+1}_{i,j} = U^n_{i,j}
+   &+ \frac{\Delta t}{\Delta x} \left ( F^{(x),n+1/2}_{i-1/2,j} - F^{(x),n+1/2}_{i+1/2,j} \right ) \nonumber \\
+   &+ \frac{\Delta t}{\Delta y} \left ( F^{(y),n+1/2}_{i,j-1/2} - F^{(y),n+1/2}_{i,j+1/2} \right ) + \frac{\Delta t}{2} \left (H(U^n_{i,j}) + H(U^{n+1}_{i,j})\right )
+\end{align}
+As written, this appears to be an implicit update (since $U^{n+1}$
+depends on $H^{n+1}$), but often, the form of the source terms allows
+you to update the equations in sequence explicitly.  
+
+Again, using a constant gravitational acceleration as an example, and
+looking in 1-d for simplicity, $U = (\rho, \rho u, \rho E)^\intercal$
+and $H = (0, \rho g, \rho u g)^\intercal$, so our update sequence is:
+\begin{align}
+\rho^{n+1}_i = \rho^n_i &+ \frac{\Delta t}{\Delta x} 
+   \left [\rho_{i-1/2}^{n+1/2} u_{i-1/2}^{n+1/2} - 
+          \rho_{i+1/2}^{n+1/2} u_{i+1/2}^{n+1/2} \right ] \\
+(\rho u)^{n+1}_i = (\rho u)^n_i &+ \frac{\Delta t}{\Delta x} 
+   \left [ \rho_{i-1/2}^{n+1/2} (u_{i-1/2}^{n+1/2})^2  - 
+           \rho_{i+1/2}^{n+1/2} (u_{i+1/2}^{n+1/2})^2  \right ]
+         + \frac{\Delta t}{\Delta x} \left ( p_{i-1/2}^{n+1/2} - 
+                                              p_{i+1/2}^{n+1/2} \right ) \nonumber \\
+       &+ \frac{\Delta t}{2}(\rho^n_i + \rho^{n+1}_i) g \\
+(\rho E)^{n+1}_i = (\rho E)^n_i &+ \frac{\Delta t}{\Delta x} 
+   \left [ \left (\rho_{i-1/2}^{n+1/2} E_{i-1/2}^{n+1/2}  + p_{i-1/2}^{n+1/2} \right ) u_{i-1/2}^{n+1/2} - \right . \nonumber \\
+   &\phantom{+ \frac{\Delta t}{\Delta x} \left[ \right.}   \left .   \left (\rho_{i+1/2}^{n+1/2} E_{i+1/2}^{n+1/2}  + p_{i+1/2}^{n+1/2} \right ) u_{i+1/2}^{n+1/2} \right ]
+    + \frac{\Delta t}{2} \left [ (\rho u)^n + (\rho u)^{n+1} \right] g
+\end{align}
+These updates can be done one after another without any implicit
+coupling.  Other sources, like the Coriolis force, will involve an
+implicit update, but even then, it is local to a single zone and can
+be solved analytically.
 
 %-----------------------------------------------------------------------------
 \section{Simple geometries}
