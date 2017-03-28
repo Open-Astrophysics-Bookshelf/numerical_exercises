@@ -147,13 +147,13 @@ in Eq.~\ref{eq:taylorstate} is the identity, $I = LR$, we rewrite this
 expression as:
 \begin{equation}
 \qb_{i+1/2,L}^{n+1/2} = \qb_i^n +
-     \frac{1}{2} \left [ RL - \frac{\Delta t}{\Delta x} R\Lambda L \right ]_i \overline{\Delta \qb}_i
+     \frac{1}{2} \left [ \Rb\Lb - \frac{\Delta t}{\Delta x} \Rb\Lambdab \Lb \right ]_i \overline{\Delta \qb}_i
 \end{equation}
-We see the common factor of $L \Delta \qb$.  We now write this back in
+We see the common factor of $\Lb \Delta \qb$.  We now write this back in
 component form.  Consider:
 \begin{equation}
 \renewcommand{\arraystretch}{1.5}
-R\Lambda L \overline{\Delta \qb} =
+\Rb\Lambdab \Lb \overline{\Delta \qb} =
    \left ( \begin{array}{c:c:c}
              r_1^\evm & r_1^\evz & r_1^\evp \\
              r_2^\evm & r_2^\evz & r_2^\evp \\
@@ -174,11 +174,11 @@ R\Lambda L \overline{\Delta \qb} =
             \overline{\Delta p} \end{array} \right )
 \renewcommand{\arraystretch}{1.0}
 \end{equation}
-Starting with $L \overline{\Delta \qb}$, which is a vector with each component
+Starting with $\Lb \overline{\Delta \qb}$, which is a vector with each component
 the dot-product of a left eigenvalue with $\overline{\Delta \qb}$, we have
 \begin{equation}
 \renewcommand{\arraystretch}{1.5}
-R\Lambda L \overline{\Delta \qb} =
+\Rb\Lambdab \Lb \overline{\Delta \qb} =
    \left ( \begin{array}{c:c:c}
              r_1^\evm & r_1^\evz & r_1^\evp \\
              r_2^\evm & r_2^\evz & r_2^\evp \\
@@ -188,24 +188,24 @@ R\Lambda L \overline{\Delta \qb} =
                           & \lambda^\evz & \\
                           &              & \lambda^\evp \end{array} \right )
    \left ( \begin{array}{c}
-            l^\evm \cdot \overline{\Delta \qb} \\
-            l^\evz \cdot \overline{\Delta \qb} \\
-            l^\evp \cdot \overline{\Delta \qb} \end{array} \right )
+            \lb^\evm \cdot \overline{\Delta \qb} \\
+            \lb^\evz \cdot \overline{\Delta \qb} \\
+            \lb^\evp \cdot \overline{\Delta \qb} \end{array} \right )
 \renewcommand{\arraystretch}{1.0}
 \end{equation}
-Next we see that multiplying this vector by $\Lambda$ simply puts the
+Next we see that multiplying this vector by $\Lambdab$ simply puts the
 eigenvalue with its respective eigenvector in the resulting column vector:
 \begin{equation}
 \renewcommand{\arraystretch}{1.5}
-R\Lambda L \overline{\Delta \qb} =
+\Rb\Lambdab \Lb \overline{\Delta \qb} =
    \left ( \begin{array}{c:c:c}
              r_1^\evm & r_1^\evz & r_1^\evp \\
              r_2^\evm & r_2^\evz & r_2^\evp \\
              r_3^\evm & r_3^\evz & r_3^\evp \end{array} \right )
    \left ( \begin{array}{c}
-            \lambda^\evm \, l^\evm \cdot \overline{\Delta \qb} \\
-            \lambda^\evz \, l^\evz \cdot \overline{\Delta \qb} \\
-            \lambda^\evp \, l^\evp \cdot \overline{\Delta \qb} \end{array} \right )
+            \lambda^\evm \, \lb^\evm \cdot \overline{\Delta \qb} \\
+            \lambda^\evz \, \lb^\evz \cdot \overline{\Delta \qb} \\
+            \lambda^\evp \, \lb^\evp \cdot \overline{\Delta \qb} \end{array} \right )
 \renewcommand{\arraystretch}{1.0}
 \end{equation}
 Finally, the last multiply results in a column vector:
@@ -213,47 +213,50 @@ Finally, the last multiply results in a column vector:
 \renewcommand{\arraystretch}{1.5}
 R\Lambda L \overline{\Delta \qb} =
    \left ( \begin{array}{c}
-            r_1^\evm \, \lambda^\evm \, l^\evm \cdot \overline{\Delta \qb} +
-            r_1^\evz \, \lambda^\evz \, l^\evz \cdot \overline{\Delta \qb} +
-            r_1^\evp \, \lambda^\evp \, l^\evp \cdot \overline{\Delta \qb} \\
+            r_1^\evm \, \lambda^\evm \, \lb^\evm \cdot \overline{\Delta \qb} +
+            r_1^\evz \, \lambda^\evz \, \lb^\evz \cdot \overline{\Delta \qb} +
+            r_1^\evp \, \lambda^\evp \, \lb^\evp \cdot \overline{\Delta \qb} \\
 %
-            r_2^\evm \, \lambda^\evm \, l^\evm \cdot \overline{\Delta \qb} +
-            r_2^\evz \, \lambda^\evz \, l^\evz \cdot \overline{\Delta \qb} +
-            r_2^\evp \, \lambda^\evp \, l^\evp \cdot \overline{\Delta \qb} \\
+            r_2^\evm \, \lambda^\evm \, \lb^\evm \cdot \overline{\Delta \qb} +
+            r_2^\evz \, \lambda^\evz \, \lb^\evz \cdot \overline{\Delta \qb} +
+            r_2^\evp \, \lambda^\evp \, \lb^\evp \cdot \overline{\Delta \qb} \\
 %
-            r_3^\evm \, \lambda^\evm \, l^\evm \cdot \overline{\Delta \qb} +
-            r_3^\evz \, \lambda^\evz \, l^\evz \cdot \overline{\Delta \qb} +
-            r_3^\evp \, \lambda^\evp \, l^\evp \cdot \overline{\Delta \qb} \\
+            r_3^\evm \, \lambda^\evm \, \lb^\evm \cdot \overline{\Delta \qb} +
+            r_3^\evz \, \lambda^\evz \, \lb^\evz \cdot \overline{\Delta \qb} +
+            r_3^\evp \, \lambda^\evp \, \lb^\evp \cdot \overline{\Delta \qb} \\
    \end{array} \right )
 \renewcommand{\arraystretch}{1.0}
 \end{equation}
 We can rewrite this compactly as:
 \begin{equation}
-\sum_\nu \lambda^{(\nu)} (l^{(\nu)} \cdot \overline{\Delta \qb}) r^{(\nu)}
+\sum_\nu \lambda^{(\nu)} (\lb^{(\nu)} \cdot \overline{\Delta \qb}) \rb^{(\nu)}
 \end{equation}
 where we use $\nu$ to indicate which wave we are summing over.  A similar
-expansion is used for $RL \overline{\Delta \qb}$.  In fact, any vector
+expansion is used for $\Rb\Lb \overline{\Delta \qb}$.  In fact, any vector
 can be decomposed in this fashion:
 \begin{equation}
-\chi = I \chi = R L \chi = \sum_\nu (l^\enu \cdot \chi) r^\enu
+{\boldsymbol{\chi}} = {\bf I} {\boldsymbol{\chi}} = \Rb \Lb {\boldsymbol{\chi}} = 
+   \sum_\nu (\lb^\enu \cdot {\boldsymbol{\chi}}) \rb^\enu
 \end{equation}
 And then it is easy to see that the above manipulations for $\Ab \Delta \qb$
 can be expressed as:
 \begin{equation}
-\Ab \Delta \qb =  \Ab \sum_\nu (l^\enu \cdot \overline{\Delta \qb}) r^\enu = \sum_\nu (l^\enu \cdot \overline{\Delta \qb}) \Ab r^\enu = \sum_\nu (l^\enu \cdot \overline{\Delta \qb}) \lambda^\enu r^\enu
+\Ab \Delta \qb =  \Ab \sum_\nu (\lb^\enu \cdot \overline{\Delta \qb}) \rb^\enu = 
+  \sum_\nu (\lb^\enu \cdot \overline{\Delta \qb}) \Ab \rb^\enu = 
+  \sum_\nu (\lb^\enu \cdot \overline{\Delta \qb}) \lambda^\enu \rb^\enu
 \end{equation}
-where we used $\Ab r^\enu = \lambda^\enu r^\enu$.  The quantity $(l^\enu
+where we used $\Ab \rb^\enu = \lambda^\enu \rb^\enu$.  The quantity $(\lb^\enu
 \cdot \overline{\Delta \qb})$ that shows up here is the projection of
 the vector $\overline{\Delta \qb}$ into the characteristic variable
 carried by wave $\nu$.  This sum shows, as discussed earlier, that each wave
 carries a jump in the characteristic variable, with the jump in the primitive
-variables proportion to the right eigenvector, $r^\enu$.
+variables proportion to the right eigenvector, $\rb^\enu$.
 
 The resulting vector
 for the left state is:
 \begin{equation}
 \qb_{i+1/2,L}^{n+1/2} = \qb_i^n + \frac{1}{2} \sum_{\nu; \lambda^{(\nu)} \ge 0}
-  \left [ 1 - \frac{\Delta t}{\Delta x} \lambda_i^{(\nu)} \right ] (l_i^{(\nu)} \cdot \overline{\Delta \qb}_i) r_i^{(\nu)}
+  \left [ 1 - \frac{\Delta t}{\Delta x} \lambda_i^{(\nu)} \right ] (\lb_i^{(\nu)} \cdot \overline{\Delta \qb}_i) \rb_i^{(\nu)}
 \end{equation}
 Note that we make a slight change here, and only include a term in the sum if
 its wave is moving toward the interface ($\lambda^\enu \ge 0$).  The quantity
@@ -264,13 +267,13 @@ Starting with the data in the $i+1$ zone and expanding to the left, we can
 find the right state on the $i+1/2$ interface:
 \begin{equation}
 \qb_{i+1/2,R}^{n+1/2} = \qb_{i+1}^n - \frac{1}{2} \sum_{\nu; \lambda^{(\nu)} \le 0}
-  \left [ 1 + \frac{\Delta t}{\Delta x} \lambda_{i+1}^{(\nu)} \right ] (l_{i+1}^{(\nu)} \cdot \overline{\Delta \qb}_{i+1}) r_{i+1}^{(\nu)}
+  \left [ 1 + \frac{\Delta t}{\Delta x} \lambda_{i+1}^{(\nu)} \right ] (\lb_{i+1}^{(\nu)} \cdot \overline{\Delta \qb}_{i+1}) \rb_{i+1}^{(\nu)}
 \end{equation}
 
 
 A good discussion of this is in Miller \& Colella
 \cite{millercolella:2002} (Eq.\ 85).  This expression is saying that
-each wave carries a jump in $r^{(\nu)}$ and only those jumps moving
+each wave carries a jump in $\rb^{(\nu)}$ and only those jumps moving
 toward the interface contribute to our interface state.  This
 restriction of only summing up the waves moving toward the interface
 is sometimes called {\em characteristic tracing}.  This decomposition
@@ -278,7 +281,7 @@ in terms of the eigenvectors and eigenvalues is commonly called a {\em
   characteristic projection}.  In terms of an operator, $P$, it can be
 expressed as:
 \begin{equation}
-P \chi = \sum_\nu (l^{(\nu)} . \chi) r^{(\nu)}
+P {\boldsymbol{\chi}} = \sum_\nu (\lb^{(\nu)} . {\boldsymbol{\chi}}) \rb^{(\nu)}
 \end{equation}
 \begin{exercise}[Characteristic projection]
 {
@@ -324,11 +327,11 @@ and projecting this RHS (see Colella \& Glaz Eq. 43; Miller \& Colella Eq. 87),
 and isolating the interface state, we have
 \begin{align}
 \qb_{i+1/2,L}^{n+1/2} &= \tilde{\qb}_{i,L} + \frac{1}{2} \frac{\Delta t}{\Delta x}
-       \sum_{\nu; \lambda^{(\nu)} \ge 0} l_i^{(\nu)} \cdot \left [ \max(\lambda_i^\evp,0) - \Ab_i \right ]
-                                           \overline{\Delta \qb}_i \, r_i^{(\nu)} \\
+       \sum_{\nu; \lambda^{(\nu)} \ge 0} \lb_i^{(\nu)} \cdot \left [ \max(\lambda_i^\evp,0) - \Ab_i \right ]
+                                           \overline{\Delta \qb}_i \, \rb_i^{(\nu)} \\
                     &= \tilde{\qb}_{i,L} + \frac{1}{2} \frac{\Delta t}{\Delta x}
        \sum_{\nu; \lambda^{(\nu)} \ge 0} \left [ \max(\lambda_i^\evp,0) - \lambda_i^{(\nu)} \right ]
-                                          (l_i^{(\nu)} \cdot \overline{\Delta \qb}_i) \, r_i^{(\nu)}
+                                          (\lb_i^{(\nu)} \cdot \overline{\Delta \qb}_i) \, \rb_i^{(\nu)}
 \end{align}
 This is equivalent to the expression in Saltzman~\cite{saltzman:1994}
 (p.\ 161, first column, second-to-last equation) and
@@ -338,7 +341,7 @@ end).  The corresponding state to the right of this interface is:
 \qb_{i+1/2,R}^{n+1/2} = \tilde{\qb}_{i+1,R} + \frac{1}{2} \frac{\Delta t}{\Delta x}
        \sum_{\nu; \lambda^{(\nu)} \le 0}
        \left [ \min(\lambda_{i+1}^\evm,0) - \lambda_{i+1}^{(\nu)} \right ]
-       (l_{i+1}^{(\nu)} \cdot \overline{\Delta \qb}_{i+1}) \, r_{i+1}^{(\nu)}
+       (\lb_{i+1}^{(\nu)} \cdot \overline{\Delta \qb}_{i+1}) \, \rb_{i+1}^{(\nu)}
 \end{equation}
 where now the reference state captures the flow from the $i+1$ zone
 moving to the {\em left} to this interface (hence the appearance of
@@ -399,10 +402,10 @@ Eq.~\ref{eq:lin_decomp}, we can write this (after the characteristic
 projection) as
 \begin{equation}
 \qb_{i+1/2,L}^{n+1/2} = \tilde{\qb}_+ -
-   \sum_{\nu;\lambda^{(\nu)}\ge 0} l_i^{(\nu)} \cdot \left \{
+   \sum_{\nu;\lambda^{(\nu)}\ge 0} \lb_i^{(\nu)} \cdot \left \{
         \tilde{\qb}_+ - \left [ \qb_i^n +
             \frac{1}{2} \left ( 1 - \frac{\Delta t}{\Delta x} \lambda_i^{(\nu)} \right ) \overline{\Delta \qb}_i \right ]
-       \right \} r_i^{(\nu)}
+       \right \} \rb_i^{(\nu)}
 \end{equation}
 Miller \& Colella rewrite the portion inside the $[\ldots]$
 recognizing that (similar to M\&C Eq.\ 88, but for the $i+1/2,L$ interface):
@@ -448,9 +451,9 @@ with $\sigma^{(\nu)} = |\lambda^{(\nu)}|\Delta t / \Delta x$ (see Almgren et
 al. Eq. 31)  (see Figure~\ref{fig:ppm_trace}).  Then
 \begin{equation}
 \qb_{i+1/2,L}^{n+1/2} = \tilde{\qb}_+ -
-   \sum_{\nu;\lambda^{(\nu)}\ge 0} l_i^{(\nu)} \cdot \left (
+   \sum_{\nu;\lambda^{(\nu)}\ge 0} \lb_i^{(\nu)} \cdot \left (
         \tilde{\qb}_+ - \Ic_+^{(\nu)}(\qb_i)
-       \right ) r_i^{(\nu)}  \label{eq:ppmtrace}
+       \right ) \rb_i^{(\nu)}  \label{eq:ppmtrace}
 \end{equation}
 Miller \& Colella choose the reference state as
 \begin{equation}
@@ -524,9 +527,9 @@ we can write the left velocity state as (leaving off the $i$
 subscripts on the vectors):
 \begin{equation}
 u_{i+1/2,L}^{n+1/2} =
-  \tilde{u}_+ - \sum_\nu l^{(\nu)} \cdot
+  \tilde{u}_+ - \sum_\nu \lb^{(\nu)} \cdot
       ( \tilde{\qb}_+ -  \Ic_+^{(\nu)}(\qb) )
-    \underbrace{r^{(\nu)}}_{\begin{smallmatrix}\mathrm{only~the}\\ u~\mathrm{`slot'} \end{smallmatrix}}
+    \underbrace{\rb^{(\nu)}}_{\begin{smallmatrix}\mathrm{only~the}\\ u~\mathrm{`slot'} \end{smallmatrix}}
 \end{equation}
 (where, as above, the $\sim$ indicates the reference state).
 Here the $r$ eigenvector on the end is representative---we only pick
@@ -583,7 +586,7 @@ Putting in the eigenvectors and writing out the sum, we have:
 Here again we show the entire right eigenvector for illustration, but
 only the element that comes into play is drawn in black.  This shows
 that the second term is $0$---the contact wave does not carry a jump
-in velocity.  Multiplying out $l^{(\nu)} \cdot (\tilde{\qb}_+ -
+in velocity.  Multiplying out $\lb^{(\nu)} \cdot (\tilde{\qb}_+ -
 \Ic_+^{(\nu)})$ we have:
 \begin{align}
 u_{i+1/2,L}^{n+1/2} =
@@ -634,7 +637,7 @@ interface over our timestep:
 The right state at $i-1/2$ using zone $i$ data is:
 \begin{equation}
 \qb_{i-1/2,R}^{n+1/2} = \tilde{\qb}_- - \sum_{\nu; \lambda_\nu \le 0}
-   l_i^{(\nu)} \cdot \left ( \tilde{\qb}_- - \Ic_-^{(\nu)}(\qb_i) \right ) r_i^{(\nu)}
+   \lb_i^{(\nu)} \cdot \left ( \tilde{\qb}_- - \Ic_-^{(\nu)}(\qb_i) \right ) \rb_i^{(\nu)}
 \end{equation}
 where the reference state is now:
 \begin{equation}
@@ -711,11 +714,11 @@ subsequent parts of the algorithm.
   limiting on the characteristic variables rather than the primitive
   variables.  The characteristic slopes for the quantity carried by
   the wave $\nu$ can be found from the primitive variables
-  as: \begin{equation} \Delta w^{(\nu)} = l^{(\nu)} \cdot \Delta
+  as: \begin{equation} \Delta w^{(\nu)} = \lb^{(\nu)} \cdot \Delta
   \qb \end{equation} any limiting would then be done to $\Delta
   w^{(\nu)}$ and the limited primitive variables would be recovered
   as: \begin{equation} \overline{\Delta \qb} = \sum_\nu \overline{\Delta
-  w}^{(\nu)} r^{(\nu)} \end{equation} (here we use an overline to
+  w}^{(\nu)} \rb^{(\nu)} \end{equation} (here we use an overline to
   indicate limiting).
 
   This is attractive because it is more in the spirit of the linear
@@ -753,7 +756,7 @@ side.
 Once the wave speeds are known, we look at the sign of the speeds to
 determine which of the 4 regions is on the interface.  In the `star'
 region, only $\rho$ jumps across the middle (contact) wave, the
-pressure and velocity are constant across that wave (see $r^\evz$).
+pressure and velocity are constant across that wave (see $\rb^\evz$).
 We determine the state in the star region ($\rho_l^*, \rho_r^*, u^*,
 p^*$) by using the jump conditions for the Euler equations.  In
 general, these differ depending on whether the waves are shocks or
@@ -817,7 +820,7 @@ Once we have the fluxes, the conservative update is done as
 The timestep, $\Delta t$ is determined by the time it takes for the
 fastest wave to cross a single zone:
 \begin{equation}
-\Delta t < \min_i \frac{\Delta x}{|u_i| + c}
+\Delta t < \min_d \left \{ \frac{\Delta x}{|\Ub \cdot {\bf e}_d| + c}\right \}
 \end{equation}
 (This is the limit for the CTU unsplit scheme here, but see the discussion
 in \S~\ref{sec:adv:timestep}).
@@ -1127,11 +1130,11 @@ each wave to the interface, we'll denote these as $\Ic^\enu_\pm(g)$.  Then we in
 term in the characteristic projection itself.  Our projections are
 now:
 \begin{equation}
-\sum_{\nu; \lambda^\enu \ge 0}l^\enu \cdot (\tilde{\qb} - \Ic^\enu_+(\qb) - \tfrac{\Delta t}{2} G) r^\enu
+\sum_{\nu; \lambda^\enu \ge 0}\lb^\enu \cdot (\tilde{\qb} - \Ic^\enu_+(\qb) - \tfrac{\Delta t}{2} G) \rb^\enu
 \end{equation}
 for the left state, and
 \begin{equation}
-\sum_{\nu; \lambda^\enu \le 0} l^\enu \cdot (\tilde{\qb} - \Ic^\enu_-(\qb) - \tfrac{\Delta t}{2} G) r^\enu
+\sum_{\nu; \lambda^\enu \le 0} \lb^\enu \cdot (\tilde{\qb} - \Ic^\enu_-(\qb) - \tfrac{\Delta t}{2} G) \rb^\enu
 \end{equation}
 for the right state.  Since $G$ is only non-zero for velocity, only
 the velocity changes.  Writing out the sum (and performing the vector products), we
@@ -1555,26 +1558,26 @@ discretization yet.  Now we can use an ODE integrator to solve this system.
 Consider
 second-order Runge-Kutta.  We evaluate two slopes,
 \begin{alignat}{3}
-k_1 &= \Delta t \bigg [ &-&\frac{\Fb^{(x)}(\Uc^n_{i+1/2,j})
+{\bf k}_1 &= \Delta t \bigg [ &-&\frac{\Fb^{(x)}(\Uc^n_{i+1/2,j})
                                - \Fb^{(x)}(\Uc^n_{i-1/2,j})}{\Delta x} \nonumber \\
     &\,                 &-&\frac{\Fb^{(y)}(\Uc^n_{i,j+1/2})
                                - \Fb^{(y)}(\Uc^n_{i,j-1/2})}{\Delta y} \bigg ] \\
-k_2 &= \Delta t \bigg [ &-&\frac{\Fb^{(x)}([\Uc^n + k_1/2]_{i+1/2,j})
-                               - \Fb^{(x)}([\Uc^n + k_1/2]_{i-1/2,j})}{\Delta x} \nonumber \\
-    &\,                 &-&\frac{\Fb^{(y)}([\Uc^n + k_1/2]_{i,j+1/2})
-                               - \Fb^{(y)}([\Uc^n + k_1/2]_{i,j-1/2})}{\Delta y} \bigg ]
+{\bf k}_2 &= \Delta t \bigg [ &-&\frac{\Fb^{(x)}([\Uc^n + {\bf k}_1/2]_{i+1/2,j})
+                               - \Fb^{(x)}([\Uc^n + {\bf k}_1/2]_{i-1/2,j})}{\Delta x} \nonumber \\
+    &\,                 &-&\frac{\Fb^{(y)}([\Uc^n + {\bf k}_1/2]_{i,j+1/2})
+                               - \Fb^{(y)}([\Uc^n + {\bf k}_1/2]_{i,j-1/2})}{\Delta y} \bigg ]
 \end{alignat}
 and then
 \begin{equation}
-\Uc^{n+1}_{i,j} = \Uc^n_{i,j} + k_2
+\Uc^{n+1}_{i,j} = \Uc^n_{i,j} + {\bf k}_2
 \end{equation}
 In the construction of the interface states, $\Uc^n_{i+1/2,j}$ or $[\Uc^n
-+ k_1/2]_{i+1/2,j}$, there is no explicit transverse term, since that
++ {\bf k}_1/2]_{i+1/2,j}$, there is no explicit transverse term, since that
 arose from Taylor expanding $\Uc^n_{i,j}$ in time through $\Delta t/2$.
 Instead, we simply construct these interface states using a
 one-dimensional reconstruction and solve a Riemann problem at each
-interface.  The evaluation of the second slope, $k_2$, implicitly
-includes the transverse information since we add $k_1/2$ to
+interface.  The evaluation of the second slope, ${\bf k}_2$, implicitly
+includes the transverse information since we add ${\bf k}_1/2$ to
 $\Uc^n_{i,j}$ before doing the prediction to the interfaces.  Also note,
 however, that in this construction of the interface states, there is
 no characteristic projection, since that arises from predicting the
@@ -1642,21 +1645,21 @@ There are now 4 eigenvalues, with the new one also being simply $u$.
 This says that the species simply advect with the flow.  The right
 eigenvectors are now:
 \begin{equation}
-r^\evm = \left ( \begin{array}{c} 1 \\ -c/\rho \\ c^2 \\ 0\end{array} \right )
+\rb^\evm = \left ( \begin{array}{c} 1 \\ -c/\rho \\ c^2 \\ 0\end{array} \right )
 %
 \qquad
-r^\evz = \left ( \begin{array}{c} 1 \\ 0 \\ 0  \\ 0\end{array} \right )
+\rb^\evz = \left ( \begin{array}{c} 1 \\ 0 \\ 0  \\ 0\end{array} \right )
 %
 \qquad
-r^\evzs{X} = \left ( \begin{array}{c} 0 \\ 0  \\ 0 \\ 1 \end{array} \right )
+\rb^\evzs{X} = \left ( \begin{array}{c} 0 \\ 0  \\ 0 \\ 1 \end{array} \right )
 %
 \qquad
-r^\evp = \left ( \begin{array}{c} 1 \\ c/\rho \\ c^2 \\ 0 \end{array} \right )
+\rb^\evp = \left ( \begin{array}{c} 1 \\ c/\rho \\ c^2 \\ 0 \end{array} \right )
 \end{equation}
 corresponding to $\lambda^\evm = u -c$, $\lambda^\evz = u$,
 $\lambda^\evzs{X} = u$, and $\lambda^\evp = u + c$.  We see that for
 the species, the only non-zero element is for one of the $u$
-eigenvectors ($r^\evzs{X}$).  This means that $X_k$ only jumps over
+eigenvectors ($\rb^\evzs{X}$).  This means that $X_k$ only jumps over
 this middle wave.  In the Riemann solver then, there is no `star'
 state for the species, it just jumps across the contact wave.
 
@@ -1782,26 +1785,26 @@ our system as
 where we define $\alpha = (\gamma_e - 1)(\gamma_e - \Gamma_1)$ for
 convenience.  The right eigenvectors are:
 \begin{equation}
-r^\evm = \left( \begin{array}{c} 1\\ {c}/{\tau}\\ -{c^{2}}/{\tau^{2}}\\ {\alpha}/{\tau}\end{array}\right)
+\rb^\evm = \left( \begin{array}{c} 1\\ {c}/{\tau}\\ -{c^{2}}/{\tau^{2}}\\ {\alpha}/{\tau}\end{array}\right)
 %
 \qquad
-r^\evz = \left( \begin{array}{c} 1\\0\\0\\0 \end{array}\right)
+\rb^\evz = \left( \begin{array}{c} 1\\0\\0\\0 \end{array}\right)
 %
 \qquad
-r^\evzs{\gamma_e} = \left( \begin{array}{c} 0\\0\\0\\1\end{array}\right)
+\rb^\evzs{\gamma_e} = \left( \begin{array}{c} 0\\0\\0\\1\end{array}\right)
 %
 \qquad
-r^\evp = \left( \begin{array}{c} 1\\ -{c}/{\tau}\\ -{c^{2}}/{\tau^{2}}\\ {\alpha}/{\tau} \end{array}\right )
+\rb^\evp = \left( \begin{array}{c} 1\\ -{c}/{\tau}\\ -{c^{2}}/{\tau^{2}}\\ {\alpha}/{\tau} \end{array}\right )
 \end{equation}
 and corresponding left eigenvectors are:
 \begin{align}
-l^\evm &= \left( \begin{array}{cccc} 0 & \frac{\tau}{2 c} & - \frac{\tau^{2}}{2 c^{2}} & 0\end{array}\right) \\
+\lb^\evm &= \left( \begin{array}{cccc} 0 & \frac{\tau}{2 c} & - \frac{\tau^{2}}{2 c^{2}} & 0\end{array}\right) \\
 %
-l^\evz &= \left( \begin{array}{cccc} 0 & \frac{\tau}{2 c} & - \frac{\tau^{2}}{2 c^{2}} & 0\end{array}\right) \\
+\lb^\evz &= \left( \begin{array}{cccc} 0 & \frac{\tau}{2 c} & - \frac{\tau^{2}}{2 c^{2}} & 0\end{array}\right) \\
 %
-l^\evzs{\gamma_e} &= \left( \begin{array}{cccc} 0 & 0 & \frac{\alpha \tau}{c^{2}} & 1\end{array}\right) \\
+\lb^\evzs{\gamma_e} &= \left( \begin{array}{cccc} 0 & 0 & \frac{\alpha \tau}{c^{2}} & 1\end{array}\right) \\
 %
-l^\evp &= \left ( \begin{array}{cccc} 0 & - \frac{\tau}{2 c} & - \frac{\tau^{2}}{2 c^{2}} & 0\end{array}\right)
+\lb^\evp &= \left ( \begin{array}{cccc} 0 & - \frac{\tau}{2 c} & - \frac{\tau^{2}}{2 c^{2}} & 0\end{array}\right)
 \end{align}
 
 \subsubsection{Carrying $(\rho e)$}
@@ -1830,45 +1833,45 @@ With the addition of $\rho e$, our system becomes:
 where $h = e + p/\rho$ is the specific enthalpy.  The eigenvalues of this
 system are:
 \begin{equation}
-\lambda^{(1)} = u - c \qquad
-\lambda^{(2)} = u  \qquad
-\lambda^{(3)} = u  \qquad
-\lambda^{(4)} = u + c
+\lambda^\evm = u - c \qquad
+\lambda^\evz = u  \qquad
+\lambda^\evzs{\rho e} = u  \qquad
+\lambda^\evp = u + c
 \end{equation}
 and the eigenvectors are:
 \begin{equation}
-r^{(1)} = \left ( \begin{array}{c} 1 \\ -c/\rho \\ c^2 \\ h \end{array} \right )
+\rb^\evm = \left ( \begin{array}{c} 1 \\ -c/\rho \\ c^2 \\ h \end{array} \right )
 \qquad
-r^{(2)} = \left ( \begin{array}{c} 1 \\ 0 \\ 0 \\ 0 \end{array} \right )
+\rb^\evz = \left ( \begin{array}{c} 1 \\ 0 \\ 0 \\ 0 \end{array} \right )
 \qquad
-r^{(3)} = \left ( \begin{array}{c} 0 \\ 0 \\ 0 \\ 1 \end{array} \right )
+\rb^\evzs{\rho e} = \left ( \begin{array}{c} 0 \\ 0 \\ 0 \\ 1 \end{array} \right )
 \qquad
-r^{(4)} = \left ( \begin{array}{c} 1 \\ c/\rho \\ c^2 \\ h \end{array} \right )
+\rb^\evp = \left ( \begin{array}{c} 1 \\ c/\rho \\ c^2 \\ h \end{array} \right )
 \end{equation}
 and
 \begin{eqnarray}
 &&
-l^{(1)} = ( \begin{array}{cccc} 0 & -\frac{\rho}{2c} & \frac{1}{2c^2} & 0
+\lb^\evm = ( \begin{array}{cccc} 0 & -\frac{\rho}{2c} & \frac{1}{2c^2} & 0
             \end{array} ) \nonumber \\
 &&
-l^{(2)} = ( \begin{array}{cccc} 1 & 0 & -\frac{1}{c^2} & 0
+\lb^\evz = ( \begin{array}{cccc} 1 & 0 & -\frac{1}{c^2} & 0
             \end{array} ) \nonumber \\
 &&
-l^{(3)} = ( \begin{array}{cccc} 0 & 0 & -\frac{h}{c^2} & 1
+\lb^\evzs{\rho e} = ( \begin{array}{cccc} 0 & 0 & -\frac{h}{c^2} & 1
             \end{array} ) \nonumber \\
 &&
-l^{(4)} = ( \begin{array}{cccc} 0 & \frac{\rho}{2c} & \frac{1}{2c^2} & 0
+\lb^\evp = ( \begin{array}{cccc} 0 & \frac{\rho}{2c} & \frac{1}{2c^2} & 0
             \end{array} )
 \end{eqnarray}
 Remember that the state variables in the $\qb$ vector are mixed into the
-other states by $l \cdot \qb$.  Since all $l^{(\nu)}$'s have $0$ in the
-$\rho e$ `slot' (the last position) except for $l^{(3)}$, and the
-corresponding $r^{(3)}$ is only non-zero in the $\rho e$ slot, this
+other states by $\lb \cdot \qb$.  Since all $\lb^{(\nu)}$'s have $0$ in the
+$\rho e$ `slot' (the last position) except for $\lb^\evzs{\rho e}$, and the
+corresponding $\rb^\evzs{\rho e}$ is only non-zero in the $\rho e$ slot, this
 means that $\rho e$ is not mixed into the other state variables.  This
 is as expected, since $\rho e$ is not needed in the system.
 
 Also recall that the jump carried by the wave $\nu$ is proportional
-to $r^{(\nu)}$---since $r^{(1)}$, $r^{(3)}$, and $r^{(4)}$ have
+to $\rb^{(\nu)}$---since $\rb^\evm$, $\rb^\evzs{\rho e}$, and $\rb^\evp$ have
 non-zero $\rho e$ elements, this means that $\rho e$ jumps across
 these three waves.
 

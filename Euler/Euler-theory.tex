@@ -158,7 +158,7 @@ where
 
 
 
-The eigenvalues of $\Ab$ can be found via $| \Ab - \lambda I | = 0$,
+The eigenvalues of $\Ab$ can be found via $| \Ab - \lambda {\bf I} | = 0$,
 where $|\ldots|$ indicates the determinant and $\lambda$ are the eigenvalues.
 \begin{exercise}[The eigenvalues of the Euler system]
 {
@@ -205,9 +205,9 @@ corresponding eigenvectors throughout these notes.
 %
 The right and left eigenvectors can be found via:
 \begin{equation}
-\Ab \, r^\enu = \lambda^\enu r^\enu \; ;
+\Ab \, \rb^\enu = \lambda^\enu \rb^\enu \; ;
 \qquad
-l^\enu \, \Ab  = \lambda^\enu l^\enu
+\lb^\enu \, \Ab  = \lambda^\enu \lb^\enu
 \end{equation}
 where $\nu = \{-,\circ,+\}$ corresponding to the three waves, and
 there is one right and one left eigenvector for each of the eigenvalues.
@@ -217,28 +217,28 @@ there is one right and one left eigenvector for each of the eigenvalues.
 Show that the right eigenvectors are:
 \begin{equation}
 \label{eq:euler:primRevs}
-r^\evm = \left ( \begin{array}{c} 1 \\ -c/\rho \\ c^2 \end{array} \right )
+\rb^\evm = \left ( \begin{array}{c} 1 \\ -c/\rho \\ c^2 \end{array} \right )
 %
 \qquad
-r^\evz = \left ( \begin{array}{c} 1 \\ 0 \\ 0  \end{array} \right )
+\rb^\evz = \left ( \begin{array}{c} 1 \\ 0 \\ 0  \end{array} \right )
 %
 \qquad
-r^\evp = \left ( \begin{array}{c} 1 \\ c/\rho \\ c^2 \end{array} \right )
+\rb^\evp = \left ( \begin{array}{c} 1 \\ c/\rho \\ c^2 \end{array} \right )
 \end{equation}
 and the left eigenvectors are:
 \begin{align}
-l^\evm &= \left ( \begin{array}{ccc} 0 & -\frac{\rho}{2c} & \frac{1}{2c^2}
+\lb^\evm &= \left ( \begin{array}{ccc} 0 & -\frac{\rho}{2c} & \frac{1}{2c^2}
                   \end{array} \right ) \\
 %
 \qquad
-l^\evz &= \left ( \begin{array}{ccc} 1 & 0 & -\frac{1}{c^2}  \end{array} \right ) \\
+\lb^\evz &= \left ( \begin{array}{ccc} 1 & 0 & -\frac{1}{c^2}  \end{array} \right ) \\
 %
 \qquad
-l^\evp &= \left ( \begin{array}{ccc} 0 & \phantom{+}\frac{\rho}{2c} & \frac{1}{2c^2} \end{array} \right )
+\lb^\evp &= \left ( \begin{array}{ccc} 0 & \phantom{+}\frac{\rho}{2c} & \frac{1}{2c^2} \end{array} \right )
 \end{align}
 Note that in general, there can be an arbitrary constant in front of each
 eigenvector.  Here they are normalized such that
-$l^{(i)} \cdot r^{(j)} = \delta_{ij}$.
+$\lb^{(i)} \cdot \rb^{(j)} = \delta_{ij}$.
 }
 \end{exercise}
 A {\sf Jupyter} notebook using {\sf SymPy} that derives these
@@ -247,28 +247,28 @@ eigenvectors is available here:
 \footnote{if you don't have {\sf Jupyter}, you can view this rendered online via the github link.}
 
 A final form of the equations is called the {\em characteristic form}.  Here,
-we wish to diagonalize the matrix $\Ab$.  We take the matrix $R$ to be the
+we wish to diagonalize the matrix $\Ab$.  We take the matrix $\Rb$ to be the
 matrix of right eigenvectors,
 \begin{equation}
-R = (r^\evm | r^\evz | r^\evp )
+\Rb = (\rb^\evm | \rb^\evz | \rb^\evp )
 \end{equation}
-(i.e., $R$ is a square matrix whose columns are the eigenvectors),
-and $L$
+(i.e., $\Rb$ is a square matrix whose columns are the eigenvectors),
+and $\Lb$
 is the corresponding matrix of left eigenvectors:
 \begin{equation}
-L = \left ( \begin{array}{c} l^\evm \\
+\Lb = \left ( \begin{array}{c} \lb^\evm \\
                              \hdashline
-                             l^\evz \\
+                             \lb^\evz \\
                              \hdashline
-                             l^\evp \end{array} \right )
+                             \lb^\evp \end{array} \right )
 \end{equation}
-Note that $L\, R = I = R\, L$, and $L = R^{-1}$.
+Note that $\Lb\, \Rb = {\bf I} = \Rb\, \Lb$, and $\Lb = \Rb^{-1}$.
 \begin{exercise}[Characteristic form of the Euler equations]
 {
-Show that $\Lambda = L \Ab R$ is a diagonal matrix with the diagonal elements
+Show that $\Lambdab = \Lb \Ab \Rb$ is a diagonal matrix with the diagonal elements
 simply the 3 eigenvalues we found above:
 \begin{equation}
-\Lambda =
+\Lambdab =
    \left ( \begin{array}{ccc}
              \lambda^\evm &              & \\
                           & \lambda^\evz & \\
@@ -277,22 +277,22 @@ simply the 3 eigenvalues we found above:
 }
 \end{exercise}
 To transform our primitive variable system into the characteristic form, we 
-start by multiplying by $L$:
+start by multiplying by $\Lb$:
 \begin{equation}
-L\qb_t + L \Ab \qb_x = 0
+\Lb\qb_t + \Lb \Ab \qb_x = 0
 \end{equation}
-Next, recalling that $RL = I$ (we can insert
+Next, recalling that $\Rb\Lb = {\bf I}$ (we can insert
 the identity matrix where we please), we can rewrite our system as:
 \begin{equation}
-L\qb_t + L \Ab R L \qb_x = 0
+\Lb\qb_t + \Lb \Ab \Rb \Lb \qb_x = 0
 \end{equation}
-Finally, defining $dw = L d\qb$,
+Finally, defining $dw = \Lb d\qb$,
 \begin{equation}
 w_t + \Lambda w_x = 0
 \end{equation}
 Here, the $w$ are the {\em characteristic variables}.  Note that we cannot
-in general integrate $dw = L d\qb$ to write down the characteristic
-quantities.  Since $\Lambda$ is diagonal, this system is a set of
+in general integrate $dw = \Lb d\qb$ to write down the characteristic
+quantities.  Since $\Lambdab$ is diagonal, this system is a set of
 decoupled advection-like equations:
 \begin{align}
 w_t^\evm + \lambda^\evm w_x^\evm &= 0 \\
@@ -302,7 +302,7 @@ w_t^\evp + \lambda^\evp w_x^\evp &= 0
 
 If the system were linear, then the solution to each would simply be
 to advect the quantity $w^\enu$ at the wave speed $\lambda^\enu$.  We
-could then get back the primitive variables as $d\qb = L^{-1} dw = R dw$.
+could then get back the primitive variables as $d\qb = \Lb^{-1} dw = \Rb dw$.
 
 The basic idea of hyperbolic systems of PDEs is that there is one wave
 for each eigenvalue, and these define the characteristic curves,
@@ -313,13 +313,13 @@ characteristics are straight lines.
 
 Imagine initial conditions consisting of a jump in the primitive
 variables, $\Delta \qb$.  The corresponding jumps in characteristic
-variables are $\Delta w \sim L \Delta \qb$ (where the $\sim$ accounts
-for the fact that in a nonlinear system, $L = L(\qb)$).  The
+variables are $\Delta w \sim \Lb \Delta \qb$ (where the $\sim$ accounts
+for the fact that in a nonlinear system, $\Lb = \Lb(\qb)$).  The
 characteristic form of the equations says that each of the waves will
-carry its respective jump, $\Delta w$.  Since $d\qb = L^{-1}dw = R dw$,
+carry its respective jump, $\Delta w$.  Since $d\qb = \Lb^{-1}dw = \Rb dw$,
 the jump in the primitive variable across each wave is proportional to
 the right-eigenvector associated with that wave.  So, for example,
-since $r^\evz$ is only non-zero for the density element (see
+since $\rb^\evz$ is only non-zero for the density element (see
 Eq.~\ref{eq:euler:primRevs}), this then means that only density jumps
 across the $\lambda^\evz = u$ wave---pressure and velocity are
 constant across this wave (see for example, Toro~\cite{toro:1997},
@@ -391,7 +391,7 @@ We typically work in terms of primitive variables.  The states in the
 $L$ and $R$ regions are simply the left and right input states---the
 waves have not had time to reach here, so they are unmodified.
 
-Looking at the middle right eigenvector, $r^\evz$, we identify the
+Looking at the middle right eigenvector, $\rb^\evz$, we identify the
 middle wave as a {\em contact discontinuity}.  There is neither
 compression nor expansion across this wave (since the velocity does
 not jump across it) and it simply separates two states.  We also know
@@ -437,13 +437,13 @@ The eigenvalues of $\Ab_s$ are again $u$, $u-c$, and $u+c$.  The right eigenvect
 are\footnote{Again, see the {\sf SymPy} {\sf Jupyter} notebook:
 \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/compressible/euler.ipynb}{euler.ipynb}}}
 \begin{align}
-r_s^\evm = \left ( \begin{array}{c} 1 \\ -c/\rho \\ 0 \end{array} \right )
+\rb_s^\evm = \left ( \begin{array}{c} 1 \\ -c/\rho \\ 0 \end{array} \right )
 %
 \qquad
-r_s^\evz = \left ( \begin{array}{c} 1 \\ 0 \\ -c^2/p_s  \end{array} \right )
+\rb_s^\evz = \left ( \begin{array}{c} 1 \\ 0 \\ -c^2/p_s  \end{array} \right )
 %
 \qquad
-r_s^\evp = \left ( \begin{array}{c} 1 \\ c/\rho \\ 0 \end{array} \right )
+\rb_s^\evp = \left ( \begin{array}{c} 1 \\ c/\rho \\ 0 \end{array} \right )
 \end{align}
 Here, we define $p_s \equiv \partial p/\partial s |_\rho$.
 Since the jump in $\qb_s$ is proportional to these eigenvectors, we see that
@@ -456,8 +456,8 @@ across the $\evm$ wave.  So we can use this constancy to tell us how
 the evolution behaves across that wave.  The constancy of the middle and right characteristic variables across the left
 wave gives us the conditions (using our original primitive variable system):
 \begin{align}
-l^\evp \cdot d\qb &= 0 \\
-l^\evz \cdot d\qb &= 0 
+\lb^\evp \cdot d\qb &= 0 \\
+\lb^\evz \cdot d\qb &= 0 
 \end{align}
 or 
 \begin{equation}
