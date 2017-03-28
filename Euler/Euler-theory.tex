@@ -104,10 +104,10 @@ $\Uc = (u_1, u_2, \ldots, u_n)^\intercal$ is
   \end{array} \right )
 \end{equation*}
 }
-of this flux vector can now be computed as $A = \partial
+of this flux vector can now be computed as $\Ab = \partial
 \Fb/\partial \Uc$:
 \begin{equation}
-A(\Uc) = \left ( \begin{array}{ccc}
+\Ab(\Uc) = \left ( \begin{array}{ccc}
    0  & 1 & 0 \\
    -\frac{1}{2}u^2(3 -\gamma) & u (3 -\gamma) & \gamma - 1 \\
    \frac{1}{2}(\gamma -2)u^3 - \frac{uc^2}{\gamma -1} &
@@ -117,7 +117,7 @@ A(\Uc) = \left ( \begin{array}{ccc}
 where the speed of sound is $c = \sqrt{\gamma p/\rho}$.   With this, our
 system can be written as:
 \begin{equation}
-\Uc_t + A(\Uc) \Uc_x = 0
+\Uc_t + \Ab(\Uc) \Uc_x = 0
 \end{equation}
 This matrix is quite complex and difficult to work with.  The
 eigenvectors of this matrix can be found in a variety of sources
@@ -143,14 +143,14 @@ solutions like we saw with Burgers' equation.
 %
 The primitive variable system can be written compactly as:
 \begin{equation}
-q_t + A(q) q_x = 0
+\qb_t + \Ab(\qb) \qb_x = 0
 \end{equation}
 where
 \begin{equation}
-q = \left ( \begin{array}{c} \rho \\ u \\ p \end{array} \right )
+\qb = \left ( \begin{array}{c} \rho \\ u \\ p \end{array} \right )
 %
 \qquad
-A(q) = \left ( \begin{array}{ccc} u  & \rho     & 0 \\
+\Ab(\qb) = \left ( \begin{array}{ccc} u  & \rho     & 0 \\
                                   0  &  u       & 1/\rho \\
                                   0  & \gamma p & u \end{array} \right )
 \label{eq:primitivesystem}
@@ -158,15 +158,15 @@ A(q) = \left ( \begin{array}{ccc} u  & \rho     & 0 \\
 
 
 
-The eigenvalues of $A$ can be found via $| A - \lambda I | = 0$,
+The eigenvalues of $\Ab$ can be found via $| \Ab - \lambda I | = 0$,
 where $|\ldots|$ indicates the determinant and $\lambda$ are the eigenvalues.
 \begin{exercise}[The eigenvalues of the Euler system]
 {
-Show that the eigenvalues of $A$ are $\lambda^\evm = u -c$, $\lambda^\evz = u$, $\lambda^\evp = u+c$.
+Show that the eigenvalues of $\Ab$ are $\lambda^\evm = u -c$, $\lambda^\evz = u$, $\lambda^\evp = u+c$.
 }
 \end{exercise}
-Note that both the conserved Jacobian matrix, $A(\Uc)$, and the
-primitive variable matrix, $A(q)$, have the same eigenvalues,
+Note that both the conserved Jacobian matrix, $\Ab(\Uc)$, and the
+primitive variable matrix, $\Ab(\qb)$, have the same eigenvalues,
  since they represent the same physics.
 
 In Eq.~\ref{eq:primitivesystem}, we used the algebraic gamma-law
@@ -195,7 +195,7 @@ The sound speed is then $c^2 = \Gamma_1 p /\rho$.
 These eigenvalues are the speeds at which information propagates
 through the fluid.  Since the eigenvalues are real, this system (the
 Euler equations) is said to be {\em hyperbolic}.  Additionally, since
-$A = A(q)$, the system is said to be {\em quasi-linear}.  Note,
+$\Ab = \Ab(\qb)$, the system is said to be {\em quasi-linear}.  Note,
 physically, these eigenvalues are telling us that information is
 communicated at the speed of the fluid ($u$), as well as the speed of
 sound moving with respect to the fluid ($u \pm c$).
@@ -205,9 +205,9 @@ corresponding eigenvectors throughout these notes.
 %
 The right and left eigenvectors can be found via:
 \begin{equation}
-A \, r^\enu = \lambda^\enu r^\enu \; ;
+\Ab \, r^\enu = \lambda^\enu r^\enu \; ;
 \qquad
-l^\enu \, A  = \lambda^\enu l^\enu
+l^\enu \, \Ab  = \lambda^\enu l^\enu
 \end{equation}
 where $\nu = \{-,\circ,+\}$ corresponding to the three waves, and
 there is one right and one left eigenvector for each of the eigenvalues.
@@ -247,7 +247,7 @@ eigenvectors is available here:
 \footnote{if you don't have {\sf Jupyter}, you can view this rendered online via the github link.}
 
 A final form of the equations is called the {\em characteristic form}.  Here,
-we wish to diagonalize the matrix $A$.  We take the matrix $R$ to be the
+we wish to diagonalize the matrix $\Ab$.  We take the matrix $R$ to be the
 matrix of right eigenvectors,
 \begin{equation}
 R = (r^\evm | r^\evz | r^\evp )
@@ -265,7 +265,7 @@ L = \left ( \begin{array}{c} l^\evm \\
 Note that $L\, R = I = R\, L$, and $L = R^{-1}$.
 \begin{exercise}[Characteristic form of the Euler equations]
 {
-Show that $\Lambda = L A R$ is a diagonal matrix with the diagonal elements
+Show that $\Lambda = L \Ab R$ is a diagonal matrix with the diagonal elements
 simply the 3 eigenvalues we found above:
 \begin{equation}
 \Lambda =
@@ -279,19 +279,19 @@ simply the 3 eigenvalues we found above:
 To transform our primitive variable system into the characteristic form, we 
 start by multiplying by $L$:
 \begin{equation}
-Lq_t + L A q_x = 0
+L\qb_t + L \Ab \qb_x = 0
 \end{equation}
 Next, recalling that $RL = I$ (we can insert
 the identity matrix where we please), we can rewrite our system as:
 \begin{equation}
-Lq_t + L A R L q_x = 0
+L\qb_t + L \Ab R L \qb_x = 0
 \end{equation}
-Finally, defining $dw = L dq$,
+Finally, defining $dw = L d\qb$,
 \begin{equation}
 w_t + \Lambda w_x = 0
 \end{equation}
 Here, the $w$ are the {\em characteristic variables}.  Note that we cannot
-in general integrate $dw = L dq$ to write down the characteristic
+in general integrate $dw = L d\qb$ to write down the characteristic
 quantities.  Since $\Lambda$ is diagonal, this system is a set of
 decoupled advection-like equations:
 \begin{align}
@@ -302,7 +302,7 @@ w_t^\evp + \lambda^\evp w_x^\evp &= 0
 
 If the system were linear, then the solution to each would simply be
 to advect the quantity $w^\enu$ at the wave speed $\lambda^\enu$.  We
-could then get back the primitive variables as $dq = L^{-1} dw = R dw$.
+could then get back the primitive variables as $d\qb = L^{-1} dw = R dw$.
 
 The basic idea of hyperbolic systems of PDEs is that there is one wave
 for each eigenvalue, and these define the characteristic curves,
@@ -312,11 +312,11 @@ constant.  Across them, the solution jumps.  For a linear system, the
 characteristics are straight lines.
 
 Imagine initial conditions consisting of a jump in the primitive
-variables, $\Delta q$.  The corresponding jumps in characteristic
-variables are $\Delta w \sim L \Delta q$ (where the $\sim$ accounts
-for the fact that in a nonlinear system, $L = L(q)$).  The
+variables, $\Delta \qb$.  The corresponding jumps in characteristic
+variables are $\Delta w \sim L \Delta \qb$ (where the $\sim$ accounts
+for the fact that in a nonlinear system, $L = L(\qb)$).  The
 characteristic form of the equations says that each of the waves will
-carry its respective jump, $\Delta w$.  Since $dq = L^{-1}dw = R dw$,
+carry its respective jump, $\Delta w$.  Since $d\qb = L^{-1}dw = R dw$,
 the jump in the primitive variable across each wave is proportional to
 the right-eigenvector associated with that wave.  So, for example,
 since $r^\evz$ is only non-zero for the density element (see
@@ -405,9 +405,9 @@ be a shock if the flow is compressing and a rarefaction otherwise.
 \subsection{Rarefactions}
 
 The conditions across a rarefaction can be understood by considering
-a system where entropy replaces pressure, $q_s = (\rho, u, s)^\intercal$.
+a system where entropy replaces pressure, $\qb_s = (\rho, u, s)^\intercal$.
 The entropy equation is simply $Ds/Dt = 0$.  We need to express the
-pressure gradient in the velocity equation in terms of $q_s$.
+pressure gradient in the velocity equation in terms of $\qb_s$.
 \begin{equation}
 \frac{\partial p(\rho, s)}{\partial x} =
   \left . \frac{\partial p}{\partial s} \right |_\rho \frac{\partial s}{\partial x} +
@@ -424,16 +424,16 @@ giving
 \end{equation}
 This gives a system:
 \begin{equation}
-{q_s}_t + A_s(q_s) {q_s}_x = 0
+{\qb_s}_t + \Ab_s(\qb_s) {\qb_s}_x = 0
 \end{equation}
 where
 \begin{equation}
-A_s =
+\Ab_s =
  \left ( \begin{array}{ccc} u & \rho & 0 \\
         c^2/\rho & u & \frac{1}{\rho} \left . \frac{\partial p}{\partial s}\right |_\rho \\
         0 & 0 & u \end{array} \right )
 \end{equation}
-The eigenvalues of $A_s$ are again $u$, $u-c$, and $u+c$.  The right eigenvectors
+The eigenvalues of $\Ab_s$ are again $u$, $u-c$, and $u+c$.  The right eigenvectors
 are\footnote{Again, see the {\sf SymPy} {\sf Jupyter} notebook:
 \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/compressible/euler.ipynb}{euler.ipynb}}}
 \begin{align}
@@ -446,7 +446,7 @@ r_s^\evz = \left ( \begin{array}{c} 1 \\ 0 \\ -c^2/p_s  \end{array} \right )
 r_s^\evp = \left ( \begin{array}{c} 1 \\ c/\rho \\ 0 \end{array} \right )
 \end{align}
 Here, we define $p_s \equiv \partial p/\partial s |_\rho$.
-Since the jump in $q_s$ is proportional to these eigenvectors, we see that
+Since the jump in $\qb_s$ is proportional to these eigenvectors, we see that
 entropy does not change across the left, $(-)$, and right, $(+)$, waves.
 
 Consider the $\evp$ wave, which moves at a speed $\lambda^\evp = u
@@ -456,8 +456,8 @@ across the $\evm$ wave.  So we can use this constancy to tell us how
 the evolution behaves across that wave.  The constancy of the middle and right characteristic variables across the left
 wave gives us the conditions (using our original primitive variable system):
 \begin{align}
-l^\evp \cdot dq &= 0 \\
-l^\evz \cdot dq &= 0 
+l^\evp \cdot d\qb &= 0 \\
+l^\evz \cdot d\qb &= 0 
 \end{align}
 or 
 \begin{equation}
@@ -935,7 +935,7 @@ constant pressure behaviors.
 Here we illustrate how the eigensystem changes when we replace pressure with
 temperature in our primitive variable system.
 
-We write this set of variables as $\hat{q} = (\tau, u,
+We write this set of variables as $\hat{\qb} = (\tau, u,
 T)^\intercal$---note that we keep $\tau$ instead of $\rho$ here.  The
 motivation for this comes from the fact that with temperature in the
 mix, the temperature will jump across the contact wave.  Since
@@ -965,7 +965,7 @@ where we defined
 
 The density equation remains unchanged from the traditional primitive
 variable formulation, but for the velocity, we need to write the
-$\partial p/\partial x$ term in terms of $\hat{q}$.  We do this via
+$\partial p/\partial x$ term in terms of $\hat{\qb}$.  We do this via
 the chain rule.  We define $p_\rho \equiv {\partial p}/{\partial \rho}
 |_T$ and $p_T \equiv {\partial p}/{\partial T} |_\rho$, then our
 velocity equation is:
@@ -976,12 +976,12 @@ Note that here we neglected any composition dependence in the EOS.
 
 Our primitive variable system in matrix form is then:
 \begin{equation}
-\hat{q}_t + \hat{A} \hat{q}_x = 0
+\hat{\qb}_t + \hat{\Ab} \hat{\qb}_x = 0
 \end{equation}
 with
 \begin{equation}
 \renewcommand{\arraystretch}{1.5}
-\hat{A}(\hat{q}) =
+\hat{\Ab}(\hat{\qb}) =
 \left (
 \begin{array}{ccc}
 u                   & -\tau & 0 \\
@@ -991,7 +991,7 @@ u                   & -\tau & 0 \\
 \right )
 \end{equation}
 The eigenvalues can be found through the characteristic polynomial,
-$|\hat{A} - \lambda I| = 0$:
+$|\hat{\Ab} - \lambda I| = 0$:
 \begin{equation}
 (u - \lambda)^3 - (u -\lambda) \left ( {p_T \eta\tau} + p_\rho \right ) = 0
 \end{equation}
@@ -1048,16 +1048,16 @@ temperature).
 
 We write:
 \begin{eqnarray}
-\hat{\beta}^\evm_s &\equiv& (\hat{l}^\evm \cdot \Delta \hat{q}^\evm ) =
+\hat{\beta}^\evm_s &\equiv& (\hat{l}^\evm \cdot \Delta \hat{\qb}^\evm ) =
    \frac{1}{2C} \left (\frac{\rho^2 p_\rho}{C} \Delta \tau^\evm
                         + \Delta u^\evm - \frac{p_T}{C}\Delta T^\evm \right ) \\
 %
-\hat{\beta}^\evz_s &\equiv& (\hat{l}^\evz \cdot \Delta \hat{q}^\evz ) =
+\hat{\beta}^\evz_s &\equiv& (\hat{l}^\evz \cdot \Delta \hat{\qb}^\evz ) =
     \Delta \tau^\evz +
         \frac{1}{C^2} \left (-\rho^2 p_\rho \Delta \tau^\evz
                         + {p_T}\Delta T^\evz \right ) \\
 %
-\hat{\beta}^\evp_s &\equiv& (\hat{l}^\evp \cdot \Delta \hat{q}^\evp ) =
+\hat{\beta}^\evp_s &\equiv& (\hat{l}^\evp \cdot \Delta \hat{\qb}^\evp ) =
    \frac{1}{2C} \left (\frac{\rho^2 p_\rho}{C} \Delta \tau^\evp
                         - \Delta u^\evp - \frac{p_T}{C}\Delta T^\evp \right )
 \end{eqnarray}
@@ -1066,9 +1066,9 @@ Note that since $p_\tau = -\rho^2 p_\rho$, we can form a $\Delta p^\enu$ as
 \Delta p^\enu = p_\tau \Delta \tau^\enu + p_T \Delta T^\enu
 \end{equation}
 and then we see that the $\hat{\beta}^\enu$'s above have the same
-functional form as the $\mathring{\beta}^\enu$ from the $\mathring{q}
+functional form as the $\mathring{\beta}^\enu$ from the $\mathring{\qb}
 = (\tau, u, p, e)^\intercal$ eigensystem.  This is no surprise, since
-the $l\cdot \Delta q$ are the characteristic variables of the Euler
+the $l\cdot \Delta \qb$ are the characteristic variables of the Euler
 equations.  The numerical values will differ though, because the
 $\hat{\beta}^\enu$ and $\mathring{\beta}^\enu$ use different reference
 states and reconstructed variables.
@@ -1084,9 +1084,9 @@ T_s &=& \tilde{T} - \frac{1}{p_T} \left \{
    \rho^2 p_\rho \left [ \hat{\beta}^\evm + \hat{\beta}^\evz + \hat{\beta}^\evp \right ] \right \}
 \end{eqnarray}
 For $T_s$, we recognize the first quantity in the square brackets as
-being the same as $-(p_s - \tilde{p})$ in the $\mathring{q}$ system, and the
+being the same as $-(p_s - \tilde{p})$ in the $\mathring{\qb}$ system, and the
 second term in the square brackets being the same as $-(\tau_s - \tilde{\tau})$
-in the $\mathring{q}$ system, then we see
+in the $\mathring{\qb}$ system, then we see
 \begin{equation}
 p_T (T_s - \tilde{T} ) \approx (p_s - \tilde{p} ) - p_\tau (\tau_s - \tilde{\tau})
 \end{equation}
