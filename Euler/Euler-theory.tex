@@ -286,23 +286,23 @@ the identity matrix where we please), we can rewrite our system as:
 \begin{equation}
 \Lb\qb_t + \Lb \Ab \Rb \Lb \qb_x = 0
 \end{equation}
-Finally, defining $dw = \Lb d\qb$,
+Finally, defining $d\wb = \Lb d\qb$,
 \begin{equation}
-w_t + \Lambda w_x = 0
+\wb_t + \Lambda \wb_x = 0
 \end{equation}
-Here, the $w$ are the {\em characteristic variables}.  Note that we cannot
-in general integrate $dw = \Lb d\qb$ to write down the characteristic
+Here, the $\wb$ are the {\em characteristic variables}.  Note that we cannot
+in general integrate $d\wb = \Lb d\qb$ to write down the characteristic
 quantities.  Since $\Lambdab$ is diagonal, this system is a set of
 decoupled advection-like equations:
 \begin{align}
-w_t^\evm + \lambda^\evm w_x^\evm &= 0 \\
-w_t^\evz + \lambda^\evz w_x^\evz &= 0 \\
-w_t^\evp + \lambda^\evp w_x^\evp &= 0 
+\wb_t^\evm + \lambda^\evm \wb_x^\evm &= 0 \\
+\wb_t^\evz + \lambda^\evz \wb_x^\evz &= 0 \\
+\wb_t^\evp + \lambda^\evp \wb_x^\evp &= 0 
 \end{align}
 
 If the system were linear, then the solution to each would simply be
-to advect the quantity $w^\enu$ at the wave speed $\lambda^\enu$.  We
-could then get back the primitive variables as $d\qb = \Lb^{-1} dw = \Rb dw$.
+to advect the quantity $\wb^\enu$ at the wave speed $\lambda^\enu$.  We
+could then get back the primitive variables as $d\qb = \Lb^{-1} d\wb = \Rb d\wb$.
 
 The basic idea of hyperbolic systems of PDEs is that there is one wave
 for each eigenvalue, and these define the characteristic curves,
@@ -313,10 +313,10 @@ characteristics are straight lines.
 
 Imagine initial conditions consisting of a jump in the primitive
 variables, $\Delta \qb$.  The corresponding jumps in characteristic
-variables are $\Delta w \sim \Lb \Delta \qb$ (where the $\sim$ accounts
+variables are $\Delta \wb \sim \Lb \Delta \qb$ (where the $\sim$ accounts
 for the fact that in a nonlinear system, $\Lb = \Lb(\qb)$).  The
 characteristic form of the equations says that each of the waves will
-carry its respective jump, $\Delta w$.  Since $d\qb = \Lb^{-1}dw = \Rb dw$,
+carry its respective jump, $\Delta \wb$.  Since $d\qb = \Lb^{-1}d\wb = \Rb d\wb$,
 the jump in the primitive variable across each wave is proportional to
 the right-eigenvector associated with that wave.  So, for example,
 since $\rb^\evz$ is only non-zero for the density element (see
@@ -450,8 +450,8 @@ Since the jump in $\qb_s$ is proportional to these eigenvectors, we see that
 entropy does not change across the left, $(-)$, and right, $(+)$, waves.
 
 Consider the $\evp$ wave, which moves at a speed $\lambda^\evp = u
-+c$.  Across this wave, the characteristic variable $w^\evp$ will
-jump, but the others will not.  Similarly, $w^\evp$ will be constant
++c$.  Across this wave, the characteristic variable $\wb^\evp$ will
+jump, but the others will not.  Similarly, $\wb^\evp$ will be constant
 across the $\evm$ wave.  So we can use this constancy to tell us how
 the evolution behaves across that wave.  The constancy of the middle and right characteristic variables across the left
 wave gives us the conditions (using our original primitive variable system):
