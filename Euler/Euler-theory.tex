@@ -58,15 +58,15 @@ state.
 In this form, the equations are said to be in {\em conservative form},
 i.e.\ they can be written as:
 \begin{equation}
-U_t + \left [F(U) \right ]_x = 0
+\Uc_t + \left [\Fb(\Uc) \right ]_x = 0
 \end{equation}
 with
 \begin{equation}
-U = \left ( \begin{array}{c} \rho \\ \rho u \\ \rho E \end{array} \right )
+\Uc = \left ( \begin{array}{c} \rho \\ \rho u \\ \rho E \end{array} \right )
 %
 \qquad
 %
-F(U) = \left ( \begin{array}{c} \rho u \\ \rho uu + p \\ \rho u E + up \end{array} \right )
+\Fb(\Uc) = \left ( \begin{array}{c} \rho u \\ \rho uu + p \\ \rho u E + up \end{array} \right )
 \end{equation}
 %
 We can write this in {\em quasi-linear} form by first expressing the
@@ -84,7 +84,7 @@ p = \rho e (\gamma-1) =  \left (\mathcal{E} - \frac{1}{2} \frac{m^2}{\rho}\right
 \end{equation}
 we have
 \begin{equation}
-F(U) = \left ( \begin{array}{c}
+\Fb(\Uc) = \left ( \begin{array}{c}
       m \\
       \frac{1}{2}\frac{m^2}{\rho} \left (3 - \gamma \right ) +
           \mathcal{E} (\gamma - 1) \\
@@ -92,10 +92,10 @@ F(U) = \left ( \begin{array}{c}
 \end{equation}
 The Jacobian%
 \footnote{
-The Jacobian, $J$ of a vector $F(U)$ with $F = (f_1, f_2, \ldots, f_n)^\intercal$ and
-$U = (u_1, u_2, \ldots, u_n)^\intercal$ is 
+The Jacobian, ${\bf J}$ of a vector $\Fb(\Uc)$ with $\Fb = (f_1, f_2, \ldots, f_n)^\intercal$ and
+$\Uc = (u_1, u_2, \ldots, u_n)^\intercal$ is 
 \begin{equation*}
-J \equiv \frac{\partial F}{\partial U} = \left (
+{\bf J} \equiv \frac{\partial \Fb}{\partial \Uc} = \left (
   \begin{array}{cccc}
      \partial f_1/\partial u_1 & \partial f_1/\partial u_2 & \ldots & \partial f_1/\partial u_n \\
      \partial f_2/\partial u_1 & \partial f_2/\partial u_2 & \ldots & \partial f_2/\partial u_n \\
@@ -105,9 +105,9 @@ J \equiv \frac{\partial F}{\partial U} = \left (
 \end{equation*}
 }
 of this flux vector can now be computed as $A = \partial
-F/\partial U$:
+\Fb/\partial \Uc$:
 \begin{equation}
-A(U) = \left ( \begin{array}{ccc}
+A(\Uc) = \left ( \begin{array}{ccc}
    0  & 1 & 0 \\
    -\frac{1}{2}u^2(3 -\gamma) & u (3 -\gamma) & \gamma - 1 \\
    \frac{1}{2}(\gamma -2)u^3 - \frac{uc^2}{\gamma -1} &
@@ -117,7 +117,7 @@ A(U) = \left ( \begin{array}{ccc}
 where the speed of sound is $c = \sqrt{\gamma p/\rho}$.   With this, our
 system can be written as:
 \begin{equation}
-U_t + A(U) U_x = 0
+\Uc_t + A(\Uc) \Uc_x = 0
 \end{equation}
 This matrix is quite complex and difficult to work with.  The
 eigenvectors of this matrix can be found in a variety of sources
@@ -165,7 +165,7 @@ where $|\ldots|$ indicates the determinant and $\lambda$ are the eigenvalues.
 Show that the eigenvalues of $A$ are $\lambda^\evm = u -c$, $\lambda^\evz = u$, $\lambda^\evp = u+c$.
 }
 \end{exercise}
-Note that both the conserved Jacobian matrix, $A(U)$, and the
+Note that both the conserved Jacobian matrix, $A(\Uc)$, and the
 primitive variable matrix, $A(q)$, have the same eigenvalues,
  since they represent the same physics.
 
@@ -553,7 +553,7 @@ it.
 
 The Rankine-Hugoniot conditions are:
 \begin{equation}
-\frac{F(U_\star) - F(U_s)}{U_\star - U_s} = S
+\frac{\Fb(\Uc_\star) - \Fb(\Uc_s)}{\Uc_\star - \Uc_s} = S
 \end{equation}
 where $S$ is the shock speed.  It is easiest to work in the frame of the shock.  If the shock speed
 is $S$, then we define the velocity in the shock frame as:
@@ -563,7 +563,7 @@ is $S$, then we define the velocity in the shock frame as:
 \end{align}
 and the Rankine-Hugoniot conditions become:
 \begin{equation}
-\frac{F(\hat{U}_\star) - F(\hat{U}_s)}{\hat{U}_\star - \hat{U}_s} = 0
+\frac{\Fb(\hat{\Uc}_\star) - \Fb(\hat{\Uc}_s)}{\hat{\Uc}_\star - \hat{\Uc}_s} = 0
 \end{equation}
 
 For the one-dimensional system of Euler equations, we have the conditions:

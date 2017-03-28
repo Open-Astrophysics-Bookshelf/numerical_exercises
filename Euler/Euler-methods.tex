@@ -12,18 +12,18 @@ We will solve the Euler equations using a high-order {\em Godunov
 interfaces are computed by solving the Riemann problem for our system.
 The finite-volume update for our system appears as:
 \begin{equation}
-U^{n+1}_i = U^n_i + \frac{\Delta t}{\Delta x} \left ( F_{i-1/2}^{n+1/2} - F_{i+1/2}^{n+1/2} \right )
+\Uc^{n+1}_i = \Uc^n_i + \frac{\Delta t}{\Delta x} \left ( \Fb_{i-1/2}^{n+1/2} - \Fb_{i+1/2}^{n+1/2} \right )
 \end{equation}
-This says that each of the conserved quantities in $U$ change only due
+This says that each of the conserved quantities in $\Uc$ change only due
 to the flux of that quantity through the boundary of the cell.
 
 Instead of approximating the flux itself on the interface, we find an
-approximation to the state on the interface, $U_{i-1/2}^{n+1/2}$ and
-$U_{i+1/2}^{n+1/2}$ and use this with the flux function to define the
+approximation to the state on the interface, $\Uc_{i-1/2}^{n+1/2}$ and
+$\Uc_{i+1/2}^{n+1/2}$ and use this with the flux function to define the
 flux through the interface:
 \begin{align}
-F_{i-1/2}^{n+1/2} &= F(U_{i-1/2}^{n+1/2}) \\
-F_{i+1/2}^{n+1/2} &= F(U_{i+1/2}^{n+1/2})
+\Fb_{i-1/2}^{n+1/2} &= \Fb(\Uc_{i-1/2}^{n+1/2}) \\
+\Fb_{i+1/2}^{n+1/2} &= \Fb(\Uc_{i+1/2}^{n+1/2})
 \end{align}
 To find this interface state, we predict left and right states at each
 interface (centered in time), which are the input to the Riemann
@@ -39,7 +39,7 @@ structure.  The interface states in terms of the primitive variables
 can be converted into the interface states of the conserved variables
 through a simple algebraic transformation,
 \begin{equation}
-U_{i+1/2,L}^{n+1/2} = U(q_{i+1/2,L}^{n+1/2})
+\Uc_{i+1/2,L}^{n+1/2} = \Uc(q_{i+1/2,L}^{n+1/2})
 \end{equation}
 
 % figure made with figures/Euler/riemann-states.py
@@ -87,17 +87,17 @@ The simplest possible reconstruction of the data is piecewise constant.
 This is what was done in the original Godunov method~\cite{godunov:1959}.  For the interface
 marked by $i+1/2$, the left and right states on the interface are simply:
 \begin{align}
-U_{i+1/2,L} &= U_i \\
-U_{i+1/2,R} &= U_{i+1}
+\Uc_{i+1/2,L} &= \Uc_i \\
+\Uc_{i+1/2,R} &= \Uc_{i+1}
 \end{align}
-This does not take into account in any way how the state $U$ may be changing
+This does not take into account in any way how the state $\Uc$ may be changing
 through the cell.  As a result, it is first-order accurate in space, and since
 no attempt was made to center it in time, it is first-order accurate in time.
 
 \subsection{Piecewise linear}
 
 For higher-order reconstruction, we first convert from the conserved
-variables, $U$, to the primitive variables, $q$.  These have a simpler
+variables, $\Uc$, to the primitive variables, $q$.  These have a simpler
 characteristic structure, making them easier to work with.  Here we
 consider piecewise linear reconstruction---the cell average data is
 approximated by a line with non-zero slope within each cell.
@@ -790,7 +790,7 @@ and the appropriate star state.
 Then the fluxes are computed from this state as:
 \begin{equation}
 \renewcommand{\arraystretch}{1.5}
-F_{i+1/2}^{n+1/2} = \left ( \begin{array}{c}
+\Fb_{i+1/2}^{n+1/2} = \left ( \begin{array}{c}
                              \rho_{i+1/2}^{n+1/2} u_{i+1/2}^{n+1/2} \\
                              \rho_{i+1/2}^{n+1/2} (u_{i+1/2}^{n+1/2})^2 + p_{i+1/2}^{n+1/2} \\
                              u_{i+1/2}^{n+1/2} p_{i+1/2}^{n+1/2} / (\gamma - 1)  +
@@ -811,8 +811,8 @@ with the Rankine-Hugoniot jump conditions to give the fluxes.
 
 Once we have the fluxes, the conservative update is done as
 \begin{equation}
-U^{n+1}_i = U^n_i + \frac{\Delta t}{\Delta x} 
-   \left ( F_{i-1/2}^{n+1/2} - F_{i+1/2}^{n+1/2} \right )
+\Uc^{n+1}_i = \Uc^n_i + \frac{\Delta t}{\Delta x} 
+   \left ( \Fb_{i-1/2}^{n+1/2} - \Fb_{i+1/2}^{n+1/2} \right )
 \end{equation}
 The timestep, $\Delta t$ is determined by the time it takes for the
 fastest wave to cross a single zone:
@@ -920,23 +920,23 @@ of the first valid zone in the domain (just inside the left boundary).
 The multidimensional case is very similar to the multidimensional
 advection problem.  Our system of equations is now:
 \begin{equation}
-U_t + [F^{(x)}(U)]_x + [F^{(y)}(U)]_y = 0
+\Uc_t + [\Fb^{(x)}(\Uc)]_x + [\Fb^{(y)}(\Uc)]_y = 0
 \end{equation}
 with
 \begin{equation}
-U = \left ( \begin{array}{c} \rho \\ \rho u \\ \rho v \\ \rho E \end{array} \right )
+\Uc = \left ( \begin{array}{c} \rho \\ \rho u \\ \rho v \\ \rho E \end{array} \right )
 %
 \qquad
 %
-F^{(x)}(U) = \left ( \begin{array}{c} \rho u \\ \rho uu + p \\ \rho v u \\ \rho u E + up \end{array} \right )
+\Fb^{(x)}(\Uc) = \left ( \begin{array}{c} \rho u \\ \rho uu + p \\ \rho v u \\ \rho u E + up \end{array} \right )
 %
 \qquad
-F^{(y)}(U) = \left ( \begin{array}{c} \rho v \\ \rho vu     \\ \rho v v + p \\ \rho v E + vp \end{array} \right )
+\Fb^{(y)}(\Uc) = \left ( \begin{array}{c} \rho v \\ \rho vu     \\ \rho v v + p \\ \rho v E + vp \end{array} \right )
 \end{equation}
 
 We note that there is no transformation that can convert the multidimensional
 system into characteristic variables, since we cannot simultaneously
-diagonalize the Jacobians corresponding to $F^{(x)}$ and $F^{(y)}$.  Related
+diagonalize the Jacobians corresponding to $\Fb^{(x)}$ and $\Fb^{(y)}$.  Related
 to this is that when limiting, we limit one-dimensional slopes instead of
 doing a full multidimensional reconstruction and limiting (see \cite{BDS}
 for a multidimensional limiting procedure for linear advection.  For
@@ -945,28 +945,28 @@ in a characteristic form, we cannot use this type of method).
 
 For a directionally-unsplit discretization, we predict the
 cell-centered quantities to the edges by Taylor expanding the
-conservative state, $U$, in space and time.  Now, when replacing the
-time derivative ($\partial U/\partial t$) with the divergence of the
+conservative state, $\Uc$, in space and time.  Now, when replacing the
+time derivative ($\partial \Uc/\partial t$) with the divergence of the
 fluxes, we gain a transverse flux derivative term.  For example,
 predicting to the upper $x$ edge of zone $i,j$, we have:
 \begin{align}
-U_{i+1/2,j,L}^{n+1/2} &= U_{i,j}^n + \frac{\Delta x}{2} \frac{\partial U}{\partial x}
-                            + \frac{\Delta t}{2} \frac{\partial U}{\partial t} + \ldots \\
-&= U_{i,j}^n + \frac{\Delta x}{2} \frac{\partial U}{\partial x}
-                            - \frac{\Delta t}{2} \frac{\partial F^{(x)}}{\partial x}
-                            - \frac{\Delta t}{2} \frac{\partial F^{(y)}}{\partial y} \\
-&= U_{i,j}^n + \frac{1}{2} \left [ 1 - \frac{\Delta t}{\Delta x} A^{(x)}(U) \right ] \Delta U
-                            - \frac{\Delta t}{2} \frac{\partial F^{(y)}}{\partial y} \label{eq:Utaylorstate}
+\Uc_{i+1/2,j,L}^{n+1/2} &= \Uc_{i,j}^n + \frac{\Delta x}{2} \frac{\partial \Uc}{\partial x}
+                            + \frac{\Delta t}{2} \frac{\partial \Uc}{\partial t} + \ldots \\
+&= \Uc_{i,j}^n + \frac{\Delta x}{2} \frac{\partial \Uc}{\partial x}
+                            - \frac{\Delta t}{2} \frac{\partial \Fb^{(x)}}{\partial x}
+                            - \frac{\Delta t}{2} \frac{\partial \Fb^{(y)}}{\partial y} \\
+&= \Uc_{i,j}^n + \frac{1}{2} \left [ 1 - \frac{\Delta t}{\Delta x} A^{(x)}(\Uc) \right ] \Delta \Uc
+                            - \frac{\Delta t}{2} \frac{\partial \Fb^{(y)}}{\partial y} \label{eq:Utaylorstate}
 \end{align}
-where $A^{(x)}(U) \equiv \partial F^{(x)} / \partial U$.  We decompose
+where $A^{(x)}(\Uc) \equiv \partial \Fb^{(x)} / \partial \Uc$.  We decompose
 this into a {\em normal state} and a {\em transverse flux difference}.
-Adopting the notation from Colella (1990), we use $\hat{U}$ to denote
+Adopting the notation from Colella (1990), we use $\hat{\Uc}$ to denote
 the normal state:
 \begin{align}
-\hat{U}_{i+1/2,j,L}^{n+1/2} &\equiv U_{i,j}^n
-      + \frac{1}{2} \left [ 1 - \frac{\Delta t}{\Delta x} A^{(x)}(U) \right ] \Delta U \\
-U_{i+1/2,j,L}^{n+1/2} &= \hat{U}_{i+1/2,j,L}^{n+1/2}
-                            - \frac{\Delta t}{2} \frac{\partial F^{(y)}}{\partial y}  \label{eq:fullleftstate}
+\hat{\Uc}_{i+1/2,j,L}^{n+1/2} &\equiv \Uc_{i,j}^n
+      + \frac{1}{2} \left [ 1 - \frac{\Delta t}{\Delta x} A^{(x)}(\Uc) \right ] \Delta \Uc \\
+\Uc_{i+1/2,j,L}^{n+1/2} &= \hat{\Uc}_{i+1/2,j,L}^{n+1/2}
+                            - \frac{\Delta t}{2} \frac{\partial \Fb^{(y)}}{\partial y}  \label{eq:fullleftstate}
 \end{align}
 
 The primitive variable form for this system is
@@ -997,51 +997,51 @@ velocity $u$, corresponding to the additional eigenvalue.
 Derive the form of $A^{(x)}(q)$ and $A^{(y)}(q)$ and find their left and right eigenvectors.}
 \end{exercise}
 
-We note here that $\hat{U}_{i+1/2,j,L}^{n+1/2}$ is essentially
+We note here that $\hat{\Uc}_{i+1/2,j,L}^{n+1/2}$ is essentially
 one-dimensional, since only the $x$-fluxes are involved (through
-$A^{(x)}(U)$).  This means that we can compute this term using the
+$A^{(x)}(\Uc)$).  This means that we can compute this term using the
 one-dimensional techniques developed in \S~\ref{sec:onedrecon}.  In
 particular, Colella (1990) suggest that we switch to primitive variables
 and compute this as:
 \begin{equation}
-\hat{U}_{i+1/2,j,L}^{n+1/2} = U(\hat{q}_{i+1/2,j,L}^{n+1/2})
+\hat{\Uc}_{i+1/2,j,L}^{n+1/2} = \Uc(\hat{q}_{i+1/2,j,L}^{n+1/2})
 \end{equation}
 Similarly, we consider the system projected along the $y$-direction to
 define the normal states on the $y$-edges, again using the one-dimensional
 reconstruction on the primitive variables from \S~\ref{sec:onedrecon}:
 \begin{equation}
-\hat{U}_{i,j+1/2,L}^{n+1/2} = U(\hat{q}_{i,j+1/2,L}^{n+1/2})
+\hat{\Uc}_{i,j+1/2,L}^{n+1/2} = \Uc(\hat{q}_{i,j+1/2,L}^{n+1/2})
 \end{equation}
 
 To compute the full interface state (Eq.~\ref{eq:fullleftstate}), we
 need to include the transverse term.
 Colella (1990) gives two different procedures for evaluating the
 transverse fluxes.  The first is to simply use the cell-centered
-$U_{i,j}$ (Colella 1990,
+$\Uc_{i,j}$ (Colella 1990,
 Eq. 2.13); the second is to use the reconstructed normal states (the
-$\hat{U}$'s) (Eq. 2.15).  In both cases, we need to solve a {\em
+$\hat{\Uc}$'s) (Eq. 2.15).  In both cases, we need to solve a {\em
   transverse Riemann problem} to find the true state on the transverse
 interface.  This latter approach is what we prefer.  In particular,
-for computing the full $x$-interface left state, $U_{i+1/2,j,L}^{n+1/2}$, we need the
+for computing the full $x$-interface left state, $\Uc_{i+1/2,j,L}^{n+1/2}$, we need the
 transverse ($y$) states, which we define as
 \begin{align}
-U^T_{i,j+1/2} &= \mathcal{R}(\hat{U}^{n+1/2}_{i,j+1/2,L},
-                            \hat{U}^{n+1/2}_{i,j+1/2,R}) \\
-U^T_{i,j-1/2} &= \mathcal{R}(\hat{U}^{n+1/2}_{i,j-1/2,L},
-                            \hat{U}^{n+1/2}_{i,j-1/2,R})
+\Uc^T_{i,j+1/2} &= \mathcal{R}(\hat{\Uc}^{n+1/2}_{i,j+1/2,L},
+                            \hat{\Uc}^{n+1/2}_{i,j+1/2,R}) \\
+\Uc^T_{i,j-1/2} &= \mathcal{R}(\hat{\Uc}^{n+1/2}_{i,j-1/2,L},
+                            \hat{\Uc}^{n+1/2}_{i,j-1/2,R})
 \end{align}
 
 Taken together, the full interface state is now:
 \begin{equation}
-U_{i+1/2,j,L}^{n+1/2} = U(\hat{q}_{i+1/2,j,L}^{n+1/2})
-   - \frac{\Delta t}{2} \frac{F^{(y)}(U^T_{i,j+1/2}) - F^{(y)}(U^T_{i,j-1/2})}{\Delta y}
+\Uc_{i+1/2,j,L}^{n+1/2} = \Uc(\hat{q}_{i+1/2,j,L}^{n+1/2})
+   - \frac{\Delta t}{2} \frac{\Fb^{(y)}(\Uc^T_{i,j+1/2}) - \Fb^{(y)}(\Uc^T_{i,j-1/2})}{\Delta y}
 \end{equation}
 
 The right state at the $i+1/2$ interface can be similarly computed (starting with the
 data in zone $i+1,j$ and expanding to the left) as:
 \begin{equation}
-U_{i+1/2,j,R}^{n+1/2} = U(\hat{q}_{i+1/2,j,R}^{n+1/2})
-   - \frac{\Delta t}{2} \frac{F^{(y)}(U^T_{i+1,j+1/2}) - F^{(y)}(U^T_{i+1,j-1/2})}{\Delta y}
+\Uc_{i+1/2,j,R}^{n+1/2} = \Uc(\hat{q}_{i+1/2,j,R}^{n+1/2})
+   - \frac{\Delta t}{2} \frac{\Fb^{(y)}(\Uc^T_{i+1,j+1/2}) - \Fb^{(y)}(\Uc^T_{i+1,j-1/2})}{\Delta y}
 \end{equation}
 Note the indices on the transverse states---they are now to the right of the interface (since
 we are dealing with the right state).
@@ -1049,12 +1049,12 @@ we are dealing with the right state).
 We then find the $x$-interface state by solving the Riemann problem
 normal to our interface:
 \begin{equation}
-U_{i+1/2,j}^{n+1/2} = \mathcal{R}(U_{i+1/2,j,L}^{n+1/2}, U_{i+1/2,j,R}^{n+1/2})
+\Uc_{i+1/2,j}^{n+1/2} = \mathcal{R}(\Uc_{i+1/2,j,L}^{n+1/2}, \Uc_{i+1/2,j,R}^{n+1/2})
 \end{equation}
 Therefore, construction of the interface states now requires two
 Riemann solves: a transverse and normal one.  The fluxes are then evaluated as:
 \begin{equation}
-F^{(x),n+1/2}_{i+1/2,j} = F^{(x)}(U_{i+1/2,j}^{n+1/2})
+\Fb^{(x),n+1/2}_{i+1/2,j} = \Fb^{(x)}(\Uc_{i+1/2,j}^{n+1/2})
 \end{equation}
 Note, for multi-dimensional problems, in the Riemann solver, the transverse
 velocities are simply selected based on the speed of the contact, giving
@@ -1062,9 +1062,9 @@ either the left or right state.
 
 The final conservative update is done as:
 \begin{equation}
-U^{n+1}_{i,j} = U^n_{i,j}
-   + \frac{\Delta t}{\Delta x} \left ( F^{(x),n+1/2}_{i-1/2,j} - F^{(x),n+1/2}_{i+1/2,j} \right )
-   + \frac{\Delta t}{\Delta y} \left ( F^{(y),n+1/2}_{i,j-1/2} - F^{(y),n+1/2}_{i,j+1/2} \right )
+\Uc^{n+1}_{i,j} = \Uc^n_{i,j}
+   + \frac{\Delta t}{\Delta x} \left ( \Fb^{(x),n+1/2}_{i-1/2,j} - \Fb^{(x),n+1/2}_{i+1/2,j} \right )
+   + \frac{\Delta t}{\Delta y} \left ( \Fb^{(y),n+1/2}_{i,j-1/2} - \Fb^{(y),n+1/2}_{i,j+1/2} \right )
 \end{equation}
 
 
@@ -1083,27 +1083,27 @@ couple in the corners.
 Adding source terms is straightforward.  For
 a system described by
 \begin{equation}
-U_t + [F^{(x)}(U)]_x + [F^{(y)}(U)]_y = H
+\Uc_t + [\Fb^{(x)}(\Uc)]_x + [\Fb^{(y)}(\Uc)]_y = H
 \end{equation}
 we predict to the edges in the same fashion as described above, but now
-when we replace $\partial U/\partial t$ with the divergence of the
+when we replace $\partial \Uc/\partial t$ with the divergence of the
 fluxes, we also pick up the source term.  This appears as:
 \begin{align}
-U_{i+1/2,j,L}^{n+1/2} &= U_{i,j}^n
-            + \frac{\Delta x}{2} \frac{\partial U}{\partial x}
-            + \frac{\Delta t}{2} \frac{\partial U}{\partial t} + \ldots \\
-&= U_{i,j}^n + \frac{\Delta x}{2} \frac{\partial U}{\partial x}
-              - \frac{\Delta t}{2} \frac{\partial F^{(x)}}{\partial x}
-              - \frac{\Delta t}{2} \frac{\partial F^{(y)}}{\partial y}
+\Uc_{i+1/2,j,L}^{n+1/2} &= \Uc_{i,j}^n
+            + \frac{\Delta x}{2} \frac{\partial \Uc}{\partial x}
+            + \frac{\Delta t}{2} \frac{\partial \Uc}{\partial t} + \ldots \\
+&= \Uc_{i,j}^n + \frac{\Delta x}{2} \frac{\partial \Uc}{\partial x}
+              - \frac{\Delta t}{2} \frac{\partial \Fb^{(x)}}{\partial x}
+              - \frac{\Delta t}{2} \frac{\partial \Fb^{(y)}}{\partial y}
               + \frac{\Delta t}{2} H_{i,j} \\
-&= U_{i,j}^n
- + \frac{1}{2} \left [1 -\frac{\Delta t}{\Delta x} A^{(x)}(U)\right ] \Delta U
- - \frac{\Delta t}{2} \frac{\partial F^{(y)}}{\partial y}
+&= \Uc_{i,j}^n
+ + \frac{1}{2} \left [1 -\frac{\Delta t}{\Delta x} A^{(x)}(\Uc)\right ] \Delta \Uc
+ - \frac{\Delta t}{2} \frac{\partial \Fb^{(y)}}{\partial y}
  + \frac{\Delta t}{2} H_{i,j}
   \label{eq:Utaylorstatesource}
 \end{align}
 We can compute things as above, but simply add the source term to the
-$\hat{U}$'s and carry it through.
+$\hat{\Uc}$'s and carry it through.
 
 Note that the source here is cell-centered.  This expansion is
 second-order accurate.  This is the approach outlined in Miller
@@ -1163,16 +1163,16 @@ interface states, we also need to include it in the conservative
 update.  To second-order, we need it to be time-centered, which
 usually means averaging the time-level $n$ and $n+1$ sources:
 \begin{align}
-U^{n+1}_{i,j} = U^n_{i,j}
-   &+ \frac{\Delta t}{\Delta x} \left ( F^{(x),n+1/2}_{i-1/2,j} - F^{(x),n+1/2}_{i+1/2,j} \right ) \nonumber \\
-   &+ \frac{\Delta t}{\Delta y} \left ( F^{(y),n+1/2}_{i,j-1/2} - F^{(y),n+1/2}_{i,j+1/2} \right ) + \frac{\Delta t}{2} \left (H(U^n_{i,j}) + H(U^{n+1}_{i,j})\right )
+\Uc^{n+1}_{i,j} = \Uc^n_{i,j}
+   &+ \frac{\Delta t}{\Delta x} \left ( \Fb^{(x),n+1/2}_{i-1/2,j} - \Fb^{(x),n+1/2}_{i+1/2,j} \right ) \nonumber \\
+   &+ \frac{\Delta t}{\Delta y} \left ( \Fb^{(y),n+1/2}_{i,j-1/2} - \Fb^{(y),n+1/2}_{i,j+1/2} \right ) + \frac{\Delta t}{2} \left (H(\Uc^n_{i,j}) + H(\Uc^{n+1}_{i,j})\right )
 \end{align}
-As written, this appears to be an implicit update (since $U^{n+1}$
+As written, this appears to be an implicit update (since $\Uc^{n+1}$
 depends on $H^{n+1}$), but often, the form of the source terms allows
 you to update the equations in sequence explicitly.  
 
 Again, using a constant gravitational acceleration as an example, and
-looking in 1-d for simplicity, $U = (\rho, \rho u, \rho E)^\intercal$
+looking in 1-d for simplicity, $\Uc = (\rho, \rho u, \rho E)^\intercal$
 and $H = (0, \rho g, \rho u g)^\intercal$, so our update sequence is:
 \begin{align}
 \rho^{n+1}_i = \rho^n_i &+ \frac{\Delta t}{\Delta x} 
@@ -1210,12 +1210,12 @@ the reconstruction of the interface states and the conservative update.
 
 Our 1-d system in spherical coordinates appears as:
 \begin{equation}
-\ddt{U} + \frac{1}{r^2} \ddr{r^2 F} = 0
+\ddt{\Uc} + \frac{1}{r^2} \ddr{r^2 \Fb} = 0
 \end{equation}
 The geometry factors that appear are from the spherical form of the
 divergence.  Expanding out the radial derivative, we have:
 \begin{equation}
-\ddt{U} + \ddr{F} = -\frac{2F}{r}
+\ddt{\Uc} + \ddr{\Fb} = -\frac{2\Fb}{r}
 \end{equation}
 Likewise, the primitive variable equations now have source terms:
 \begin{align}
@@ -1274,15 +1274,15 @@ coordinates\footnote{Some sources will call this cylindrical
   coordinates, but note that the grid is not a polar grid---it is
   still Cartesian} is:
 \begin{equation}
-\frac{\partial U}{\partial t}
-  + \frac{1}{r}\frac{\partial r F^{(r)}}{\partial r}
-  + \frac{\partial F^{(z)}}{\partial z} = 0
+\frac{\partial \Uc}{\partial t}
+  + \frac{1}{r}\frac{\partial r \Fb^{(r)}}{\partial r}
+  + \frac{\partial \Fb^{(z)}}{\partial z} = 0
 \end{equation}
 Expanding out the $r$ derivative, we can write this as:
 \begin{equation}
-\frac{\partial U}{\partial t}
-  + \frac{\partial F^{(r)}}{\partial r}
-  + \frac{\partial F^{(z)}}{\partial z} = -\frac{F^{(r)}}{r}
+\frac{\partial \Uc}{\partial t}
+  + \frac{\partial \Fb^{(r)}}{\partial r}
+  + \frac{\partial \Fb^{(z)}}{\partial z} = -\frac{\Fb^{(r)}}{r}
 \end{equation}
 Again, the primitive variable version of this expanded form is used
 for the interface state prediction.  The conservative update
@@ -1545,37 +1545,37 @@ integrator to do the work for us.
 
 Discretizing our system in space leads to the following system:
 \begin{equation}
-\frac{dU_{i,j}}{dt} = -\frac{F^{(x)}(U_{i+1/2,j}) - F^{(x)}(U_{i-1/2,j})}{\Delta x}
-                      -\frac{F^{(y)}(U_{i,j+1/2}) - F^{(y)}(U_{i,j-1/2})}{\Delta y}
+\frac{d\Uc_{i,j}}{dt} = -\frac{\Fb^{(x)}(\Uc_{i+1/2,j}) - \Fb^{(x)}(\Uc_{i-1/2,j})}{\Delta x}
+                      -\frac{\Fb^{(y)}(\Uc_{i,j+1/2}) - \Fb^{(y)}(\Uc_{i,j-1/2})}{\Delta y}
 \end{equation}
-Note that there is no time superscript in the $U$ used to evaluate the
+Note that there is no time superscript in the $\Uc$ used to evaluate the
 fluxes on the righthand side---we have not done any time
 discretization yet.  Now we can use an ODE integrator to solve this system.
 
 Consider
 second-order Runge-Kutta.  We evaluate two slopes,
 \begin{alignat}{3}
-k_1 &= \Delta t \bigg [ &-&\frac{F^{(x)}(U^n_{i+1/2,j})
-                               - F^{(x)}(U^n_{i-1/2,j})}{\Delta x} \nonumber \\
-    &\,                 &-&\frac{F^{(y)}(U^n_{i,j+1/2})
-                               - F^{(y)}(U^n_{i,j-1/2})}{\Delta y} \bigg ] \\
-k_2 &= \Delta t \bigg [ &-&\frac{F^{(x)}([U^n + k_1/2]_{i+1/2,j})
-                               - F^{(x)}([U^n + k_1/2]_{i-1/2,j})}{\Delta x} \nonumber \\
-    &\,                 &-&\frac{F^{(y)}([U^n + k_1/2]_{i,j+1/2})
-                               - F^{(y)}([U^n + k_1/2]_{i,j-1/2})}{\Delta y} \bigg ]
+k_1 &= \Delta t \bigg [ &-&\frac{\Fb^{(x)}(\Uc^n_{i+1/2,j})
+                               - \Fb^{(x)}(\Uc^n_{i-1/2,j})}{\Delta x} \nonumber \\
+    &\,                 &-&\frac{\Fb^{(y)}(\Uc^n_{i,j+1/2})
+                               - \Fb^{(y)}(\Uc^n_{i,j-1/2})}{\Delta y} \bigg ] \\
+k_2 &= \Delta t \bigg [ &-&\frac{\Fb^{(x)}([\Uc^n + k_1/2]_{i+1/2,j})
+                               - \Fb^{(x)}([\Uc^n + k_1/2]_{i-1/2,j})}{\Delta x} \nonumber \\
+    &\,                 &-&\frac{\Fb^{(y)}([\Uc^n + k_1/2]_{i,j+1/2})
+                               - \Fb^{(y)}([\Uc^n + k_1/2]_{i,j-1/2})}{\Delta y} \bigg ]
 \end{alignat}
 and then
 \begin{equation}
-U^{n+1}_{i,j} = U^n_{i,j} + k_2
+\Uc^{n+1}_{i,j} = \Uc^n_{i,j} + k_2
 \end{equation}
-In the construction of the interface states, $U^n_{i+1/2,j}$ or $[U^n
+In the construction of the interface states, $\Uc^n_{i+1/2,j}$ or $[\Uc^n
 + k_1/2]_{i+1/2,j}$, there is no explicit transverse term, since that
-arose from Taylor expanding $U^n_{i,j}$ in time through $\Delta t/2$.
+arose from Taylor expanding $\Uc^n_{i,j}$ in time through $\Delta t/2$.
 Instead, we simply construct these interface states using a
 one-dimensional reconstruction and solve a Riemann problem at each
 interface.  The evaluation of the second slope, $k_2$, implicitly
 includes the transverse information since we add $k_1/2$ to
-$U^n_{i,j}$ before doing the prediction to the interfaces.  Also note,
+$\Uc^n_{i,j}$ before doing the prediction to the interfaces.  Also note,
 however, that in this construction of the interface states, there is
 no characteristic projection, since that arises from predicting the
 interface states forward in time.  Again, these interface states are
@@ -1746,7 +1746,7 @@ We can derive a similar expression as
 \begin{align}
 \frac{D\gamma_e}{Dt} &= \frac{D}{Dt} \left ( \frac{p}{\rho e} + 1 \right )
    = - \frac{p}{(\rho e)^2} \frac{D(\rho e)}{Dt} + \frac{1}{\rho e} \frac{Dp}{Dt} \nonumber \\
-   &= (\gamma_e - 1) (\gamma_e  - \Gamma_1) \nabla \cdot U \label{eq:gammae}
+   &= (\gamma_e - 1) (\gamma_e  - \Gamma_1) \nabla \cdot \Ub \label{eq:gammae}
 \end{align}
 where we used Eqs.~\ref{eq:euler:pgeneral} and \ref{eq:euler:econs}, and the definition
 of the sound speed.
@@ -1897,7 +1897,7 @@ since general equations of state can be expensive.
 Extending these to an unsplit formulation requires carrying an additional
 auxiliary variable from the primitive state back to the conserved state
 and adding the transverse gradients to its interface state.  Castro
-deals with a conserved state of $U = (\rho, \rho U, \rho E, p)$, and
+deals with a conserved state of $\Uc = (\rho, \rho \Ub, \rho E, p)$, and
 explicitly adds the transverse terms found in the multi-dimensional form
 of Eq.~\ref{eq:euler:pgeneral}
 to the normal states of $p$.
