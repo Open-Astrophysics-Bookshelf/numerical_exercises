@@ -56,9 +56,9 @@ scale cutoff that is well above the viscous dissipation scale.
 Hydrostatic equilibrium also puts demands on the resolution.  Recall that
 the momentum equation is:
 \begin{equation}
-\rho \DDt{u} + \nabla p = \rho g
+\rho \DDt{\Ub} + \nabla p = \rho \gb
 \end{equation}
-If hydrostatic equilibrium, $\nabla p = \rho g$, is not exactly
+If hydrostatic equilibrium, $\nabla p = \rho \gb$, is not exactly
 satisfied, then the residual will appear as a force that generates an
 acceleration and non-zero velocities will build up.  A good rule of
 thumb is that you need 10 points per pressure scale height to get a

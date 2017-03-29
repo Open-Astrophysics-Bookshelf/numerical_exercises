@@ -68,7 +68,7 @@ piecewise linear,
 \end{equation}
 or piecewise parabolic,
 \begin{equation}
-\qb(x) = \alpha (x - x_i)^2 + \beta (x - x_i) + \gamma
+\qb(x) = \boldsymbol{\alpha} (x - x_i)^2 + \boldsymbol{\beta} (x - x_i) + \boldsymbol{\gamma}
 \end{equation}
 where in each case, the average of $\qb(x)$ over the cell gives $\qb_i$.
 Most of the complexity of the method is then figuring out the coefficients
@@ -710,23 +710,30 @@ subsequent parts of the algorithm.
 
 \subsection{Limiting on characteristic variables}
 
-  Some authors (see for example, \cite{athena} Eqs.~37, 38) advocate
-  limiting on the characteristic variables rather than the primitive
-  variables.  The characteristic slopes for the quantity carried by
-  the wave $\nu$ can be found from the primitive variables
-  as: \begin{equation} \Delta w^{(\nu)} = \lb^{(\nu)} \cdot \Delta
-  \qb \end{equation} any limiting would then be done to $\Delta
-  w^{(\nu)}$ and the limited primitive variables would be recovered
-  as: \begin{equation} \overline{\Delta \qb} = \sum_\nu \overline{\Delta
-  w}^{(\nu)} \rb^{(\nu)} \end{equation} (here we use an overline to
-  indicate limiting).
+Some authors (see for example, \cite{athena} Eqs.~37, 38) advocate
+limiting on the characteristic variables rather than the primitive
+variables.  The characteristic slopes for the quantity carried by the
+wave $\nu$ can be found from the primitive variables
+as: 
+%
+\begin{equation} 
+\Delta w^{(\nu)} = \lb^{(\nu)} \cdot \Delta \qb 
+\end{equation} 
+%
+any limiting would then be done to $\Delta w^{(\nu)}$ and the limited
+primitive variables would be recovered as:
+\begin{equation}
+  \overline{\Delta \qb} = \sum_\nu \overline{\Delta w}^{(\nu)}
+  \rb^{(\nu)} 
+\end{equation} 
+(here we use an overline to indicate limiting).
 
-  This is attractive because it is more in the spirit of the linear
-  advection equation and the formalism that was developed there.  A
-  potential downside is that when you limit on the characteristic
-  variables and convert back to the primitive, the primitive variables
-  may now fall outside of valid physical ranges (for example, negative
-  density).
+This is attractive because it is more in the spirit of the linear
+advection equation and the formalism that was developed there.  A
+potential downside is that when you limit on the characteristic
+variables and convert back to the primitive, the primitive variables
+may now fall outside of valid physical ranges (for example, negative
+density).
 
 
 
@@ -1086,7 +1093,7 @@ couple in the corners.
 Adding source terms is straightforward.  For
 a system described by
 \begin{equation}
-\Uc_t + [\Fb^{(x)}(\Uc)]_x + [\Fb^{(y)}(\Uc)]_y = H
+\Uc_t + [\Fb^{(x)}(\Uc)]_x + [\Fb^{(y)}(\Uc)]_y = \Hb
 \end{equation}
 we predict to the edges in the same fashion as described above, but now
 when we replace $\partial \Uc/\partial t$ with the divergence of the
@@ -1098,11 +1105,11 @@ fluxes, we also pick up the source term.  This appears as:
 &= \Uc_{i,j}^n + \frac{\Delta x}{2} \frac{\partial \Uc}{\partial x}
               - \frac{\Delta t}{2} \frac{\partial \Fb^{(x)}}{\partial x}
               - \frac{\Delta t}{2} \frac{\partial \Fb^{(y)}}{\partial y}
-              + \frac{\Delta t}{2} H_{i,j} \\
+              + \frac{\Delta t}{2} \Hb_{i,j} \\
 &= \Uc_{i,j}^n
  + \frac{1}{2} \left [1 -\frac{\Delta t}{\Delta x} \Ab^{(x)}(\Uc)\right ] \Delta \Uc
  - \frac{\Delta t}{2} \frac{\partial \Fb^{(y)}}{\partial y}
- + \frac{\Delta t}{2} H_{i,j}
+ + \frac{\Delta t}{2} \Hb_{i,j}
   \label{eq:Utaylorstatesource}
 \end{align}
 We can compute things as above, but simply add the source term to the
@@ -1117,10 +1124,10 @@ tracing of the interface states.  This is the approach taken in, e.g.,
 the original PPM paper.  To make things more concrete, let's consider just
 gravity as the source.  Our primitive variable equations in this case are:
 \begin{equation}
-\qb_t + \Ab(\qb) \qb_x = G
+\qb_t + \Ab(\qb) \qb_x = \Gb
 \end{equation}
-where $G = (0, g, 0)^T$---i.e. the gravitational source only affects
-$u$, not $\rho$ or $p$\footnote{Note that in the PPM paper, they put $G$ on
+where $\Gb = (0, g, 0)^T$---i.e. the gravitational source only affects
+$u$, not $\rho$ or $p$\footnote{Note that in the PPM paper, they put $\Gb$ on
 the lefthand side of the primitive variable equation, so our signs are
 opposite.}.
 
@@ -1130,13 +1137,13 @@ each wave to the interface, we'll denote these as $\Ic^\enu_\pm(g)$.  Then we in
 term in the characteristic projection itself.  Our projections are
 now:
 \begin{equation}
-\sum_{\nu; \lambda^\enu \ge 0}\lb^\enu \cdot (\tilde{\qb} - \Ic^\enu_+(\qb) - \tfrac{\Delta t}{2} G) \rb^\enu
+\sum_{\nu; \lambda^\enu \ge 0}\lb^\enu \cdot (\tilde{\qb} - \Ic^\enu_+(\qb) - \tfrac{\Delta t}{2} \Gb) \rb^\enu
 \end{equation}
 for the left state, and
 \begin{equation}
-\sum_{\nu; \lambda^\enu \le 0} \lb^\enu \cdot (\tilde{\qb} - \Ic^\enu_-(\qb) - \tfrac{\Delta t}{2} G) \rb^\enu
+\sum_{\nu; \lambda^\enu \le 0} \lb^\enu \cdot (\tilde{\qb} - \Ic^\enu_-(\qb) - \tfrac{\Delta t}{2} \Gb) \rb^\enu
 \end{equation}
-for the right state.  Since $G$ is only non-zero for velocity, only
+for the right state.  Since $\Gb$ is only non-zero for velocity, only
 the velocity changes.  Writing out the sum (and performing the vector products), we
 get:
 \begin{align}
@@ -1152,8 +1159,8 @@ u_{i+1/2,L}^{n+1/2} =
 where the only change from Eq.~\ref{eq:ufull} are the
 $\Ic^\evm_+(g)$ and $\Ic^\evp_+(g)$ terms.
 
-These differ from the expression in the PPM paper, where $\Delta t G$,
-not $\Delta t/2 G$ is used in the projection, however this appears to
+These differ from the expression in the PPM paper, where $\Delta t \Gb$,
+not $(\Delta t/2) \Gb$ is used in the projection, however this appears to
 be a typo.  To see this, notice that if both waves are moving toward
 the interface, then the source term that is added to the interface
 state is $(\Delta t/4) (\Ic_+^\evm(g) +
@@ -1168,15 +1175,15 @@ usually means averaging the time-level $n$ and $n+1$ sources:
 \begin{align}
 \Uc^{n+1}_{i,j} = \Uc^n_{i,j}
    &+ \frac{\Delta t}{\Delta x} \left ( \Fb^{(x),n+1/2}_{i-1/2,j} - \Fb^{(x),n+1/2}_{i+1/2,j} \right ) \nonumber \\
-   &+ \frac{\Delta t}{\Delta y} \left ( \Fb^{(y),n+1/2}_{i,j-1/2} - \Fb^{(y),n+1/2}_{i,j+1/2} \right ) + \frac{\Delta t}{2} \left (H(\Uc^n_{i,j}) + H(\Uc^{n+1}_{i,j})\right )
+   &+ \frac{\Delta t}{\Delta y} \left ( \Fb^{(y),n+1/2}_{i,j-1/2} - \Fb^{(y),n+1/2}_{i,j+1/2} \right ) + \frac{\Delta t}{2} \left (\Hb(\Uc^n_{i,j}) + \Hb(\Uc^{n+1}_{i,j})\right )
 \end{align}
 As written, this appears to be an implicit update (since $\Uc^{n+1}$
-depends on $H^{n+1}$), but often, the form of the source terms allows
+depends on $\Hb^{n+1}$), but often, the form of the source terms allows
 you to update the equations in sequence explicitly.  
 
 Again, using a constant gravitational acceleration as an example, and
 looking in 1-d for simplicity, $\Uc = (\rho, \rho u, \rho E)^\intercal$
-and $H = (0, \rho g, \rho u g)^\intercal$, so our update sequence is:
+and $\Hb = (0, \rho g, \rho u g)^\intercal$, so our update sequence is:
 \begin{align}
 \rho^{n+1}_i = \rho^n_i &+ \frac{\Delta t}{\Delta x} 
    \left [\rho_{i-1/2}^{n+1/2} u_{i-1/2}^{n+1/2} - 
