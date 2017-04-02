@@ -1433,11 +1433,13 @@ p_l    &= 0.4    &  p_r    &= 0.4 \nonumber
 \subsection{Sedov blast wave}
 
 The Sedov (or Sedov-Taylor) blast wave~\cite{sedov:1959} is a point
-explosion---a small amount of energy is placed at a point in a uniform
-domain.  A spherical shockwave propagates outward, evacuating the
-region in the center.  The Sedov problem also has an analytic
-solution, and this problem is a good way of testing out the geometric
-factors for 1-d spherical and 2-d axisymmetric geometries.
+explosion---energy, $\mathcal{E}_\mathrm{expl}$, is placed at a point
+in a uniform domain.  A spherical shockwave propagates outward,
+evacuating the region in the center.  The Sedov problem also has an
+analytic solution\footnote{See \cite{timmes_sedov_code} for a nice
+  code to general the solutions}, and this problem is a good way of
+testing out the geometric factors for 1-d spherical and 2-d
+axisymmetric geometries.
 
 \begin{figure}[t]
 \centering
@@ -1450,6 +1452,21 @@ factors for 1-d spherical and 2-d axisymmetric geometries.
   geometry used makes this act as if it were a sphere.}
 \end{figure}
 
+The major difficulty with initializing the Sedov problem is
+representing a point, where all the energy desposited, on the grid.
+If you just initialize a singe zone, then the size of the point
+changes as you change resolution.  Additionally, in 2- or 3-d
+Cartesian coordinates, the point will be squared off.  A standard way
+of initializing this (see, e.g., \cite{omang:2006}) is to imagine the
+energy deposition inflating a region of radius $r_\mathrm{init}$ like
+a balloon, resulting in an energy density, $E =
+\mathcal{E}_\mathrm{expl}/V_\mathrm{init}$, where $V_\mathrm{init} =
+4\pi r_\mathrm{init}^3/3$ for a spherical blast wave and
+$V_\mathrm{init} = \pi r_\mathrm{init}^2$ for a cylindrical blast
+wave. Then the pressure is
+\begin{equation}
+p = \frac{\mathcal{E}_\mathrm{expl}}{V_\mathrm{init}} (\gamma - 1)
+\end{equation}
 
 \subsection{Advection}
 
