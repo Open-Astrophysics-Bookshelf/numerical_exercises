@@ -86,25 +86,37 @@ to help understand the possible error in your simulation.
 \section{Boundary conditions}
 
 Another approximation you make is how to treat the boundaries.
+Usually one chooses symmetry / reflecting, outflow / zero-gradient,
+inflow (specifying the value on the boundary), or periodic.  In the
+case of symmetry, the fluid state is reflected and the normal velocity
+is reflected with a sign change.  The transverse velocity can be left
+as is (a slip wall) or set to zero at the boundary (no-slip wall).  
+
 Generally speaking, you should put your boundaries as far away from
 the place where the action is occuring as possible.  For example,
 if you are modeling a convective region bounded by stably stratified
 flow, then you should have a large buffer of stable atmosphere
 bounding it.
 
-Periodic boundary conditions don't magically fix everything either.  
-With a triply-periodic box (periodic on all boundaries), then you 
-are confining the flow.  If energy is injected into the box, then
-there is no place for it to expand.  
+Periodic boundary conditions don't magically fix everything either.
+With a triply-periodic box (periodic on all boundaries), then you are
+confining the flow.  If energy is injected into the box, then there is
+no place for it to expand, and this can lead to artifical heating or
+compression.
+
+Symmetry / reflecting boundaries provide a simple way to reduce a
+problem size, for example, modeling only an octant of a star in 3-d
+instead of the full star.  But they also introduce artifacts, since
+they force the normal velocity to zero right on the boundary.  This
+means that flow through the center of a star (e.g., if we model only
+an octant) can be restricted, resulting in artifical flow / convective
+features.  Wall heating can also be an issue---forcing the normal
+velocity to zero at the symmetry boundary can lead to stagnation of
+the flow there, allowing hot spots to develop and not be transported
+away.
 
 
-wall heating
-
-
-traditional
-
-
-characteristic BCs?
+\MarginPar{characteristic BCs?}
 
 
 
@@ -112,7 +124,27 @@ characteristic BCs?
 
 \section{Timestep considerations}
 
-Burning timescale
+The timestep constraint we discussed (the CFL condition) is required
+for stability, but that is different than accuracy.  In particular,
+accurately capturing some physical processes (that may appear as
+source terms) might require more restrictive timesteps to ensure that they 
+are properly coupled with the hydrodynamics.  
+
+An example where this can commonly arise is reactive flows---combining
+hydrodynamics with nuclear or chemical reactions.  If the reactions
+are very vigorous, then you may run into a situation where you exaust
+your fuel in a zone in a single step, without giving the hydrodynamics
+a chance to advect new fuel in.  This represents a breakdown of the
+coupling of the hydrodynamics and reactions.  A common way to improve
+the accuracy here is to monitor the change in mass fractions of a fuel
+and set a timestep limit such that:
+\begin{equation}
+\Delta t_\mathrm{react} = C_\mathrm{react}
+\frac{X_\mathrm{fuel}}{|\dot{X}_\mathrm{fuel}|}
+\end{equation}
+where $C_\mathrm{react} < 1$.  The species creation rate,
+$\dot{X}_\mathrm{react}$, is typically evaluated using the value from
+the previous step.
 
 
 
