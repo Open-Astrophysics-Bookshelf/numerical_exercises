@@ -77,6 +77,23 @@ where $\sigma$ here is a mix of thermodynamic derivatives,
 
 \section{Operator splitting approach}
 
+Using operator splitting, we separate the equations into hydrodynamics
+and reactive parts and we do this operations in turn.  The reactive 
+portion is:
+\begin{align}
+\frac{dX_k}{dt} &= \omegadot_k \\
+\frac{d(\rho e)}{dt} &= \rho \Hnuc
+\end{align}
+and the hydrodynamics part is:
+\begin{align}
+\ddt{\rho} + \nabla \cdot (\rho \Ub) &= 0 \\
+\ddt{\rho X_k} + \nabla \cdot (\rho \Ub X_k) &= 0 \\
+\ddt{(\rho \Ub)} + \nabla \cdot (\rho \Ub \Ub) + \nabla p &= 0 \\
+\ddt{(\rho E)} + \nabla \cdot (\rho E \Ub + p \Ub ) &= 0
+\end{align}
+
+
+
 \subsection{Adding species to hydrodynamics}
 
 When we now consider our primitive variables: $\qb = (\rho, u, p, X_k)$,
@@ -84,7 +101,7 @@ we find
 \begin{equation}
 \Ab(\qb) = \left ( \begin{array}{cccc} u  & \rho     & 0      &  0\\
                                   0  &  u       & 1/\rho &  0\\
-                                  0  & \gamma p & u      &  0\\
+                                  0  & \Gamma_1 p & u      &  0\\
                                   0  & 0        & 0      & u \end{array} \right )
 \end{equation}
 There are now 4 eigenvalues, with the new one also being simply $u$.
