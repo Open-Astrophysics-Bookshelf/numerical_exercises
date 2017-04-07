@@ -16,93 +16,22 @@ spatially constant pressure (and constant-in-time if the domain is
 open).  We'll denote this background pressure as $p_0(r,t)$, where 
 $r$ is a radial coordinate.
 
-From the first law of thermodynamics, $Tds = de + pd(1/\rho)$, we see
+Previously, we derived the pressure evolution with reactive sources
+(see Eq.~\ref{eq:reacting:p}) by following the evolution of pressure
+as a fluid element moves (e.g., the Lagrangian derivative).  For the 
+low Mach flows, we want to see the evolution $p_0$ in the fluid
+element, which is expressed as:
 \begin{equation}
-T \frac{Ds}{Dt} = \frac{De}{Dt} + p_0 \frac{D(1/\rho)}{Dt}
+\ddt{p_0} + \Ub \cdot \nabla p_0 + \Gamma_1 p_0 \nabla \cdot \Ub = \Gamma_1 p_0 \sigma \Hnuc
 \end{equation}
-which is our internal energy evolution equation.  The internal
-energy in a fluid parcel can change due to local heat release and 
-diffusion, so we can write:
+We can rewrite this as a constraint on the velocity field by solving for $\nabla \cdot \Ub$:
 \begin{equation}
-T \frac{Ds}{Dt} = \frac{De}{Dt} + p_0 \frac{D(1/\rho)}{Dt} = H +
-\nabla \cdot (k \nabla T) \equiv \dot{q}
+  \nabla \cdot \Ub + \frac{1}{\Gamma_1 p_0}\frac{Dp_0}{Dt} = \sigma \Hnuc \equiv S
 \end{equation}
-where $H$ is the specific energy generation rate (energy / mass /time)
-and $k$ is the thermal conductivity.
-
-We can derive the constraint on the velocity field by considering the
-Lagrangian derivative of the pressure---this captures the change in
-pressure of a fluid element as it moves through the domain.
-\begin{equation}
-\frac{Dp_0}{Dt} = \left . \frac{\partial p_0}{\partial \rho} \right |_s
-     \frac{D\rho}{Dt} +
-     \left . \frac{\partial p_0}{\partial s} \right |_\rho
-     \frac{Ds}{Dt}
-\end{equation}
-we recognize that $\Gamma_1 \equiv \partial \log p_0/\partial \log \rho |_s$.
-The Maxwell relations tell us that
-\begin{equation}
-\partial p_0/\partial s |_\rho = \rho^2 \partial T/\partial \rho |_s
-\end{equation}
-This gives us the form:
-\begin{equation}
-\frac{Dp_0}{Dt} = \frac{p_0}{\rho} \Gamma_1 \frac{D\rho}{Dt} +
-     \left . \rho^2 \frac{\partial T}{\partial \rho} \right |_s
-     \frac{\dot{q}}{T}
-\end{equation}
-
-We need an expression for $\partial T/\partial \rho |_s$ and terms of
-derivatives of $\rho$ and $T$ (since that is what our equations of
-state typically provide).  Consider $\Gamma_1$, with $p = p(\rho, T)$:
-\begin{equation}
-  \Gamma_1 = \frac{\rho}{p} \left . \frac{dp}{d\rho} \right |_s
-  = \frac{\rho}{p} \left [ p_\rho + p_T \left . \frac{dT}{d\rho} \right |_s \right ]
-\end{equation}
-where we use the shorthand $p_\rho \equiv \partial p/\partial \rho |_T$ and
-$p_T \equiv \partial p/\partial T |_\rho$.  This tells us that
-\begin{equation}
-  \left . \frac{\partial T}{\partial \rho} \right |_s = \frac{p}{\rho p_T} (\Gamma_1 - \chi_\rho)
-\end{equation}
-where $\chi_\rho \equiv \partial \log p / \partial \log \rho |_T$.  Using the following
-relations
-\begin{equation}
-\frac{\Gamma_1}{\chi_\rho} = \frac{c_p}{c_v}
-\end{equation}
-and
-\begin{equation}
-  c_p - c_v = \frac{p}{\rho T} \frac{\chi_T^2}{\chi_\rho}
-\end{equation}
-with $\chi_T \equiv \partial \log p / \partial \log T |_\rho$
-(see, e.g. \cite{HKT} for both of these relations), we can
-write
-\begin{equation}
-  \left . \frac{\partial T}{\partial \rho} \right |_s = \frac{p\chi_T}{\rho^2 c_v}
-\end{equation}
-
-Putting this all together, we have:
-\begin{equation}
-\frac{Dp_0}{Dt} = \frac{p_0}{\rho}\Gamma_1  \frac{D\rho}{Dt}
-   + \frac{p \chi_T}{c_v T} \dot{q}
-\end{equation}
-The continuity equation gives us:
-\begin{equation}
-\frac{D\rho}{Dt} = -\rho \nabla \cdot \Ub
-\end{equation}
-Solving for the velocity divergence, 
-we finally have:
-\begin{align}
-  \nabla \cdot \Ub + \frac{1}{\Gamma_1 p_0}\frac{Dp_0}{Dt} &=
-    \frac{\chi_T }{c_v T \Gamma_1} \dot{q} 
-  = \frac{\chi_T}{c_p \chi_\rho T} \dot{q} \nonumber \\
- &= \frac{p_T}{\rho c_p p_\rho} \dot{q}
-  \equiv \sigma \dot{q}    
-\end{align}
 with
 \begin{equation}
 \sigma = \frac{\partial p_0/\partial T |_\rho}{\rho c_p \partial p_0/\partial \rho |_T}
 \end{equation}
-The $\sigma$ notation follows from \cite{ABRZ:II}, where we abbreviate
-the righthand side as $S$.
 
 This is the general constraint equation for low Mach flow.  Note that the
 only approximation we made is $p \rightarrow p_0$.  This form of the constraint,
