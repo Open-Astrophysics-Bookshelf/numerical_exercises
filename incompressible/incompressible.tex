@@ -14,9 +14,9 @@ acoustic/shock waves).  The Lagrangian derivative of the density
 captures the changes in the fluid, and is a measure of its compressibility.
 From the continuity equation, we see:
 \begin{equation}
--\frac{1}{\rho}\frac{D\rho}{Dt} = \nabla \cdot U
+-\frac{1}{\rho}\frac{D\rho}{Dt} = \nabla \cdot \Ub
 \end{equation}
-Note that for $\nabla \cdot U > 0$, we have $-(1/\rho) (D\rho/Dt) > 0$,
+Note that for $\nabla \cdot \Ub > 0$, we have $-(1/\rho) (D\rho/Dt) > 0$,
 which means that $\rho$ gets smaller---this is expansion of the Lagrangian
 fluid element.
 
@@ -24,7 +24,7 @@ A fluid in which the density (and therefore volume) of a fluid element is not
 allowed to change is called {\em incompressible}.  An incompressible
 fluid obeys the velocity constraint:
 \begin{equation}
-\nabla \cdot U = 0
+\nabla \cdot \Ub = 0
 \end{equation}
 (since $D\rho / Dt = 0$).  The incompressible fluid approximation is 
 a reasonable approximation when the Mach number of the fluid is small
@@ -32,7 +32,7 @@ a reasonable approximation when the Mach number of the fluid is small
 we take the density to be constant everywhere in the domain (not just
 in our fluid element), then we have:
 \begin{equation}
-\frac{\partial U}{\partial t} + U \cdot \nabla U + \nabla p = 0
+\frac{\partial \Ub}{\partial t} + \Ub \cdot \nabla \Ub + \nabla p = 0
 \end{equation}
 Note that $p$ here looks like a pressure, but it is not subject to
 any equation of state.  This system is closed as written.  The value
@@ -45,31 +45,31 @@ of $p$ is determined such that the velocity constraint is satisfied.
 The basic idea behind a projection method is that any vector field
 can be decomposed into a divergence free part and the gradient of 
 a scalar (this is sometimes called a {\em Hodge decomposition}).  
-Given a velocity field $U^\star$, we can express it in terms of the 
-divergence free part $U^d$ and a scalar, $\phi$ as:
+Given a velocity field $\Ub^\star$, we can express it in terms of the 
+divergence free part $\Ub^d$ and a scalar, $\phi$ as:
 \begin{equation}
-U^\star = U^d + \nabla \phi
+\Ub^\star = \Ub^d + \nabla \phi
 \end{equation}
-Taking the divergence of each side, and noting that $\nabla \cdot U^d
+Taking the divergence of each side, and noting that $\nabla \cdot \Ub^d
 = 0$, we have
 \begin{equation}
-\nabla \cdot U^\star = \nabla^2 \phi
+\nabla \cdot \Ub^\star = \nabla^2 \phi
 \end{equation}
 This is an elliptic equation.  Given suitable boundary conditions, we
 can solve for $\phi$ (for instance, using multigrid) and recover the
-divergence free part of $U^\star$ as:
+divergence free part of $\Ub^\star$ as:
 \begin{equation}
-U^d = U^\star - \nabla \phi
+\Ub^d = \Ub^\star - \nabla \phi
 \end{equation}
 We call this operation of extracting the divergence free part of a
 velocity field a {\em projection}.  This can be expressed by defining
-an operator $P$, such that $PU^\star = U^d$, and $(I - P)U^\star =
+an operator $P$, such that $P\Ub^\star = \Ub^d$, and $(I - P)\Ub^\star =
 \nabla \phi$.  From the momentum equation, we see that $\partial
-U/\partial t + \nabla p$ is in the form of a divergence free term
+\Ub/\partial t + \nabla p$ is in the form of a divergence free term
 $+$ the gradient of a scalar.  This means that advancing the velocity
 field subject to the constraint involves solving:
 \begin{equation}
-U_t = P(U_t + \nabla p) = P(-U\cdot \nabla U)
+\Ub_t = P(\Ub_t + \nabla p) = P(-\Ub\cdot \nabla \Ub)
 \label{eq:projevolve}
 \end{equation}
 See Bell, Colella, and Howell~\cite{BCH} for a nice discussion of this.
@@ -95,7 +95,7 @@ in succession (i.e. $L = DG$).  Depending on our data centerings, we
 may prefer to discretize the Laplacian independently to $D$ and $G$,
 such that $L \ne DG$.  This is called an {\em approximate projection}.
 Note that for an approximate projection, $P$ is not
-idempotent: $P^2 U \ne PU$.
+idempotent: $P^2 \Ub \ne P\Ub$.
 
 Many variations on this basic idea exist, using alternate forms of the
 projection, different grid centerings of the $\phi$ variable, and
@@ -105,7 +105,7 @@ additional physics.
 \section{Cell-centered approximate projection solver}
 
 Here we describe an incompressible algorithm that uses cell-centered
-data throughout---$U$ and $p$ are both cell-centered.  The
+data throughout---$\Ub$ and $p$ are both cell-centered.  The
 projection at the end is an approximate projection.  The basic
 algorithm flow is 
 \begin{itemize}
@@ -154,7 +154,7 @@ sometimes called a MAC grid.
 
 
 We follow ABS.  Our velocity evolution system (writing out the
-individual components of $U$: $u$ and $v$) is
+individual components of $\Ub$: $u$ and $v$) is
 \begin{eqnarray}
 \frac{\partial u}{\partial t} &=& -u \frac{\partial u}{\partial x} 
                                   -v \frac{\partial u}{\partial y} 
@@ -351,8 +351,8 @@ construction is done for the right states at the interface.
 
 Finally, we do a Riemann solve (again, using the Burger's form of the
 Riemann problem) followed by upwinding to get the normal advective
-velocities.  This is basically the $\mathcal{R}$ operation followed 
-by $\mathcal{U}$.  Together, it is:
+velocities.  This is basically the $\mathcal{R}(.,.)$ operation followed 
+by $\mathcal{U}(.,.)$.  Together, it is:
 \begin{equation}
 u^\mathrm{adv}_{i+1/2,j} = \left \{ \begin{array}{cl}
    u_{i+1/2,j,L}^{n+1/2}  & 
@@ -394,7 +394,7 @@ it the MAC projection.
 
 The divergence of the MAC velocities is cell-centered and constructed as:
 \begin{equation}
-(D U)_{i,j} = \frac{u^\mathrm{adv}_{i+1/2,j} - u^\mathrm{adv}_{i-1/2,j}}
+(D \Ub)_{i,j} = \frac{u^\mathrm{adv}_{i+1/2,j} - u^\mathrm{adv}_{i-1/2,j}}
                    {\Delta x} +
               \frac{v^\mathrm{adv}_{i,j+1/2} - v^\mathrm{adv}_{i,j-1/2}}
                    {\Delta y}
@@ -405,7 +405,7 @@ DG$, this makes the MAC projection an exact projection.
 
 We solve
 \begin{equation}
-L\phi = DU
+L\phi = D\Ub
 \end{equation}
 using multigrid V-cycles and then update the MAC velocities as:
 \begin{eqnarray}
@@ -441,7 +441,7 @@ that they are consistent with the MAC-projected advective velocities
 
 Once we have the time-centered interface states that are consistent with
 the MAC-projected advective velocities, we can update the velocities to
-the new time by discretizing the advective terms ($U\cdot \nabla U$).
+the new time by discretizing the advective terms ($\Ub\cdot \nabla \Ub$).
 We express the advective terms for $u$ as $A^{(u),n+1/2}_{i,j}$ and
 those for $v$ as $A^{(v),n+1/2}_{i,j}$.  These have the form:
 \begin{eqnarray}
@@ -483,9 +483,9 @@ v^{\star\star}_{i,j} &=& v^n_{i,j} - \Delta t A^{(v),n+1/2}_{i,j}
 Following the notation in Martin, we distinguish between these with
 an `$\star$' vs.\ `$\star\star$' \footnote{Note that these are identical to
 ABC~\cite{ABC} approximation projections (1) and (2) (a quick look at ABC might
-suggest the opposite, but note that their definition of $U^\star$
+suggest the opposite, but note that their definition of $\Ub^\star$
 already includes a $-Gp^{n-1/2}$ term, so by explicitly adding it back
-in, you are dealing with the case where $U^\star$ was updated without
+in, you are dealing with the case where $\Ub^\star$ was updated without
 any $Gp^{n-1/2}$ term, like the `$\star\star$' case above.)}.
 
 
@@ -501,10 +501,10 @@ would be no need to add it.
 BCH did an exact projection on a cell-centered grid.  There, the
 divergence operator is:
 \begin{equation}
-(D U)_{i,j} = \frac{u_{i+1,j} - u_{i-1,j}}{2\Delta x} +
+(D \Ub)_{i,j} = \frac{u_{i+1,j} - u_{i-1,j}}{2\Delta x} +
               \frac{v_{i,j+1} - v_{i,j-1}}{2\Delta y} \label{eq:ccdiv}
 \end{equation}
-This gives a cell-centered $DU$.  If we want $\phi$ cell-centered, then
+This gives a cell-centered $D\Ub$.  If we want $\phi$ cell-centered, then
 the gradient, $G\phi$ must also be cell centered so $L\phi = DG\phi$ is 
 cell-centered.  This means that we must have
 \begin{eqnarray}
@@ -539,35 +539,35 @@ explore various forms of what to project when doing the approximate
 projection.  For instance, do we include the $Gp^{n-1/2}$ term in the
 provisional velocity or not?  Chorin noted that if viscosity is being
 modeled, then it is necessary to include it here to get second-order
-accuracy.  Also, one can project the update to the velocity, $(U^\star
-- U^n)/\Delta t$ instead of just the new velocity, since $U^n$ should
+accuracy.  Also, one can project the update to the velocity, $(\Ub^\star
+- \Ub^n)/\Delta t$ instead of just the new velocity, since $\Ub^n$ should
 already be divergence free.  Rider argues that projecting the update
 is not desirable with approximate projections, since any error in
-$U^n$ being divergence-free is carried forward to the new $U^{n+1}$.
+$\Ub^n$ being divergence-free is carried forward to the new $\Ub^{n+1}$.
 One issue is that a cell-centered approximate projection cannot remove
 all sources of divergence (see Rider and Martin's PhD thesis).
 
 When projecting the new velocity, we scale by $\Delta t$ to get a quantity
 that has dimensions of pressure.  The procedure for the projection
-differs slightly depending on whether we project $U^\star$ or $U^{\star\star}$:
+differs slightly depending on whether we project $\Ub^\star$ or $\Ub^{\star\star}$:
 \begin{itemize}
-\item case I: projecting $U^{\star}/\Delta t$.  
+\item case I: projecting $\Ub^{\star}/\Delta t$.  
 
 From the expression above,
 this looks like:
 \begin{equation}
-\frac{U^\star}{\Delta t} = \frac{U^n}{\Delta t} - A^{(u),n+1/2} - (G p)^{(x),n-1/2}
+\frac{\Ub^\star}{\Delta t} = \frac{\Ub^n}{\Delta t} - A^{(u),n+1/2} - (G p)^{(x),n-1/2}
 \end{equation}
-Ideally, $U^n$ is already divergence free, and $Gp^{n-1/2}$ is the
+Ideally, $\Ub^n$ is already divergence free, and $Gp^{n-1/2}$ is the
 gradient of a scalar, which will be removed, so the projection should
 pick out the divergence free portion of $A^{(u)}$.  We solve:
 \begin{equation}
-L\phi = D (U^\star/\Delta t)
+L\phi = D (\Ub^\star/\Delta t)
 \end{equation}
 using multigrid V-cycles.
 We then find the new, divergence free velocity field as:
 \begin{equation}
-U^{n+1} = U^\star - \Delta t G\phi
+\Ub^{n+1} = \Ub^\star - \Delta t G\phi
 \end{equation}
 
 Since we already included $Gp^{n-1/2}$ in what we projected, $G\phi$
@@ -582,21 +582,21 @@ Gp^{n+1/2} = Gp^{n-1/2} + G\phi
 (see Martin 2.5 or ABC).  We store this for the next timestep.
 
 
-\item case II: projecting $U^{\star\star}/\Delta t$.  
+\item case II: projecting $\Ub^{\star\star}/\Delta t$.  
 
 From the expression above,
 this looks like:
 \begin{equation}
-\frac{U^{\star\star}}{\Delta t} = \frac{U^n}{\Delta t} - A^{(u),n+1/2} 
+\frac{\Ub^{\star\star}}{\Delta t} = \frac{\Ub^n}{\Delta t} - A^{(u),n+1/2} 
 \end{equation}
 There is no explicit $Gp^{n-1/2}$ term.  We solve:
 \begin{equation}
-L\phi = D (U^{\star\star}/\Delta t)
+L\phi = D (\Ub^{\star\star}/\Delta t)
 \end{equation}
 using multigrid V-cycles.
 We then find the new, divergence free velocity field as:
 \begin{equation}
-U^{n+1} = U^{\star\star} - \Delta t G\phi
+\Ub^{n+1} = \Ub^{\star\star} - \Delta t G\phi
 \end{equation}
 
 Since there was no $Gp^{n-1/2}$ in what we projected, $p^{n+1/2} = \phi$,
@@ -607,7 +607,7 @@ Gp^{n+1/2} = G\phi
 We store this for the next timestep.
 \end{itemize}
 
-One pathology of this form of the projection is that $(DU)_{i,j}$ does
+One pathology of this form of the projection is that $(D\Ub)_{i,j}$ does
 not actually make use of the velocity field in zone $(i,j)$.  This
 decoupling from the local zone can result in a checkerboarding pattern
 in the projected velocity field.
@@ -624,7 +624,7 @@ the velocity that we want at the wall (in the advection step), and we
 do not want this value to change in the projection step.  Since the
 correction is:
 \begin{equation}
-U^{n+1} = U^\star - \nabla \phi
+\Ub^{n+1} = \Ub^\star - \nabla \phi
 \end{equation}
 we want $\nabla \phi \cdot n = 0$.  
 
@@ -685,24 +685,24 @@ algorithm.
   The basic idea follows the method described above.  Now the 
   mass continuity equation is also evolved:
   \begin{equation}
-  \frac{\partial \rho}{\partial t} + \nabla \cdot (\rho U) = 0
+  \frac{\partial \rho}{\partial t} + \nabla \cdot (\rho \Ub) = 0
   \end{equation}
   The density is predicted to the interfaces follow the same procedure
   above and upwinded using the MAC velocities.
   %
   For the projection, the decomposition is written as:
   \begin{equation}
-  U = U^d + \frac{1}{\rho}\nabla \phi
+  \Ub = \Ub^d + \frac{1}{\rho}\nabla \phi
   \end{equation}
   and the elliptic equation is now a variable-coefficient equation:
   \begin{equation}
-  \nabla \cdot \frac{1}{\rho} \nabla \phi = \nabla \cdot U
+  \nabla \cdot \frac{1}{\rho} \nabla \phi = \nabla \cdot \Ub
   \end{equation}
 
 \item {\em Viscosity}: When viscosity is included in the system, our
   momentum equation becomes:
   \begin{equation}
-  U_t + U\cdot \nabla U + \nabla p = \epsilon \nabla^2 U
+  \Ub_t + \Ub\cdot \nabla \Ub + \nabla p = \epsilon \nabla^2 \Ub
   \end{equation}
   The solution process for this equation is largely the same.
   Following BCH, first the advective term is computed by predicting
@@ -719,7 +719,7 @@ algorithm.
   \frac{v^\star - v^n}{\Delta t} &=& - A^{(v),n+1/2} - \nabla p^{(y),n-1/2} 
        + \frac{\epsilon }{2} \nabla^2 (v^n + v^\star) 
   \end{eqnarray}
-  This involves two separate multigrid solves.  Once $U^\star$ is found,
+  This involves two separate multigrid solves.  Once $\Ub^\star$ is found,
   the final projection is done as usual.
 
 \item {\em Low Mach number combustion}: In low-Mach number combustion
@@ -728,7 +728,7 @@ algorithm.
   the equation of state along particle paths, leading to the appearance
   of a source term:
   \begin{equation}
-  \nabla \cdot U = S
+  \nabla \cdot \Ub = S
   \end{equation}
   Here, $S$, incorporates the compressibility effects due to the 
   heat release and diffusion.  This system is used when modeling
@@ -739,8 +739,8 @@ algorithm.
   The solution technique largely follows that of the incompressible
   flow.  One caveat, because the constraint now has a local heat
   source, $S$, doing the cell-centered divergence described above
-  leads to a decoupling of $DU$ from the local source, since the
-  stencil of $DU$ does not include the zone upon which it is centered.
+  leads to a decoupling of $D\Ub$ from the local source, since the
+  stencil of $D\Ub$ does not include the zone upon which it is centered.
 
   This system is described in detail in \cite{pember-flame,
     DayBell:2000,SNpaper}.

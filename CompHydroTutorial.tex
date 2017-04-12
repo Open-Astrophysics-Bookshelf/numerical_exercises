@@ -35,7 +35,7 @@
 
 % Palatino font (and math symbols) -- looks nicer than the standard
 % LaTeX font
-\usepackage{mathpazo}
+\usepackage[osf]{mathpazo}
 \linespread{1.05}        % Palatino needs more leading
 %\usepackage[scaled]{helvet} % ss
 \usepackage{raleway}
@@ -507,14 +507,11 @@ Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
 
 \fi
 
-\chapter{Planning a Simulation}
-
-\input simulations/simulations.tex
 
 
 
+\part{Elliptic and Parabolic Problems}
 
-\part{Elliptic, Parabolic Problems, and Mixed-Type Problems}
 
 %\addtocontents{exc}{\protect\addvspace{10pt}}%
 \chapter{Elliptic Equations and Multigrid}
@@ -526,10 +523,25 @@ Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
 
 \input diffusion/diffusion.tex
 
+
+
+
+\part{Multiphysics applications}
+
 %\addtocontents{exc}{\protect\addvspace{10pt}}%
-\chapter{Multiphysics Applications}
+\chapter{Model Problems}
 
 \input multiphysics/multiphysics.tex
+
+\chapter{Reactive Flow}
+
+\input reactive_flow/reactive_flow.tex
+
+\chapter{Planning a Simulation}
+
+\input simulations/simulations.tex
+
+
 
 
 \part{Low Speed Hydrodynamics}

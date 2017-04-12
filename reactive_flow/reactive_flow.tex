@@ -1,0 +1,331 @@
+
+\section{Introduction}
+
+Many astrophysical problems involve modeling nuclear reactions coupled
+with hydrodynamics.  For multifluid flows, the Euler equations are
+augments with continuity equations for each of the (chemical or
+nuclear) species.  If we denote the density of species $k$ as
+$\rho_k$, then conservation of mass for each species individually
+implies:
+\begin{equation}
+\label{eq:euler:partialdensitycont}
+\ddt{\rho_k} + \nabla \cdot (\rho_k \Ub) = 0
+\end{equation}
+Summing Eq.~\ref{eq:euler:partialdensitycont} over $k$ gives us back
+the mass contunity equation, since $\sum_k \rho_k = \rho$.  The
+$\rho_k$ are sometimes called {\em partial densities}.  It is often
+easier to define a mass fraction of species $k$, $X_k$, as
+\begin{equation}
+X_k = \frac{\rho_k}{\rho}
+\end{equation}
+and it is easy to see that $\sum_k X_k = 1$, and 
+\begin{equation}
+\frac{\partial (\rho X_k)}{\partial t} + \nabla \cdot  (\rho X_k \Ub) = 0
+\end{equation}
+Using the continuity equation, we can write this as an advection
+equation:
+\begin{equation}
+\frac{\partial X_k}{\partial t} + \Ub \cdot \nabla X_k = 0
+\end{equation}
+or 
+\begin{equation}
+\DDt{X_k} = 0
+\end{equation}
+This latter form says that as a fluid element advects with the flow,
+its composition does not change.  However, reactions can turn one
+species into another, so for reacting flow, $DX_k/Dt \ne 0$.  If we
+define the creation rate for species $k$ as $\omegadot_k$, then we have:
+\begin{equation}
+\DDt{X_k} = \omegadot_k
+\end{equation}
+Reactions will also release (or consume) energy, due to the change in
+nuclear or chemical binding energy.  This energy will be a source to
+the internal energy.  In particular, if we revisit the first law of
+thermodynamics for our system,\MarginPar{this assumes chemical equilibrium}
+\begin{equation}
+T ds = de + p d \left( \frac{1}{\rho}\right ) = q_\mathrm{react}
+\end{equation}
+where $q_\mathrm{react}$ is the specific energy release due to
+reactions.  Following a fluid element, this takes the form:
+\begin{equation}
+T\DDt{s} = \DDt{e} + p \DDt{(1/\rho)} = \Hnuc
+\end{equation}
+Where now $\Hnuc$ is the time-rate of energy release per unit mass.
+
+The conservative Euler equations with reactive source terms
+appear as:
+\begin{align}
+\ddt{\rho} + \nabla \cdot (\rho \Ub) &= 0 \\
+\ddt{\rho X_k} + \nabla \cdot (\rho \Ub X_k) &= \rho \omegadot_k \\
+\ddt{(\rho \Ub)} + \nabla \cdot (\rho \Ub \Ub) + \nabla p &= 0 \\
+\ddt{(\rho E)} + \nabla \cdot (\rho E \Ub + p \Ub ) &= \rho \Hnuc
+\end{align}
+
+In primitive form, the derivation of the pressure equation is a
+complex.  Previously, we found the pressure evolution in the absence
+of sources by differentiating pressure along streamlines
+(Eq.~\ref{eq:euler:presnosource}):
+\begin{equation}
+\frac{Dp}{Dt} = \left . \frac{\partial p}{\partial \rho} \right |_s
+     \DDt{\rho} + 
+     \left . \frac{\partial p}{\partial s} \right |_\rho
+     \DDt{s}
+\end{equation}
+where, as before, we recognize that $\Gamma_1 \equiv \partial \log p/\partial \log \rho |_s$.
+Now, however, we have an entropy source, so $Ds/Dt \ne 0$.  
+The Maxwell relations\footnote{see, for instance, \cite{shu}, for some discussion
+on these relations} tell us that
+\begin{equation}
+\partial p/\partial s |_\rho = \rho^2 \partial T/\partial \rho |_s
+\end{equation}
+This gives us the form:
+\begin{equation}
+\frac{Dp}{Dt} = \frac{p}{\rho} \Gamma_1 \frac{D\rho}{Dt} +
+     \left . \rho^2 \frac{\partial T}{\partial \rho} \right |_s
+     \frac{\Hnuc}{T}
+\end{equation}
+
+We need an expression for $\partial T/\partial \rho |_s$ in terms of
+derivatives of $\rho$ and $T$ (since that is what our equations of
+state typically provide).  Consider $\Gamma_1$, with $p = p(\rho, T)$:
+\begin{equation}
+  \Gamma_1 = \frac{\rho}{p} \left . \frac{dp}{d\rho} \right |_s
+  = \frac{\rho}{p} \left [ p_\rho + p_T \left . \frac{dT}{d\rho} \right |_s \right ]
+\end{equation}
+where we use the shorthand $p_\rho \equiv \partial p/\partial \rho |_T$ and
+$p_T \equiv \partial p/\partial T |_\rho$.  This tells us that
+\begin{equation}
+  \left . \frac{\partial T}{\partial \rho} \right |_s = \frac{p}{\rho p_T} (\Gamma_1 - \chi_\rho)
+\end{equation}
+where $\chi_\rho \equiv \partial \log p / \partial \log \rho |_T$.  To further simplify this,
+we use some standard relations for general equations of state
+\begin{equation}
+\frac{\Gamma_1}{\chi_\rho} = \frac{c_p}{c_v}
+\end{equation}
+and
+\begin{equation}
+  c_p - c_v = \frac{p}{\rho T} \frac{\chi_T^2}{\chi_\rho}
+\end{equation}
+with $\chi_T \equiv \partial \log p / \partial \log T |_\rho$
+(see, e.g., \cite{HKT} for both of these relations).  These allow us to write
+\begin{equation}
+  \left . \frac{\partial T}{\partial \rho} \right |_s = \frac{p\chi_T}{\rho^2 c_v}
+\end{equation}
+
+Putting this all together, we have:
+\begin{equation}
+\frac{Dp}{Dt} = \frac{p}{\rho}\Gamma_1  \frac{D\rho}{Dt}
+   + \frac{p \chi_T}{c_v T} \dot{q}
+\end{equation}
+and using the continuity equation, $D\rho/Dt = -\rho \nabla \cdot \Ub$, 
+we finally have:
+\begin{equation}
+\label{eq:reacting:p}
+\ddt{p} + \Ub \cdot \nabla p + \Gamma_1 p \nabla \cdot \Ub = \Gamma_1 p \sigma \Hnuc
+\end{equation}
+where we defined
+\begin{equation}
+\sigma = \frac{\partial p/\partial T |_\rho}{\rho c_p \partial p/\partial \rho |_T}
+\end{equation}
+The $\sigma$ notation follows from \cite{ABRZ:II}.
+
+For simplicity of notation, we'll write things out in terms of a
+one-dimensional system for the following.  The primitive variable
+system, in one-dimension, is then
+\begin{align}
+\ddt{\rho} + u \ddx{\rho} + \rho \ddx{u} &= 0\\
+\ddt{u} + u \ddx{u} + \frac{1}{\rho} \ddx{p} &= 0\\
+\ddt{p} + u \ddx{p} + \Gamma_1 p \ddx{u} &= \Gamma_1 p \sigma \Hnuc \\
+\ddt{X_k} + u \ddx{X_k} &= \omegadot_k 
+\end{align}
+
+
+\section{Operator splitting approach}
+
+Using operator splitting, we separate the equations into hydrodynamics
+and reactive parts and we do this operations in turn.  Following the
+ideas from \S~\ref{sec:multiphys:diffreact}, we perform the update
+in stages.  If we denote the reaction update operator as $R_{\Delta t}$
+and the hydrodynamics operator as $A_{\Delta t}$, then our update 
+appears as:
+\begin{equation}
+  \Uc^{n+1} = R_{\Delta t/2} A_{\Delta t} R_{\Delta t/2} \Uc^n
+\end{equation}
+
+To make it more explicit, we write out system as:
+\begin{equation}
+\ddt{\Uc} + \nabla \cdot \Fb(\Uc) = \Rc(\Uc)
+\end{equation}
+where $\Rc = (0, \omegadot_k, 0, \rho \Hnuc)^\intercal$ is the vector
+of reactive sources.  The advance through $\Delta t$ in time is:
+\begin{enumerate}
+\item {\em Evolve reaction part for $\Delta t/2$}.
+
+  We define $\Uc_i^\star$ as the result of integrating
+  \begin{equation}
+    \frac{d\Uc_i}{dt} = \Rc(\Uc_i)
+  \end{equation}
+  over $t \in [t^n, t^{n+\myhalf}]$ with initial conditions, 
+  $\Uc_i(t^n) = \Uc_i^n$.
+
+\item {\em Solve the hydrodynamics portion for $\Delta t$, beginning
+    with the state $\Uc^\star$}
+   %
+   \begin{equation}
+     \frac{\Uc^{\star\star}_i - \Uc^\star_i}{\Delta t} =
+      \frac{\Fb^\exx(\Uc^{\star,n+\myhalf}_{i-\myhalf}) - \Fb^\exx(\Uc^{\star,n+\myhalf}_{i+\myhalf})}{\Delta x}
+   \end{equation}
+  where $\Uc^{\star,n+\myhalf}_{i-\myhalf}$ is the predict interface state
+  (using the ideas from \S~\ref{sec:onedrecon}), beginning with the state
+  $\Uc^\star$.
+
+\item {\em Evolve reaction part for $\Delta t/2$}
+
+  We reach the final update, $\Uc^{n+1}$, by integrating
+  \begin{equation}
+    \frac{d\Uc}{dt} = \Rc(\Uc)
+  \end{equation}
+  over $t \in [t^{\myhalf}, t^{n+1}]$ with initial conditions
+    $\Uc(t^{n+\myhalf}) = \Uc^{\star\star}$.
+
+\end{enumerate}
+
+
+
+\subsection{Adding species to hydrodynamics}
+
+In the hydrodynamics algorithm, we neglect the reaction terms.  Their effects
+are incorporated implicitly by performing the hydrodynamics update off of the 
+state that has already experienced burning.
+\begin{align}
+\ddt{\rho} + \nabla \cdot (\rho \Ub) &= 0 \\
+\ddt{(\rho X_k)} + \nabla \cdot (\rho \Ub X_k) &= 0 \\
+\ddt{(\rho \Ub)} + \nabla \cdot (\rho \Ub \Ub) + \nabla p &= 0 \\
+\ddt{(\rho E)} + \nabla \cdot (\rho E \Ub + p \Ub ) &= 0
+\end{align}
+
+
+
+When we now consider our primitive variables: $\qb = (\rho, u, p, X_k)$,
+we find
+\begin{equation}
+\Ab(\qb) = \left ( \begin{array}{cccc} u  & \rho     & 0      &  0\\
+                                  0  &  u       & 1/\rho &  0\\
+                                  0  & \Gamma_1 p & u      &  0\\
+                                  0  & 0        & 0      & u \end{array} \right )
+\end{equation}
+There are now 4 eigenvalues, with the new one also being simply $u$.
+This says that the species simply advect with the flow.  The right
+eigenvectors are now:
+\begin{equation}
+\rb^\evm = \left ( \begin{array}{c} 1 \\ -c/\rho \\ c^2 \\ 0\end{array} \right )
+%
+\qquad
+\rb^\evz = \left ( \begin{array}{c} 1 \\ 0 \\ 0  \\ 0\end{array} \right )
+%
+\qquad
+\rb^\evzs{X} = \left ( \begin{array}{c} 0 \\ 0  \\ 0 \\ 1 \end{array} \right )
+%
+\qquad
+\rb^\evp = \left ( \begin{array}{c} 1 \\ c/\rho \\ c^2 \\ 0 \end{array} \right )
+\end{equation}
+corresponding to $\lambda^\evm = u -c$, $\lambda^\evz = u$,
+$\lambda^\evzs{X} = u$, and $\lambda^\evp = u + c$.  We see that for
+the species, the only non-zero element is for one of the $u$
+eigenvectors ($\rb^\evzs{X}$).  This means that $X_k$ only jumps over
+this middle wave.  In the Riemann solver then, there is no `star'
+state for the species, it just jumps across the contact wave.
+
+To add species into the solver, you simply need to reconstruct $X_k$
+as described above, find the interface values using this new $\Ab(\qb)$
+and associated eigenvectors, solve the Riemann problem, with $X_k$ on
+the interface being simply the left or right state depending on the
+sign of the contact wave speed, and do the conservative update for
+$\rho X_k$ using the species flux.
+
+
+One issue that can arise with species is that even if $\sum_k X_k = 1$
+initially, after the update, that may no longer be true.  There are a
+variety of ways to handle this:
+\begin{itemize}
+\item You can update the species, $(\rho X_k)$ to the new time and then
+define the density to be $\rho = \sum_k (\rho X_k)$---this means that
+you are not relying on the value of the density from the mass continuity
+equation itself.
+
+\item You can force the interface states of $X_k$ to sum to 1.  Because
+the limiting is non-linear, this is where problems can arise.  If the
+interface values of $X_k$ are forced to sum to 1 (by renormalizing), then
+the updated cell-centered value of $X_k$ will as well.  This is the
+approach discussed in \cite{plewamuller:1999}.
+
+\item You can design the limiting procedure to preserve the summation
+property.  This approach is sometimes taken in the combustion field.
+For piecewise linear reconstruction, this can be obtained by computing
+the limited slopes of all the species, and taking the most restrictive
+slope and applying this same slope to all the species.
+\end{itemize}
+
+
+\subsection{Integrating the reaction network}
+
+The reactive portion of our system is:
+\begin{align}
+\frac{dX_k}{dt} &= \omegadot_k \\
+\frac{d(\rho e)}{dt} &= \rho \Hnuc
+\end{align}
+As written, this system is not closed without the equation of state,
+since $\omegadot_k = \omegadot_k(\rho, T, X_k)$, and likewise for
+$\Hnuc$.  We can express the internal energy in terms of the
+temperature as
+\if DEBUG
+\footnote{formally, there should be a composition term here too, of the
+form
+\[
+\sum_k \left . \frac{\partial e}{\partial X_k} \right |_{\rho,T} \frac{dX_k}{dt}  =
+      \sum_k \mu_k \frac{dX_k}{dt} 
+\]
+where $\mu_k$ is the chemical potential.  But this term is zero if we are in chemical
+equilibrium, which is usually assumed (but perhaps should be checked) for astrophysical
+flows.  
+}
+\fi
+\begin{align}
+\frac{de}{dt} &= \left . \frac{\partial e}{\partial T}\right |_\rho \frac{dT}{dt} +
+                 \left . \frac{\partial e}{\partial \rho}\right |_T \frac{d\rho}{dt} \\
+              &= c_v \frac{dT}{dt} + \cancelto{0}{\left . \frac{\partial e}{\partial \rho}\right |_T \frac{d\rho}{dt}}
+\end{align}
+where the latter term cancels only when we use operator splitting,
+because we do not evolve the density during the reaction step.  Note,
+we'd get a slightly different temperature evolution equation if we
+started with enthalpy, $h$, instead of internal energy, with $c_p$
+replacing $c_v$.  Again, this difference only arises because we are
+neglecting the hydrodynamic portions of the temperature evolution
+during the reaction step.
+
+Many simulation codes neglect the evolution of temperature during the
+reaction step (see, e.g., \cite{flash}).
+
+An excellent introduction to integrating astrophysical nuclear
+reaction networks is found in \cite{timmes_nets}.  The main issue with
+reaction networks is that they tend to be stiff, which means that
+implicit integration techniques are needed.  There are a number of
+well-tested, freely available implicit ODE integrators
+(e.g.~\cite{vode}).
+
+For stiff systems, you need to supply both a righthand side routine
+and a Jacobian routine\footnote{although this could be calculated via
+  finite-differences if needed}.
+
+
+
+\section{Burning modes}
+
+\subsection{Convective burning}
+
+
+\subsection{Deflagrations}
+
+
+\subsection{Detonations}
+

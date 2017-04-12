@@ -22,7 +22,7 @@
 
 \hline 
 \endlastfoot
-$A$     & Jacobian matrix  & N/A \\
+$\Ab$     & Jacobian matrix  & N/A \\
 %
 $c$     & sound speed, $c = \sqrt{\Gamma_1 p/\rho}$  & m~s$^{-1}$ \\
 %
@@ -42,9 +42,9 @@ $E$     & specific total energy                      & erg~g$^{-1}$ \\
 %
 $e$     & specific internal energy                   & erg~g$^{-1}$ \\
 %
-$F$     & flux vector                                & N/A \\
+$\Fb$     & flux vector                                & N/A \\
 %
-$g$     & gravitational acceleration                 & cm~s$^{-2}$ \\
+$\gb$     & gravitational acceleration                 & cm~s$^{-2}$ \\
 %
 $\gamma$ & ratio of specific heats, $\gamma = c_p/c_v$ & -- \\
 %
@@ -54,13 +54,13 @@ $h$     & specific enthalpy                          & erg~g$^{-1}$ \\
 %
 $\Ic$   & integral under a (piecewise) parabolic polynomial reconstruction & N/A \\
 %
-$l$     & left eigenvector                           & N/A \\
+$\lb$     & left eigenvector                           & N/A \\
 %
 $\lambda$ & eigenvalue                               & N/A \\
 % 
 $p$     & pressure                                   & erg~cm$^{-3}$ \\
 %
-$r$     & right eigenvector                          & N/A \\
+$\rb$     & right eigenvector                          & N/A \\
 %
 $\riemann(q_L, q_R)$ & Riemann problem between states $q_L$ and $q_R$ & N/A \\
 %
@@ -78,18 +78,19 @@ $X_k$   & mass fraction of the species ($\sum_k X_k = 1$) & -- \\
 %
 $\rho$  & mass density  & g~cm$^{-3}$ \\
 %
-$q$     & primitive variable vector                 & N/A \\
+$\qb$     & primitive variable vector                 & N/A \\
 %
 $\Ub$   & total velocity vector, $\Ub = (u, v)^\intercal$ in 2-d & cm~s$^{-1}$ \\
 %
-$\Ucons$ & conserved variable vector & N/A \\
+$\Uc$   & conserved variable vector & N/A \\
 %
 $u$     & x-velocity   & cm~s$^{-1}$ \\
 %
 $v$     & y-velocity   & cm~s$^{-1}$ \\
 %
-$w$     & characteristic variable                   & N/A \\
+$\wb$     & characteristic variables vector                   & N/A \\
 %
+$\omegadot_k$ & species creation rate                         & s$^{-1}$ \\
 \end{longtable}
 \end{center}
 \renewcommand{\arraystretch}{1.0}

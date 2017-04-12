@@ -16,93 +16,22 @@ spatially constant pressure (and constant-in-time if the domain is
 open).  We'll denote this background pressure as $p_0(r,t)$, where 
 $r$ is a radial coordinate.
 
-From the first law of thermodynamics, $Tds = de + pd(1/\rho)$, we see
+Previously, we derived the pressure evolution with reactive sources
+(see Eq.~\ref{eq:reacting:p}) by following the evolution of pressure
+as a fluid element moves (e.g., the Lagrangian derivative).  For the 
+low Mach flows, we want to see the evolution $p_0$ in the fluid
+element, which is expressed as:
 \begin{equation}
-T \frac{Ds}{Dt} = \frac{De}{Dt} + p_0 \frac{D(1/\rho)}{Dt}
+\ddt{p_0} + \Ub \cdot \nabla p_0 + \Gamma_1 p_0 \nabla \cdot \Ub = \Gamma_1 p_0 \sigma \Hnuc
 \end{equation}
-which is our internal energy evolution equation.  The internal
-energy in a fluid parcel can change due to local heat release and 
-diffusion, so we can write:
+We can rewrite this as a constraint on the velocity field by solving for $\nabla \cdot \Ub$:
 \begin{equation}
-T \frac{Ds}{Dt} = \frac{De}{Dt} + p_0 \frac{D(1/\rho)}{Dt} = H +
-\nabla \cdot (k \nabla T) \equiv \dot{q}
+  \nabla \cdot \Ub + \frac{1}{\Gamma_1 p_0}\frac{Dp_0}{Dt} = \sigma \Hnuc \equiv S
 \end{equation}
-where $H$ is the specific energy generation rate (energy / mass /time)
-and $k$ is the thermal conductivity.
-
-We can derive the constraint on the velocity field by considering the
-Lagrangian derivative of the pressure---this captures the change in
-pressure of a fluid element as it moves through the domain.
-\begin{equation}
-\frac{Dp_0}{Dt} = \left . \frac{\partial p_0}{\partial \rho} \right |_s
-     \frac{D\rho}{Dt} +
-     \left . \frac{\partial p_0}{\partial s} \right |_\rho
-     \frac{Ds}{Dt}
-\end{equation}
-we recognize that $\Gamma_1 \equiv \partial \log p_0/\partial \log \rho |_s$.
-The Maxwell relations tell us that
-\begin{equation}
-\partial p_0/\partial s |_\rho = \rho^2 \partial T/\partial \rho |_s
-\end{equation}
-This gives us the form:
-\begin{equation}
-\frac{Dp_0}{Dt} = \frac{p_0}{\rho} \Gamma_1 \frac{D\rho}{Dt} +
-     \left . \rho^2 \frac{\partial T}{\partial \rho} \right |_s
-     \frac{\dot{q}}{T}
-\end{equation}
-
-We need an expression for $\partial T/\partial \rho |_s$ and terms of
-derivatives of $\rho$ and $T$ (since that is what our equations of
-state typically provide).  Consider $\Gamma_1$, with $p = p(\rho, T)$:
-\begin{equation}
-  \Gamma_1 = \frac{\rho}{p} \left . \frac{dp}{d\rho} \right |_s
-  = \frac{\rho}{p} \left [ p_\rho + p_T \left . \frac{dT}{d\rho} \right |_s \right ]
-\end{equation}
-where we use the shorthand $p_\rho \equiv \partial p/\partial \rho |_T$ and
-$p_T \equiv \partial p/\partial T |_\rho$.  This tells us that
-\begin{equation}
-  \left . \frac{\partial T}{\partial \rho} \right |_s = \frac{p}{\rho p_T} (\Gamma_1 - \chi_\rho)
-\end{equation}
-where $\chi_\rho \equiv \partial \log p / \partial \log \rho |_T$.  Using the following
-relations
-\begin{equation}
-\frac{\Gamma_1}{\chi_\rho} = \frac{c_p}{c_v}
-\end{equation}
-and
-\begin{equation}
-  c_p - c_v = \frac{p}{\rho T} \frac{\chi_T^2}{\chi_\rho}
-\end{equation}
-with $\chi_T \equiv \partial \log p / \partial \log T |_\rho$
-(see, e.g. \cite{HKT} for both of these relations), we can
-write
-\begin{equation}
-  \left . \frac{\partial T}{\partial \rho} \right |_s = \frac{p\chi_T}{\rho^2 c_v}
-\end{equation}
-
-Putting this all together, we have:
-\begin{equation}
-\frac{Dp_0}{Dt} = \frac{p_0}{\rho}\Gamma_1  \frac{D\rho}{Dt}
-   + \frac{p \chi_T}{c_v T} \dot{q}
-\end{equation}
-The continuity equation gives us:
-\begin{equation}
-\frac{D\rho}{Dt} = -\rho \nabla \cdot U
-\end{equation}
-Solving for the velocity divergence, 
-we finally have:
-\begin{align}
-  \nabla \cdot U + \frac{1}{\Gamma_1 p_0}\frac{Dp_0}{Dt} &=
-    \frac{\chi_T }{c_v T \Gamma_1} \dot{q} 
-  = \frac{\chi_T}{c_p \chi_\rho T} \dot{q} \nonumber \\
- &= \frac{p_T}{\rho c_p p_\rho} \dot{q}
-  \equiv \sigma \dot{q}    
-\end{align}
 with
 \begin{equation}
 \sigma = \frac{\partial p_0/\partial T |_\rho}{\rho c_p \partial p_0/\partial \rho |_T}
 \end{equation}
-The $\sigma$ notation follows from \cite{ABRZ:II}, where we abbreviate
-the righthand side as $S$.
 
 This is the general constraint equation for low Mach flow.  Note that the
 only approximation we made is $p \rightarrow p_0$.  This form of the constraint,
@@ -113,7 +42,7 @@ for a general equation of state, was originally derived in \cite{ABRZ:I}.
 A useful limit is smallscale combustion.  In an open domain, we can take
 $p_0$ as constant, so $Dp_0/Dt = 0$, and we are left with
 \begin{equation}
-\nabla \cdot U = S
+\nabla \cdot \Ub = S
 \end{equation}
 This looks like the constraint for incompressible flow, but with a source
 to the divergence.  This source captures the compressible effects due
@@ -129,11 +58,11 @@ appromation we take is that $p_0 = p_0(r)$---i.e., no time
 dependence to the atmosphere.  Finally, we'll consider the case
 with no local heat sources ($S = 0$).  Then we have
 \begin{equation}
-\nabla \cdot U + \frac{1}{\gamma p_0} U \cdot \nabla p_0 = 0
+\nabla \cdot \Ub + \frac{1}{\gamma p_0} \Ub \cdot \nabla p_0 = 0
 \end{equation}
 which is equivalent to
 \begin{equation}
-\nabla \cdot \left ( p_0^{1/\gamma} U \right ) = 0
+\nabla \cdot \left ( p_0^{1/\gamma} \Ub \right ) = 0
 \end{equation}
 This constraint captures the changes in compressibilty due to the 
 background stratification of an atmosphere.  This form was originally
@@ -143,7 +72,7 @@ atmosphere is isentropic, then we know that $d\log p_0 = \gamma d\log \rho_0$,
 where we use $\rho_0$ to represent the density corresponding to $p_0$, and
 we can write this constraint as:
 \begin{equation}
-\nabla \cdot (\rho_0 U) = 0
+\nabla \cdot (\rho_0 \Ub) = 0
 \end{equation}
 This is the traditional anelastic constraint.
 
@@ -330,36 +259,36 @@ with an initial condition of
 
 The compressible momentum equation (written in terms of velocity is):
 \begin{equation}
-\rho \frac{\partial U}{\partial t} + \rho U \cdot \nabla U + \nabla p = \rho g
+\rho \frac{\partial \Ub}{\partial t} + \rho \Ub \cdot \nabla \Ub + \nabla p = \rho \gb
 \end{equation}
 Subtracting off the base state, and defining the perturbational
 pressure (sometimes called the dynamic pressure) as $p^\prime = p -
 p_0$, and perturbational density as $\rho' = \rho - \rho_0$, we have:
 \begin{equation}
-\rho \frac{\partial U}{\partial t} + \rho U \cdot \nabla U + \nabla p' = \rho' g
+\rho \frac{\partial \Ub}{\partial t} + \rho \Ub \cdot \nabla \Ub + \nabla p' = \rho' \gb
 \end{equation}
 or 
 \begin{equation}
-\frac{\partial U}{\partial t} + U \cdot \nabla U + \frac{1}{\rho} \nabla p^\prime = 
-   \frac{\rho^\prime}{\rho} g
+\frac{\partial \Ub}{\partial t} + \Ub \cdot \nabla \Ub + \frac{1}{\rho} \nabla p^\prime = 
+   \frac{\rho^\prime}{\rho} \gb
 \end{equation}
 
 Several authors \cite{KP:2012,VLBWZ:2013} explored the idea of energy
 conservation in a low Mach number system and found that an additional term (which can
 look like a buoyancy) is needed in the low Mach number formulation, yielding:
 \begin{equation}
-\frac{\partial U}{\partial t} + U \cdot \nabla U + 
+\frac{\partial \Ub}{\partial t} + \Ub \cdot \nabla \Ub + 
    \frac{\beta_0}{\rho} \nabla \left (\frac{p^\prime}{\beta_0} \right ) = 
-   \frac{\rho^\prime}{\rho} g
+   \frac{\rho^\prime}{\rho} \gb
 \end{equation}
 
 Completing the system are the continuity equation,
 \begin{equation}
-\frac{\partial \rho}{\partial t} + \nabla \cdot (\rho U) = 0
+\frac{\partial \rho}{\partial t} + \nabla \cdot (\rho \Ub) = 0
 \end{equation}
 and the constraint,
 \begin{equation}
-\nabla \cdot (\beta_0 U) = 0
+\nabla \cdot (\beta_0 \Ub) = 0
 \end{equation}
 with $\beta_0 = p_0^{1/\gamma}$.
 
@@ -372,21 +301,21 @@ The general solution procedure is for a single step is:
 \begin{enumerate}
   \renewcommand{\labelenumi}{\Roman{enumi}.}
   
-\item {\em Predict $U$ to the interfaces}
+\item {\em Predict $\Ub$ to the interfaces}
 
-\item {\em Enforce the divergence constraint on the interface $U$'s (the
-  MAC projection) to get $U^\mathrm{adv}$.}
+\item {\em Enforce the divergence constraint on the interface $\Ub$'s (the
+  MAC projection) to get $\Ub^\mathrm{adv}$.}
 
   Decomposing the velocity field as
   \begin{equation}
-    U^\star = U^d + \frac{\beta_0}{\rho} \nabla \phi
+    \Ub^\star = \Ub^d + \frac{\beta_0}{\rho} \nabla \phi
   \end{equation}
   as suggested from the form of the momentum equation, our Poisson
   equation can be defined by multiplying by $\beta_0$ and taking the
-  divergence, and using $\nabla \cdot (\beta_0 U^d) = 0$, giving
+  divergence, and using $\nabla \cdot (\beta_0 \Ub^d) = 0$, giving
   \begin{equation}
     \nabla \cdot \frac{\beta_0^2}{\rho} \nabla \phi =
-    \nabla \cdot (\beta_0 U^\star)
+    \nabla \cdot (\beta_0 \Ub^\star)
   \end{equation}
   Note that when written like this, $\phi$ has units of
   $p^\prime/\beta_0$. \MarginPar{there is a $\Delta t$ here too}
@@ -399,7 +328,7 @@ The general solution procedure is for a single step is:
   (note that, since $\beta_0$ is one-dimensional, we only average in
   the vertical direction).  The divergence term is then:
   \begin{equation}
-    \left [ \nabla \cdot (\beta_0 U) \right ]_{i,j}^\mathrm{adv} =
+    \left [ \nabla \cdot (\beta_0 \Ub) \right ]_{i,j}^\mathrm{adv} =
           {\beta_0}_j \frac{u^\mathrm{adv}_{i+1/2,j} - 
             u^\mathrm{adv}_{i-1/2,j}}{\Delta x} +
           \frac{{\beta_0}_{j+1/2} v^\mathrm{adv}_{i,j+1/2} - 
@@ -416,11 +345,11 @@ The general solution procedure is for a single step is:
   We then solve
   \begin{equation}
     (L_\eta\phi)_{i,j} =
-    \left [ \nabla \cdot (\beta_0 U) \right ]_{i,j}^\mathrm{adv}
+    \left [ \nabla \cdot (\beta_0 \Ub) \right ]_{i,j}^\mathrm{adv}
   \end{equation}
   Once we solve for $\phi$, we correct the velocity as:
   \begin{equation}
-    U^\mathrm{new} = U^\star - \frac{\beta_0}{\rho} \nabla \phi
+    \Ub^\mathrm{new} = \Ub^\star - \frac{\beta_0}{\rho} \nabla \phi
   \end{equation}
   Since the MAC velocities are edge-centered, our correction appears as:
   \begin{align}
@@ -522,14 +451,14 @@ the continuity equation:
 \end{align}
 
 
-\item {\em Update $U^n$ to $U^{n+1,\star}$}
+\item {\em Update $\Ub^n$ to $\Ub^{n+1,\star}$}
   
-\item {\em Enforce the divergence constraint on $U^{n+1}$}
+\item {\em Enforce the divergence constraint on $\Ub^{n+1}$}
 
   For the final projection, we have cell-centered velocties.  We 
   define the divergence term as:
   \begin{equation}
-    \left [ \nabla \cdot (\beta_0 U) \right ]_{i,j}^\star =
+    \left [ \nabla \cdot (\beta_0 \Ub) \right ]_{i,j}^\star =
           {\beta_0}_j \frac{u^\star_{i+1,j} - 
             u^\star_{i-1,j}}{2\Delta x} +
           \frac{{\beta_0}_{j+1} v^\star_{i,j+1} - 
@@ -547,7 +476,7 @@ is needed if the velocity field is initialially zero.  In \cite{ABNZ:III},
 a constraint based on the buoyancy forcing is used.  First, we compute
 the maxiumum buoyancy acceleration,
 \begin{equation}
-a_\mathrm{max} = \max \left \{ \left |\frac{\rho'g}{\rho} \right | \right \}
+a_\mathrm{max} = \max \left \{ \left |\frac{\rho'\gb}{\rho} \right | \right \}
 \end{equation}
 and then 
 \begin{equation}
@@ -572,9 +501,9 @@ Next we need to find $\nabla {p^\prime}^{n-1/2}$ for the first step.
 Taking $p = p_0 + p^\prime$, with $p_0 = \mathrm{constant}$, the system 
 becomes:
 \begin{align}
-\frac{\partial \rho}{\partial t} + \nabla \cdot (\rho U) &= 0 \\
-\frac{\partial \rho U}{\partial t} + \nabla \cdot (\rho U U) + \nabla p^\prime &= 0 \\
-\nabla \cdot U &= S
+\frac{\partial \rho}{\partial t} + \nabla \cdot (\rho \Ub) &= 0 \\
+\frac{\partial \rho \Ub}{\partial t} + \nabla \cdot (\rho \Ub \Ub) + \nabla p^\prime &= 0 \\
+\nabla \cdot \Ub &= S
 \end{align}
 
 \subsection{Species}
@@ -582,15 +511,15 @@ becomes:
 
 \subsection{Constraint}
 
-Our constraint equation is $\nabla \cdot U = S$.  Decomposing the
+Our constraint equation is $\nabla \cdot \Ub = S$.  Decomposing the
 velocity field as
 \begin{equation}
-U^\star = U^d + \frac{1}{\rho} \nabla \phi
+\Ub^\star = \Ub^d + \frac{1}{\rho} \nabla \phi
 \end{equation}
 our Poisson equation can be defined by taking the divergence, and
-using $\nabla \cdot U^d = S$, giving
+using $\nabla \cdot \Ub^d = S$, giving
 \begin{equation}
-\nabla \cdot \frac{1}{\rho} \nabla \phi = \nabla \cdot U^\star - S
+\nabla \cdot \frac{1}{\rho} \nabla \phi = \nabla \cdot \Ub^\star - S
 \end{equation}
 
 
@@ -604,13 +533,13 @@ The general solution procedure is for a single step is:
   \item Do the hydrodynamcis for $\Delta t$
 
     \begin{itemize}
-    \item Predict $U$ to the interfaces 
-    \item Enforce the divergence constraint on the interface $U$'s (the
-      MAC projection) to get $U^\mathrm{adv}$.
+    \item Predict $\Ub$ to the interfaces 
+    \item Enforce the divergence constraint on the interface $\Ub$'s (the
+      MAC projection) to get $\Ub^\mathrm{adv}$.
     \item Predict $\rho$ to the interfaces
     \item Do the conservative update of $\rho$
-    \item Update $U^n$ to $U^{n+1}$
-    \item Enforce the divergence constraint on $U^{n+1}$
+    \item Update $\Ub^n$ to $\Ub^{n+1}$
+    \item Enforce the divergence constraint on $\Ub^{n+1}$
     \end{itemize}
 
   \item React for $\Delta t/2$
