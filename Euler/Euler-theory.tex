@@ -517,20 +517,20 @@ u + \frac{2c}{\gamma - 1} = \mbox{constant} \quad \mbox{across the left rarefact
 
 This allows you to link the state to the left of the rarefaction to the star state:
 \begin{equation}
-u_l + \frac{2c_l}{\gamma - 1} = u_\star + \frac{2c_\star}{\gamma -1}
+u_L + \frac{2c_L}{\gamma - 1} = u_\star + \frac{2c_\star}{\gamma -1}
 \end{equation}
 and
 \begin{equation}
-\frac{p_l}{\rho_l^\gamma} = \frac{p_\star}{\rho_\star^\gamma}
+\frac{p_L}{\rho_L^\gamma} = \frac{p_\star}{\rho_\star^\gamma}
 \end{equation}
 from our constant-entropy equation of state.  Together, show that this
 gives:
 \begin{equation}
-u_{\star,l} = u_l + \frac{2c_l}{\gamma - 1} \left [ 1 - \left ( \frac{p_\star}{p_l}\right )^{(\gamma - 1)/2\gamma} \right ]
+u_{\star,L} = u_L + \frac{2c_L}{\gamma - 1} \left [ 1 - \left ( \frac{p_\star}{p_L}\right )^{(\gamma - 1)/2\gamma} \right ]
 \end{equation}
 A similar construction can be done for the right rarefaction, yielding:
 \begin{equation}
-u_{\star,r} = u_r - \frac{2c_r}{\gamma - 1} \left [ 1 - \left ( \frac{p_\star}{p_r}\right )^{(\gamma - 1)/2\gamma} \right ]
+u_{\star,R} = u_R - \frac{2c_R}{\gamma - 1} \left [ 1 - \left ( \frac{p_\star}{p_R}\right )^{(\gamma - 1)/2\gamma} \right ]
 \end{equation}
 
 \end{exercise}
@@ -539,8 +539,8 @@ For a general equation of state, there is not a closed form, but we would need
 to integrate our system to get $u_\star = u(p_\star)$.
 
 We'll denote the solution across the left rarefaction as $u_\star =
-u_l^{rare}(p_\star)$ and across the right rarefaction as $u_\star =
-u_r^{rare}(p_\star)$.
+u_L^{rare}(p_\star)$ and across the right rarefaction as $u_\star =
+u_R^{rare}(p_\star)$.
 
 \subsection{Shocks}
 
@@ -689,6 +689,7 @@ The one other piece of information we need is the shock speed.  We can
 get this from the mass flux, $W_s$, definition, e.g., $W_L = \rho_L
 \hat{u}_L = \rho_L (u_L - S)$,:
 \begin{equation}
+\label{eq:euler-theory:shockgeneral}
 S = u_s \mp \frac{W_s}{\rho_s} \quad\mbox{`$-$' for left, `+' for right}\\
 \end{equation}
 
@@ -742,14 +743,14 @@ shows all of the possible states one can reach from the current state
 through either a shock or rarefaction.  There are two such curves, one
 corresponding to the left and one to the right state:
 \begin{equation}
-u_{\star,l}(p) = \begin{cases}
-   u_{\star,l}^\mathrm{shock}(p) & p > p_l \\
-   u_{\star,l}^\mathrm{rare}(p) & p \le p_l 
+u_{\star,L}(p) = \begin{cases}
+   u_{\star,L}^\mathrm{shock}(p) & p > p_L \\
+   u_{\star,L}^\mathrm{rare}(p) & p \le p_L 
    \end{cases}
 \qquad
 u_{\star,r}(p) = \begin{cases}
-   u_{\star,r}^\mathrm{shock}(p) & p > p_r \\
-   u_{\star,r}^\mathrm{rare}(p) & p \le p_r 
+   u_{\star,R}^\mathrm{shock}(p) & p > p_R \\
+   u_{\star,R}^\mathrm{rare}(p) & p \le p_R 
    \end{cases}
 \end{equation}
 The solution
@@ -836,15 +837,49 @@ rarefaction.  To find out which region the interface falls in, we simply
 look at the speeds.  
 
 The first speed to consider is the contact wave, that has a speed of
-simply $S_c = u_\star$.  If $S_c > \xi$, then we are choosing between
-the $L$ and $L_\star$ states (cases c and d in
-Figure~\ref{fig:euler:riemann_sample}).  If $S_c < \xi$, then we are
-choosing between $R$ and $R_\star$ states (cases a and b).
+simply $S_c = u_\star$.  If $S_c < \xi$, then we are choosing between
+$R$ and $R_\star$ states (cases a and b).  If $S_c > \xi$, then we are
+choosing between the $L$ and $L_\star$ states (cases c and d in
+Figure~\ref{fig:euler:riemann_sample})\footnote{for the special case
+  where $S_c = 0$, we usually take the solution to be the average of
+  the $L_\star$ and $R_\star$ states.  Testing for this explicitly
+  rather than using $\ge$ in a check is important for maintaining
+  symmetry (see \S~\ref{sec:euler-methods:shocktubes}).}.
 
-This will leave just a single wave to consider: the right wave for
-cases a and b; and the left wave for cases c and d.  We need the wave
-speed for this---it will depend on whether it is a shock or a
-rarefaction.
+The direction of the contact reduces the problem down to choosing
+between just two regions, either $L$-$L_\star$ or $R$-$R_\star$.  This
+leaves just a single wave to consider: the right wave for cases a and
+b; and the left wave for cases c and d.  We need the wave speed for
+this---it will depend on whether it is a shock or a rarefaction.  
+
+For a shock, the wave speed is given by
+Eq.~\ref{eq:euler-theory:shockgeneral}.  We do the same procedure as
+before.  For example, for cases a and b, we look at $S_R$, the
+right-moving shock speed for the 3-wave.  If $S_R > 0$, then the
+interface is in the $R_\star$ state (case b), while if $S_R < 0$, then
+the interface is in the $R$ state (case a).  A similar process
+holds for the left-moving shock and cases c and d.
+
+For a rarefaction, the
+relevant speeds are the characteristic speeds on either side of the
+rarefaction.  We usually talk about the leading part of the
+rarefaction (the {\em head}) and trailing part (the {\em tail}).  The
+corresponding wave speeds are:
+\begin{itemize}
+\item left (1) rarefaction:
+  \begin{itemize} 
+  \item $\lambda_\mathrm{head} = u_L - c_L$
+  \item $\lambda_\mathrm{tail} = u_\star - c_\star$
+  \end{itemize}
+  
+\item right (3) rarefaction:
+  \begin{itemize} 
+  \item $\lambda_\mathrm{head} = u_R + c_R$
+  \item $\lambda_\mathrm{tail} = u_\star + c_\star$
+  \end{itemize}
+\end{itemize}
+The nature of the rarefaction is such that it spreads out,
+$|\lambda_\mathrm{head}| > |\lambda_\mathrm{tail}|$.
 
 
 
