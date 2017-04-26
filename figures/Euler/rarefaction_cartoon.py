@@ -23,73 +23,60 @@ class RiemannWaves(object):
         self.rpos = rpos
 
         # these control the spacing of the waves in the figure
-        self.theta = np.radians(25)
         self.h = 1.0
 
         # this controls the spacing of the structure in the rarefaction
-        self.rare_theta = np.radians(3)
-        self.tail = 5*self.rare_theta
+        self.rare_theta = np.radians(2.5)
 
-        if rpos < 1:
-            self.left = -45
-            self.center = 5
-            self.right = 40
+        if rpos < 0:
+            self.head = np.radians(-45)
+            self.center = np.radians(5)
+            self.right = np.radians(40)
         elif rpos == 0:
-            self.left = 0 - 0.5
+            self.head = 0 - 2.5*self.rare_theta
+            self.center = np.radians(30)
+            self.right = np.radians(45)
+        else:
+            self.head = np.radians(5)
+            self.center = np.radians(35)
+            self.right = np.radians(50)
+
+        self.tail = self.head + 5*self.rare_theta
 
     def draw(self, output="plot.png", label=None):
         """ draw the wave structure """
 
-        # by default, we'll make the waves theta degrees apart
-        if self.right < 0:
-            angle3 = -0.75*self.theta
-        elif self.right > 0 and self.contact < 0:
-            angle3 = 0.534*self.theta
-        elif self.right > 0 and self.contact > 0 and self.left < 0:
-            angle3 = 0.966*self.theta
-        else:
-            angle3 = 2.25*self.theta
-
-        anglec = angle3 - 0.75*self.theta
-        angle1 = anglec - 0.75*self.theta
-
-        print(np.degrees(angle1), np.degrees(anglec), np.degrees(angle3))
-
-        # each wave has a point on the origin.  The maximum height we want to draw to is self.h
-        x1 = self.h*np.tan(angle1)
-        xc = self.h*np.tan(anglec)
-        x3 = self.h*np.tan(angle3)
-
-        print(x1, xc, x3)
+        # each wave has a point on the origin.  The maximum height we
+        # want to draw to is self.h -- we'll do the center and right
+        xc = self.h*np.tan(self.center)
+        x3 = self.h*np.tan(self.right)
 
         plt.clf()
 
         # draw the waves
-        plt.plot([0, x1], [0, self.h], color="C0")
         plt.plot([0, xc], [0, self.h], color="C0")
         plt.plot([0, x3], [0, self.h], color="C0")
 
-        # label regions
-        x1h = 0.75*self.h*np.tan(angle1)
-        xch = 0.75*self.h*np.tan(anglec)
-        x3h = 0.75*self.h*np.tan(angle3)
+        # rarefaction
+        for t in np.arange(self.head, self.tail+self.rare_theta, 
+                           self.rare_theta):
+            xr = self.h*np.tan(t)
+            plt.plot([0, xr], [0, self.h], color="C0")
 
-        dx = max(xch - x1h, x3h - xch)
-        xL = x1h - 0.6*dx
-        xLstar = 0.5*(x1h + xch)
-        xRstar = 0.5*(xch + x3h)
-        xR = x3h + 0.6*dx
-
-        plt.text(xL, 0.65*self.h, r"$L$", horizontalalignment="right", color="C0")
-        plt.text(xLstar, 0.75*self.h, r"$L\star$", horizontalalignment="center", color="C0")
-        plt.text(xRstar, 0.75*self.h, r"$R\star$", horizontalalignment="center", color="C0")
-        plt.text(xR, 0.65*self.h, r"$R$", horizontalalignment="left", color="C0")
+        xhead = self.h*np.tan(self.head)
+        xtail = self.h*np.tan(self.tail) #+self.rare_theta)
 
         # draw the grid
-        L = 1.1*max(abs(x1), abs(x3))
+        L = 1.1*max(abs(xhead), abs(x3))
 
-        plt.plot([-L, L], [0, 0], color="k")
-        plt.plot([0, 0], [0, 1.2*self.h], color="k")
+        plt.plot([-L, L], [0, 0], color="k", zorder=-100)
+        plt.plot([0, 0], [0, 1.2*self.h], color="k", zorder=-100)
+
+        plt.text(xhead, self.h, r"$\lambda_\mathrm{head}$", 
+                 horizontalalignment="right", color="C0")
+
+        plt.text(xtail, self.h, r"$\lambda_\mathrm{tail}$", 
+                 horizontalalignment="left", color="C0")
 
         f = plt.gcf()
 
@@ -100,7 +87,6 @@ class RiemannWaves(object):
         plt.axis("off")
         plt.subplots_adjust(left=0.02, right=0.95, bottom=0.05, top=0.95)
 
-
         f.set_size_inches(5.0, 3.5)
 
         plt.tight_layout()
@@ -109,14 +95,11 @@ class RiemannWaves(object):
 
 if __name__ == "__main__":
 
-    rw = RiemannWaves(left=-1, contact=-1, right=-1)
-    rw.draw("riemann_waves_ifc_R.pdf", label="(a)")
+    rw = RiemannWaves(rpos=-1)
+    rw.draw("rarefaction_left.pdf", label="(a)")
 
-    rw = RiemannWaves(left=-1, contact=-1, right=1)
-    rw.draw("riemann_waves_ifc_Rstar.pdf", label="(b)")
+    rw = RiemannWaves(rpos=0)
+    rw.draw("rarefaction_center.pdf", label="(b)")
 
-    rw = RiemannWaves(left=-1, contact=1, right=1)
-    rw.draw("riemann_waves_ifc_Lstar.pdf", label="(c)")
-
-    rw = RiemannWaves(left=1, contact=1, right=1)
-    rw.draw("riemann_waves_ifc_L.pdf", label="(d)")
+    rw = RiemannWaves(rpos=1)
+    rw.draw("rarefaction_right.pdf", label="(c)")
