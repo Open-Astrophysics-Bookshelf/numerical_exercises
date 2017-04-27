@@ -14,7 +14,19 @@ a virtual realization of some astrophysical system that you are
 interested in.  Just like that.  In practice, it is not this simple.
 All simulation codes make approximations---these start even before one
 turns to the computer, simply by making a choice of what equations are
-to be solved.  Typically, we have a system of PDEs, and we need to
+to be solved.  The main approximation that we will follow here, is the
+{\em fluid approximation} (see Figure~\ref{fig:intro:fluid_scale}).
+We don't want to focus on the motions of the individual atoms, nuclei,
+electrons, and photons in our system, so we work on a scale that is
+much larger than the mean free path of the system.  This allows us to
+describe the bulk properties of a fluid element, which in turn is
+small compared to the system of interest.
+
+Within the fluid approximation, additional approximations are made,
+both in terms of the physics included and how we represent a continuous
+fluid in the finite-memory of a computer (the {\em discretization} process).
+
+Typically, we have a system of PDEs, and we need to
 convert the continuous functional form of our system into a discrete
 form that can be represented in the finite memory of a computer.  This
 introduces yet more approximation.
@@ -37,10 +49,22 @@ simulations reveal.  To really understand the limits of your
 simulations, you should do parameter and convergence studies.
 
 There is no ``\"uber-code''.  Every algorithm begins with
-approximations and has limitations.  Comparisons between different
-codes are important and common in our field (see, for example,
+approximations and has limitations.  
+Comparisons between different codes are important and common in our
+field (see, for example,
 \cite{frenk:1999,dimonte:2004,devalborro:2006}), and build confidence
 in the results that we are on the right track.
+
+%
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.9\linewidth]{fluid_scale}
+\caption[The fluid scale.]{\label{fig:intro:fluid_scale} The fluid
+  scale sits in an intermediate range---much smaller than the system
+  of interest (a star in this case), but much larger than the mean
+  free path.}
+\end{figure}
+%
 
 To really understand your simulations, you need to know what the code
 your are using is doing under the hood.  This means understanding the
