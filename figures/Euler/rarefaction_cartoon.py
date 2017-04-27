@@ -102,8 +102,8 @@ class RiemannWaves(object):
         xR = xr + fac*dx
 
         plt.text(xL, 0.65*self.h, r"$L$", horizontalalignment="right", color="C0")
-        plt.text(xLstar, 0.75*self.h, r"$L\star$", horizontalalignment="center", color="C0")
-        plt.text(xRstar, 0.75*self.h, r"$R\star$", horizontalalignment="center", color="C0")
+        plt.text(xLstar, 0.75*self.h, r"$L_\star$", horizontalalignment="center", color="C0")
+        plt.text(xRstar, 0.75*self.h, r"$R_\star$", horizontalalignment="center", color="C0")
         plt.text(xR, 0.65*self.h, r"$R$", horizontalalignment="left", color="C0")
 
 
