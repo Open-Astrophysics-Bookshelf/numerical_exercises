@@ -78,6 +78,35 @@ class RiemannWaves(object):
         plt.text(xtail, self.h, r"$\lambda_\mathrm{tail}$", 
                  horizontalalignment="left", color="C0")
 
+
+        dx = abs(0.75*self.h*np.tan(0.5*(self.head + self.tail)))
+
+        if self.rpos == -1:
+            fac = 0.4
+        elif self.rpos == 0:
+            fac = 1.0
+        else:
+            fac = 1.0
+
+        xh = 0.75*self.h*np.tan(self.head)
+        xt = 0.75*self.h*np.tan(self.tail)
+        xc = 0.75*self.h*np.tan(self.center)
+        xr = 0.75*self.h*np.tan(self.right)
+
+        if dx == 0:
+            dx = abs(xh)
+
+        xL = xh - fac*dx
+        xLstar = 0.5*(xt + xc)
+        xRstar = 0.5*(xc + xr)
+        xR = xr + fac*dx
+
+        plt.text(xL, 0.65*self.h, r"$L$", horizontalalignment="right", color="C0")
+        plt.text(xLstar, 0.75*self.h, r"$L\star$", horizontalalignment="center", color="C0")
+        plt.text(xRstar, 0.75*self.h, r"$R\star$", horizontalalignment="center", color="C0")
+        plt.text(xR, 0.65*self.h, r"$R$", horizontalalignment="left", color="C0")
+
+
         f = plt.gcf()
 
         # label?
