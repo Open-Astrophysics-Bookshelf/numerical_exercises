@@ -16,18 +16,18 @@ We will solve the Euler equations using a high-order {\em Godunov
 interfaces are computed by solving the Riemann problem for our system.
 The finite-volume update for our system appears as:
 \begin{equation}
-\Uc^{n+1}_i = \Uc^n_i + \frac{\Delta t}{\Delta x} \left ( \Fb_{i-1/2}^{n+1/2} - \Fb_{i+1/2}^{n+1/2} \right )
+\Uc^{n+1}_i = \Uc^n_i + \frac{\Delta t}{\Delta x} \left ( \Fb_{i-\myhalf}^{n+\myhalf} - \Fb_{i+\myhalf}^{n+\myhalf} \right )
 \end{equation}
 This says that each of the conserved quantities in $\Uc$ change only due
 to the flux of that quantity through the boundary of the cell.
 
 Instead of approximating the flux itself on the interface, we find an
-approximation to the state on the interface, $\Uc_{i-1/2}^{n+1/2}$ and
-$\Uc_{i+1/2}^{n+1/2}$ and use this with the flux function to define the
+approximation to the state on the interface, $\Uc_{i-\myhalf}^{n+\myhalf}$ and
+$\Uc_{i+\myhalf}^{n+\myhalf}$ and use this with the flux function to define the
 flux through the interface:
 \begin{align}
-\Fb_{i-1/2}^{n+1/2} &= \Fb(\Uc_{i-1/2}^{n+1/2}) \\
-\Fb_{i+1/2}^{n+1/2} &= \Fb(\Uc_{i+1/2}^{n+1/2})
+\Fb_{i-\myhalf}^{n+\myhalf} &= \Fb(\Uc_{i-\myhalf}^{n+\myhalf}) \\
+\Fb_{i+\myhalf}^{n+\myhalf} &= \Fb(\Uc_{i+\myhalf}^{n+\myhalf})
 \end{align}
 To find this interface state, we predict left and right states at each
 interface (centered in time), which are the input to the Riemann
@@ -43,7 +43,7 @@ structure.  The interface states in terms of the primitive variables
 can be converted into the interface states of the conserved variables
 through a simple algebraic transformation,
 \begin{equation}
-\Uc_{i+1/2,L}^{n+1/2} = \Uc(\qb_{i+1/2,L}^{n+1/2})
+\Uc_{i+\myhalf,L}^{n+\myhalf} = \Uc(\qb_{i+\myhalf,L}^{n+\myhalf})
 \end{equation}
 
 % figure made with figures/Euler/riemann-states.py
@@ -52,7 +52,7 @@ through a simple algebraic transformation,
 \includegraphics[width=\linewidth]{riemann_comp}
 \caption[The left and right states for the Riemann
   problem]{\label{fig:riemann} The left and right states at interface
-  $i+1/2$.  The arrow indicates the flux through the interface, as
+  $i+\myhalf$.  The arrow indicates the flux through the interface, as
   computed by the Riemann solver using these states as input.}
 \end{figure}
 
@@ -89,10 +89,10 @@ that build off of these ideas below.
 
 The simplest possible reconstruction of the data is piecewise constant.
 This is what was done in the original Godunov method~\cite{godunov:1959}.  For the interface
-marked by $i+1/2$, the left and right states on the interface are simply:
+marked by $i+\myhalf$, the left and right states on the interface are simply:
 \begin{align}
-\Uc_{i+1/2,L} &= \Uc_i \\
-\Uc_{i+1/2,R} &= \Uc_{i+1}
+\Uc_{i+\myhalf,L} &= \Uc_i \\
+\Uc_{i+\myhalf,R} &= \Uc_{i+1}
 \end{align}
 This does not take into account in any way how the state $\Uc$ may be changing
 through the cell.  As a result, it is first-order accurate in space, and since
@@ -119,14 +119,14 @@ data.
   slopes and the solid line shows the limited slopes.}
 \end{figure}
 
-Consider constructing the left state at the interface $i+1/2$ (see
+Consider constructing the left state at the interface $i+\myhalf$ (see
 Figure~\ref{fig:riemann}).  Just like for the advection equation, we
 do a Taylor expansion through $\Delta x/2$ to bring us to the
 interface, and $\Delta t/2$ to bring us to the midpoint in time.
 Starting with $\qb_i$, the cell-centered primitive variable, expanding
 to the right interface (to create the left state there) gives:
 \begin{align}
-\qb_{i+1/2,L}^{n+1/2} &= \qb_i^n +
+\qb_{i+\myhalf,L}^{n+\myhalf} &= \qb_i^n +
     \left . \frac{\Delta x}{2} \frac{\partial \qb}{\partial x} \right |_i +
     \frac{\Delta t}{2} \underbrace{\left .\frac{\partial \qb}{\partial t} \right |_i}_{= -\Ab \partial \qb / \partial x} + \ldots \\
 &= \qb_i^n + \frac{\Delta x}{2} \left . \frac{\partial \qb}{\partial x} \right |_i
@@ -150,7 +150,7 @@ that the `$1$'
 in Eq.~\ref{eq:taylorstate} is the identity, $I = LR$, we rewrite this
 expression as:
 \begin{equation}
-\qb_{i+1/2,L}^{n+1/2} = \qb_i^n +
+\qb_{i+\myhalf,L}^{n+\myhalf} = \qb_i^n +
      \frac{1}{2} \left [ \Rb\Lb - \frac{\Delta t}{\Delta x} \Rb\Lambdab \Lb \right ]_i \overline{\Delta \qb}_i
 \end{equation}
 We see the common factor of $\Lb \Delta \qb$.  We now write this back in
@@ -259,7 +259,7 @@ variables proportion to the right eigenvector, $\rb^\enu$.
 The resulting vector
 for the left state is:
 \begin{equation}
-\qb_{i+1/2,L}^{n+1/2} = \qb_i^n + \frac{1}{2} \sum_{\nu; \lambda^{(\nu)} \ge 0}
+\qb_{i+\myhalf,L}^{n+\myhalf} = \qb_i^n + \frac{1}{2} \sum_{\nu; \lambda^{(\nu)} \ge 0}
   \left [ 1 - \frac{\Delta t}{\Delta x} \lambda_i^{(\nu)} \right ] (\lb_i^{(\nu)} \cdot \overline{\Delta \qb}_i) \rb_i^{(\nu)}
 \end{equation}
 Note that we make a slight change here, and only include a term in the sum if
@@ -268,9 +268,9 @@ $\Delta t \lambda^\enu/\Delta x$ inside the brackets is simply the CFL
 number for the wave $\nu$.
 
 Starting with the data in the $i+1$ zone and expanding to the left, we can
-find the right state on the $i+1/2$ interface:
+find the right state on the $i+\myhalf$ interface:
 \begin{equation}
-\qb_{i+1/2,R}^{n+1/2} = \qb_{i+1}^n - \frac{1}{2} \sum_{\nu; \lambda^{(\nu)} \le 0}
+\qb_{i+\myhalf,R}^{n+\myhalf} = \qb_{i+1}^n - \frac{1}{2} \sum_{\nu; \lambda^{(\nu)} \le 0}
   \left [ 1 + \frac{\Delta t}{\Delta x} \lambda_{i+1}^{(\nu)} \right ] (\lb_{i+1}^{(\nu)} \cdot \overline{\Delta \qb}_{i+1}) \rb_{i+1}^{(\nu)}
 \end{equation}
 
@@ -306,12 +306,12 @@ the interface state, and that the characteristic decomposition simply adds
 up all these jumps, we can subtract off the reference state and
 project the result.  In other words, we can write:
 \begin{equation}
-\qb_{i+1/2,L}^{n+1/2} - \qb_\mathrm{ref} = \qb_i^n - \qb_\mathrm{ref} +
+\qb_{i+\myhalf,L}^{n+\myhalf} - \qb_\mathrm{ref} = \qb_i^n - \qb_\mathrm{ref} +
   \frac{1}{2} \left [ 1 - \frac{\Delta t}{\Delta x} \Ab_i \right ] \overline{\Delta \qb}_i
 \label{eq:lin_decomp}
 \end{equation}
 Then we subject the RHS to the characteristic projection---this tells
-us how much of the quantity $\qb_{i+1/2,L}^{n+1/2} - \qb_\mathrm{ref}$
+us how much of the quantity $\qb_{i+\myhalf,L}^{n+\myhalf} - \qb_\mathrm{ref}$
 reaches the interface.  Colella \& Glaz (p.\ 278) and Colella
 (Eq.\ 2.11) suggest
 \begin{equation}
@@ -324,13 +324,13 @@ the largest portion of the linear profiles.  Physically, this
 reference state represents the jump carried by the fastest wave
 moving toward the interface.  Then,
 \begin{equation}
-\qb_{i+1/2,L}^{n+1/2} - \tilde{\qb}_{i,L} = \frac{1}{2} \frac{\Delta t}{\Delta x}
+\qb_{i+\myhalf,L}^{n+\myhalf} - \tilde{\qb}_{i,L} = \frac{1}{2} \frac{\Delta t}{\Delta x}
   \left [ \max(\lambda_i^\evp,0) - \Ab_i \right ] \overline{\Delta \qb}_i
 \end{equation}
 and projecting this RHS (see Colella \& Glaz Eq. 43; Miller \& Colella Eq. 87),
 and isolating the interface state, we have
 \begin{align}
-\qb_{i+1/2,L}^{n+1/2} &= \tilde{\qb}_{i,L} + \frac{1}{2} \frac{\Delta t}{\Delta x}
+\qb_{i+\myhalf,L}^{n+\myhalf} &= \tilde{\qb}_{i,L} + \frac{1}{2} \frac{\Delta t}{\Delta x}
        \sum_{\nu; \lambda^{(\nu)} \ge 0} \lb_i^{(\nu)} \cdot \left [ \max(\lambda_i^\evp,0) - \Ab_i \right ]
                                            \overline{\Delta \qb}_i \, \rb_i^{(\nu)} \\
                     &= \tilde{\qb}_{i,L} + \frac{1}{2} \frac{\Delta t}{\Delta x}
@@ -342,7 +342,7 @@ This is equivalent to the expression in Saltzman~\cite{saltzman:1994}
 Colella~\cite{colella:1990} (p.\ 191, the group of expressions at the
 end).  The corresponding state to the right of this interface is:
 \begin{equation}
-\qb_{i+1/2,R}^{n+1/2} = \tilde{\qb}_{i+1,R} + \frac{1}{2} \frac{\Delta t}{\Delta x}
+\qb_{i+\myhalf,R}^{n+\myhalf} = \tilde{\qb}_{i+1,R} + \frac{1}{2} \frac{\Delta t}{\Delta x}
        \sum_{\nu; \lambda^{(\nu)} \le 0}
        \left [ \min(\lambda_{i+1}^\evm,0) - \lambda_{i+1}^{(\nu)} \right ]
        (\lb_{i+1}^{(\nu)} \cdot \overline{\Delta \qb}_{i+1}) \, \rb_{i+1}^{(\nu)}
@@ -357,10 +357,10 @@ $\lambda^\evm$, the leftmost eigenvalue):
 \ \\
 
 Side note: the data in zone $i$ will be used to construct the right
-state at $i-1/2$ (the left interface) and the left state at $i+1/2$
+state at $i-\myhalf$ (the left interface) and the left state at $i+\myhalf$
 (the right interface) (see Figure~\ref{fig:states}).  For this reason,
 codes usually compute the eigenvectors/eigenvalues for that zone and
-then compute $\qb_{i-1/2,R}^{n+1/2}$ together with $\qb_{i+1/2,L}^{n+1/2}$
+then compute $\qb_{i-\myhalf,R}^{n+\myhalf}$ together with $\qb_{i+\myhalf,L}^{n+\myhalf}$
 in a loop over the zone centers.
 
 % figure made by figures/Euler/states.py
@@ -405,17 +405,17 @@ PPM~\cite{colellawoodward:1984} (see Eqs.\ 88-90).  Starting with
 Eq.~\ref{eq:lin_decomp}, we can write this (after the characteristic
 projection) as
 \begin{equation}
-\qb_{i+1/2,L}^{n+1/2} = \tilde{\qb}_+ -
+\qb_{i+\myhalf,L}^{n+\myhalf} = \tilde{\qb}_+ -
    \sum_{\nu;\lambda^{(\nu)}\ge 0} \lb_i^{(\nu)} \cdot \left \{
         \tilde{\qb}_+ - \left [ \qb_i^n +
             \frac{1}{2} \left ( 1 - \frac{\Delta t}{\Delta x} \lambda_i^{(\nu)} \right ) \overline{\Delta \qb}_i \right ]
        \right \} \rb_i^{(\nu)}
 \end{equation}
 Miller \& Colella rewrite the portion inside the $[\ldots]$
-recognizing that (similar to M\&C Eq.\ 88, but for the $i+1/2,L$ interface):
+recognizing that (similar to M\&C Eq.\ 88, but for the $i+\myhalf,L$ interface):
 \begin{equation}
   \qb_i^n + \frac{1}{2} \left (1 - \frac{\Delta t}{\Delta x} \lambda_i^{(\nu)} \right ) \overline{\Delta \qb}_i
-  \approx \frac{1}{\lambda \Delta t} \int_{x_{i+1/2} - \lambda \Delta t}^{x_{i+1/2}}
+  \approx \frac{1}{\lambda \Delta t} \int_{x_{i+\myhalf} - \lambda \Delta t}^{x_{i+\myhalf}}
            \qb(x) dx
 \end{equation}
 where $\qb(x)$ is the reconstructed functional form of $\qb$ in the zone.
@@ -444,17 +444,17 @@ keep our expressions for the interface states.
   define $\Ic_+^\enu$ (this is indicated by the shaded
   region).  The $\Ic_+^\enu$ carried by this wave will be
   added to those carried by the other waves to form the left state at
-  interface $i+1/2$.}
+  interface $i+\myhalf$.}
 \end{figure}
 
 In particular, we define
 \begin{equation}
-\Ic_+^{(\nu)}(\qb_i) = \frac{1}{\sigma^{(\nu)} \Delta x} \int _{x_{i+1/2} - \sigma^{(\nu)} \Delta x}^{x_{i+1/2}} \qb(x) dx
+\Ic_+^{(\nu)}(\qb_i) = \frac{1}{\sigma^{(\nu)} \Delta x} \int _{x_{i+\myhalf} - \sigma^{(\nu)} \Delta x}^{x_{i+\myhalf}} \qb(x) dx
 \end{equation}
 with $\sigma^{(\nu)} = |\lambda^{(\nu)}|\Delta t / \Delta x$ (see Almgren et
 al. Eq. 31)  (see Figure~\ref{fig:ppm_trace}).  Then
 \begin{equation}
-\qb_{i+1/2,L}^{n+1/2} = \tilde{\qb}_+ -
+\qb_{i+\myhalf,L}^{n+\myhalf} = \tilde{\qb}_+ -
    \sum_{\nu;\lambda^{(\nu)}\ge 0} \lb_i^{(\nu)} \cdot \left (
         \tilde{\qb}_+ - \Ic_+^{(\nu)}(\qb_i)
        \right ) \rb_i^{(\nu)}  \label{eq:ppmtrace}
@@ -490,7 +490,7 @@ on the left and right edges, respectively, of the current cell, and
 \end{equation}
 and
 \begin{equation}
-\xi(x) = \frac{x - x_{i-1/2}}{\Delta x}
+\xi(x) = \frac{x - x_{i-\myhalf}}{\Delta x}
 \end{equation}
 
 To complete the description, we need to determine the parameters of
@@ -508,7 +508,7 @@ the parabolic profile.
 \begin{exercise}[Conservative interpolation]
 {Show that $\qb(x)$ is a conservative interpolant.  That is
 \begin{equation}
-\frac{1}{\Delta x} \int_{x_{i-1/2}}^{x_{i+1/2}} \qb(x) dx = \qb_i
+\frac{1}{\Delta x} \int_{x_{i-\myhalf}}^{x_{i+\myhalf}} \qb(x) dx = \qb_i
 \end{equation}
 You can also see that the average over the left half of the zone is
 $\qb_i -\frac{1}{4}\Delta \qb$ and the average over the right half of the
@@ -530,7 +530,7 @@ Eq.~\ref{eq:ppmtrace},
 we can write the left velocity state as (leaving off the $i$
 subscripts on the vectors):
 \begin{equation}
-u_{i+1/2,L}^{n+1/2} =
+u_{i+\myhalf,L}^{n+\myhalf} =
   \tilde{u}_+ - \sum_\nu \lb^{(\nu)} \cdot
       ( \tilde{\qb}_+ -  \Ic_+^{(\nu)}(\qb) )
     \underbrace{\rb^{(\nu)}}_{\begin{smallmatrix}\mathrm{only~the}\\ u~\mathrm{`slot'} \end{smallmatrix}}
@@ -542,7 +542,7 @@ second row).
 
 Putting in the eigenvectors and writing out the sum, we have:
 \begin{align}
- u_{i+1/2,L}^{n+1/2} =
+ u_{i+\myhalf,L}^{n+\myhalf} =
      \tilde{u}_+ &-
        \left ( \begin{array}{ccc}
                   0 & -\frac{\rho}{2c} & \frac{1}{2c^2} \end{array}
@@ -593,7 +593,7 @@ that the second term is $0$---the contact wave does not carry a jump
 in velocity.  Multiplying out $\lb^{(\nu)} \cdot (\tilde{\qb}_+ -
 \Ic_+^{(\nu)})$ we have:
 \begin{align}
-u_{i+1/2,L}^{n+1/2} =
+u_{i+\myhalf,L}^{n+\myhalf} =
    \tilde{u}_+
   &- \frac{1}{2} \left [
       (\tilde{u}_+ - \Ic_+^\evm(u) ) -
@@ -618,7 +618,7 @@ Defining
 \end{align}
 we can write our left state as:
 \begin{equation}
-u_{i+1/2,L}^{n+1/2} =
+u_{i+\myhalf,L}^{n+\myhalf} =
    \tilde{u}_+ + C ( \beta^+ - \beta^-)
 \end{equation}
 This is Eqs.~3.6 and 3.7 in the PPM paper.  Note that in their
@@ -631,16 +631,16 @@ the expressions for $\rho_L$ and $p_L$ can be written out. \\
 \end{quote}
 
 Similar expressions can be derived for the right state at the left interface
-of the zone ($\qb_{i-1/2,R}^{n+1/2}$).  Here, the integral under the parabolic
+of the zone ($\qb_{i-\myhalf,R}^{n+\myhalf}$).  Here, the integral under the parabolic
 reconstruction is done over the region of each wave that can reach the left
 interface over our timestep:
 \begin{equation}
 \Ic_-^{(\nu)}(\qb) = \frac{1}{\sigma^{(\nu)} \Delta x}
-  \int_{x_{i-1/2}}^{x_{i-1/2} + \sigma^{(\nu)} \Delta x} \qb(x) dx
+  \int_{x_{i-\myhalf}}^{x_{i-\myhalf} + \sigma^{(\nu)} \Delta x} \qb(x) dx
 \end{equation}
-The right state at $i-1/2$ using zone $i$ data is:
+The right state at $i-\myhalf$ using zone $i$ data is:
 \begin{equation}
-\qb_{i-1/2,R}^{n+1/2} = \tilde{\qb}_- - \sum_{\nu; \lambda_\nu \le 0}
+\qb_{i-\myhalf,R}^{n+\myhalf} = \tilde{\qb}_- - \sum_{\nu; \lambda_\nu \le 0}
    \lb_i^{(\nu)} \cdot \left ( \tilde{\qb}_- - \Ic_-^{(\nu)}(\qb_i) \right ) \rb_i^{(\nu)}
 \end{equation}
 where the reference state is now:
@@ -687,7 +687,7 @@ subsequent parts of the algorithm.
   coefficient is determined, the interface state is blended with the
   cell-centered value via:
   \begin{equation}
-  \qb_{i+1/2,\{L,R\}}^{n+1/2} \leftarrow (1 - \chi) \qb_i + \chi \qb_{i+1/2,\{L,R\}}^{n+1/2}
+  \qb_{i+\myhalf,\{L,R\}}^{n+\myhalf} \leftarrow (1 - \chi) \qb_i + \chi \qb_{i+\myhalf,\{L,R\}}^{n+\myhalf}
   \end{equation}
 
   Note that the flattening algorithm increases the stencil size of
@@ -748,7 +748,7 @@ density).
 Once the interface states are created, the Riemann solver is called.  This
 returns the solution at the interface:
 \begin{equation}
-\qb_{i+1/2}^{n+1/2} = \mathcal{R}(\qb_{i+1/2,L}^{n+1/2}, \qb_{i+1/2,R}^{n+1/2})
+\qb_{i+\myhalf}^{n+\myhalf} = \mathcal{R}(\qb_{i+\myhalf,L}^{n+\myhalf}, \qb_{i+\myhalf,R}^{n+\myhalf})
 \end{equation}
 
 \subsection{Interface solution}
@@ -775,7 +775,7 @@ rarefactions.  In practice, approximate Riemann solvers often assume
 one or the other (for example, the two-shock Riemann solver used
 in~\cite{colellaglaz:1985}).  With the wave speeds and the states
 known in each region, we can evaluate the state on the interface,
-$\qb_{i+1/2}^{n+1/2}$.
+$\qb_{i+\myhalf}^{n+\myhalf}$.
 
 \begin{figure}[t]
 \centering
@@ -804,12 +804,12 @@ and the appropriate star state.
 Then the fluxes are computed from this state as:
 \begin{equation}
 \renewcommand{\arraystretch}{1.5}
-\Fb_{i+1/2}^{n+1/2} = \left ( \begin{array}{c}
-                             \rho_{i+1/2}^{n+1/2} u_{i+1/2}^{n+1/2} \\
-                             \rho_{i+1/2}^{n+1/2} (u_{i+1/2}^{n+1/2})^2 + p_{i+1/2}^{n+1/2} \\
-                             u_{i+1/2}^{n+1/2} p_{i+1/2}^{n+1/2} / (\gamma - 1)  +
-                             \frac{1}{2} \rho_{i+1/2}^{n+1/2} (u_{i+1/2}^{n+1/2})^3 +
-                             u_{i+1/2}^{n+1/2} p_{i+1/2}^{n+1/2}
+\Fb_{i+\myhalf}^{n+\myhalf} = \left ( \begin{array}{c}
+                             \rho_{i+\myhalf}^{n+\myhalf} u_{i+\myhalf}^{n+\myhalf} \\
+                             \rho_{i+\myhalf}^{n+\myhalf} (u_{i+\myhalf}^{n+\myhalf})^2 + p_{i+\myhalf}^{n+\myhalf} \\
+                             u_{i+\myhalf}^{n+\myhalf} p_{i+\myhalf}^{n+\myhalf} / (\gamma - 1)  +
+                             \frac{1}{2} \rho_{i+\myhalf}^{n+\myhalf} (u_{i+\myhalf}^{n+\myhalf})^3 +
+                             u_{i+\myhalf}^{n+\myhalf} p_{i+\myhalf}^{n+\myhalf}
                             \end{array} \right )
 \renewcommand{\arraystretch}{1.0}
 \end{equation}
@@ -826,7 +826,7 @@ with the Rankine-Hugoniot jump conditions to give the fluxes.
 Once we have the fluxes, the conservative update is done as
 \begin{equation}
 \Uc^{n+1}_i = \Uc^n_i + \frac{\Delta t}{\Delta x} 
-   \left ( \Fb_{i-1/2}^{n+1/2} - \Fb_{i+1/2}^{n+1/2} \right )
+   \left ( \Fb_{i-\myhalf}^{n+\myhalf} - \Fb_{i+\myhalf}^{n+\myhalf} \right )
 \end{equation}
 The timestep, $\Delta t$ is determined by the time it takes for the
 fastest wave to cross a single zone:
@@ -964,7 +964,7 @@ time derivative ($\partial \Uc/\partial t$) with the divergence of the
 fluxes, we gain a transverse flux derivative term.  For example,
 predicting to the upper $x$ edge of zone $i,j$, we have:
 \begin{align}
-\Uc_{i+1/2,j,L}^{n+1/2} &= \Uc_{i,j}^n + \frac{\Delta x}{2} \frac{\partial \Uc}{\partial x}
+\Uc_{i+\myhalf,j,L}^{n+\myhalf} &= \Uc_{i,j}^n + \frac{\Delta x}{2} \frac{\partial \Uc}{\partial x}
                             + \frac{\Delta t}{2} \frac{\partial \Uc}{\partial t} + \ldots \\
 &= \Uc_{i,j}^n + \frac{\Delta x}{2} \frac{\partial \Uc}{\partial x}
                             - \frac{\Delta t}{2} \frac{\partial \Fb^{(x)}}{\partial x}
@@ -977,9 +977,9 @@ this into a {\em normal state} and a {\em transverse flux difference}.
 Adopting the notation from Colella (1990), we use $\hat{\Uc}$ to denote
 the normal state:
 \begin{align}
-\hat{\Uc}_{i+1/2,j,L}^{n+1/2} &\equiv \Uc_{i,j}^n
+\hat{\Uc}_{i+\myhalf,j,L}^{n+\myhalf} &\equiv \Uc_{i,j}^n
       + \frac{1}{2} \left [ 1 - \frac{\Delta t}{\Delta x} \Ab^{(x)}(\Uc) \right ] \Delta \Uc \\
-\Uc_{i+1/2,j,L}^{n+1/2} &= \hat{\Uc}_{i+1/2,j,L}^{n+1/2}
+\Uc_{i+\myhalf,j,L}^{n+\myhalf} &= \hat{\Uc}_{i+\myhalf,j,L}^{n+\myhalf}
                             - \frac{\Delta t}{2} \frac{\partial \Fb^{(y)}}{\partial y}  \label{eq:fullleftstate}
 \end{align}
 
@@ -1011,20 +1011,20 @@ velocity $u$, corresponding to the additional eigenvalue.
 Derive the form of $\Ab^{(x)}(\qb)$ and $\Ab^{(y)}(\qb)$ and find their left and right eigenvectors.}
 \end{exercise}
 
-We note here that $\hat{\Uc}_{i+1/2,j,L}^{n+1/2}$ is essentially
+We note here that $\hat{\Uc}_{i+\myhalf,j,L}^{n+\myhalf}$ is essentially
 one-dimensional, since only the $x$-fluxes are involved (through
 $\Ab^{(x)}(\Uc)$).  This means that we can compute this term using the
 one-dimensional techniques developed in \S~\ref{sec:onedrecon}.  In
 particular, Colella (1990) suggest that we switch to primitive variables
 and compute this as:
 \begin{equation}
-\hat{\Uc}_{i+1/2,j,L}^{n+1/2} = \Uc(\hat{\qb}_{i+1/2,j,L}^{n+1/2})
+\hat{\Uc}_{i+\myhalf,j,L}^{n+\myhalf} = \Uc(\hat{\qb}_{i+\myhalf,j,L}^{n+\myhalf})
 \end{equation}
 Similarly, we consider the system projected along the $y$-direction to
 define the normal states on the $y$-edges, again using the one-dimensional
 reconstruction on the primitive variables from \S~\ref{sec:onedrecon}:
 \begin{equation}
-\hat{\Uc}_{i,j+1/2,L}^{n+1/2} = \Uc(\hat{\qb}_{i,j+1/2,L}^{n+1/2})
+\hat{\Uc}_{i,j+\myhalf,L}^{n+\myhalf} = \Uc(\hat{\qb}_{i,j+\myhalf,L}^{n+\myhalf})
 \end{equation}
 
 To compute the full interface state (Eq.~\ref{eq:fullleftstate}), we
@@ -1036,26 +1036,26 @@ Eq. 2.13); the second is to use the reconstructed normal states (the
 $\hat{\Uc}$'s) (Eq. 2.15).  In both cases, we need to solve a {\em
   transverse Riemann problem} to find the true state on the transverse
 interface.  This latter approach is what we prefer.  In particular,
-for computing the full $x$-interface left state, $\Uc_{i+1/2,j,L}^{n+1/2}$, we need the
+for computing the full $x$-interface left state, $\Uc_{i+\myhalf,j,L}^{n+\myhalf}$, we need the
 transverse ($y$) states, which we define as
 \begin{align}
-\Uc^T_{i,j+1/2} &= \mathcal{R}(\hat{\Uc}^{n+1/2}_{i,j+1/2,L},
-                            \hat{\Uc}^{n+1/2}_{i,j+1/2,R}) \\
-\Uc^T_{i,j-1/2} &= \mathcal{R}(\hat{\Uc}^{n+1/2}_{i,j-1/2,L},
-                            \hat{\Uc}^{n+1/2}_{i,j-1/2,R})
+\Uc^T_{i,j+\myhalf} &= \mathcal{R}(\hat{\Uc}^{n+\myhalf}_{i,j+\myhalf,L},
+                            \hat{\Uc}^{n+\myhalf}_{i,j+\myhalf,R}) \\
+\Uc^T_{i,j-\myhalf} &= \mathcal{R}(\hat{\Uc}^{n+\myhalf}_{i,j-\myhalf,L},
+                            \hat{\Uc}^{n+\myhalf}_{i,j-\myhalf,R})
 \end{align}
 
 Taken together, the full interface state is now:
 \begin{equation}
-\Uc_{i+1/2,j,L}^{n+1/2} = \Uc(\hat{\qb}_{i+1/2,j,L}^{n+1/2})
-   - \frac{\Delta t}{2} \frac{\Fb^{(y)}(\Uc^T_{i,j+1/2}) - \Fb^{(y)}(\Uc^T_{i,j-1/2})}{\Delta y}
+\Uc_{i+\myhalf,j,L}^{n+\myhalf} = \Uc(\hat{\qb}_{i+\myhalf,j,L}^{n+\myhalf})
+   - \frac{\Delta t}{2} \frac{\Fb^{(y)}(\Uc^T_{i,j+\myhalf}) - \Fb^{(y)}(\Uc^T_{i,j-\myhalf})}{\Delta y}
 \end{equation}
 
-The right state at the $i+1/2$ interface can be similarly computed (starting with the
+The right state at the $i+\myhalf$ interface can be similarly computed (starting with the
 data in zone $i+1,j$ and expanding to the left) as:
 \begin{equation}
-\Uc_{i+1/2,j,R}^{n+1/2} = \Uc(\hat{\qb}_{i+1/2,j,R}^{n+1/2})
-   - \frac{\Delta t}{2} \frac{\Fb^{(y)}(\Uc^T_{i+1,j+1/2}) - \Fb^{(y)}(\Uc^T_{i+1,j-1/2})}{\Delta y}
+\Uc_{i+\myhalf,j,R}^{n+\myhalf} = \Uc(\hat{\qb}_{i+\myhalf,j,R}^{n+\myhalf})
+   - \frac{\Delta t}{2} \frac{\Fb^{(y)}(\Uc^T_{i+1,j+\myhalf}) - \Fb^{(y)}(\Uc^T_{i+1,j-\myhalf})}{\Delta y}
 \end{equation}
 Note the indices on the transverse states---they are now to the right of the interface (since
 we are dealing with the right state).
@@ -1063,12 +1063,12 @@ we are dealing with the right state).
 We then find the $x$-interface state by solving the Riemann problem
 normal to our interface:
 \begin{equation}
-\Uc_{i+1/2,j}^{n+1/2} = \mathcal{R}(\Uc_{i+1/2,j,L}^{n+1/2}, \Uc_{i+1/2,j,R}^{n+1/2})
+\Uc_{i+\myhalf,j}^{n+\myhalf} = \mathcal{R}(\Uc_{i+\myhalf,j,L}^{n+\myhalf}, \Uc_{i+\myhalf,j,R}^{n+\myhalf})
 \end{equation}
 Therefore, construction of the interface states now requires two
 Riemann solves: a transverse and normal one.  The fluxes are then evaluated as:
 \begin{equation}
-\Fb^{(x),n+1/2}_{i+1/2,j} = \Fb^{(x)}(\Uc_{i+1/2,j}^{n+1/2})
+\Fb^{(x),n+\myhalf}_{i+\myhalf,j} = \Fb^{(x)}(\Uc_{i+\myhalf,j}^{n+\myhalf})
 \end{equation}
 Note, for multi-dimensional problems, in the Riemann solver, the transverse
 velocities are simply selected based on the speed of the contact, giving
@@ -1077,8 +1077,8 @@ either the left or right state.
 The final conservative update is done as:
 \begin{equation}
 \Uc^{n+1}_{i,j} = \Uc^n_{i,j}
-   + \frac{\Delta t}{\Delta x} \left ( \Fb^{(x),n+1/2}_{i-1/2,j} - \Fb^{(x),n+1/2}_{i+1/2,j} \right )
-   + \frac{\Delta t}{\Delta y} \left ( \Fb^{(y),n+1/2}_{i,j-1/2} - \Fb^{(y),n+1/2}_{i,j+1/2} \right )
+   + \frac{\Delta t}{\Delta x} \left ( \Fb^{(x),n+\myhalf}_{i-\myhalf,j} - \Fb^{(x),n+\myhalf}_{i+\myhalf,j} \right )
+   + \frac{\Delta t}{\Delta y} \left ( \Fb^{(y),n+\myhalf}_{i,j-\myhalf} - \Fb^{(y),n+\myhalf}_{i,j+\myhalf} \right )
 \end{equation}
 
 
@@ -1103,7 +1103,7 @@ we predict to the edges in the same fashion as described above, but now
 when we replace $\partial \Uc/\partial t$ with the divergence of the
 fluxes, we also pick up the source term.  This appears as:
 \begin{align}
-\Uc_{i+1/2,j,L}^{n+1/2} &= \Uc_{i,j}^n
+\Uc_{i+\myhalf,j,L}^{n+\myhalf} &= \Uc_{i,j}^n
             + \frac{\Delta x}{2} \frac{\partial \Uc}{\partial x}
             + \frac{\Delta t}{2} \frac{\partial \Uc}{\partial t} + \ldots \\
 &= \Uc_{i,j}^n + \frac{\Delta x}{2} \frac{\partial \Uc}{\partial x}
@@ -1151,7 +1151,7 @@ for the right state.  Since $\Gb$ is only non-zero for velocity, only
 the velocity changes.  Writing out the sum (and performing the vector products), we
 get:
 \begin{align}
-u_{i+1/2,L}^{n+1/2} =
+u_{i+\myhalf,L}^{n+\myhalf} =
    \tilde{u}_+
   &- \frac{1}{2} \left [
       \left (\tilde{u}_+ - \Ic_+^\evm(u) - \frac{\Delta t}{2} \Ic^\evm_+(g) \right ) -
@@ -1178,8 +1178,8 @@ update.  To second-order, we need it to be time-centered, which
 usually means averaging the time-level $n$ and $n+1$ sources:
 \begin{align}
 \Uc^{n+1}_{i,j} = \Uc^n_{i,j}
-   &+ \frac{\Delta t}{\Delta x} \left ( \Fb^{(x),n+1/2}_{i-1/2,j} - \Fb^{(x),n+1/2}_{i+1/2,j} \right ) \nonumber \\
-   &+ \frac{\Delta t}{\Delta y} \left ( \Fb^{(y),n+1/2}_{i,j-1/2} - \Fb^{(y),n+1/2}_{i,j+1/2} \right ) + \frac{\Delta t}{2} \left (\Hb(\Uc^n_{i,j}) + \Hb(\Uc^{n+1}_{i,j})\right )
+   &+ \frac{\Delta t}{\Delta x} \left ( \Fb^{(x),n+\myhalf}_{i-\myhalf,j} - \Fb^{(x),n+\myhalf}_{i+\myhalf,j} \right ) \nonumber \\
+   &+ \frac{\Delta t}{\Delta y} \left ( \Fb^{(y),n+\myhalf}_{i,j-\myhalf} - \Fb^{(y),n+\myhalf}_{i,j+\myhalf} \right ) + \frac{\Delta t}{2} \left (\Hb(\Uc^n_{i,j}) + \Hb(\Uc^{n+1}_{i,j})\right )
 \end{align}
 As written, this appears to be an implicit update (since $\Uc^{n+1}$
 depends on $\Hb^{n+1}$), but often, the form of the source terms allows
@@ -1190,17 +1190,17 @@ looking in 1-d for simplicity, $\Uc = (\rho, \rho u, \rho E)^\intercal$
 and $\Hb = (0, \rho g, \rho u g)^\intercal$, so our update sequence is:
 \begin{align}
 \rho^{n+1}_i = \rho^n_i &+ \frac{\Delta t}{\Delta x} 
-   \left [\rho_{i-1/2}^{n+1/2} u_{i-1/2}^{n+1/2} - 
-          \rho_{i+1/2}^{n+1/2} u_{i+1/2}^{n+1/2} \right ] \\
+   \left [\rho_{i-\myhalf}^{n+\myhalf} u_{i-\myhalf}^{n+\myhalf} - 
+          \rho_{i+\myhalf}^{n+\myhalf} u_{i+\myhalf}^{n+\myhalf} \right ] \\
 (\rho u)^{n+1}_i = (\rho u)^n_i &+ \frac{\Delta t}{\Delta x} 
-   \left [ \rho_{i-1/2}^{n+1/2} (u_{i-1/2}^{n+1/2})^2  - 
-           \rho_{i+1/2}^{n+1/2} (u_{i+1/2}^{n+1/2})^2  \right ]
-         + \frac{\Delta t}{\Delta x} \left ( p_{i-1/2}^{n+1/2} - 
-                                              p_{i+1/2}^{n+1/2} \right ) \nonumber \\
+   \left [ \rho_{i-\myhalf}^{n+\myhalf} (u_{i-\myhalf}^{n+\myhalf})^2  - 
+           \rho_{i+\myhalf}^{n+\myhalf} (u_{i+\myhalf}^{n+\myhalf})^2  \right ]
+         + \frac{\Delta t}{\Delta x} \left ( p_{i-\myhalf}^{n+\myhalf} - 
+                                              p_{i+\myhalf}^{n+\myhalf} \right ) \nonumber \\
        &+ \frac{\Delta t}{2}(\rho^n_i + \rho^{n+1}_i) g \\
 (\rho E)^{n+1}_i = (\rho E)^n_i &+ \frac{\Delta t}{\Delta x} 
-   \left [ \left (\rho_{i-1/2}^{n+1/2} E_{i-1/2}^{n+1/2}  + p_{i-1/2}^{n+1/2} \right ) u_{i-1/2}^{n+1/2} - \right . \nonumber \\
-   &\phantom{+ \frac{\Delta t}{\Delta x} \left[ \right.}   \left .   \left (\rho_{i+1/2}^{n+1/2} E_{i+1/2}^{n+1/2}  + p_{i+1/2}^{n+1/2} \right ) u_{i+1/2}^{n+1/2} \right ]
+   \left [ \left (\rho_{i-\myhalf}^{n+\myhalf} E_{i-\myhalf}^{n+\myhalf}  + p_{i-\myhalf}^{n+\myhalf} \right ) u_{i-\myhalf}^{n+\myhalf} - \right . \nonumber \\
+   &\phantom{+ \frac{\Delta t}{\Delta x} \left[ \right.}   \left .   \left (\rho_{i+\myhalf}^{n+\myhalf} E_{i+\myhalf}^{n+\myhalf}  + p_{i+\myhalf}^{n+\myhalf} \right ) u_{i+\myhalf}^{n+\myhalf} \right ]
     + \frac{\Delta t}{2} \left [ (\rho u)^n + (\rho u)^{n+1} \right] g
 \end{align}
 These updates can be done one after another without any implicit
@@ -1254,20 +1254,20 @@ term is a gradient, not a divergence, and therefore has different
 geometic factors.  The update of the system appears as:
 \begin{align}
 \rho^{n+1}_i = \rho^n_i &+ \frac{\Delta t}{V_i} 
-   \left [A_{i-1/2} \rho_{i-1/2}^{n+1/2} u_{i-1/2}^{n+1/2} - 
-          A_{i+1/2} \rho_{i+1/2}^{n+1/2} u_{i+1/2}^{n+1/2} \right ] \\
+   \left [A_{i-\myhalf} \rho_{i-\myhalf}^{n+\myhalf} u_{i-\myhalf}^{n+\myhalf} - 
+          A_{i+\myhalf} \rho_{i+\myhalf}^{n+\myhalf} u_{i+\myhalf}^{n+\myhalf} \right ] \\
 (\rho u)^{n+1}_i = (\rho u)^n_i &+ \frac{\Delta t}{V_i} 
-   \left [ A_{i-1/2} \rho_{i-1/2}^{n+1/2} (u_{i-1/2}^{n+1/2})^2  - 
-           A_{i+1/2} \rho_{i+1/2}^{n+1/2} (u_{i+1/2}^{n+1/2})^2  \right ]\nonumber \\
-        & + \frac{\Delta t}{\Delta r} \left ( p_{i-1/2}^{n+1/2} - 
-                                              p_{i+1/2}^{n+1/2} \right ) \\
+   \left [ A_{i-\myhalf} \rho_{i-\myhalf}^{n+\myhalf} (u_{i-\myhalf}^{n+\myhalf})^2  - 
+           A_{i+\myhalf} \rho_{i+\myhalf}^{n+\myhalf} (u_{i+\myhalf}^{n+\myhalf})^2  \right ]\nonumber \\
+        & + \frac{\Delta t}{\Delta r} \left ( p_{i-\myhalf}^{n+\myhalf} - 
+                                              p_{i+\myhalf}^{n+\myhalf} \right ) \\
 (\rho E)^{n+1}_i = (\rho E)^n_i &+ \frac{\Delta t}{V_i} 
-   \left [ A_{i-1/2} \left (\rho_{i-1/2}^{n+1/2} E_{i-1/2}^{n+1/2}  + p_{i-1/2}^{n+1/2} \right ) u_{i-1/2}^{n+1/2} - \right . \nonumber \\
-   &\phantom{+ \frac{\Delta t}{V_i} \left[ \right.}   \left .   A_{i+1/2} \left (\rho_{i+1/2}^{n+1/2} E_{i+1/2}^{n+1/2}  + p_{i+1/2}^{n+1/2} \right ) u_{i+1/2}^{n+1/2} \right ]
+   \left [ A_{i-\myhalf} \left (\rho_{i-\myhalf}^{n+\myhalf} E_{i-\myhalf}^{n+\myhalf}  + p_{i-\myhalf}^{n+\myhalf} \right ) u_{i-\myhalf}^{n+\myhalf} - \right . \nonumber \\
+   &\phantom{+ \frac{\Delta t}{V_i} \left[ \right.}   \left .   A_{i+\myhalf} \left (\rho_{i+\myhalf}^{n+\myhalf} E_{i+\myhalf}^{n+\myhalf}  + p_{i+\myhalf}^{n+\myhalf} \right ) u_{i+\myhalf}^{n+\myhalf} \right ]
 \end{align}
 Here, the geometry factors are:
 \begin{align}
-A_{i-1/2} &= (r_{i-1/2})^2\\
+A_{i-\myhalf} &= (r_{i-\myhalf})^2\\
 V_i &= (r_i)^2 \Delta r
 \end{align}
 
@@ -1304,8 +1304,8 @@ follows the same idea as the 1-d spherical version.  The area
 and volume factors only differ from their Cartesian counterparts
 in the radial direction, and take the form:
 \begin{align}
-A_{i-1/2,j} &= r_{i-1/2} \Delta z \\
-A_{i,j-1/2} &= r_i \Delta z\\
+A_{i-\myhalf,j} &= r_{i-\myhalf} \Delta z \\
+A_{i,j-\myhalf} &= r_i \Delta z\\
 V_{i,j} &= r_i \Delta r \Delta z
 \end{align}
 These choices of geometric factors reproduce a discretized
@@ -1319,11 +1319,12 @@ as a gradient and not a divergence.
 
 
 %-----------------------------------------------------------------------------
-\section{Test problems}
+\section{Some Test problems}
 
 There are a large number of standard test problems that are used to
 test out our methods.  Like we say with advection, it is best to have
-a problem with an analytic solution.  
+a problem with an analytic solution.  Here we show just a few of the most
+popular test problems.
 
 \subsection{Shock tubes}
 \label{sec:euler-methods:shocktubes}
@@ -1449,7 +1450,7 @@ axisymmetric geometries.
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.7\linewidth]{hydro1d_sedov_1dsph}
-\caption[1-d spherical Sedov problem]{\label{fig:Euler:doublerare:ppm} 1-d Sedov explosion with
+\caption[1-d spherical Sedov problem]{\label{fig:Euler:sedov1d} 1-d Sedov explosion with
   piecewise parabolic reconstruction, using 128 zones (on $r \in
   [0,1]$), $\cfl = 0.8$, and the CGF Riemann solver.  This was run
   with \hydrooned\ using the {\tt sedov} problem setup and visualized
@@ -1473,6 +1474,40 @@ wave. Then the pressure is
 p = \frac{\mathcal{E}_\mathrm{expl}}{V_\mathrm{init}} (\gamma - 1)
 \end{equation}
 
+
+Figure~\ref{fig:Euler:sedov1d} shows the solution to the Sedov problem
+in 1-d in a spherical geometry.  This is compared to the spherical
+Sedov solution (solid line). There is good agreement in the position of the
+shock and density and velocity profiles.  The pressure behind the shock
+is a little low---this is likely an artifact of the initialization process.
+
+In 2-d, we run the problem in Cartesian coordinates---this produces a cylindrical
+blast wave.  Figure~\ref{fig:Euler:sedov2d} shows the solution in 2-d.
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.85\linewidth]{sedov_pyro}
+\caption[2-d cylindrical Sedov problem]{\label{fig:Euler:sedov2d} 2-d Sedov explosion with
+  piecewise linear reconstruction, using 128$^2$ zones (on $r \in
+  [0,1]\times[0,1]$), $\cfl = 0.8$, and the HLLC Riemann solver.  This was run
+  with \pyro\ as {\tt ./pyro.py compressible sedov inputs.sedov}.  An initial
+  perturbation size of $r_\mathrm{init} = 0.01$ was used.}
+\end{figure}
+The density and pressure look very symmetric.  In the velocity magnitude
+plot, we see an imprint of the grid along coordinate axes, and likewise
+in the internal energy.  The bump in internal energy near the origin arises
+because of the error in defining $e$ from $E$ and $U$.  We can produce an angle-averaged
+profile of this and compare to the analytic solution, shown in Figure~\ref{fig:Euler:sedov2d_compare}.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.75\linewidth]{sedov_compare}
+\caption[2-d cylindrical Sedov problem]{\label{fig:Euler:sedov2d_compare} Angle-average 
+  profile for the 2-d Sedov explosion from Figure~\ref{fig:Euler:sedov2d} shown
+  with the analytic solution.  This was constructed using the {\tt sedov\_compare.py}
+  script in \pyro.}
+\end{figure}
+
+
 \subsection{Advection}
 
 \subsection{Slow moving shock}
@@ -1487,11 +1522,11 @@ conditions to setup a stationary (or slow-moving) shock.
 The speed of a right-moving shock was found (see
 Eq.~\ref{eq:euler:shockspeedjump}) as:
 \begin{equation}
-S = u_r + c_r \left [ \left ( \frac{p_\star}{p_r} \right ) \frac{\gamma+1}{2\gamma} + \frac{\gamma-1}{2\gamma} \right ]^{1/2}
+S = u_r + c_r \left [ \left ( \frac{p_\star}{p_r} \right ) \frac{\gamma+1}{2\gamma} + \frac{\gamma-1}{2\gamma} \right ]^{\myhalf}
 \end{equation}
 We want $S = 0$, which allows us to express the pre-shock velocity, $u_r$, as:
 \begin{equation}
-u_r = -c_r \left [ \left ( \frac{p_\star}{p_r} \right ) \frac{\gamma+1}{2\gamma} + \frac{\gamma-1}{2\gamma} \right ]^{1/2}
+u_r = -c_r \left [ \left ( \frac{p_\star}{p_r} \right ) \frac{\gamma+1}{2\gamma} + \frac{\gamma-1}{2\gamma} \right ]^{\myhalf}
 \end{equation}
 We have the freedom to choose the density and pressure ahead of the
 shock, $\rho_r$ and $p_r$, which in turn gives us $c_r$.  Next, we can
@@ -1534,6 +1569,7 @@ p_l    &= 100         &  p_r    &= 1 \nonumber
 \end{figure}
 
 
+\ifdefined \debugmode
 \subsection{Odd-even decoupling}
 
 \subsection{Gresho vortex}
@@ -1543,6 +1579,7 @@ designed such that the overall structure is unchanging in time.  It
 has a nice feature in that it allows you to set the Mach number of
 the flow as one of the parameters.
 
+\fi
 
 \subsection{Hydrostatic equilibrium}
 
@@ -1563,7 +1600,7 @@ resolution will result in lower velocities.
 % scale height resolved -- do uniform T atmosphere
 
 
-\subsection{Rayleigh-Taylor instability}
+%\subsection{Rayleigh-Taylor instability}
 
 
 
@@ -1577,8 +1614,8 @@ integrator to do the work for us.
 
 Discretizing our system in space leads to the following system:
 \begin{equation}
-\frac{d\Uc_{i,j}}{dt} = -\frac{\Fb^{(x)}(\Uc_{i+1/2,j}) - \Fb^{(x)}(\Uc_{i-1/2,j})}{\Delta x}
-                      -\frac{\Fb^{(y)}(\Uc_{i,j+1/2}) - \Fb^{(y)}(\Uc_{i,j-1/2})}{\Delta y}
+\frac{d\Uc_{i,j}}{dt} = -\frac{\Fb^{(x)}(\Uc_{i+\myhalf,j}) - \Fb^{(x)}(\Uc_{i-\myhalf,j})}{\Delta x}
+                      -\frac{\Fb^{(y)}(\Uc_{i,j+\myhalf}) - \Fb^{(y)}(\Uc_{i,j-\myhalf})}{\Delta y}
 \end{equation}
 Note that there is no time superscript in the $\Uc$ used to evaluate the
 fluxes on the righthand side---we have not done any time
@@ -1587,26 +1624,26 @@ discretization yet.  Now we can use an ODE integrator to solve this system.
 Consider
 second-order Runge-Kutta.  We evaluate two slopes,
 \begin{alignat}{3}
-{\bf k}_1 &= \Delta t \bigg [ &-&\frac{\Fb^{(x)}(\Uc^n_{i+1/2,j})
-                               - \Fb^{(x)}(\Uc^n_{i-1/2,j})}{\Delta x} \nonumber \\
-    &\,                 &-&\frac{\Fb^{(y)}(\Uc^n_{i,j+1/2})
-                               - \Fb^{(y)}(\Uc^n_{i,j-1/2})}{\Delta y} \bigg ] \\
-{\bf k}_2 &= \Delta t \bigg [ &-&\frac{\Fb^{(x)}([\Uc^n + {\bf k}_1/2]_{i+1/2,j})
-                               - \Fb^{(x)}([\Uc^n + {\bf k}_1/2]_{i-1/2,j})}{\Delta x} \nonumber \\
-    &\,                 &-&\frac{\Fb^{(y)}([\Uc^n + {\bf k}_1/2]_{i,j+1/2})
-                               - \Fb^{(y)}([\Uc^n + {\bf k}_1/2]_{i,j-1/2})}{\Delta y} \bigg ]
+{\bf k}_1 &= \Delta t \bigg [ &-&\frac{\Fb^{(x)}(\Uc^n_{i+\myhalf,j})
+                               - \Fb^{(x)}(\Uc^n_{i-\myhalf,j})}{\Delta x} \nonumber \\
+    &\,                 &-&\frac{\Fb^{(y)}(\Uc^n_{i,j+\myhalf})
+                               - \Fb^{(y)}(\Uc^n_{i,j-\myhalf})}{\Delta y} \bigg ] \\
+{\bf k}_2 &= \Delta t \bigg [ &-&\frac{\Fb^{(x)}([\Uc^n + {\bf k}_\myhalf]_{i+\myhalf,j})
+                               - \Fb^{(x)}([\Uc^n + {\bf k}_\myhalf]_{i-\myhalf,j})}{\Delta x} \nonumber \\
+    &\,                 &-&\frac{\Fb^{(y)}([\Uc^n + {\bf k}_\myhalf]_{i,j+\myhalf})
+                               - \Fb^{(y)}([\Uc^n + {\bf k}_\myhalf]_{i,j-\myhalf})}{\Delta y} \bigg ]
 \end{alignat}
 and then
 \begin{equation}
 \Uc^{n+1}_{i,j} = \Uc^n_{i,j} + {\bf k}_2
 \end{equation}
-In the construction of the interface states, $\Uc^n_{i+1/2,j}$ or $[\Uc^n
-+ {\bf k}_1/2]_{i+1/2,j}$, there is no explicit transverse term, since that
+In the construction of the interface states, $\Uc^n_{i+\myhalf,j}$ or $[\Uc^n
++ {\bf k}_\myhalf]_{i+\myhalf,j}$, there is no explicit transverse term, since that
 arose from Taylor expanding $\Uc^n_{i,j}$ in time through $\Delta t/2$.
 Instead, we simply construct these interface states using a
 one-dimensional reconstruction and solve a Riemann problem at each
 interface.  The evaluation of the second slope, ${\bf k}_2$, implicitly
-includes the transverse information since we add ${\bf k}_1/2$ to
+includes the transverse information since we add ${\bf k}_\myhalf$ to
 $\Uc^n_{i,j}$ before doing the prediction to the interfaces.  Also note,
 however, that in this construction of the interface states, there is
 no characteristic projection, since that arises from predicting the
@@ -1628,7 +1665,7 @@ time-discretization of a multidimensional system, the timestep is
 actually more restrictive than the cases presented above that
 predicted the interface states to the half-time and performed
 characteristic tracing.  Titarev \& Toro \cite{titarevtoro} claim that
-you need $0 < C < 1/2$ for 2-d flows and $0 < C < 1/3$ for 3-d flows.
+you need $0 < C < \myhalf$ for 2-d flows and $0 < C < 1/3$ for 3-d flows.
 
 An additional complexity arises when doing multiphysics.  Often we
 split the different physical processes up and treat them in turn.
@@ -1821,7 +1858,7 @@ these three waves.
 Working through the sum for the $(\rho e)$ state, and using a $\sim$ to
 denote the reference states, we arrive at:
 \begin{align}
-(\rho e)_{i+1/2,L}^{n+1/2} = \widetilde{(\rho e)} &-
+(\rho e)_{i+\myhalf,L}^{n+\myhalf} = \widetilde{(\rho e)} &-
    \frac{1}{2} \left [ -\frac{\rho}{c} \left (\tilde{u} - \Ic^{(1)}_+(u) \right )
                        +\frac{1}{c^2} \left (\tilde{p} - \Ic^{(1)}_+(p) \right )
                \right ] h \nonumber \\
