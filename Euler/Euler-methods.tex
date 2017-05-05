@@ -1510,6 +1510,46 @@ profile of this and compare to the analytic solution, shown in Figure~\ref{fig:E
 
 \subsection{Advection}
 
+We can run a simple advection test analogous to the tests we used in
+Ch.~\ref{ch:advection}.  However, because we are now doing hydrodynamics,
+we need to suppress the dynamics.  This is accomplished by putting the 
+profile we want to advect in the density field and then put it in
+pressure equilibrium by adjusting the internal energy.  For example, consider
+a Gaussian profile.  We initialize the density as:
+\begin{equation}
+\rho = (\rho_1 - \rho_0) e^{-(x - x_c)^2/\sigma^2} + \rho_0
+\end{equation}
+To advect the profile to the right, we choose a constant velocity,
+\begin{equation}
+u = u_0
+\end{equation}
+and to suppress dynamics, we make the pressure constant,
+\begin{equation}
+p = p_0
+\end{equation}
+Finally, we compute the total energy as
+\begin{equation}
+\rho E = \frac{p}{\gamma - 1} + \frac{1}{2}\rho u^2
+\end{equation}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.7\linewidth]{advect_hydro1d}
+\caption[Simple advection test]{\label{fig:Euler:advect:1d} Piecewise
+  parabolic reconstruction with an advection test, using 128 zones,
+  $\cfl = 0.8$, and the CGF Riemann solver.  A Gaussian profile was
+  advected for 10 periods.  This was run with \hydrooned\ using the
+  {\tt advect} problem setup and
+  visualized with the {\tt advect\_compare.py} script there.}
+\end{figure}
+
+Figure~\ref{fig:Euler:advect:1d} shows an example of a Gaussian profile
+advected for 10 periods.  The initial conditions used $\rho_0 = 10^{-3}$,
+$\rho_1 = 1$, $p_0 = 10^{-6}$, $u_0 = 1$, and $\sigma = 0.1$ (these 
+coincide with the choices used in \cite{flash}).  The result is similar
+to what we saw when we considered pure advection---the shape is mostly
+preserved, but the peak of the Gaussian is clipped.
+
 \subsection{Slow moving shock}
 
 Slow moving (or stationary) shocks can be difficult to model, as
