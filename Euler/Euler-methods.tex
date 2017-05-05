@@ -1543,12 +1543,15 @@ Finally, we compute the total energy as
   visualized with the {\tt advect\_compare.py} script there.}
 \end{figure}
 
-Figure~\ref{fig:Euler:advect:1d} shows an example of a Gaussian profile
-advected for 10 periods.  The initial conditions used $\rho_0 = 10^{-3}$,
-$\rho_1 = 1$, $p_0 = 10^{-6}$, $u_0 = 1$, and $\sigma = 0.1$ (these 
-coincide with the choices used in \cite{flash}).  The result is similar
-to what we saw when we considered pure advection---the shape is mostly
-preserved, but the peak of the Gaussian is clipped.
+Figure~\ref{fig:Euler:advect:1d} shows an example of a Gaussian
+profile advected for 10 periods.  The initial conditions used $\rho_0
+= 10^{-3}$, $\rho_1 = 1$, $p_0 = 10^{-6}$, $u_0 = 1$, and $\sigma =
+0.1$ (these coincide with the choices used in \cite{flash}).  The
+non-zero value for the ambient density, $\rho_0$, ensures that any
+quantities that are derived by dividing by density remain
+well-defined.  The result is similar to what we saw when we considered
+pure advection---the shape is mostly preserved, but the peak of the
+Gaussian is clipped.
 
 \subsection{Slow moving shock}
 
@@ -1609,6 +1612,17 @@ p_l    &= 100         &  p_r    &= 1 \nonumber
 \end{figure}
 
 
+\subsection{Two-dimensional Riemann problems}
+
+Several different 2-d Riemann problems were introduced in
+\cite{hydro_test_quad}, to explore the multi-dimensional
+interactive of the different hydrodynamic waves.  These
+problems initialize the 4 quadrants of the domain with different
+states, and watch the ensuing evolution.  There are some
+analytic estimates that can be compared to, but also these
+tests can provide a means of assessing the symmetry of 
+a code in the presence of complex flows.
+
 \ifdefined \debugmode
 \subsection{Odd-even decoupling}
 
@@ -1619,7 +1633,6 @@ designed such that the overall structure is unchanging in time.  It
 has a nice feature in that it allows you to set the Mach number of
 the flow as one of the parameters.
 
-\fi
 
 \subsection{Hydrostatic equilibrium}
 
@@ -1642,6 +1655,7 @@ resolution will result in lower velocities.
 
 %\subsection{Rayleigh-Taylor instability}
 
+\fi
 
 
 %-----------------------------------------------------------------------------
