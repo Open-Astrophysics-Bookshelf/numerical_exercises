@@ -880,7 +880,25 @@ corresponding wave speeds are:
   \end{itemize}
 \end{itemize}
 The nature of the rarefaction is such that it spreads out,
-$|\lambda_\mathrm{head}| > |\lambda_\mathrm{tail}|$.
+$|\lambda_\mathrm{head}| > |\lambda_\mathrm{tail}|$.  To determine
+which state we are in, we look to see where both the head and tail are
+with respect to the interface.
+Figure~\ref{fig:euler:rarefaction_sample} shows the possibilities for
+a left (1) rarefaction.  In case (a), $\lambda_\mathrm{head},
+\lambda_\mathrm{tail} < 0$, so the $L_\star$ state is on the
+interface.  In case (c), $\lambda_\mathrm{head}, \lambda_\mathrm{tail}
+> 0$, so the $L$ state is on the interface.  Case (b) is more
+complicated---we have $\lambda_\mathrm{head} <0, \lambda_\mathrm{tail}
+> 0$, so the rarefaction spans the interface.  We need to therefore
+solve for the state in the rarefaction itself.
+
+To find the structure inside of a rarefaction, consider some point,
+$(x, t)$, in the $x$-$t$ plane.  For an initial discontinuity at the
+origin, we can imagine a line connecting this point and the origin,
+which has the form:
+\begin{equation}
+\frac{x}{t} = u - c
+\end{equation}
 
 % figure from figures/Euler/rarefaction_cartoon.py
 \begin{figure}
