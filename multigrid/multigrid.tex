@@ -629,6 +629,44 @@ that you will have separate actions for the fine level (where
 inhomogeneous boundaries may apply) and the coarser levels (where you
 will always be homogeneous).
 
+An alternate way to enforce boundary conditions is via {\em boundary
+  charges}.  For inhomogeneous boundary conditions, boundary charges
+can be used to convert the BCs to homogeneous BCs.  This has the
+advantage of allowing the ghost cell filling routines only deal with
+the homogeneous case.
+
+Consider the one-dimensional Poisson equation, near the left boundary
+our discretized equation appears as:
+\begin{equation}
+\frac{\phi_\mathrm{lo-1} - 2\phi_\mathrm{lo} + \phi_\mathrm{lo+1}}{\Delta x^2}
+ = f_\mathrm{lo}
+\end{equation}
+Inhomogeneous BCs at the left boundary would give the condition:
+\begin{equation}
+\phi_\mathrm{lo-1} = 2 \phi_l - \phi_\mathrm{lo}
+\end{equation}
+Substituting this into the discrete equation, we have:
+\begin{equation}
+\frac{2 \phi_l - \phi_\mathrm{lo} - 2\phi_\mathrm{lo} + \phi_\mathrm{lo+1}}{\Delta x^2}
+ = f_\mathrm{lo}
+\end{equation}
+Bringing the boundary condition value over to the RHS, we see
+\begin{equation}
+\frac{- 3\phi_\mathrm{lo} + \phi_\mathrm{lo+1}}{\Delta x^2}
+ = f_\mathrm{lo} - \frac{2\phi_l}{\Delta x^2}
+\end{equation}
+Now the left side looks precisely like the differenced Poisson equation
+with homogeneous Dirichlet BCs.  The RHS has an additional `charge' that
+captures the boundary value.  By modifying the source term, $f$, in the
+multigrid solver to include this charge, we can use the homogeneous 
+ghost cell filling routines throughout the multigrid algorithm.
+This technique is discussed a bit in~\cite{colellanotes}.
+
+Note that the form of the boundary charge will depend on the form of the
+elliptic equation---the expressions derived above apply only for
+$\nabla^2 \phi = f$.
+
+
 
 
 \subsection{Stopping criteria}
@@ -683,33 +721,7 @@ second-order convergence for our implementation.
 \end{figure}
 
 
-\section{Going Further}
-
-\label{sec:multigrid:other}
-
-\subsection{Red-black Ordering}
-
-When using domain decomposition to spread the problem across parallel
-processors, the smoothing is often done as {\em red-black
-  Gauss-Seidel}.  In this ordering, you imagine the grid to be a
-checkerboard (see Figure~\ref{fig:rb}).  In the first Gauss-Seidel
-pass you update the red squares and in the second, the black squares.
-The advantage is that when updating the red, you can be sure that none
-of the zones you depend on (the neighboring black zones) will change.
-This makes the decomposition parallel.  Note: this works for the
-standard 5-point Laplacian.  If you are doing some other operator with
-a different stencil, then this decomposition may no longer hold.
-
-% this figure can be created by figures/multigrid/red_black.py
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=0.6\linewidth]{rb}
-  \caption[Red-black ordering of zones]
-{\label{fig:rb} The red-black ordering of zones.}
-\end{figure}
-
-
-\subsection{Solvability}
+\section{Solvability}
 
 For $\nabla^2 \phi = f$ with periodic or
 Neumann boundaries all around, the sum of $f$ must equal $0$
@@ -751,43 +763,33 @@ enforce that $f$ integrate to zero numerically to test convergence.
 This is discussed in \S~\ref{sec:lm:periodicbcs}.
 
 
-\subsection{Boundary charges}
 
-For inhomogeneous boundary conditions, {\em boundary charges} can be
-used to convert the BCs to homogeneous BCs.  This has the advantage of
-allowing the ghost cell filling routines only deal with the
-homogeneous case.
+\section{Going Further}
 
-Consider the one-dimensional Poisson equation, near the left boundary
-our discretized equation appears as:
-\begin{equation}
-\frac{\phi_\mathrm{lo-1} - 2\phi_\mathrm{lo} + \phi_\mathrm{lo+1}}{\Delta x^2}
- = f_\mathrm{lo}
-\end{equation}
-Inhomogeneous BCs at the left boundary would give the condition:
-\begin{equation}
-\phi_\mathrm{lo-1} = 2 \phi_l - \phi_\mathrm{lo}
-\end{equation}
-Substituting this into the discrete equation, we have:
-\begin{equation}
-\frac{2 \phi_l - \phi_\mathrm{lo} - 2\phi_\mathrm{lo} + \phi_\mathrm{lo+1}}{\Delta x^2}
- = f_\mathrm{lo}
-\end{equation}
-Bringing the boundary condition value over to the RHS, we see
-\begin{equation}
-\frac{- 3\phi_\mathrm{lo} + \phi_\mathrm{lo+1}}{\Delta x^2}
- = f_\mathrm{lo} - \frac{2\phi_l}{\Delta x^2}
-\end{equation}
-Now the left side looks precisely like the differenced Poisson equation
-with homogeneous Dirichlet BCs.  The RHS has an additional `charge' that
-captures the boundary value.  By modifying the source term, $f$, in the
-multigrid solver to include this charge, we can use the homogeneous 
-ghost cell filling routines throughout the multigrid algorithm.
-This technique is discussed a bit in~\cite{colellanotes}.
+\label{sec:multigrid:other}
 
-Note that the form of the boundary charge will depend on the form of the
-elliptic equation---the expressions derived above apply only for
-$\nabla^2 \phi = f$.
+\subsection{Red-black Ordering}
+
+When using domain decomposition to spread the problem across parallel
+processors, the smoothing is often done as {\em red-black
+  Gauss-Seidel}.  In this ordering, you imagine the grid to be a
+checkerboard (see Figure~\ref{fig:rb}).  In the first Gauss-Seidel
+pass you update the red squares and in the second, the black squares.
+The advantage is that when updating the red, you can be sure that none
+of the zones you depend on (the neighboring black zones) will change.
+This makes the decomposition parallel.  Note: this works for the
+standard 5-point Laplacian.  If you are doing some other operator with
+a different stencil, then this decomposition may no longer hold.
+
+% this figure can be created by figures/multigrid/red_black.py
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.6\linewidth]{rb}
+  \caption[Red-black ordering of zones]
+{\label{fig:rb} The red-black ordering of zones.}
+\end{figure}
+
+
 
 
 

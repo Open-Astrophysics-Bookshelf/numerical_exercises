@@ -13,8 +13,8 @@
 \DeclareGraphicsExtensions{%
   .pdf, .png}
 
-% Bibliographic Package                                                         
-\usepackage[numbers,sort&compress]{natbib}       
+% Bibliographic Package
+\usepackage[numbers,sort&compress]{natbib}
 
 % code listings
 \usepackage{listings}
@@ -99,7 +99,6 @@
 
 
 
-
 % hyperlinks -- load after fncychap
 \usepackage{hyperref}
 \usepackage[hyperpageref]{backref}
@@ -179,6 +178,27 @@
 \thispagestyle{empty}
 \newpage
 \if@twocolumn\hbox{}\newpage\fi\fi\fi}
+\makeatother
+
+
+% no page number of the part page
+% http://latex.org/forum/viewtopic.php?f=47&t=4293&p=16738
+\makeatletter
+\renewcommand\part{%
+   \if@openright
+     \cleardoublepage
+   \else
+     \clearpage
+   \fi
+   \thispagestyle{empty}%
+   \if@twocolumn
+     \onecolumn
+     \@tempswatrue
+   \else
+     \@tempswafalse
+   \fi
+   \null\vfil
+   \secdef\@part\@spart}
 \makeatother
 
 
@@ -561,7 +581,7 @@ Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
 \input radiation/radiation.tex
 \fi
 
-%\part{Appendices}
+\part{Code Descriptions}
 
 \appendix
 
