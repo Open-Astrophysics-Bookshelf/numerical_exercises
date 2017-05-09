@@ -117,17 +117,17 @@ Instead, we again use an approximate projection.  We discretize the
 variable-coefficient Laplacian as:
 \begin{align}
 (L_\eta \phi)_{i,j} = 
- & \frac{\eta_{i+1/2,j} (\phi_{i+1,j} - \phi_{i,j}) -
-        \eta_{i-1/2,j} (\phi_{i,j} - \phi_{i-1,j})}{\Delta x^2} + \nonumber \\
- & \frac{\eta_{i,j+1/2} (\phi_{i,j+1} - \phi_{i,j}) -
-        \eta_{i,j-1/2} (\phi_{i,j} - \phi_{i,j-1})}{\Delta y^2}
+ & \frac{\eta_{i+\myhalf,j} (\phi_{i+1,j} - \phi_{i,j}) -
+        \eta_{i-\myhalf,j} (\phi_{i,j} - \phi_{i-1,j})}{\Delta x^2} + \nonumber \\
+ & \frac{\eta_{i,j+\myhalf} (\phi_{i,j+1} - \phi_{i,j}) -
+        \eta_{i,j-\myhalf} (\phi_{i,j} - \phi_{i,j-1})}{\Delta y^2}
 \label{lm:eq:lap}
 \end{align}
 
 We can define the interface values of $\eta$ as the averages of the
 cell-centered values, e.g.,
 \begin{equation}
-  \eta_{i,j+1/2} = \frac{1}{2}(\eta_{i,j} + \eta_{i,j+1})
+  \eta_{i,j+\myhalf} = \frac{1}{2}(\eta_{i,j} + \eta_{i,j+1})
 \end{equation}
 Our elliptic equation is then 
 \begin{equation}
@@ -137,15 +137,15 @@ Our elliptic equation is then
 The relaxation method for this operator again relies on isolating
 $\phi_{i,j}$, yielding:
 \begin{equation}
-\phi_{i,j} = \frac{\teta_{i+1/2,j}\phi_{i+1,j} + \teta_{i-1/2,j}\phi_{i-1,j} +
-                   \teta_{i,j+1/2}\phi_{i,j+1} + \teta_{i,j-1/2}\phi_{i,j-1} -
+\phi_{i,j} = \frac{\teta_{i+\myhalf,j}\phi_{i+1,j} + \teta_{i-\myhalf,j}\phi_{i-1,j} +
+                   \teta_{i,j+\myhalf}\phi_{i,j+1} + \teta_{i,j-\myhalf}\phi_{i,j-1} -
                    f_{i,j} } 
-                  {\teta_{i+1/2,j} + \teta_{i-1/2,j} + 
-                   \teta_{i,j+1/2} + \teta_{i,j-1/2}}
+                  {\teta_{i+\myhalf,j} + \teta_{i-\myhalf,j} + 
+                   \teta_{i,j+\myhalf} + \teta_{i,j-\myhalf}}
 \label{lm:eq:smooth}
 \end{equation}
-with the shorthand that $\teta_{i\pm1/2,j} = \eta_{i\pm1/2,j}/\Delta x^2$
-and $\teta_{i,j\pm1/2} = \eta_{i,j\pm1/2}/\Delta y^2$.
+with the shorthand that $\teta_{i\pm\myhalf,j} = \eta_{i\pm\myhalf,j}/\Delta x^2$
+and $\teta_{i,j\pm\myhalf} = \eta_{i,j\pm\myhalf}/\Delta y^2$.
 
 To put this into our multigrid framework, there are three changes we
 need to make:
@@ -323,16 +323,16 @@ The general solution procedure is for a single step is:
   For the MAC projection, we have edge-centered velocities (in their
   respective coordinate direction).  We define an edge-centered $\beta_0$ as
   \begin{equation}
-    {\beta_0}_{j+1/2} = \frac{1}{2} ( {\beta_0}_j + {\beta_0}_{j+1} )
+    {\beta_0}_{j+\myhalf} = \frac{1}{2} ( {\beta_0}_j + {\beta_0}_{j+1} )
   \end{equation}
   (note that, since $\beta_0$ is one-dimensional, we only average in
   the vertical direction).  The divergence term is then:
   \begin{equation}
     \left [ \nabla \cdot (\beta_0 \Ub) \right ]_{i,j}^\mathrm{adv} =
-          {\beta_0}_j \frac{u^\mathrm{adv}_{i+1/2,j} - 
-            u^\mathrm{adv}_{i-1/2,j}}{\Delta x} +
-          \frac{{\beta_0}_{j+1/2} v^\mathrm{adv}_{i,j+1/2} - 
-            {\beta_0}_{j-1/2} v^\mathrm{adv}_{i,j-1/2} }{\Delta y}
+          {\beta_0}_j \frac{u^\mathrm{adv}_{i+\myhalf,j} - 
+            u^\mathrm{adv}_{i-\myhalf,j}}{\Delta x} +
+          \frac{{\beta_0}_{j+\myhalf} v^\mathrm{adv}_{i,j+\myhalf} - 
+            {\beta_0}_{j-\myhalf} v^\mathrm{adv}_{i,j-\myhalf} }{\Delta y}
   \end{equation}
   
   We define the coefficient, $\eta$, in the Poisson equation as:
@@ -353,12 +353,12 @@ The general solution procedure is for a single step is:
   \end{equation}
   Since the MAC velocities are edge-centered, our correction appears as:
   \begin{align}
-    u^\mathrm{adv}_{i+1/2,j} &= u^\mathrm{adv}_{i+1/2,j} -
-    \left (\frac{\beta_0}{\rho}\right )_{i+1/2,j}
+    u^\mathrm{adv}_{i+\myhalf,j} &= u^\mathrm{adv}_{i+\myhalf,j} -
+    \left (\frac{\beta_0}{\rho}\right )_{i+\myhalf,j}
     \frac{\phi_{i+1,j} - \phi_{i,j}}{\Delta x} \\
     %
-    v^\mathrm{adv}_{i,j+1/2} &= v^\mathrm{adv}_{i,j+1/2} -
-    \left (\frac{\beta_0}{\rho}\right )_{i,j+1/2}
+    v^\mathrm{adv}_{i,j+\myhalf} &= v^\mathrm{adv}_{i,j+\myhalf} -
+    \left (\frac{\beta_0}{\rho}\right )_{i,j+\myhalf}
     \frac{\phi_{i,j+1} - \phi_{i,j}}{\Delta y} 
   \end{align}
   
@@ -371,7 +371,7 @@ that were used for advection.  Our equation is:
 \end{equation}
 The $x$-interface left state would be:
 \begin{align}
-\rho_{i+1/2,j,L}^{n+1/2} &= \rho_{i,j}^n + 
+\rho_{i+\myhalf,j,L}^{n+\myhalf} &= \rho_{i,j}^n + 
    \frac{\Delta x}{2} \frac{\partial \rho}{\partial x} +
    \frac{\Delta t}{2} \frac{\partial \rho}{\partial t} + \ldots \nonumber \\
 %
@@ -381,7 +381,7 @@ The $x$-interface left state would be:
 %
  &= \underbrace{\rho_{i,j}^n + 
    \frac{\Delta x}{2} \left ( 1 - \frac{\Delta t}{\Delta x} u_{i,j} \right )
-        \frac{\partial \rho}{\partial x}}_{\hat{\rho}_{i+1/2,j,L}^{n+1/2}}
+        \frac{\partial \rho}{\partial x}}_{\hat{\rho}_{i+\myhalf,j,L}^{n+\myhalf}}
    - \frac{\Delta t}{2} \left [\rho u_x \right ]_{i,j} 
    - \frac{\Delta t}{2} \left [ (\rho v)_y \right ]_{i,j}
 \end{align}
@@ -395,42 +395,42 @@ $\hat{\rho}$ term) and ``transverse'' part (which here includes the
 non-advective part of the divergence).  We first construct the normal
 parts as
 \begin{equation}
-\hat{\rho}_{i+1/2,j,L}^{n+1/2} = \rho_{i,j}^n + 
-   \frac{1}{2} \left ( 1 - \frac{\Delta t}{\Delta x} u^\mathrm{adv}_{i+1/2,j} \right )
+\hat{\rho}_{i+\myhalf,j,L}^{n+\myhalf} = \rho_{i,j}^n + 
+   \frac{1}{2} \left ( 1 - \frac{\Delta t}{\Delta x} u^\mathrm{adv}_{i+\myhalf,j} \right )
    \overline{\Delta \rho}^{(x)}_{i,j}
 \end{equation}
 and then solve the Riemann problem (upwinding) for these:
 \begin{equation}
-\hat{\rho}_{i+1/2,j}^{n+1/2} = 
-   \mathcal{U}[u^\mathrm{adv}_{i+1/2,j}](\hat{\rho}_{i+1/2,j,L}^{n+1/2},
-                                     \hat{\rho}_{i+1/2,j,R}^{n+1/2}) =
+\hat{\rho}_{i+\myhalf,j}^{n+\myhalf} = 
+   \mathcal{U}[u^\mathrm{adv}_{i+\myhalf,j}](\hat{\rho}_{i+\myhalf,j,L}^{n+\myhalf},
+                                     \hat{\rho}_{i+\myhalf,j,R}^{n+\myhalf}) =
   \left \{
   \begin{array}{cl}
-     \hat{\rho}_{i+1/2,j,L}^{n+1/2} & u^\mathrm{adv}_{i+1/2,j} > 0 \\
-     \hat{\rho}_{i+1/2,j,R}^{n+1/2} & u^\mathrm{adv}_{i+1/2,j} < 0 
+     \hat{\rho}_{i+\myhalf,j,L}^{n+\myhalf} & u^\mathrm{adv}_{i+\myhalf,j} > 0 \\
+     \hat{\rho}_{i+\myhalf,j,R}^{n+\myhalf} & u^\mathrm{adv}_{i+\myhalf,j} < 0 
   \end{array} \right .
 \end{equation}
 The same procedure is done for the $y$-interfaces.
 
 The full states are then constructed using these ``hat'' states.  For example,
 \begin{align}
-\rho_{i+1/2,j,L}^{n+1/2} = \hat{\rho}_{i+1/2,j,L}^{n+1/2} 
+\rho_{i+\myhalf,j,L}^{n+\myhalf} = \hat{\rho}_{i+\myhalf,j,L}^{n+\myhalf} 
    &- \frac{\Delta t}{2} \rho_{i,j} 
-     \frac{u^\mathrm{adv}_{i+1/2,j} - u^\mathrm{adv}_{i-1/2,j}}{\Delta x} \nonumber \\
+     \frac{u^\mathrm{adv}_{i+\myhalf,j} - u^\mathrm{adv}_{i-\myhalf,j}}{\Delta x} \nonumber \\
    &- \frac{\Delta t}{2} 
-        \frac{\hat{\rho}_{i,j+1/2}^{n+1/2} v^\mathrm{adv}_{i,j+1/2} -
-              \hat{\rho}_{i,j-1/2}^{n+1/2} v^\mathrm{adv}_{i,j-1/2}}{\Delta y}
+        \frac{\hat{\rho}_{i,j+\myhalf}^{n+\myhalf} v^\mathrm{adv}_{i,j+\myhalf} -
+              \hat{\rho}_{i,j-\myhalf}^{n+\myhalf} v^\mathrm{adv}_{i,j-\myhalf}}{\Delta y}
 \end{align}
 Once the new states on both the $x$- and $y$-interfaces are constructed, we
 again upwind to find the final $\rho$ state on each interface:
 \begin{equation}
-\rho_{i+1/2,j}^{n+1/2} = 
-   \mathcal{U}[u^\mathrm{adv}_{i+1/2,j}](\rho_{i+1/2,j,L}^{n+1/2},
-                                     \rho_{i+1/2,j,R}^{n+1/2}) =
+\rho_{i+\myhalf,j}^{n+\myhalf} = 
+   \mathcal{U}[u^\mathrm{adv}_{i+\myhalf,j}](\rho_{i+\myhalf,j,L}^{n+\myhalf},
+                                     \rho_{i+\myhalf,j,R}^{n+\myhalf}) =
   \left \{
   \begin{array}{cl}
-     \rho_{i+1/2,j,L}^{n+1/2} & u^\mathrm{adv}_{i+1/2,j} > 0 \\
-     \rho_{i+1/2,j,R}^{n+1/2} & u^\mathrm{adv}_{i+1/2,j} < 0 
+     \rho_{i+\myhalf,j,L}^{n+\myhalf} & u^\mathrm{adv}_{i+\myhalf,j} > 0 \\
+     \rho_{i+\myhalf,j,R}^{n+\myhalf} & u^\mathrm{adv}_{i+\myhalf,j} < 0 
   \end{array} \right .
 \end{equation}
 
@@ -443,11 +443,11 @@ the continuity equation:
 \begin{align}
 \rho^{n+1}_{i,j} = \rho^n_{i,j} 
    &- \frac{\Delta t}{\Delta x} 
-      \left (\rho_{i+1/2,j}^{n+1/2} u^\mathrm{adv}_{i+1/2,j} -
-             \rho_{i-1/2,j}^{n+1/2} u^\mathrm{adv}_{i-1/2,j} \right ) \nonumber \\
+      \left (\rho_{i+\myhalf,j}^{n+\myhalf} u^\mathrm{adv}_{i+\myhalf,j} -
+             \rho_{i-\myhalf,j}^{n+\myhalf} u^\mathrm{adv}_{i-\myhalf,j} \right ) \nonumber \\
    &- \frac{\Delta t}{\Delta y}
-      \left (\rho_{i,j+1/2}^{n+1/2} v^\mathrm{adv}_{i,j+1/2} -
-             \rho_{i,j-1/2}^{n+1/2} v^\mathrm{adv}_{i,j-1/2} \right )
+      \left (\rho_{i,j+\myhalf}^{n+\myhalf} v^\mathrm{adv}_{i,j+\myhalf} -
+             \rho_{i,j-\myhalf}^{n+\myhalf} v^\mathrm{adv}_{i,j-\myhalf} \right )
 \end{align}
 
 
@@ -480,7 +480,7 @@ a_\mathrm{max} = \max \left \{ \left |\frac{\rho'\gb}{\rho} \right | \right \}
 \end{equation}
 and then 
 \begin{equation}
-\Delta t_\mathrm{force} = \left ( \frac{2 \Delta x}{a_\mathrm{max}} \right )^{1/2} 
+\Delta t_\mathrm{force} = \left ( \frac{2 \Delta x}{a_\mathrm{max}} \right )^{\myhalf} 
 \end{equation}
 This is based simply on $\Delta x = (1/2) a t^2$---the
 time it takes for the buoyant force to accelerate a fluid element
@@ -491,7 +491,7 @@ across a zone width.
 
 First we need to make sure that the initial velocity field satisfies our constraint
 
-Next we need to find $\nabla {p^\prime}^{n-1/2}$ for the first step.
+Next we need to find $\nabla {p^\prime}^{n-\myhalf}$ for the first step.
 
 
 

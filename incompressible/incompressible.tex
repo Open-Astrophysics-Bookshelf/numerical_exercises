@@ -169,9 +169,9 @@ prediction follows from Taylor expanding the state to the interface
 (through $\Delta x/2$ or $\Delta y/2$) and to the half-time (through
 $\Delta t/2$).  As with the regular advection, we can have left and
 right states which we will resolve by solving a Riemann problem.  The
-left interface state of $u$ at $i+1/2,j$ is found as:
+left interface state of $u$ at $i+\myhalf,j$ is found as:
 \begin{eqnarray}
-u_{i+1/2,j,L}^{n+1/2} 
+u_{i+\myhalf,j,L}^{n+\myhalf} 
   &=& u_{i,j} 
     + \frac{\Delta x}{2} \left . \frac{\partial u}{\partial x} \right |_{i,j}
     + \frac{\Delta t}{2} \left . \frac{\partial u}{\partial t} \right |_{i,j}\\
@@ -190,8 +190,8 @@ We express ${\partial u}/{\partial x} |_{i,j}$ as $\Dux_{i,j} / \Delta
 x$, where $\Dux_{i,j}$ is the limited slope of $u$ in the
 $x$-direction in zone $i,j$.  Our interface state is then:
 \begin{equation}
-u_{i+1/2,j,L}^{n+1/2} 
-    = \underbrace{u_{i,j} + \frac{1}{2} \left ( 1 - \frac{\Delta t}{\Delta x} u \right ) \Dux_{i,j}}_{\equiv \hat{u}_{i+1/2,j,L}^{n+1/2}}
+u_{i+\myhalf,j,L}^{n+\myhalf} 
+    = \underbrace{u_{i,j} + \frac{1}{2} \left ( 1 - \frac{\Delta t}{\Delta x} u \right ) \Dux_{i,j}}_{\equiv \hat{u}_{i+\myhalf,j,L}^{n+\myhalf}}
     - \underbrace{\frac{\Delta t}{2} \left ( v \frac{\partial u}{\partial y} \right )_{i,j}}_{\mathrm{transverse~term}}
     - \frac{\Delta t}{2} \left . \frac{\partial p}{\partial x} \right |_{i,j}
 \label{eq:uMAC_l}
@@ -200,8 +200,8 @@ u_{i+1/2,j,L}^{n+1/2}
 
 Similarly, for $v$ through the $y$ faces, we find:
 \begin{equation}
-v_{i,j+1/2,L}^{n+1/2} 
-    = \underbrace{v_{i,j} + \frac{1}{2} \left ( 1 - \frac{\Delta t}{\Delta x} v \right ) \Dvy_{i,j}}_{\equiv \hat{v}_{i,j+1/2,L}^{n+1/2}}
+v_{i,j+\myhalf,L}^{n+\myhalf} 
+    = \underbrace{v_{i,j} + \frac{1}{2} \left ( 1 - \frac{\Delta t}{\Delta x} v \right ) \Dvy_{i,j}}_{\equiv \hat{v}_{i,j+\myhalf,L}^{n+\myhalf}}
     - \underbrace{\frac{\Delta t}{2} \left ( u \frac{\partial v}{\partial x} \right )_{i,j}}_{\mathrm{transverse~term}}
     - \frac{\Delta t}{2} \left . \frac{\partial p}{\partial y} \right |_{i,j}
 \label{eq:vMAC_l}
@@ -219,44 +219,44 @@ states on each interface.
 
 \noindent $u$ on $x$-interfaces:
 \begin{eqnarray}
-\hat{u}_{i+1/2,j,L}^{n+1/2} &=&
+\hat{u}_{i+\myhalf,j,L}^{n+\myhalf} &=&
    u_{i,j} + \frac{1}{2} \left ( 1 - \frac{\Delta t}{\Delta x} u_{i,j} \right )
        \Dux_{i,j} \\ 
 %
-\hat{u}_{i+1/2,j,R}^{n+1/2} &=&
+\hat{u}_{i+\myhalf,j,R}^{n+\myhalf} &=&
    u_{i+1,j} - \frac{1}{2} \left ( 1 + \frac{\Delta t}{\Delta x} u_{i+1,j} \right )
        \Dux_{i+1,j} 
 \end{eqnarray}
 
 \noindent $v$ on $x$-interfaces:
 \begin{eqnarray}
-\hat{v}_{i+1/2,j,L}^{n+1/2} &=&
+\hat{v}_{i+\myhalf,j,L}^{n+\myhalf} &=&
    v_{i,j} + \frac{1}{2} \left ( 1 - \frac{\Delta t}{\Delta x} u_{i,j} \right )
        \Dvx_{i,j} \\ 
 %
-\hat{v}_{i,j+1/2,R}^{n+1/2} &=&
+\hat{v}_{i,j+\myhalf,R}^{n+\myhalf} &=&
    v_{i+1,j} - \frac{1}{2} \left ( 1 + \frac{\Delta t}{\Delta x} u_{i+1,j} \right )
        \Dvx_{i+1,j} 
 \end{eqnarray}
 
 \noindent $u$ on $y$-interfaces:
 \begin{eqnarray}
-\hat{u}_{i,j+1/2,L}^{n+1/2} &=&
+\hat{u}_{i,j+\myhalf,L}^{n+\myhalf} &=&
    u_{i,j} + \frac{1}{2} \left ( 1 - \frac{\Delta t}{\Delta y} v_{i,j} \right )
        \Duy_{i,j} \\ 
 %
-\hat{u}_{i,j+1/2,R}^{n+1/2} &=&
+\hat{u}_{i,j+\myhalf,R}^{n+\myhalf} &=&
    u_{i,j+1} - \frac{1}{2} \left ( 1 + \frac{\Delta t}{\Delta y} v_{i,j+1} \right )
        \Duy_{i,j+1} 
 \end{eqnarray}
 
 \noindent $v$ on $y$-interfaces:
 \begin{eqnarray}
-\hat{v}_{i,j+1/2,L}^{n+1/2} &=&
+\hat{v}_{i,j+\myhalf,L}^{n+\myhalf} &=&
    v_{i,j} + \frac{1}{2} \left ( 1 - \frac{\Delta t}{\Delta y} v_{i,j} \right )
        \Dvy_{i,j} \\ 
 %
-\hat{v}_{i,j+1/2,R}^{n+1/2} &=&
+\hat{v}_{i,j+\myhalf,R}^{n+\myhalf} &=&
    v_{i,j+1} - \frac{1}{2} \left ( 1 + \frac{\Delta t}{\Delta y} v_{i,j+1} \right )
        \Dvy_{i,j+1} 
 \end{eqnarray}
@@ -283,11 +283,11 @@ problem solution is:
 \end{equation}
 We solve this for each of the normal velocities, giving:
 \begin{eqnarray}
-\hat{u}^\mathrm{adv}_{i+1/2,j} &=& 
-    \mathcal{R}(\hat{u}_{i+1/2,j,L}^{n+1/2}, \hat{u}_{i+1/2,j,R}^{n+1/2}) \\
+\hat{u}^\mathrm{adv}_{i+\myhalf,j} &=& 
+    \mathcal{R}(\hat{u}_{i+\myhalf,j,L}^{n+\myhalf}, \hat{u}_{i+\myhalf,j,R}^{n+\myhalf}) \\
 %
-\hat{v}^\mathrm{adv}_{i,j+1/2} &=& 
-    \mathcal{R}(\hat{v}_{i,j+1/2,L}^{n+1/2}, \hat{v}_{i,j+1/2,R}^{n+1/2})
+\hat{v}^\mathrm{adv}_{i,j+\myhalf} &=& 
+    \mathcal{R}(\hat{v}_{i,j+\myhalf,L}^{n+\myhalf}, \hat{v}_{i,j+\myhalf,R}^{n+\myhalf})
 \end{eqnarray}
 These advective velocities (sometimes called the {\em transverse
   velocities}) are used to resolve the left and right states of all the
@@ -307,14 +307,14 @@ $\hat{v}^\mathrm{adv}$.  If we write the upwinding as:
 \end{equation}
 Then the interface states are:
 \begin{eqnarray}
-\hat{u}_{i+1/2,j} &=& \mathcal{U}[\hat{u}_{i+1/2,j}^\mathrm{adv}]
-             (\hat{u}_{i+1/2,j,L}^{n+1/2}, \hat{u}_{i+1/2,j,R}^{n+1/2} ) \\
-\hat{v}_{i+1/2,j} &=& \mathcal{U}[\hat{u}_{i+1/2,j}^\mathrm{adv}]
-             (\hat{v}_{i+1/2,j,L}^{n+1/2}, \hat{v}_{i+1/2,j,R}^{n+1/2} ) \\
-\hat{u}_{i,j+1/2} &=& \mathcal{U}[\hat{v}_{i,j+1/2}^\mathrm{adv}]
-             (\hat{u}_{i,j+1/2,L}^{n+1/2}, \hat{u}_{i,j+1/2,R}^{n+1/2} ) \\
-\hat{v}_{i,j+1/2} &=& \mathcal{U}[\hat{v}_{i,j+1/2}^\mathrm{adv}]
-             (\hat{v}_{i,j+1/2,L}^{n+1/2}, \hat{v}_{i,j+1/2,R}^{n+1/2} ) 
+\hat{u}_{i+\myhalf,j} &=& \mathcal{U}[\hat{u}_{i+\myhalf,j}^\mathrm{adv}]
+             (\hat{u}_{i+\myhalf,j,L}^{n+\myhalf}, \hat{u}_{i+\myhalf,j,R}^{n+\myhalf} ) \\
+\hat{v}_{i+\myhalf,j} &=& \mathcal{U}[\hat{u}_{i+\myhalf,j}^\mathrm{adv}]
+             (\hat{v}_{i+\myhalf,j,L}^{n+\myhalf}, \hat{v}_{i+\myhalf,j,R}^{n+\myhalf} ) \\
+\hat{u}_{i,j+\myhalf} &=& \mathcal{U}[\hat{v}_{i,j+\myhalf}^\mathrm{adv}]
+             (\hat{u}_{i,j+\myhalf,L}^{n+\myhalf}, \hat{u}_{i,j+\myhalf,R}^{n+\myhalf} ) \\
+\hat{v}_{i,j+\myhalf} &=& \mathcal{U}[\hat{v}_{i,j+\myhalf}^\mathrm{adv}]
+             (\hat{v}_{i,j+\myhalf,L}^{n+\myhalf}, \hat{v}_{i,j+\myhalf,R}^{n+\myhalf} ) 
 \end{eqnarray}
 
 Now we can construct the full left and right predictions for the
@@ -322,27 +322,27 @@ normal velocities on each interface (Eqs.~\ref{eq:uMAC_l} and
 \ref{eq:vMAC_l}).  This involves simply adding the transverse term to
 the hat quantities and adding the pressure gradient.
 \begin{equation}
-u_{i+1/2,j,L}^{n+1/2} = \hat{u}_{i+1/2,j,L}^{n+1/2} 
+u_{i+\myhalf,j,L}^{n+\myhalf} = \hat{u}_{i+\myhalf,j,L}^{n+\myhalf} 
     - \frac{\Delta t}{2} 
-       \left [ \frac{1}{2} \left (\hat{v}^\mathrm{adv}_{i,j-1/2} +
-                                  \hat{v}^\mathrm{adv}_{i,j+1/2} \right )
+       \left [ \frac{1}{2} \left (\hat{v}^\mathrm{adv}_{i,j-\myhalf} +
+                                  \hat{v}^\mathrm{adv}_{i,j+\myhalf} \right )
       \right ]
-      \left ( \frac{\hat{u}_{i,j+1/2}^{n+1/2} - 
-                    \hat{u}_{i,j-1/2}^{n+1/2}}{\Delta y} \right )
-    - \frac{\Delta t}{2} (Gp)^{(x),n-1/2}_{i,j}
+      \left ( \frac{\hat{u}_{i,j+\myhalf}^{n+\myhalf} - 
+                    \hat{u}_{i,j-\myhalf}^{n+\myhalf}}{\Delta y} \right )
+    - \frac{\Delta t}{2} (Gp)^{(x),n-\myhalf}_{i,j}
 \end{equation}
 and
 \begin{equation}
-v_{i,j+1/2,L}^{n+1/2} = \hat{v}_{i,j+1/2,L}^{n+1/2} 
+v_{i,j+\myhalf,L}^{n+\myhalf} = \hat{v}_{i,j+\myhalf,L}^{n+\myhalf} 
     - \frac{\Delta t}{2} 
-       \left [ \frac{1}{2} \left (\hat{u}^\mathrm{adv}_{i-1/2,j} +
-                                  \hat{u}^\mathrm{adv}_{i+1/2,j} \right )
+       \left [ \frac{1}{2} \left (\hat{u}^\mathrm{adv}_{i-\myhalf,j} +
+                                  \hat{u}^\mathrm{adv}_{i+\myhalf,j} \right )
       \right ]
-      \left ( \frac{\hat{v}_{i+1/2,j}^{n+1/2} - 
-                    \hat{v}_{i-1/2,j}^{n+1/2}}{\Delta x} \right )
-    - \frac{\Delta t}{2} (Gp)^{(y),n-1/2}_{i,j}
+      \left ( \frac{\hat{v}_{i+\myhalf,j}^{n+\myhalf} - 
+                    \hat{v}_{i-\myhalf,j}^{n+\myhalf}}{\Delta x} \right )
+    - \frac{\Delta t}{2} (Gp)^{(y),n-\myhalf}_{i,j}
 \end{equation}
-Here $ (Gp)^{(x),n-1/2}_{i,j}$ and $ (Gp)^{(y),n-1/2}_{i,j}$ are
+Here $ (Gp)^{(x),n-\myhalf}_{i,j}$ and $ (Gp)^{(y),n-\myhalf}_{i,j}$ are
 difference-approximations to $\nabla p$ in the $x$ and $y$
 directions respectively.  Note that they are lagged---these come from
 the projection at the end of the previous timestep.  See BCG for
@@ -354,19 +354,19 @@ Riemann problem) followed by upwinding to get the normal advective
 velocities.  This is basically the $\mathcal{R}(.,.)$ operation followed 
 by $\mathcal{U}(.,.)$.  Together, it is:
 \begin{equation}
-u^\mathrm{adv}_{i+1/2,j} = \left \{ \begin{array}{cl}
-   u_{i+1/2,j,L}^{n+1/2}  & 
-         \mathrm{~if~} u_{i+1/2,j,L}^{n+1/2} > 0, \qquad 
-                       u_{i+1/2,j,L}^{n+1/2} + u_{i+1/2,j,R}^{n+1/2} > 0 \\
-   \frac{1}{2} \left ( u_{i+1/2,j,L}^{n+1/2} +
-                       u_{i+1/2,j,R}^{n+1/2} \right )  &
-          \mathrm{~if~} u_{i+1/2,j,L}^{n+1/2} \le 0, \qquad 
-                        u_{i+1/2,j,R}^{n+1/2} \ge 0 \\
-   u_{i+1/2,j,R}^{n+1/2}  & \mathrm{~otherwise}
+u^\mathrm{adv}_{i+\myhalf,j} = \left \{ \begin{array}{cl}
+   u_{i+\myhalf,j,L}^{n+\myhalf}  & 
+         \mathrm{~if~} u_{i+\myhalf,j,L}^{n+\myhalf} > 0, \qquad 
+                       u_{i+\myhalf,j,L}^{n+\myhalf} + u_{i+\myhalf,j,R}^{n+\myhalf} > 0 \\
+   \frac{1}{2} \left ( u_{i+\myhalf,j,L}^{n+\myhalf} +
+                       u_{i+\myhalf,j,R}^{n+\myhalf} \right )  &
+          \mathrm{~if~} u_{i+\myhalf,j,L}^{n+\myhalf} \le 0, \qquad 
+                        u_{i+\myhalf,j,R}^{n+\myhalf} \ge 0 \\
+   u_{i+\myhalf,j,R}^{n+\myhalf}  & \mathrm{~otherwise}
   \end{array}
   \right .
 \end{equation}
-and similar for $v^\mathrm{adv}_{i,j+1/2}$.  
+and similar for $v^\mathrm{adv}_{i,j+\myhalf}$.  
 These velocities are sometimes referred to as the MAC velocities.
 
 
@@ -394,9 +394,9 @@ it the MAC projection.
 
 The divergence of the MAC velocities is cell-centered and constructed as:
 \begin{equation}
-(D \Ub)_{i,j} = \frac{u^\mathrm{adv}_{i+1/2,j} - u^\mathrm{adv}_{i-1/2,j}}
+(D \Ub)_{i,j} = \frac{u^\mathrm{adv}_{i+\myhalf,j} - u^\mathrm{adv}_{i-\myhalf,j}}
                    {\Delta x} +
-              \frac{v^\mathrm{adv}_{i,j+1/2} - v^\mathrm{adv}_{i,j-1/2}}
+              \frac{v^\mathrm{adv}_{i,j+\myhalf} - v^\mathrm{adv}_{i,j-\myhalf}}
                    {\Delta y}
 \end{equation}
 We define a cell-centered $\phi$.  $G\phi$ will then be edge-centered
@@ -409,10 +409,10 @@ L\phi = D\Ub
 \end{equation}
 using multigrid V-cycles and then update the MAC velocities as:
 \begin{eqnarray}
-u^\mathrm{adv}_{i+1/2,j} &=& u^\mathrm{adv}_{i+1/2,j} - 
+u^\mathrm{adv}_{i+\myhalf,j} &=& u^\mathrm{adv}_{i+\myhalf,j} - 
     \frac{\phi_{i+1,j} - \phi_{i,j}}{\Delta x} \\
 %
-v^\mathrm{adv}_{i,j+1/2} &=& v^\mathrm{adv}_{i,j+1/2} - 
+v^\mathrm{adv}_{i,j+\myhalf} &=& v^\mathrm{adv}_{i,j+\myhalf} - 
     \frac{\phi_{i,j+1} - \phi_{i,j}}{\Delta y}
 \end{eqnarray}
 
@@ -429,8 +429,8 @@ $y$-interfaces (not just the normal component at each interface).
 Finally, instead of solving a Riemann problem to resolve the left and
 right states, we simply upwind using the MAC-projected
 $u^\mathrm{adv}$ and $v^\mathrm{adv}$.  This results in the interface
-state $u^{n+1/2}_{i+1/2,j}$, $v^{n+1/2}_{i+1/2,j}$, $u^{n+1/2}_{i,j+1/2}$,
-$v^{n+1/2}_{i,j+1/2}$.
+state $u^{n+\myhalf}_{i+\myhalf,j}$, $v^{n+\myhalf}_{i+\myhalf,j}$, $u^{n+\myhalf}_{i,j+\myhalf}$,
+$v^{n+\myhalf}_{i,j+\myhalf}$.
 
 The only reason we need to do this step over, instead of using the
 interface states that we predicted previously is we want to ensure
@@ -442,31 +442,31 @@ that they are consistent with the MAC-projected advective velocities
 Once we have the time-centered interface states that are consistent with
 the MAC-projected advective velocities, we can update the velocities to
 the new time by discretizing the advective terms ($\Ub\cdot \nabla \Ub$).
-We express the advective terms for $u$ as $A^{(u),n+1/2}_{i,j}$ and
-those for $v$ as $A^{(v),n+1/2}_{i,j}$.  These have the form:
+We express the advective terms for $u$ as $A^{(u),n+\myhalf}_{i,j}$ and
+those for $v$ as $A^{(v),n+\myhalf}_{i,j}$.  These have the form:
 \begin{eqnarray}
-A^{(u),n+1/2}_{i,j} =   
+A^{(u),n+\myhalf}_{i,j} =   
    && \frac{1}{2}
-     \left ( u^\mathrm{adv}_{i-1/2,j} + u^\mathrm{adv}_{i+1/2,j} \right )
-     \frac{u^{n+1/2}_{i+1/2,j} - u^{n+1/2}_{i-1/2,j}}{\Delta x} + \nonumber \\
+     \left ( u^\mathrm{adv}_{i-\myhalf,j} + u^\mathrm{adv}_{i+\myhalf,j} \right )
+     \frac{u^{n+\myhalf}_{i+\myhalf,j} - u^{n+\myhalf}_{i-\myhalf,j}}{\Delta x} + \nonumber \\
    && \frac{1}{2}
-     \left ( v^\mathrm{adv}_{i,j-1/2} + v^\mathrm{adv}_{i,j+1/2} \right )
-     \frac{u^{n+1/2}_{i,j+1/2} - u^{n+1/2}_{i,j-1/2}}{\Delta y} \\
+     \left ( v^\mathrm{adv}_{i,j-\myhalf} + v^\mathrm{adv}_{i,j+\myhalf} \right )
+     \frac{u^{n+\myhalf}_{i,j+\myhalf} - u^{n+\myhalf}_{i,j-\myhalf}}{\Delta y} \\
 %
-A^{(v),n+1/2}_{i,j} = 
+A^{(v),n+\myhalf}_{i,j} = 
    && \frac{1}{2}
-     \left ( u^\mathrm{adv}_{i-1/2,j} + u^\mathrm{adv}_{i+1/2,j} \right )
-     \frac{v^{n+1/2}_{i+1/2,j} - v^{n+1/2}_{i-1/2,j}}{\Delta x} \nonumber +\\
+     \left ( u^\mathrm{adv}_{i-\myhalf,j} + u^\mathrm{adv}_{i+\myhalf,j} \right )
+     \frac{v^{n+\myhalf}_{i+\myhalf,j} - v^{n+\myhalf}_{i-\myhalf,j}}{\Delta x} \nonumber +\\
    && \frac{1}{2}
-     \left ( v^\mathrm{adv}_{i,j-1/2} + v^\mathrm{adv}_{i,j+1/2} \right )
-     \frac{v^{n+1/2}_{i,j+1/2} - v^{n+1/2}_{i,j-1/2}}{\Delta y}
+     \left ( v^\mathrm{adv}_{i,j-\myhalf} + v^\mathrm{adv}_{i,j+\myhalf} \right )
+     \frac{v^{n+\myhalf}_{i,j+\myhalf} - v^{n+\myhalf}_{i,j-\myhalf}}{\Delta y}
 \end{eqnarray}
 
 The normal update for $u$, $v$ would include the $Gp$ term and appear
 as:
 \begin{eqnarray}
-u^{\star}_{i,j} &=& u^n_{i,j} - \Delta t A^{(u),n+1/2}_{i,j} - \Delta t (G p)^{(x),n-1/2}_{i,j} \\
-v^{\star}_{i,j} &=& v^n_{i,j} - \Delta t A^{(v),n+1/2}_{i,j} - \Delta t (G p)^{(y),n-1/2}_{i,j} 
+u^{\star}_{i,j} &=& u^n_{i,j} - \Delta t A^{(u),n+\myhalf}_{i,j} - \Delta t (G p)^{(x),n-\myhalf}_{i,j} \\
+v^{\star}_{i,j} &=& v^n_{i,j} - \Delta t A^{(v),n+\myhalf}_{i,j} - \Delta t (G p)^{(y),n-\myhalf}_{i,j} 
 \end{eqnarray}
 Note that at this point, we don't have an updated $p$, so we use a lagged
 value from the previous step's projection.
@@ -475,8 +475,8 @@ Alternately, we can note that for an exact projection, $Gp$, is the gradient
 of a scalar and would be removed by the projection, so we can omit it in
 this update, giving an alternate provisional update:
 \begin{eqnarray}
-u^{\star\star}_{i,j} &=& u^n_{i,j} - \Delta t A^{(u),n+1/2}_{i,j}  \\
-v^{\star\star}_{i,j} &=& v^n_{i,j} - \Delta t A^{(v),n+1/2}_{i,j}  
+u^{\star\star}_{i,j} &=& u^n_{i,j} - \Delta t A^{(u),n+\myhalf}_{i,j}  \\
+v^{\star\star}_{i,j} &=& v^n_{i,j} - \Delta t A^{(v),n+\myhalf}_{i,j}  
 \end{eqnarray}
 
 
@@ -484,16 +484,16 @@ Following the notation in Martin, we distinguish between these with
 an `$\star$' vs.\ `$\star\star$' \footnote{Note that these are identical to
 ABC~\cite{ABC} approximation projections (1) and (2) (a quick look at ABC might
 suggest the opposite, but note that their definition of $\Ub^\star$
-already includes a $-Gp^{n-1/2}$ term, so by explicitly adding it back
+already includes a $-Gp^{n-\myhalf}$ term, so by explicitly adding it back
 in, you are dealing with the case where $\Ub^\star$ was updated without
-any $Gp^{n-1/2}$ term, like the `$\star\star$' case above.)}.
+any $Gp^{n-\myhalf}$ term, like the `$\star\star$' case above.)}.
 
 
 \subsection{Approximate projection}
 
 This provisional velocity field does not yet obey the constraint.  To
 enforce the constraint, we need to do a projection.  Here is where we
-have the flexibility on whether to include the $G p^{n-1/2}$ term.  If
+have the flexibility on whether to include the $G p^{n-\myhalf}$ term.  If
 we were doing an exact projection, then adding the gradient of a
 scalar would not change the divergence-free velocity field, so there
 would be no need to add it.  
@@ -536,7 +536,7 @@ together with the cell-centered divergence above (Eq.~\ref{eq:ccdiv}).
 
 Rider~\cite{rider} and Almgren, Bell, and Crutchfield (ABC)~\cite{ABC}
 explore various forms of what to project when doing the approximate
-projection.  For instance, do we include the $Gp^{n-1/2}$ term in the
+projection.  For instance, do we include the $Gp^{n-\myhalf}$ term in the
 provisional velocity or not?  Chorin noted that if viscosity is being
 modeled, then it is necessary to include it here to get second-order
 accuracy.  Also, one can project the update to the velocity, $(\Ub^\star
@@ -556,9 +556,9 @@ differs slightly depending on whether we project $\Ub^\star$ or $\Ub^{\star\star
 From the expression above,
 this looks like:
 \begin{equation}
-\frac{\Ub^\star}{\Delta t} = \frac{\Ub^n}{\Delta t} - A^{(u),n+1/2} - (G p)^{(x),n-1/2}
+\frac{\Ub^\star}{\Delta t} = \frac{\Ub^n}{\Delta t} - A^{(u),n+\myhalf} - (G p)^{(x),n-\myhalf}
 \end{equation}
-Ideally, $\Ub^n$ is already divergence free, and $Gp^{n-1/2}$ is the
+Ideally, $\Ub^n$ is already divergence free, and $Gp^{n-\myhalf}$ is the
 gradient of a scalar, which will be removed, so the projection should
 pick out the divergence free portion of $A^{(u)}$.  We solve:
 \begin{equation}
@@ -570,14 +570,14 @@ We then find the new, divergence free velocity field as:
 \Ub^{n+1} = \Ub^\star - \Delta t G\phi
 \end{equation}
 
-Since we already included $Gp^{n-1/2}$ in what we projected, $G\phi$
+Since we already included $Gp^{n-\myhalf}$ in what we projected, $G\phi$
 will be the correction,
 \begin{equation}
-G\phi = Gp^{n+1/2} - Gp^{n-1/2}
+G\phi = Gp^{n+\myhalf} - Gp^{n-\myhalf}
 \end{equation}
 or
 \begin{equation}
-Gp^{n+1/2} = Gp^{n-1/2} + G\phi
+Gp^{n+\myhalf} = Gp^{n-\myhalf} + G\phi
 \end{equation}
 (see Martin 2.5 or ABC).  We store this for the next timestep.
 
@@ -587,9 +587,9 @@ Gp^{n+1/2} = Gp^{n-1/2} + G\phi
 From the expression above,
 this looks like:
 \begin{equation}
-\frac{\Ub^{\star\star}}{\Delta t} = \frac{\Ub^n}{\Delta t} - A^{(u),n+1/2} 
+\frac{\Ub^{\star\star}}{\Delta t} = \frac{\Ub^n}{\Delta t} - A^{(u),n+\myhalf} 
 \end{equation}
-There is no explicit $Gp^{n-1/2}$ term.  We solve:
+There is no explicit $Gp^{n-\myhalf}$ term.  We solve:
 \begin{equation}
 L\phi = D (\Ub^{\star\star}/\Delta t)
 \end{equation}
@@ -599,10 +599,10 @@ We then find the new, divergence free velocity field as:
 \Ub^{n+1} = \Ub^{\star\star} - \Delta t G\phi
 \end{equation}
 
-Since there was no $Gp^{n-1/2}$ in what we projected, $p^{n+1/2} = \phi$,
+Since there was no $Gp^{n-\myhalf}$ in what we projected, $p^{n+\myhalf} = \phi$,
 and 
 \begin{equation}
-Gp^{n+1/2} = G\phi
+Gp^{n+\myhalf} = G\phi
 \end{equation}
 We store this for the next timestep.
 \end{itemize}
@@ -638,10 +638,10 @@ See ABS for a discussion of the boundary conditions.
 
 \section{Bootstrapping}
 
-At step 0, we do not have a value of $Gp^{-1/2}$.  To get an initial value
+At step 0, we do not have a value of $Gp^{-\myhalf}$.  To get an initial value
 for $Gp$, we run through the entire evolution algorithm starting with the
 initial data.  At the end of a step, we reset $u$ and $v$ to the initial
-values and store the $Gp$ at the end of this step as $Gp^{-1/2}$.
+values and store the $Gp$ at the end of this step as $Gp^{-\myhalf}$.
 
 It is also common to precede this initialization by first projecting
 the velocity field to ensure it is divergence free.  This way, we do
@@ -707,16 +707,16 @@ algorithm.
   The solution process for this equation is largely the same.
   Following BCH, first the advective term is computed by predicting
   the velocities to the interfaces, doing the MAC projection, and then
-  forming $A^{n+1/2}$.  Now there is an explicit viscosity term (at
+  forming $A^{n+\myhalf}$.  Now there is an explicit viscosity term (at
   time-level $n$) present in the prediction, as a source term.  The
   provision velocity update is no longer a simple flux update, but
   instead requires solving two decoupled diffusion-like equations (one
   for $u$ and one for $v$).  These are differenced using
   Crank-Nicolson centering:
   \begin{eqnarray}
-  \frac{u^\star - u^n}{\Delta t} &=& - A^{(u),n+1/2} - \nabla p^{(x),n-1/2} 
+  \frac{u^\star - u^n}{\Delta t} &=& - A^{(u),n+\myhalf} - \nabla p^{(x),n-\myhalf} 
        + \frac{\epsilon }{2} \nabla^2 (u^n + u^\star) \\
-  \frac{v^\star - v^n}{\Delta t} &=& - A^{(v),n+1/2} - \nabla p^{(y),n-1/2} 
+  \frac{v^\star - v^n}{\Delta t} &=& - A^{(v),n+\myhalf} - \nabla p^{(y),n-\myhalf} 
        + \frac{\epsilon }{2} \nabla^2 (v^n + v^\star) 
   \end{eqnarray}
   This involves two separate multigrid solves.  Once $\Ub^\star$ is found,

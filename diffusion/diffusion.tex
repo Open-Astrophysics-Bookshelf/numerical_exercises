@@ -459,18 +459,18 @@ the data, has second-order convergence.\\
   we discretize as:
   \begin{equation}
   \frac{\phi_i^{n+1} - \phi_i^n}{\Delta t} = 
-        \frac{ \{ k \nabla \phi \}_{i+1/2} -
-               \{ k \nabla \phi \}_{i-1/2}}{\Delta x}
+        \frac{ \{ k \nabla \phi \}_{i+\myhalf} -
+               \{ k \nabla \phi \}_{i-\myhalf}}{\Delta x}
   \end{equation}
- Here we need the values of $k$ at the interfaces, $k_{i-1/2}$ and
- $k_{i+1/2}$.  We can get these from the cell-centered values in a
+ Here we need the values of $k$ at the interfaces, $k_{i-\myhalf}$ and
+ $k_{i+\myhalf}$.  We can get these from the cell-centered values in a
  variety of ways including straight-averaging:
  \begin{equation}
- k_{i+1/2} = \frac{1}{2} (k_i + k_{i+1})
+ k_{i+\myhalf} = \frac{1}{2} (k_i + k_{i+1})
  \end{equation}
  or averaging the inverses:
  \begin{equation}
- \frac{1}{k_{i+1/2}} = \frac{1}{2} \left (\frac{1}{k_i} + \frac{1}{k_{i+1}} \right )
+ \frac{1}{k_{i+\myhalf}} = \frac{1}{2} \left (\frac{1}{k_i} + \frac{1}{k_{i+1}} \right )
  \end{equation}
  
 \item {\em State-dependent transport coefficients}: many times the

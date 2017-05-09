@@ -41,17 +41,17 @@ We will difference this in a second-order accurate fashion.  Thinking
 of the Laplacian as $\nabla^2 \phi$ = $\nabla \cdot \nabla \phi$, we
 first compute the gradient of $\phi$ on edges:
 \begin{equation}
-[\nabla \phi \cdot \hat{x}]_{i+1/2,j} = \frac{\phi_{i+1,j} - \phi_{i,j}}{\Delta x}
+[\nabla \phi \cdot \hat{x}]_{i+\myhalf,j} = \frac{\phi_{i+1,j} - \phi_{i,j}}{\Delta x}
 \end{equation}
 Since this is defined on edges, this represents a centered difference, and is
 therefore second-order accurate.  We then difference the edge-centered
 gradients to the center to get the Laplacian at cell-centers:
 \begin{align}
 [\nabla^2 \phi]_{i,j} &=
-   \frac{[\nabla \phi \cdot \hat{x}]_{i+1/2,j} -
-         [\nabla \phi \cdot \hat{x}]_{i-1/2,j}}{\Delta x} +
-   \frac{[\nabla \phi \cdot \hat{y}]_{i,j+1/2} -
-         [\nabla \phi \cdot \hat{y}]_{i,j-1/2}}{\Delta y} \nonumber\\
+   \frac{[\nabla \phi \cdot \hat{x}]_{i+\myhalf,j} -
+         [\nabla \phi \cdot \hat{x}]_{i-\myhalf,j}}{\Delta x} +
+   \frac{[\nabla \phi \cdot \hat{y}]_{i,j+\myhalf} -
+         [\nabla \phi \cdot \hat{y}]_{i,j-\myhalf}}{\Delta y} \nonumber\\
 %
   &= \frac{\phi_{i+1,j} - 2\phi_{i,j} + \phi_{i-1,j}}{\Delta x^2} +
      \frac{\phi_{i,j+1} - 2\phi_{i,j} + \phi_{i,j-1}}{\Delta y^2} = f_{i,j}
