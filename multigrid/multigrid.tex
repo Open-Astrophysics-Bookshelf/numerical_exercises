@@ -24,28 +24,54 @@ equation (like diffusion) by discretizing in time.
 
 Notice that there is no time-dependence in any of these equations.
 The quantity $\phi$ is specified instantaneously in the domain subject to
-boundary conditions.
+boundary conditions.  This makes the solution methods very different then
+what we saw for hyperbolic problems.
+
 
 \section{\label{elliptic:sec:fft} Fourier Method}
 
-A direct way of solving a constant-coefficient elliptic equation
-is using Fourier transforms.  Using a general Fourier transform
-(which we consider here) works only for periodic boundary conditions,
-but other basis functions can be used for other boundary conditions.
+A direct way of solving a constant-coefficient elliptic equation is
+using Fourier transforms.  Using a general Fourier transform (which we
+consider here) works only for periodic boundary conditions, but other
+basis functions (e.g., all sines or all cosines) can be used for other
+boundary conditions. \MarginPar{ref?}
 
 Consider the Poisson equation:
 \begin{equation}
 \nabla^2 \phi = f
 \end{equation}
-We will difference this in a second-order accurate fashion.  Thinking
-of the Laplacian as $\nabla^2 \phi$ = $\nabla \cdot \nabla \phi$, we
-first compute the gradient of $\phi$ on edges:
+We will difference this in a second-order accurate fashion---see
+Figure~\ref{fig:mg:laplacian}.  
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{laplacian}
+\caption{\label{fig:mg:laplacian} The centerings of the first and second
+derivatives for a standard Laplacian discretization.}
+\end{figure}
+%
+In 1-d, the Laplacian is just the second-derivative.  If our solution
+is defined at cell-centers, then we first compute the first-derivative
+on cell edges:
+\begin{align}
+\left . \frac{d\phi}{dx} \right |_{i-\myhalf} &= \frac{\phi_i - \phi_{i-1}}{\Delta x}\\
+\left . \frac{d\phi}{dx} \right |_{i+\myhalf} &= \frac{\phi_{i+1} - \phi_i}{\Delta x}
+\end{align}
+These are second-order accurate on the interface.  We can then compute
+the second-derivative at the cell-center by differencing these edge values:
+\begin{equation}
+\left . \frac{d^2\phi}{dx^2} \right |_i = \frac{ d\phi/dx |_{i+\myhalf} - d\phi/dx |_{i-\myhalf}}{\Delta x}
+\end{equation}
+
+The extension to 2-d is straightforward.  Thinking of the Laplacian as $\nabla^2
+\phi$ = $\nabla \cdot \nabla \phi$, we first compute the gradient of
+$\phi$ on edges:
 \begin{equation}
 [\nabla \phi \cdot \hat{x}]_{i+\myhalf,j} = \frac{\phi_{i+1,j} - \phi_{i,j}}{\Delta x}
 \end{equation}
-Since this is defined on edges, this represents a centered difference, and is
-therefore second-order accurate.  We then difference the edge-centered
-gradients to the center to get the Laplacian at cell-centers:
+Again, since this is defined on edges, this represents a centered
+difference, and is therefore second-order accurate.  We then
+difference the edge-centered gradients to the center to get the
+Laplacian at cell-centers:
 \begin{align}
 [\nabla^2 \phi]_{i,j} &=
    \frac{[\nabla \phi \cdot \hat{x}]_{i+\myhalf,j} -
@@ -57,8 +83,10 @@ gradients to the center to get the Laplacian at cell-centers:
      \frac{\phi_{i,j+1} - 2\phi_{i,j} + \phi_{i,j-1}}{\Delta y^2} = f_{i,j}
 \end{align}        
 Again, since we used a centered-difference of the edge values, this
-expression is second-order accurate.  This is the standard
-{\em 5-point stencil} for the 2-d Laplacian.
+expression is second-order accurate.  This is the standard {\em
+  5-point stencil} for the 2-d Laplacian\footnote{There are other
+  possible second-order accurate stencils, including a 9-point stencil
+  in 2-d, that are less commonly used.}.
 
 We now assume that we have an FFT subroutine that can take our
 discrete real-space data, $\phi_{i,j}$ and return the discrete
@@ -84,8 +112,7 @@ f_{i,j} &= \frac{1}{MN} \sum_{k_x = 0}^{M-1} \sum_{k_y = 0}^{N-1}
   F_{k_x,k_y} e^{2\pi\imag i k_x/M} e^{2\pi\imag j k_y/N} 
 \end{align}
 
-Inserting these into the differenced equation (and dropping the sums
-and normalization, to focus on a single mode), we have:
+Inserting these into the differenced equation, we have:
 \begin{align}
 \frac{1}{MN}\sum_{k_x=0}^{M-1}\sum_{k_y=0}^{N-1}
 \biggl \{
@@ -157,12 +184,11 @@ Figure~\ref{fig:mg:fftpoisson} shows the solution.
 
 
 The main downside of this approach is that, because we solve for a
-single component independently (Eq.~\ref{eq:FFTsol}), this only
-works for linear problems with constant coefficients.  This makes
-it an excellent choice for cosmological problems solving the gravitational
-Poisson equation with periodic boundaries on all sides of the domain.
-However, for a problem
-like:
+single component independently (Eq.~\ref{eq:FFTsol}), this only works
+for linear problems with constant coefficients.  This makes it an
+excellent choice for cosmological problems solving the gravitational
+Poisson equation with periodic boundaries on all sides of the domain
+(see, e.g., \cite{heitmann:2008}).  However, for a problem like:
 \begin{equation}
   \nabla \cdot (\beta \nabla \phi) = f
 \end{equation}
@@ -536,12 +562,22 @@ Multigrid relies on transferring the problem up and down a hierarchy of
 grids.  Consider the following grid.  The finer grid is superposed over
 the center coarse cell, and the fine grid cells are marked in red.
 
+% this figure can be created by figures/multigrid/fvrestrict.py
+\begin{figure}[h]
+\centering
+\includegraphics[width=0.8\linewidth]{fvrestrict}
+\caption[The geometry for 1-d
+  prolongation and restriction]{\label{fig:1dgrid-prolong} A fine grid and
+  corresponding underlying coarse grid.}
+\end{figure}
+
+
 % this figure can be created by figures/multigrid/2dgrid-mg.py
 \begin{figure}[h]
 \centering
-\includegraphics[width=4.0in]{2dgrid-prolong}
+\includegraphics[width=0.8\linewidth]{2dgrid-prolong}
 \caption[The geometry for 2-d
-  prolongation]{\label{fig:2dgrid-prolong} Four fine cells and the
+  prolongation and restriction]{\label{fig:2dgrid-prolong} Four fine cells and the
   underlying coarse grid.  For prolongation, the fine cells in red are
   initialized from a coarse parent.  The gray coarse cells are used in
   the reconstruction of the coarse data.  For restriction, the fine

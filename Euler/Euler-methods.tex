@@ -354,12 +354,17 @@ and isolating the interface state, we have
 This is equivalent to the expression in Saltzman~\cite{saltzman:1994}
 (p.\ 161, first column, second-to-last equation) and
 Colella~\cite{colella:1990} (p.\ 191, the group of expressions at the
-end).  The corresponding state to the right of this interface is:
+end)\footnote{Since the combination $\lb^\enu \cdot \Delta \qb$
+  appears so frequently, some sources represent this as $\beta^\enu$
+  and then write the interface states as a linear combination of the
+  $\beta$'s.  Some variation in the literation, depending on whether $\rho$
+  or $\tau = 1/\rho$ is used as a primitive variable}.  The corresponding
+  state to the right of this interface is:
 \begin{equation}
 \qb_{i+\myhalf,R}^{n+\myhalf} = \tilde{\qb}_{i+1,R} + \frac{1}{2} \frac{\Delta t}{\Delta x}
-       \sum_{\nu; \lambda^{(\nu)} \le 0}
-       \left [ \min(\lambda_{i+1}^\evm,0) - \lambda_{i+1}^{(\nu)} \right ]
-       (\lb_{i+1}^{(\nu)} \cdot \overline{\Delta \qb}_{i+1}) \, \rb_{i+1}^{(\nu)}
+       \sum_{\nu; \lambda^\enu \le 0}
+       \left [ \min(\lambda_{i+1}^\evm,0) - \lambda_{i+1}^\enu \right ]
+       (\lb_{i+1}^\enu \cdot \overline{\Delta \qb}_{i+1}) \, \rb_{i+1}^\enu
 \end{equation}
 where now the reference state captures the flow from the $i+1$ zone
 moving to the {\em left} to this interface (hence the appearance of
@@ -367,8 +372,6 @@ $\lambda^\evm$, the leftmost eigenvalue):
 \begin{equation}
 \tilde{\qb}_{i+1,R} = \qb_{i+1} - \frac{1}{2} \left [ 1 + \frac{\Delta t}{\Delta x} \min(\lambda_{i+1}^\evm,0) \right ] \overline{\Delta \qb}_{i+1}
 \end{equation}
-
-\ \\
 
 Side note: the data in zone $i$ will be used to construct the right
 state at $i-\myhalf$ (the left interface) and the left state at $i+\myhalf$
