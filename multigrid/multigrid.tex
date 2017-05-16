@@ -241,11 +241,15 @@ or generally, the $k+1$ iteration will see:
                                   \phi_{i,j+1}^{(k)} + \phi_{i,j-1}^{(k)} - 
                                    \dx^2 f_{i,j} )
 \end{equation}
-This will (slowly) converge to the true solution, since each zone is
-coupled to each other zone (and to the boundary values that we need to
-specify---more on that in a moment).  This form of relaxation is
-called {\em Jacobi iteration}.  To implement this, you need two copies
-of $\phi$---the old iteration value and the new iteration value.
+This will (slowly) converge to the true solution\footnote{Formally,
+  convergence is only guaranteed if the matrix in our linear system is
+  {\em diagonally dominant}.  The Laplacian used here is not quite
+  diagonally domainant, but these methods still converge.}, since each
+zone is coupled to each other zone (and to the boundary values that we
+need to specify---more on that in a moment).  This form of relaxation
+is called {\em Jacobi iteration}.  To implement this, you need two
+copies of $\phi$---the old iteration value and the new iteration
+value.
 
 An alternate way to do the relaxation is to update $\phi_{i,j}$ in
 place, as soon as the new value is known.  Thus the neighboring cells
@@ -259,9 +263,8 @@ updating as:
 This only requires a single copy of $\phi$ to be stored.  This
 technique is called {\em Gauss-Seidel iteration}.  A host of other
 relaxation methods exist, including linear combinations of these two.
-The text by Briggs is an excellent reference for this, and discusses
-the strengths of these different approaches.
-
+An excellent discussion of these approaches, and their
+strengths and weaknesses is given in \cite{multigridtutorial}.
 
 Next consider the Helmholz equation with constant coefficients:
 \begin{equation}
@@ -290,15 +293,13 @@ recover the relaxation expression for Poisson's equation from above.
 \subsection{Boundary conditions}
 
 When using a cell-centered grid, no points fall exactly on the
-boundary, so we need to use ghost cells to specify boundary conditions.
-A single ghost cell is sufficient.  The common types of boundary
-conditions are {\em Dirichlet} (specified value on the boundary), {\em
-  Neumann} (specified first derivative on the boundary), and periodic.
-Some restrictions apply.  For example, consider $\phi_{xx} = 0$.  The
-solution to this is a line, $\phi = ax + b$.  We cannot specify different
-Neumann boundary conditions on each end, $\phi_x |_{x=x_l} = p$,
-$\phi_x |_{x = x_r} = q$, because this specifies two incompatible
-slopes for our line.
+boundary, so we need to use ghost cells to specify boundary
+conditions.  A single ghost cell is sufficient for the 5-point stencil
+used here.  The common types of boundary conditions are {\em
+  Dirichlet} (specified value on the boundary), {\em Neumann}
+(specified first derivative on the boundary), and periodic.  Some
+restrictions apply (see discuss this later, in
+\S~\ref{sec:multigrid:solvability}).
 
 % created by figures/multigrid/fv-fd_bnd.py
 \begin{figure}[h]
@@ -760,6 +761,7 @@ second-order convergence for our implementation.
 
 
 \section{Solvability}
+\label{sec:multigrid:solvability}
 
 For $\nabla^2 \phi = f$ with periodic or
 Neumann boundaries all around, the sum of $f$ must equal $0$
