@@ -305,17 +305,21 @@ restrictions apply (see discuss this later, in
 \begin{figure}[h]
 \centering
 \includegraphics[width=\linewidth]{fv-fd_grid_bc}
-\caption[Node-centered vs.\ cell-centered data at boundaries]{\label{fig:bcs} 
+\caption[Node-centered vs.\ cell-centered data at boundaries]{\label{mg:fig:bcs} 
   A node-centered (top) and cell-centered (bottom) finite difference
   grid showing the data and domain boundaries.  Notice that for the 
   cell-centered grid, there is no data point precisely at the boundary.}
 \end{figure}
 
 Consider Dirichlet boundary conditions, specifying values $\phi_l$ on
-the left and $\phi_r$ on the right boundaries.\footnote{If the value, $\phi_l$
-  or $\phi_r$ is zero, we call this a {\em homogeneous boundary condition}.  Otherwise
-  we call it an {\em inhomogeneous boundary condition}}  To second order, we can
-define these via:
+the left and $\phi_r$ on the right boundaries.\footnote{If the value,
+  $\phi_l$ or $\phi_r$ is zero, we call this a {\em homogeneous
+    boundary condition}.  Otherwise we call it an {\em inhomogeneous
+    boundary condition}} We'll label the first zone inside the domain,
+at the left boundary, $\mathrm{lo}$, and the last zone inside the
+domain, at the right boundary, $\mathrm{hi}$---see
+Figure~\ref{mg:fig:bcs}.  To second order, we can average the zone values on 
+either side of the interface to get the boundary condition:
 \begin{eqnarray}
 \phi_l &=& \frac{1}{2} ( \phi_\mathrm{lo} + \phi_\mathrm{lo-1} ) \\
 \phi_r &=& \frac{1}{2} ( \phi_\mathrm{hi} + \phi_\mathrm{hi+1} )
@@ -371,7 +375,7 @@ and
 
 We can make $\epsilon^{(r)}$ approach machine precision by performing
 more and more relaxation iterations, but after some point, this will
-no longer improve $\epsilon$.  The only way to improve
+no longer improve $\epsilon^\mathrm{true}$.  The only way to improve
 $\epsilon^\mathrm{true}$ is to make $\dx$ and $\dy$ smaller.
 In practice we do not know the true solution so we cannot compute
 $\epsilon^\mathrm{true}$ and will instead have to rely on
@@ -382,7 +386,7 @@ Note that since our operator is linear,
 L e = L\phi^\mathrm{true} - L\phi = f - L\phi = r
 \end{equation}
 so the error in our solution obeys a Poisson equation with the residual
-as the source.
+as the source---we'll see this in the next section.
 
 \subsection{Norms}
 
@@ -390,7 +394,7 @@ There are several different norms that are typically used in defining
 errors on the grid.  The $L_\infty$ norm (or `inf'-norm) is just the
 maximum error on the grid:
 \begin{equation}
-\|e\|_\infty = \max \{ |e_{i,j}| \}
+\|e\|_\infty = \max_{i,j} \{ |e_{i,j}| \}
 \end{equation}
 This will pick up on local errors.  
 
@@ -401,8 +405,9 @@ The $L_1$ norm and $L_2$ norms are more global.
 \end{eqnarray}
 Generally, the measure in $L_2$ falls between $L_\infty$ and $L_1$.
 Regardless of the norm used, if the problem converges, it should
-converge in all norms.  
-For reference, the BoxLib library uses $L_\infty$ in its multigrid solvers.
+converge in all norms.  For reference, the AMReX
+library\footnote{\url{https://github.com/amrex-codes}} uses $L_\infty$
+in its multigrid solvers.
 
 
 
@@ -421,7 +426,10 @@ For reference, the BoxLib library uses $L_\infty$ in its multigrid solvers.
   \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/multigrid/smooth.py}{smooth.py}}}
 \end{figure}
 
-Consider the simple Poisson problem on $x \in [0,1]$:
+Consider the simple Poisson problem\footnote{This is the test problem
+  used throughout {\em A Multigrid Tutorial} \cite{multigridtutorial}.
+  We use the same problem here to allow for easy comparison to the
+  discussions in that text.} on $x \in [0,1]$:
 \begin{equation}
 \phi_{xx} = \sin(x), \qquad \phi(0) = \phi(1) = 0
 \end{equation}
@@ -441,7 +449,6 @@ the true error changes as $\dx^2$, indicating that we are
 converging as our method should.  No additional amount of smoothing
 will change this---we are getting the best answer to the problem we
 can with our choice of discretization.
-
 In contrast, the residual error decreases to machine precision
 levels---this is indicating that our solution is an exact solution to
 the discrete equation (to roundoff-error).
@@ -449,9 +456,10 @@ In practice, we can only monitor the residual error, not the true
 error, and we hope that small residual error implies a small true
 error.
 
-Figure~\ref{fig:smoothnorms} shows the error
-with respect to the true solution and of the residual for pure smoothing
-in three different norms.
+Figure~\ref{fig:smoothnorms} shows the error with respect to the true
+solution and of the residual for pure smoothing in three different
+norms.  The overall behavior is qualitative similar regardless of the
+choice of norm.
 
 % this figure can be created with figures/multigrid/smooth-separate.py
 \begin{figure}
@@ -459,32 +467,38 @@ in three different norms.
 \includegraphics[width=\linewidth]{smooth-error-norms}
 \caption[Convergence of smoothing in different norms]{\label{fig:smoothnorms} 
   Gauss-Seidel relaxation applied to $\phi_{xx} = \sin(x)$ with
-  $\phi(0) = \phi(1) = 0$.  This is like figure \ref{fig:smooth}, but
+  $\phi(0) = \phi(1) = 0$.  This is like figure \ref{fig:smootherror}, but
   now we show the error in 3 different norms: $L_1$, $L_2$, and $L_\infty$.
   \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/multigrid/smooth-norms.py}{smooth-norms.py}}}
 \end{figure}
 
+To demonstrate the influence of the boundary conditions,
 Figure~\ref{fig:smooth-badbcs} shows the norm of the true error for
-the same problem, but this time with a naive implementation of the 
-boundary conditions (simply initializing the ghost cell to the boundary
-value, instead of averaging to the interface).  We see that with this
-mistake at the boundaries, the error of the entire solution is 
-affected, and we get only first-order convergence with resolution
-(this can be seen by looking at the spacing of the curves).  The previous
-solution, with the correct BCs is shown for reference, and shows 
-second-order convergence.  It is important to note that because every
-zone is linked to every other zone (and the boundary) in elliptic
-problems, an error at the boundary pollutes the global solution.
+the same problem, but this time with a naive implementation of the
+boundary conditions---simply initializing the ghost cell to the
+boundary value, instead of averaging to the interface:
+\begin{align}
+\phi_\mathrm{lo-1} &= \phi_\mathrm{lo} \\
+\phi_\mathrm{hi+1} &= \phi_\mathrm{hi} 
+\end{align}
+We see that with this mistake at the boundaries, the error of the
+entire solution is affected, and we get only first-order convergence
+with resolution (this can be seen by looking at the spacing of the
+curves).  The previous solution, with the correct BCs is shown for
+reference, and shows second-order convergence.  It is important to
+note that because every zone is linked to every other zone (and the
+boundary) in elliptic problems, an error at the boundary can pollute the
+global solution.
 
 \begin{figure}
 \centering
 \includegraphics[width=\linewidth]{smooth-badBCs}
 \caption[Convergence of smoothing in first-order BCs]{\label{fig:smooth-badbcs} 
-  The same problem as in figure \ref{fig:smooth}, but
-  now we done with a naive first-order boundary conditions (just initializing
-  the ghost cell to the boundary value; dotted lines).  We see that this 
+  The same problem as in figure \ref{fig:smootherror}, but
+  now we done with a naive first-order boundary conditions---just initializing
+  the ghost cell to the boundary value (solid lines).  We see that this 
   achieves only first-order convergence in the true error.  The correct
-  second-order implmentation is shown as the solid lines.
+  second-order implmentation is shown as the dotted lines.
   \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/multigrid/smooth-badbcs.py}{smooth-badbcs.py}}}
 \end{figure}
 
@@ -492,25 +506,41 @@ problems, an error at the boundary pollutes the global solution.
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.8\linewidth]{smooth-multimode}
-\caption[Smoothing of different wavenumbers]{\label{fig:smooth} Error
-  in the solution to $\phi'' = 0$ given an initial guess with 3
-  different wavenumbers of noise.  The different curves are different
-  numbers of smoothing iterations. \\
-  \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/multigrid/smooth-modes.py}{smooth-modes.py}}}
+\caption[Smoothing of different wavenumbers]{\label{fig:mg:smooth}
+  Error in the solution to $\phi'' = 0$ given an initial guess with 3
+  different wavenumbers of noise.  A 128 zone grid was used.  The
+  different curves are different numbers of smoothing
+  iterations. \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/multigrid/smooth-modes.py}{smooth-modes.py}}}
 \end{figure}
+
+\subsection{Frequency/wavelength-dependent error}
 
 We can think of the error in the solution as a superposition of high
 (short) and low (long) frequency (wavelength) modes.  Smoothing works
-really well to eliminate the short wavelength noise quickly (as the
-exercise shows), but many iterations are needed to remove the long
-wavelength noise (see Figure~\ref{fig:smooth}).  Here the wavelength
-is in terms of the number of zones across the feature, and not a
-physical measure.  
+really well to eliminate the short wavelength noise quickly, but many
+iterations are needed to remove the long wavelength noise (see
+Figure~\ref{fig:smooth}).  A very important concept to understand here
+is that when we talk about long wavelength error, we are expressing it
+in terms of the number of zones across the feature, not as physical
+length.  We can get an intuitive feel for this behavior by thinking
+about how smoothing works.  Every zone is coupled to every other zone,
+and we can think about each zone seeing one more zone away for each
+iteration.  When the error is short wavelength, that means that there
+are only a few zones across it, and after a few iterations, all of the
+zones have seen the short wavelength error, and can eliminate it.  For
+a very long wavelength error, many iterations will be needed until the
+smoothing couples one zone to another that is a wavelength away.
+
+This behavior suggests that if we could represent our problem on a
+coarser grid, the error will now be of shorter wavelength, and
+smoothing will be more efficient.  This is the core idea behind
+multigrid, which we see next.
 
 \begin{exercise}[Smoothing the 1-d Laplace equation]
 {Implement 1-d smoothing for the Laplace equation on
   cc-grid.  Use an initial guess for the solution:
   \begin{equation}
+    \label{eq:mg:phimodes}
   \phi_0(x) = \frac{1}{3} ( \sin(2\pi x) + \sin(2\pi \, 8 x) + \sin(2\pi \, 16 x) )
   \end{equation}
   on a 128 zone grid with Dirichlet boundary conditions.  This initial
@@ -521,12 +551,17 @@ physical measure.
 }
 \end{exercise}
 
-This behavior suggests that if we could represent our
-problem on a coarser grid, the error will now be of shorter
-wavelength, and smoothing will be more efficient.  This is the core
-idea behind multigrid.
-
-
+Figure~\ref{fig:mg:smooth} illustrates this behavior.  We are solving
+the Laplace equation, $\phi^{\prime\prime} = 0$ in 1-d on $[0,1]$ with
+homogeneous Dirichlet boundary conditions.  The solution is simply
+$\phi = 0$.  We use Eq.~\ref{eq:mg:phimodes} as an initial guess---this is a superposition
+of 3 different modes.  We see that the after just a few iterations, the 
+shortest wavelength mode, $\sin(2\pi 16x)$ is no longer apparent in the error,
+and just the two longer wavelength modes dominate.  By 100 iterations,
+the error appears to be only due to the longest wavelength mode, $\sin(2\pi x)$.
+Even after 1000 iterations, we still see this mode in the error.  This 
+demonstrates that the longest wavelength modes in the error take the
+longest to smooth away.
 
 \section{Multigrid}
 
