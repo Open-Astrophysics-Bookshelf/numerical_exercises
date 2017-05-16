@@ -751,8 +751,6 @@ returns the solution at the interface:
 \qb_{i+\myhalf}^{n+\myhalf} = \mathcal{R}(\qb_{i+\myhalf,L}^{n+\myhalf}, \qb_{i+\myhalf,R}^{n+\myhalf})
 \end{equation}
 
-\subsection{Interface solution}
-
 As discussed in \S~\ref{Euler:riemann:solution}, we need to determine
 which state is on our interface to compute the fluxes through the
 interface.  In practice, approximate Riemann solvers are used to speed
@@ -787,7 +785,7 @@ quite close to those for the true solution.
   \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/compressible/riemann-2shock.py}{riemann-2shock.py}}}
 \end{figure}
 
-An additionally approximation concerns rarefactions.  Recall that a
+An additional approximation concerns rarefactions.  Recall that a
 rarefaction involves diverging flow---it spreads out with time.
 Special consideration needs to be taken if the rarefaction wave spans
 the interface (a {\em transonic rarefaction}).  In this case, most
