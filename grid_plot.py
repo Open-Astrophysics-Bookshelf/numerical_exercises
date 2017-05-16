@@ -183,7 +183,7 @@ class FVGrid(object):
                 nstart = self.ilo
                 nstop = self.ihi
         else:
-            nstart = self.ilo -self.ng
+            nstart = self.ilo - self.ng
             nstop = self.ihi + self.ng
 
 
@@ -208,26 +208,40 @@ class FVGrid(object):
             # emphasize?
             if emphasize_end and n == self.ilo:
                 plt.plot([self.xl[n], self.xl[n]],
-                           [self.voff, grid_top+self.voff], color=color, lw=4)
+                         [self.voff, grid_top+self.voff], color=color, lw=4)
 
             # draw right edge
             if emphasize_end and n == self.ihi:
-                plt.plot([self.xr[n], self.xr[n]], [self.voff, grid_top+self.voff],
-                           color=color, lw=4)
+                plt.plot([self.xr[n], self.xr[n]], 
+                         [self.voff, grid_top+self.voff],
+                         color=color, lw=4)
+
             elif n < nstop or (n == nstop and draw_end):
-                plt.plot([self.xr[n], self.xr[n]], [self.voff, grid_top+self.voff],
-                           color=color, lw=2)
+                plt.plot([self.xr[n], self.xr[n]], 
+                         [self.voff, grid_top+self.voff],
+                         color=color, lw=2)
 
             # draw center marker
-            plt.plot([self.xc[n], self.xc[n]], [-0.05+self.voff, self.voff], color=color)
+            plt.plot([self.xc[n], self.xc[n]], 
+                     [-0.05+self.voff, self.voff], color=color)
 
             # draw edge marker
-            if n == nstart and edge_ticks:
-                plt.plot([self.xl[nstart], self.xl[nstart]], [-0.05+self.voff, self.voff],
-                           color=color)
-
+            
             if edge_ticks:
-                plt.plot([self.xr[n], self.xr[n]], [-0.05+self.voff, self.voff], color=color)
+                if n == nstart:
+                    if emphasize_end:
+                        lw = 4
+                    else:
+                        lw = 2
+                    plt.plot([self.xl[nstart], self.xl[nstart]], 
+                             [-0.05+self.voff, self.voff], color=color, lw=lw)
+
+                if n == nstop and emphasize_end:
+                    lw = 4
+                else:
+                    lw = 2
+                plt.plot([self.xr[n], self.xr[n]], 
+                         [-0.05+self.voff, self.voff], color=color, lw=lw)
 
 
     def label_center(self, idx, string, fontsize="small"):
@@ -242,11 +256,11 @@ class FVGrid(object):
                  horizontalalignment='center', verticalalignment='top',
                  fontsize=fontsize)
 
-    def label_cell_center(self, idx, string):
+    def label_cell_center(self, idx, string, value=0.5, color="k"):
 
-        plt.text(self.xc[idx], self.voff+0.5, string,
+        plt.text(self.xc[idx], self.voff+value, string,
                  horizontalalignment='center', verticalalignment='center',
-                 fontsize="large")
+                 fontsize="large", color=color)
 
     def mark_cell_left_state(self, idx, string, color="k", value=0.5,
                              vertical="center", fontsize="medium"):
@@ -256,6 +270,16 @@ class FVGrid(object):
         plt.text(self.xl[idx]+0.075*self.dx, self.voff+value, string,
                  horizontalalignment='left', verticalalignment=vertical, color=color,
                  fontsize=fontsize)
+
+    def mark_cell_edge(self, idx, string, color="k", value=0.5,
+                       vertical="center", fontsize="medium"):
+
+        plt.scatter(self.xl[idx], self.voff+value, 
+                    marker="x", color=color, zorder=100)
+
+        plt.text(self.xl[idx]+0.05*self.dx, self.voff+value, string,
+                 horizontalalignment='left', verticalalignment=vertical, 
+                 color=color, fontsize=fontsize)
 
     def mark_cell_right_state(self, idx, string, color="k", value=0.5,
                               vertical="center", fontsize="medium"):

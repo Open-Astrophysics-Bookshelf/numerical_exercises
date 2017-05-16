@@ -4,7 +4,21 @@
 
 \label{sec:eulermeth:intro}
 
-
+The numerical methods we use for the Euler equations mirror those used
+with advection in Ch.~\ref{ch:advection}.  The basic process is:
+\begin{itemize}
+\item Reconstruct the state variables to the interfaces.
+\item Solve the Riemann problem (as described in
+  \S~\ref{euler:sec:riemann}) and construct the fluxes through
+  the interfaces.
+\item Perform the conservative update on the state variables.
+\end{itemize}
+The Euler equations are much more complicated than linear
+advection---we already saw this with the Riemann problem.  But we will
+also see that in different parts of the algorithm we will use
+conservative or primitive variables.  Additional physics can enter as
+source terms, which we'll see how to add to both the interface states
+and conservative update here.
 
 %-----------------------------------------------------------------------------
 \section{Reconstruction of interface states}
@@ -340,12 +354,17 @@ and isolating the interface state, we have
 This is equivalent to the expression in Saltzman~\cite{saltzman:1994}
 (p.\ 161, first column, second-to-last equation) and
 Colella~\cite{colella:1990} (p.\ 191, the group of expressions at the
-end).  The corresponding state to the right of this interface is:
+end)\footnote{Since the combination $\lb^\enu \cdot \Delta \qb$
+  appears so frequently, some sources represent this as $\beta^\enu$
+  and then write the interface states as a linear combination of the
+  $\beta$'s.  Some variation in the literation, depending on whether $\rho$
+  or $\tau = 1/\rho$ is used as a primitive variable}.  The corresponding
+  state to the right of this interface is:
 \begin{equation}
 \qb_{i+\myhalf,R}^{n+\myhalf} = \tilde{\qb}_{i+1,R} + \frac{1}{2} \frac{\Delta t}{\Delta x}
-       \sum_{\nu; \lambda^{(\nu)} \le 0}
-       \left [ \min(\lambda_{i+1}^\evm,0) - \lambda_{i+1}^{(\nu)} \right ]
-       (\lb_{i+1}^{(\nu)} \cdot \overline{\Delta \qb}_{i+1}) \, \rb_{i+1}^{(\nu)}
+       \sum_{\nu; \lambda^\enu \le 0}
+       \left [ \min(\lambda_{i+1}^\evm,0) - \lambda_{i+1}^\enu \right ]
+       (\lb_{i+1}^\enu \cdot \overline{\Delta \qb}_{i+1}) \, \rb_{i+1}^\enu
 \end{equation}
 where now the reference state captures the flow from the $i+1$ zone
 moving to the {\em left} to this interface (hence the appearance of
@@ -353,8 +372,6 @@ $\lambda^\evm$, the leftmost eigenvalue):
 \begin{equation}
 \tilde{\qb}_{i+1,R} = \qb_{i+1} - \frac{1}{2} \left [ 1 + \frac{\Delta t}{\Delta x} \min(\lambda_{i+1}^\evm,0) \right ] \overline{\Delta \qb}_{i+1}
 \end{equation}
-
-\ \\
 
 Side note: the data in zone $i$ will be used to construct the right
 state at $i-\myhalf$ (the left interface) and the left state at $i+\myhalf$
@@ -753,8 +770,9 @@ returns the solution at the interface:
 
 As discussed in \S~\ref{Euler:riemann:solution}, we need to determine
 which state is on our interface to compute the fluxes through the
-interface.  In practice, approximate Riemann solvers are used to speed
-the computation of the Riemann problem.  Different Riemann solvers
+interface.  The full solution of the Riemann problem can be quite expensive,
+so in practice, approximate Riemann solvers are used to speed
+the computation.  Different Riemann solvers
 will have different approximations for finding the speeds of the left,
 center, and right wave, and evaluating the star state.  In the `star'
 region, only $\rho$ jumps across the middle (contact) wave, the
@@ -763,11 +781,19 @@ We determine the state in the star region ($\rho_l^*, \rho_r^*, u^*,
 p^*$) by using the jump conditions for the Euler equations or the
 Riemann invariants, as shown in \S~\ref{Euler:riemann:starstate}.
 Some approximate Riemann solvers assume that both waves are shocks or
-both are rarefactions.  Two-shock solvers, like the one in
-\cite{colellaglaz:1985} are quite common in astrophyiscs.
-Figure~\ref{fig:euler:riemann-2shock-curve} shows the Hugoniot
-curves for the Sod problem under the 2-shock assumption---they are
-quite close to those for the true solution.
+both are rarefactions, aimplying the form of the equation that
+must be solved to find $p_\star$.
+
+Two-shock solvers, like the one in \cite{colellaglaz:1985} are quite
+common in astrophyiscs.  Figure~\ref{fig:euler:riemann-2shock-curve}
+shows the Hugoniot curves for the Sod problem under the 2-shock
+assumption---they are quite close to those for the true solution.  To
+further save on cost, approximate Riemann solvers for general
+equations of state often include additional thermodynamic information
+at the interfaces that overconstrains the system, but can remove the
+need to call an expensive equation of state routine in solving for the
+star state.
+
 
 \begin{figure}[t]
 \centering
@@ -788,10 +814,11 @@ quite close to those for the true solution.
 An additional approximation concerns rarefactions.  Recall that a
 rarefaction involves diverging flow---it spreads out with time.
 Special consideration needs to be taken if the rarefaction wave spans
-the interface (a {\em transonic rarefaction}).  In this case, most
-approximate Riemann solvers simply linearly interpolate between the
-left or right state and the appropriate star state instead of solving
-for the structure inside the rarefaction.
+the interface (a {\em transonic rarefaction},
+\S~\ref{Euler:riemann:solution}).  In this case, most approximate
+Riemann solvers simply linearly interpolate between the left or right
+state and the appropriate star state instead of solving for the
+structure inside the rarefaction.
 
 With this approximate state, the fluxes are computed as:
 \begin{equation}
