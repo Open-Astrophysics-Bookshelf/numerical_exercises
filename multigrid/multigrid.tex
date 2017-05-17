@@ -568,50 +568,50 @@ longest to smooth away.
 The text {\em A Multigrid Tutorial}~\cite{multigridtutorial} provides
 an excellent introduction to the mechanics of multigrid.  The
 discussion here differs mainly in that we are dealing with
-cell-centered/finite-volume data.  The basic idea of multigrid\footnote{
-In these discussions, we use {\em multigrid} to mean {\em geometric multigrid},
-where the coarsening is done to the grid geometry directly.  The alternative
-is {\em algebraic multigrid}, where it is the structure of the matrix 
-in the linear system itself that is coarsened.}   is to
-smooth a little on the current grid solving $L\phi = f$, compute the
-residual, $r$, then {\em restrict} $r$ to a coarser grid and smooth on
-that grid solving $Le = r$, restrict again, $\ldots$.  Once you reach
-a sufficiently coarse grid, the problem solved exactly.  Then the data
-is moved up to the finer grids, a process called {\em prolongation}.
-The error on the coarse grid, $e$, is prolonged to the finer grid.
-This error is then used to correct the solution on the finer grid,
-some smoothing is done, and then the data is prolonged up again.
+cell-centered/finite-volume data.  We already saw that the treatment
+of boundary conditions is more complicated because we do not have a
+point directly on the boundary.  The other complication comes in
+transferring the data from a fine grid to a coarser grid, and back.
+Before we discuss the multigrid technique, we'll understand how
+the operations between grids work.
 
-Note: on the coarse grids, you are not solving the original system,
-but rather an error equation.  If the boundary conditions in the
-original system are inhomogeneous, the boundary conditions for the
-error equations are now homogeneous.  This must be understood by
-any ghost cell filling routines.
-
-There are many different forms of the multigrid process.  The simplest 
-is called the {\em V-cycle}.  Here you start of the fine grid, restrict
-down to the coarsest, solve, and then prolong back up to the finest. 
-The flow looks like a `V'.  You continue with additional V-cycles
-until the residual error is smaller than your tolerance.
 
 \subsection{Prolongation and restriction on cell-centered grids}
 
 Multigrid relies on transferring the problem up and down a hierarchy of
-grids.  Consider the following grid.  The finer grid is superposed over
-the center coarse cell, and the fine grid cells are marked in red.
-
+grids.  Consider a 1-d finite-volume/cell-centered finite-difference grid
+shown in Figure~\ref{fig:mg:1dgrid-prolong}---we see a fine grid and the
+corresponding coarser grid.
+%
 % this figure can be created by figures/multigrid/fvrestrict.py
-\begin{figure}[h]
+\begin{figure}[t]
 \centering
 \includegraphics[width=0.8\linewidth]{fvrestrict}
 \caption[The geometry for 1-d
-  prolongation and restriction]{\label{fig:1dgrid-prolong} A fine grid and
+  prolongation and restriction]{\label{fig:mg:1dgrid-prolong} A fine grid and
   corresponding underlying coarse grid.}
 \end{figure}
+%
+The process of moving the data from the fine grid to the coarse grid
+is called {\em restriction}.  If the data on our grid is a conserved 
+quantity, we want restriction to conserve the amount of stuff when transitioning
+from the fine grid to the coarse grid.  Therefore if $\phi$ represents a density,
+then conservation requires:
+\begin{equation}
+\phi^c_j = \frac{1}{\dx^c} (\dx^f \phi^f_i + \dx^f \phi^f_{i+1} )
+\end{equation}
+or, for a jump in 2 in resolution ($\dx^c = 2 \dx^f$), 
+\begin{equation}
+\phi^c_j = \frac{1}{2} (\phi^f_i + \phi^f_{i+1} )
+\end{equation}
+This latter form appears as a simple average to the interface of the
+two fine cells / center of the corresponding coarse cell.
 
+The reverse process, moving the data from the coarse grid to the
+fine grid is called {\em prolongation}.
 
 % this figure can be created by figures/multigrid/2dgrid-mg.py
-\begin{figure}[h]
+\begin{figure}[t]
 \centering
 \includegraphics[width=0.8\linewidth]{2dgrid-prolong}
 \caption[The geometry for 2-d
@@ -661,6 +661,38 @@ the fine cell.)
 There are other options for prolongation and restriction, both of
 higher and lower order accuracy.  However, the methods above seem to
 work well.
+
+
+\subsection{Multigrid cycles}
+
+The basic idea of
+multigrid\footnote{ In these discussions, we use {\em multigrid} to
+  mean {\em geometric multigrid}, where the coarsening is done to the
+  grid geometry directly.  The alternative is {\em algebraic
+    multigrid}, where it is the structure of the matrix in the linear
+  system itself that is coarsened.}  is to smooth a little on the
+current grid solving $L\phi = f$, compute the residual, $r$, then {\em
+  restrict} $r$ to a coarser grid and smooth on that grid solving $Le
+= r$, restrict again, $\ldots$.  Once you reach a sufficiently coarse
+grid, the problem solved exactly.  Then the data is moved up to the
+finer grids, a process called {\em prolongation}.  The error on the
+coarse grid, $e$, is prolonged to the finer grid.  This error is then
+used to correct the solution on the finer grid, some smoothing is
+done, and then the data is prolonged up again.
+
+Note: on the coarse grids, you are not solving the original system,
+but rather an error equation.  If the boundary conditions in the
+original system are inhomogeneous, the boundary conditions for the
+error equations are now homogeneous.  This must be understood by
+any ghost cell filling routines.
+
+There are many different forms of the multigrid process.  The simplest 
+is called the {\em V-cycle}.  Here you start of the fine grid, restrict
+down to the coarsest, solve, and then prolong back up to the finest. 
+The flow looks like a `V'.  You continue with additional V-cycles
+until the residual error is smaller than your tolerance.
+
+
 
 \subsection{Bottom solver}
 
