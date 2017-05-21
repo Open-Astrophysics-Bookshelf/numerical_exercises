@@ -579,7 +579,17 @@ the operations between grids work.
 \subsection{Prolongation and restriction on cell-centered grids}
 
 Multigrid relies on transferring the problem up and down a hierarchy of
-grids.  Consider a 1-d finite-volume/cell-centered finite-difference grid
+grids. 
+The process of moving the data from the fine grid to the coarse grid
+is called {\em restriction}.  The reverse process, moving data from
+the coarse grid to the fine grid is called {\em prolongation}.  If the
+data on our grid is a conserved quantity, we want restriction and prolongation to
+conserve the amount of stuff when transitioning data between the fine and coarse grids.
+
+
+\subsubsection{1-d}
+
+Consider a 1-d finite-volume/cell-centered finite-difference grid
 shown in Figure~\ref{fig:mg:1dgrid-prolong}---we see a fine grid and the
 corresponding coarser grid.
 %
@@ -592,11 +602,8 @@ corresponding coarser grid.
   corresponding underlying coarse grid.}
 \end{figure}
 %
-The process of moving the data from the fine grid to the coarse grid
-is called {\em restriction}.  If the data on our grid is a conserved 
-quantity, we want restriction to conserve the amount of stuff when transitioning
-from the fine grid to the coarse grid.  Therefore if $\phi$ represents a density,
-then conservation requires:
+If $\phi$ represents a density, then
+conservation requires:
 \begin{equation}
 \phi^c_j = \frac{1}{\dx^c} (\dx^f \phi^f_i + \dx^f \phi^f_{i+1} )
 \end{equation}
@@ -607,8 +614,33 @@ or, for a jump in 2 in resolution ($\dx^c = 2 \dx^f$),
 This latter form appears as a simple average to the interface of the
 two fine cells / center of the corresponding coarse cell.
 
-The reverse process, moving the data from the coarse grid to the
-fine grid is called {\em prolongation}.
+The simplest type of 
+prolongation is simply {\em direct injection}:
+\begin{align}
+\phi^f_i &= \phi^c_j \\
+\phi^f_{i+1} &= \phi^c_j 
+\end{align}
+A higher-order method is to do linear reconstruction of the coarse
+data and then average under the profile, e.g., 
+\begin{equation}
+\phi(x) = \frac{\phi^c_{i+1} - \phi^c_{i-1}}{2\dx^c} (x - x_i^c) + \phi_i^c
+\end{equation}
+
+To second-order, we can find the values of $\phi^f_i$ and
+$\phi^f_{i+1}$  by evaluating $\phi(x)$ at the $x$-coordinate corresponding to their
+cell-centers,
+\begin{align}
+x^f_i &= x^c_j - \frac{\dx^c}{4} \\
+x^f_{i+1} &= x^c_j + \frac{\dx^c}{4}
+\end{align}
+giving
+\begin{align}
+\phi^f_i     &= \phi^c_i - \frac{1}{8} (\phi^c_{i+1} - \phi^c_{i-1}) \\
+\phi^f_{i+1} &= \phi^c_i + \frac{1}{8} (\phi^c_{i+1} - \phi^c_{i-1}) 
+\end{align}
+Notice that this is conservative, since $\dx^f (\phi^f_i + \phi^f_{i+1}) = \dx^c \phi^c_j$.
+
+\subsubsection{2-d}
 
 % this figure can be created by figures/multigrid/2dgrid-mg.py
 \begin{figure}[t]
@@ -622,6 +654,7 @@ fine grid is called {\em prolongation}.
   cells are averaged to the underlying coarse cell.}
 \end{figure}
 
+
 Restriction from the fine grid to the coarse grid is straightforward.
 Since the fine cells are perfectly enclosed by a single coarse cell,
 we simply average:
@@ -634,8 +667,8 @@ Prolongation requires us to reconstruct the coarse data and use
 this reconstruction to determine what the fine cell values are.  For
 instance, a linear reconstruction of the coarse data in $x$ and $y$ is:
 \begin{equation}
-\phi(x,y) = \frac{m_x}{\dx} (x - x_i^c) + 
-            \frac{m_y}{\dy} (y - y_j^c) + \phi_{i,j}^c
+\phi(x,y) = \frac{m_x}{\dx^c} (x - x_i^c) + 
+            \frac{m_y}{\dy^c} (y - y_j^c) + \phi_{i,j}^c
 \end{equation}
 with slopes:
 \begin{eqnarray}
