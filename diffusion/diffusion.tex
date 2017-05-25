@@ -2,7 +2,7 @@
 
 \section{Diffusion}
 
-A diffusive process tends to obey Fick's law---the quantity that is
+Physically, a diffusive process obeys Fick's law---the quantity that is
 diffusing, $\phi$, moves from higher to lower concentration at a rate
 proportional to the gradient,
 \begin{equation}
@@ -16,6 +16,13 @@ This gives rise to the diffusion equation:
 \begin{equation}
 \phi_t = \nabla \cdot (k \nabla \phi)
 \end{equation}
+
+Diffusion has a time-dependence like the advection equations we
+already saw, but also has a global character like an elliptic problem.
+Unlike advection, there is no sense of upwinding in diffusion.  As we
+will see, we can cast our differenced equations in a form reminiscent
+of an elliptic problem.
+
 In one-dimension, and assuming that the diffusion coefficient, $k$, is 
 constant, we have
 \begin{equation}
@@ -29,8 +36,10 @@ The diffusion equation can describe thermal diffusion (for example, as
 part of the energy equation in compressible flow), species/mass
 diffusion for multi-species flows, or the viscous terms in
 incompressible flows.  In this form, the diffusion coefficient (or
-conductivity), $k$, can be a function of $x$, or even $\phi$.  We will
-consider a constant diffusion coefficient:
+conductivity), $k$, can be a function of $x$, or even $\phi$.  
+
+
+We will consider a constant diffusion coefficient as our model problem:
 \begin{equation}
 \frac{\partial \phi}{\partial t} = k \frac{\partial^2 \phi}{\partial x^2}
 \end{equation}
@@ -38,14 +47,12 @@ The diffusion equation is the prototypical parabolic PDE.
 The basic behavior of the diffusion equation is to take strongly peaked
 concentrations of $\phi$ and smooth them out with time.
 
-A nice overview of the discretizations for diffusion and their stability
-is given in \cite{richtmyermorton}.
-
-
 \section{Explicit differencing}
 
+A nice overview of the discretizations for diffusion and their stability
+is given in \cite{richtmyermorton}.  
 The simplest way to difference this equation is {\em explicit} in time
-(i.e.\ the righthand side depends only on the old state):
+(i.e., the righthand side depends only on the old state):
 \begin{equation}
 \label{eq:diff:explicitdiff}
 \frac{\phi_i^{n+1} - \phi_i^n}{\Delta t} = 
@@ -56,7 +63,7 @@ time (since the righthand side is not centered in time).
 
 As with the advection equation, when differenced explicitly, there is
 a constraint on the timestep required for stability.  Looking at the
-growth of a single Fourier mode, $\phi^n_i = A^n e^{ij\theta}$ with $j =
+growth of a single Fourier mode, $\phi^n_i = A^n e^{i\imag\theta}$ with $\imag =
 \sqrt{-1}$, we find:
 \begin{equation}
 \label{eq:diff:amplitude}
@@ -95,22 +102,27 @@ or Neumann:
 \phi_x |_{x=x_l} &=& \phi_x |_l\\
 \phi_x |_{x=x_r} &=& \phi_x |_r
 \end{eqnarray}
+Physically, a Dirichlet BC means fixing the value of $\phi$ (e.g., temperature)
+on the boundary.  A Neumann BC means fixing the flux on the boundary.
+
+Like with advection, it helps to have a good test problem to evaluate our
+methods for diffusion.  We can use the fact that the diffusion of a Gaussian
+is a Gaussian with a smaller amplitude and greaterwidth.
 
 \begin{exercise}[1-d explicit diffusion]
 {Write a one-dimensional explicit diffusion solver for the
   domain $[0,1]$ with Neumann boundary conditions at each end and $k = 1$,
   using the discretization of Eq.~\ref{eq:diff:explicitdiff}.
 
-  If we begin with a Gaussian, the resulting solution is also a Gaussian.
-  Initialize using the following with $t = 0$:
+  If we begin with a Gaussian, the resulting solution is also a Gaussian,
+  giving a solution\footnote{Note: the 2- and 3-d solutions are slightly different than this 1-d solution}:
   \begin{equation}
    \phi(x,t) = (\phi_2 - \phi_1) \sqrt{\frac{t_0}{t + t_0}} e^{-\frac{1}{4}(x - x_c)^2/k(t+t_0)} + \phi_1
   \end{equation}
-  with $t_0 = 0.001$, $\phi_1 = 1$, and $\phi_2 = 2$, and $x_c$ is the
+  Initialize our problem with $t = 0$, and take
+  $t_0 = 0.001$, $\phi_1 = 1$, and $\phi_2 = 2$, and $x_c$ is the
   coordinate of the center of the domain.  Run until $t = 0.01$ and
-  compare to the analytic solution above.
-
-  (Note: the solution for two-dimensions differs slightly) }
+  compare to the analytic solution above.}
 \end{exercise}
 
 
@@ -183,18 +195,29 @@ Eq.~\ref{eq:diff:explicitdiff}
 
 \section{Implicit with direct solve}
 
-A backward-Euler implicit discretization would be:
+Recall that an implicit discretization of advection did not have a
+timestep restriction for stability.  The same holds true for
+diffusion.  A backward-Euler implicit discretization would be:
 \begin{equation}
+\label{eq:diff:foimplicit}
 \frac{\phi_i^{n+1} - \phi_i^n}{\Delta t} = 
   k \frac{\phi_{i+1}^{n+1} - 2\phi_i^{n+1} + \phi_{i-1}^{n+1}}{\Delta x^2}
 \end{equation}
-This is still first-order in time, but is not restricted by the timestep
-constraint (although the timestep will still determine the accuracy).  
-Defining:
+The only difference with Eq.~\ref{eq:diff:explicitdiff} is the
+time-level of $\phi$ on the righthand side.  Defining:
 \begin{equation}
 \alpha \equiv k \frac{\Delta t}{\Delta x^2}
 \end{equation}
-we can write this as:
+This is still first-order in time.  We can do the stability analysis
+to see the growth of a mode, giving,
+\begin{equation}
+\frac{A^{n+1}}{A^n} = \frac{1}{1 - 2\alpha (\cos\theta - 1)}
+\end{equation}
+We see that $|A^{n+1}/A^n| \le 1$ for all $\theta$, $\alpha$, so this
+discretization is unconditionally stable.  However, the timestep will
+still determine the accuracy.
+
+We can write Eq.~\ref{eq:diff:foimplicit} as:
 \begin{equation}
 \label{eq:diff:implicit}
 -\alpha \phi_{i+1}^{n+1} + (1 + 2\alpha) \phi_{i}^{n+1} - \alpha \phi_{i-1}^{n+1} = \phi_i^n
@@ -206,7 +229,9 @@ The implicit method can use any $C > 0$.
 
 We specify boundary conditions by modifying the stencil
 (Eq.~\ref{eq:diff:implicit}) for the updates to $\mathrm{lo}$ and
-$\mathrm{hi}$.  For example, homogeneous Neumann BCs on the left mean:
+$\mathrm{hi}$\footnote{Here, we use the $\mathrm{lo}$, $\mathrm{hi}$
+  notation for grid indices from \S~\ref{sec:fv:bcs}}.  For example, homogeneous
+Neumann BCs on the left mean:
 \begin{equation}
 \phi_\mathrm{lo-1} = \phi_\mathrm{lo}
 \end{equation}
@@ -225,8 +250,7 @@ Substituting this into Eq~\ref{eq:diff:implicit} the update for the rightmost ce
   \phi_\mathrm{hi}^n + \alpha 2 A
 \end{equation}
 For all other interior cells, the stencil is unchanged.  The resulting
-system can be written in matrix form and appears as a {\em tridiagonal}
-matrix.  
+system appears as a {\em tridiagonal} matrix.
 \begin{equation}
 \renewcommand\arraystretch{1.5}
 \left (
@@ -270,16 +294,17 @@ linear system---we are only updating the interior points.
 
 \subsubsection{Crank-Nicolson time discretization}
 
-A second-order in time discretization requires us to center the righthand side in time.  We
-do this as:
+A second-order in time discretization requires us to center the
+righthand side in time.  We do this as:
 \begin{equation}
 \frac{\phi_i^{n+1} - \phi_i^n}{\Delta t} = 
   \frac{k}{2} \left ( \frac{\phi_{i+1}^{n} - 2\phi_i^{n} + \phi_{i-1}^{n}}{\Delta x^2} +
                       \frac{\phi_{i+1}^{n+1} - 2\phi_i^{n+1} + \phi_{i-1}^{n+1}}{\Delta x^2} \right )
 \end{equation}
-This time-discretization is called  {\em Crank-Nicolson}.
-Again, using $\alpha \equiv k\Delta t / \Delta x^2$, and grouping all the $n+1$ terms on the left
-we have:
+This looks like the average of the explicit and implicit systems we just saw.
+This time-discretization is called {\em Crank-Nicolson}.  Again, using
+$\alpha \equiv k\Delta t / \Delta x^2$, and grouping all the $n+1$
+terms on the left we have:
 \begin{equation}
 \phi^{n+1}_i - \frac{\alpha}{2} \left ( \phi^{n+1}_{i+1} - 2\phi^{n+1}_i + \phi^{n+1}_{i-1} \right )
   = \phi^n_i + \frac{\alpha}{2} \left ( \phi^{n}_{i+1} - 2\phi^{n}_i + \phi^{n}_{i-1} \right )
@@ -290,9 +315,10 @@ and grouping together the the $n+1$ terms by zone, we have:
   = \phi^n_i + \frac{\alpha}{2} \left ( \phi^n_{i+1} - 2 \phi^n_i + \phi^n_{i-1} \right )
 \end{equation}
 
-Considering homogeneous Neumann boundary conditions on the left, we again have
-$\phi^{n+1}_\mathrm{lo-1} = \phi^{n+1}_\mathrm{lo}$, and our stencil at the boundary 
-becomes
+Considering homogeneous Neumann boundary conditions on the left and
+right, we again have $\phi^{n+1}_\mathrm{lo-1} =
+\phi^{n+1}_\mathrm{lo}$ and $\phi^{n+1}_\mathrm{hi+1} =
+\phi^{n+1}_\mathrm{hi}$, and our stencil at the boundary becomes
 \begin{equation}
 -\frac{\alpha}{2} \phi^{n+1}_\mathrm{lo+1} + \left (1 + \frac{\alpha}{2} \right ) \phi^{n+1}_\mathrm{lo} =
     \phi^n_\mathrm{lo} + \frac{\alpha}{2} \left ( \phi^{n}_\mathrm{lo+1} - 2\phi^{n}_\mathrm{lo} + \phi^{n}_\mathrm{lo-1} \right )
@@ -402,13 +428,18 @@ Eq.~\ref{eq:diff:helmholtz} with a second-order difference expression
 for the second derivative, and isolate $\phi_i$, giving a smoothing
 operation of the form:
 \begin{equation}
+\label{eq:diff:discrete1d}
 \phi_{i} \leftarrow
  \left .    \left ( f_{i} + \frac{\beta}{\Delta x^2} [\phi_{i+1}
                              + \phi_{i-1}] \right ) \middle / 
 \left ( \alpha + \frac{2 \beta}{\Delta x^2}  \right )  \right .
 \end{equation}
+Note that when you take $\alpha = 0$ and $\beta = -1$ in
+Eq.~\ref{eq:diff:discrete1d}, the smoothing operation reduces to the
+form that we saw in Chapter~\ref{ch:multigrid} for just the Poisson
+equation.
 
-Note: when using multigrid, you do not need to actually construct the
+Recall, when using multigrid, you do not need to actually construct the
 matrix.  This is usually the most efficient way to implement diffusion
 in a multi-dimensional simulation code, especially when distributing
 the grid across parallel processors.  Since the discretization is the
@@ -451,11 +482,14 @@ the data, has second-order convergence.\\
 \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/diffusion/diff_converge.py}{diff\_converge.py}}}
 \end{figure}
 
-\section{Going further}
+\section{Non-constant Conductivity}
 
-\begin{itemize}
+For a non-constant conductivity, our equation has the form:
+\begin{equation}
+\frac{\partial \phi}{\partial t} = \frac{\partial}{\partial x} \left (k \frac{\partial \phi}{\partial x} \right )
+\end{equation}
 
-\item {\em Non-constant conductivity}: for the case where $k = k(x)$,
+For the case where $k = k(x)$,
   we discretize as:
   \begin{equation}
   \frac{\phi_i^{n+1} - \phi_i^n}{\Delta t} = 
@@ -473,9 +507,9 @@ the data, has second-order convergence.\\
  \frac{1}{k_{i+\myhalf}} = \frac{1}{2} \left (\frac{1}{k_i} + \frac{1}{k_{i+1}} \right )
  \end{equation}
  
-\item {\em State-dependent transport coefficients}: many times the
-  transport coefficients themselves depend on the quantity being
-  diffused:
+Slightly more complicated are state-dependent transport
+coefficients---the transport coefficients themselves depend on the
+quantity being diffused:
   \begin{equation}
   \frac{\phi_i^{n+1} - \phi_i^n}{\Delta t} = 
         \frac{1}{2} \left \{
@@ -507,10 +541,11 @@ the data, has second-order convergence.\\
   This is the approach used, for example, in \cite{SNpaper}.
 
 
-\item {\em Temperature diffusion in energy equation}: Often we find
- diffusion represented as one of many physical processes in a single
- equation.  For example, consider the internal energy equation with
- both reactions and diffusion:
+\section{Diffusion in Hydrodynamics} 
+
+Often we find diffusion represented as one of many physical processes
+in a single equation.  For example, consider the internal energy
+equation with both reactions and diffusion:
  \begin{equation}
  \rho\frac{\partial e}{\partial t} + \rho U \cdot \nabla e + p \nabla \cdot U = \nabla \cdot k \nabla T + \rho S
  \end{equation}
@@ -537,5 +572,5 @@ the data, has second-order convergence.\\
  This is now a diffusion equation for $e$, which can be solved by the
  techniques described above.  This is discussed, for example, in
  \cite{SNpaper,malone:2011}.
-\end{itemize}
+
 
