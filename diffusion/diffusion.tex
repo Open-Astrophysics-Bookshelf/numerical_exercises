@@ -447,6 +447,20 @@ same as the direct matrix solve, Eq.~\ref{eq:diff:cnmatrix}, the
 result will be exactly the same (to the tolerance of the multigrid
 solver).
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.8\linewidth]{gauss_diffusion_compare}
+\caption[Comparison of 2-d implicit diffusion with analytic
+  solution]{\label{fig:diffusion:multid} A comparison of 2-d implicit
+  diffusion of a Gaussian with the analytic solution at several times.
+  The 2-d solution was averaged over angles to yield a profile as a 
+  function of radius.
+  This used Crank-Nicolson time-discretization and multigrid.  This
+  can be run in \pyro\ as {\tt ./pyro diffusion gaussian
+    inputs.diffusion} and visualized using the {\tt
+    gauss\_diffusion\_compare.py} script there.}
+\end{figure}
+
 
 \subsection{Convergence}
 
