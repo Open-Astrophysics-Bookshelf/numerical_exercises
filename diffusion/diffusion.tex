@@ -462,6 +462,17 @@ solver).
 \end{figure}
 
 
+\begin{exercise}[Implicit multi-dimensional diffusion]
+{The diffusion solver in \pyro\ uses Crank-Nicolson differencing in time.  
+Modify the solver to do first-order backward Euler.  This will change
+the form of the linear system (coefficients and righthand side), but
+should not require any changes to the multigrid solver itself. 
+
+Compare the solution with the Crank-Nicolson solution for a very coarsely-resolved
+Gaussian and a finely-resolved Gaussian.
+}
+\end{exercise}
+
 \subsection{Convergence}
 
 One needs to be careful with the Crank-Nicolson discretization.  If
