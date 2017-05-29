@@ -449,17 +449,32 @@ solver).
 
 \begin{figure}[t]
 \centering
+\includegraphics[width=0.48\linewidth]{gauss_diff_start}
+\includegraphics[width=0.48\linewidth]{gauss_diff_end}
+\caption[2-d diffusion of a Gaussian]{\label{fig:diff:twodcompare}
+  Diffusion of a Gaussian in 2-d with $128^2$ zones using $k = 1.0$
+  and $\cfl = 2.0$.  This used Crank-Nicolson time-discretization and
+  multigrid.  This can be run in \pyro\ as {\tt ./pyro diffusion
+    gaussian inputs.diffusion} and visualized using the {\tt
+    gauss\_diffusion\_compare.py} script there.}
+\end{figure}
+
+\begin{figure}[t]
+\centering
 \includegraphics[width=0.8\linewidth]{gauss_diffusion_compare}
 \caption[Comparison of 2-d implicit diffusion with analytic
   solution]{\label{fig:diffusion:multid} A comparison of 2-d implicit
-  diffusion of a Gaussian with the analytic solution at several times.
+  diffusion from Figure~\ref{fig:diff:twodcompare} with the analytic solution at several times.
   The 2-d solution was averaged over angles to yield a profile as a 
-  function of radius.
-  This used Crank-Nicolson time-discretization and multigrid.  This
-  can be run in \pyro\ as {\tt ./pyro diffusion gaussian
-    inputs.diffusion} and visualized using the {\tt
-    gauss\_diffusion\_compare.py} script there.}
+  function of radius.}
 \end{figure}
+
+Figure~\ref{fig:diffusion:multid} shows the result of diffusing a
+Gaussian profile on a 2-d grid using Crank-Nicolson
+time-discretization, a constant coefficient, and multigrid to solve
+the discretized system, using \pyro.  There is a good agreement
+between the analytic and numerical solution, showing that this scheme
+models the diffusion of an initially resolved Gaussian well.
 
 
 \begin{exercise}[Implicit multi-dimensional diffusion]
@@ -472,6 +487,7 @@ Compare the solution with the Crank-Nicolson solution for a very coarsely-resolv
 Gaussian and a finely-resolved Gaussian.
 }
 \end{exercise}
+
 
 \subsection{Convergence}
 
@@ -506,6 +522,8 @@ We see that the Crank-Nicolson method has the lowest error, and when resolving
 the data, has second-order convergence.\\
 \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/diffusion/diff_converge.py}{diff\_converge.py}}}
 \end{figure}
+
+
 
 \section{Non-constant Conductivity}
 
