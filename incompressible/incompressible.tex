@@ -1,11 +1,5 @@
 \label{ch:incompressible}
 
-\begin{quote}
-\noindent {\em These summarize methods for solving the incompressible
-  hydrodynamics equations using an cell-centered approximate
-  projection method.}
-\end{quote}
-
 \section{Incompressible flow}
 
 As a fluid parcel advects through a domain, it compresses and expands
@@ -101,6 +95,45 @@ Many variations on this basic idea exist, using alternate forms of the
 projection, different grid centerings of the $\phi$ variable, and
 additional physics.
 
+Figure~\ref{fig:incomp:project} shows an example of a projection.  The
+initial velocity field is specified as:
+\begin{align}
+\label{eq:incomp:proju}
+  u &= -\sin(\pi x)^2 \sin(2\pi y) \\
+\label{eq:incomp:projv}
+  v &= \phantom{+} \sin(\pi y)^2 \sin(2\pi x)
+\end{align}
+which is divergence free and doubly-periodic.  This is then modified
+by adding the gradient of a scalar, $\phi$, of the form:
+\begin{equation}
+\label{eq:incomp:projphi}
+\phi = \frac{1}{10} \cos(2\pi y) \cos(2\pi x) 
+\end{equation}
+yielding a new velocity, $\Ub_p = \Ub + \nabla \phi$.
+The result is the middle panel in the figure, and is not divergence free.
+A projection is then done, to recover $\phi$ by solving
+\begin{equation}
+\nabla^2 \phi = \nabla \cdot \Ub_p
+\end{equation}
+For this figure, we use the standard 5-point Laplacian and a divergence
+built via centered-differences:
+\begin{equation}
+\nabla \cdot \Ub = \frac{u_{i+1,j} - u_{i-1,j}}{2\dx} + \frac{v_{i,j+1} - v_{i,j-1}}{2\dy}
+\end{equation}
+Together, these represent an approximation projection. 
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.9\linewidth]{project-u}
+\caption[Example of a projection]{\label{fig:incomp:project} An
+  example of an approximate projection, on a $128^2$ grid.  The top
+  shows the original velocity field, Eqs.~\ref{eq:incomp:proju} and
+  \ref{eq:incomp:projv}.  This was poluted by adding the gradient of a
+  scalar, Eq.~\ref{eq:incomp:projphi} (middle) and then a projection
+  was done to recover the original velocity field (bottom).  In this
+  case, the L$_2$ norm of the error on the velocity (comparing before
+  and after projection) is $0.000189$.}
+\end{figure}
 
 \section{Cell-centered approximate projection solver}
 
