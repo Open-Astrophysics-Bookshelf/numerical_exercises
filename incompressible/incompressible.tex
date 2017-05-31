@@ -132,8 +132,17 @@ Together, these represent an approximation projection.
   scalar, Eq.~\ref{eq:incomp:projphi} (middle) and then a projection
   was done to recover the original velocity field (bottom).  In this
   case, the L$_2$ norm of the error on the velocity (comparing before
-  and after projection) is $0.000189$.}
+  and after projection) is $0.000189$. \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/incompressible/project.py}{project.py}}}
 \end{figure}
+
+\begin{exercise}[An approximate projection]
+Implement an approximate projection, using pure smoothing for solving
+the elliptic equation.  Start with the velocity field described
+by Eqs.~\ref{eq:incomp:proju} and \ref{eq:incomp:projv} and the scalar
+from Eq.~\ref{eq:incomp:projphi}.  Compute a poluted velocity field,
+$\Ub_p = \Ub + \nabla \phi$ and then project it to recover the 
+original velocity field.
+\end{exercise}
 
 \section{Cell-centered approximate projection solver}
 

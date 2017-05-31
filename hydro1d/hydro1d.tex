@@ -9,7 +9,7 @@
 \hydrooned\ is a one-dimensional compressible hydrodynamics code written
 in modern Fortran.  In particular, it implements the piecewise parabolic
 method described in \S~\ref{sec:hydro:ppm}, in both Cartesian and spherical
-geometries.  It assumes a gamma-law equation of state.
+geometries.  It assumes a gamma-law equation of state and supports gravity.
 
 
 \section{Getting \hydrooned}
@@ -20,12 +20,34 @@ git clone https://github.com/zingale/hydro1d
 \end{verbatim}
 
 Some details on the code can be found on its webpage:
-\url{http://zingale.github.io/hydro1d/}\, .
+\url{http://zingale.github.io/hydro1d/}\, .  As with the other codes detailed here,
+if you wish to contribute, fix bugs, etc., you can create issues or pull requests
+through the code's github page.
 
 
 
-%\section{\hydrooned 's structure}
+\section{\hydrooned 's structure}
 
+There a few major data structures in \hydrooned, defined in the {\tt
+  grid.f90} file:
+
+\begin{itemize}
+\item {\tt grid\_t} : this holds the grid information, with fields for
+  the low and high indicies of the valid domain, and coordinate
+  information (including interface areas and volumes, to support
+  spherical geometry).
+
+\item {\tt gridvar\_t} : data that lives on a grid.  This holds both
+  a {\tt data} array and the {\tt grid\_t} that it is defined on.
+  
+\item {\tt gridedgevar\_t} : like {\tt gridvar\_t}, but for data
+  defined at the interfaces between zones.
+
+\end{itemize}
+
+The integer keys defined in the {\tt variables\_module} allow you
+to index the difference state fields in the data arrays of the 
+grid variables.
 
 
 \section{Running \hydrooned}
@@ -49,5 +71,22 @@ A number of runtime options can be set---these are listed in {\tt
   params.f90} and {\tt probparams.f90} (the latter is problem-specific
 parameters).
 
+
+\section{Problem setups}
+
+The following problem setups are provided:
+\begin{itemize}
+\item {\tt advect} : a simple advection test where a density profile
+  is advected through periodic boundaries, in a uniform pressure
+  medium (to suppress dynamics)
+
+\item {\tt hse} : a simple 1-d atmosphere in hydrostatic equilibrium.
+  This test works to see if the atmosphere stays in HSE.
+
+\item {\tt sedov} : a 1-d spherical Sedov explosion.
+
+\item {\tt sod} : a shock tube setup for testing against exact Riemann
+  solvers.
+\end{itemize}
 
 
