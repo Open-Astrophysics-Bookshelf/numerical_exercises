@@ -455,8 +455,7 @@ solver).
   Diffusion of a Gaussian in 2-d with $128^2$ zones using $k = 1.0$
   and $\cfl = 2.0$.  This used Crank-Nicolson time-discretization and
   multigrid.  This can be run in \pyro\ as {\tt ./pyro diffusion
-    gaussian inputs.diffusion} and visualized using the {\tt
-    gauss\_diffusion\_compare.py} script there.}
+    gaussian inputs.diffusion}.}
 \end{figure}
 
 \begin{figure}[t]
@@ -466,7 +465,8 @@ solver).
   solution]{\label{fig:diffusion:multid} A comparison of 2-d implicit
   diffusion from Figure~\ref{fig:diff:twodcompare} with the analytic solution at several times.
   The 2-d solution was averaged over angles to yield a profile as a 
-  function of radius.}
+  function of radius, using the {\tt
+    gauss\_diffusion\_compare.py} in \pyro.}
 \end{figure}
 
 Figure~\ref{fig:diffusion:multid} shows the result of diffusing a
@@ -506,7 +506,7 @@ of under-resolved flows.
 \caption[Under-resolved Crank-Nicolson diffusion]
 {\label{fig:diff:cnunstable} Crank-Nicolson diffusion of a Gaussian
 on under-resolved initial data with a large timestep.  Here we use
-$64$ zones and $C= 10$.}
+$64$ zones and $C= 10$.  \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/diffusion/diffusion_implicit.py}{diffusion\_implicit.py}}}
 \end{figure}
 
 
