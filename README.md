@@ -21,16 +21,18 @@ The following chapters are mostly written:
 - Finite-Volume Grids
 - Advection
 - Burgers' Equation
-- Euler Equations
+- Euler Equations: Theory
+- Euler Equations: Numerical Methods
 - Elliptic Equations and Multigrid
 - Diffusion
-- Multiphysics Applications
+- Model Multiphysics Problems
+- Reactive Flow
+- Planning a Simulation
 - Incompressible Flow and Projection Methods
 - Low Mach Number Methods
 
 The following are things I'd like to add in the next 1-2 years:
 
-- Standard Hydro Test Problems
 - Fluid Instabilities
 - Rotation and Self-gravity
 - Radiation Hydrodynamics
