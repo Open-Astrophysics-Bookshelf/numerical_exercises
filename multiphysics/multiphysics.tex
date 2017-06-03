@@ -1,15 +1,9 @@
 
-\begin{quote}
-\noindent {\em Generally, we are interested in multiphysics simulations---these
-           combine a little bit of everything we discussed so far}
-\end{quote}
-
 \section{Integrating Multiphysics}
 
-Consider an equation whose evolution depends on several different
+Consider a system whose evolution depends on several different
 physical processes, represented by the operators $A$, $D$,
-$R$ (these may represent, e.g., advection, diffusion, reactions,
-etc.).  
+$R$ (advection, diffusion, and reactions, respectively).
 \begin{equation}
 \phi_t = -A(\phi) + D(\phi) + R(\phi)
 \end{equation}
@@ -22,24 +16,28 @@ $[R(\phi)]_i$ may be an algebraic relation.  This leaves us with an ordinary dif
 \begin{equation}
 \frac{d\phi_i}{dt} = -[A(\phi)]_i + [D(\phi)]_i + [R(\phi)]_i
 \end{equation}
-which can be solve using standard ODE techniques.  This technique
-is called the {\em method of lines}, and can be a powerful technique
-to solve PDEs or systems of PDEs with multiple physics operators.
+which can be solve using standard ODE techniques.  This is the {\em
+  method of lines} technique we saw with advection
+(\S~\ref{adv:sec:mol_2d}) and compressible hydrodynamics
+(\S~\ref{sec:comp:mol}), and can be a powerful technique to solve PDEs
+or systems of PDEs with multiple physics operators
 
 A difficulty arises if these processes each have different timescales
 associated with them.  For instance, reactions may be vigorous and
-require a small timestep to accurately capture the changes, but
-the advection is slow.  Therefore, we don't want to use the same 
-timestep for all the processes, since that will needlessly make things
+require a small timestep to accurately capture the changes, but the
+advection is slow.  Or, recall that the timestep limiter for explicit
+diffusion scales as $\Delta x^2$ while explicit advection scales as
+$\Delta x$, so these processes could demand very different timescale
+for evolution.  Therefore, we don't want to use the same timestep for
+all the processes, since that will needlessly make things
 computationally expensive.  {\em Operator splitting} solves for the
 effects of each operator separately, using whichever timestep (and
 time-discretization, e.g., explicit or implicit) is most suited to the
 operation.  The result of one operation is used as the input to the
-next.  The downside of this approach is that the operations may
-not be well coupled.
-
-A final technique, {\em spectral deferred corrections} combines the 
-best features of the method of lines approach and operator splitting.
+next\footnote{This directly parallels the dimensional splitting
+  approach we saw for advection in \S~\ref{adv:sec:dimensionalsplit}}.
+The downside of this approach is that the operations may not be well
+coupled.
 
 
 \section{Ex: diffusion-reaction}
@@ -65,8 +63,7 @@ where $R_{\Delta t/2}$ represents reacting for a step of $\Delta t/2$
 and $D_{\Delta t}$ represents diffusing for a step of $\Delta t$.  In
 each case, these operators act as if the other were not present, but
 they see the effect of the previous operation on the input $\phi$.  
-
-No explicit source terms describing one process appear in the other
+Note that no explicit source terms describing one process appear in the other
 process's update.  The procedure for updating appears as:
 \begin{enumerate}
 \item {\em Evolve reaction ODE system for $\Delta t/2$}
