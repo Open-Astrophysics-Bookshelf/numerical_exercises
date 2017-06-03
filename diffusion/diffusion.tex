@@ -498,7 +498,8 @@ Figure~\ref{fig:diff:cnunstable} shows such a case for the Gaussian
 diffusion with Crank-Nicolson discretization and 64 zones with $C =
 10$.  For this reason, simulation codes often drop down to the
 simple backwards difference time-discretization for implicit diffusion
-of under-resolved flows.
+of under-resolved flows.  A good discussion of the different types
+of stability can be found in \cite{leveque:fd}.
 
 \begin{figure}
 \centering
@@ -522,6 +523,19 @@ We see that the Crank-Nicolson method has the lowest error, and when resolving
 the data, has second-order convergence.\\
 \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/diffusion/diff_converge.py}{diff\_converge.py}}}
 \end{figure}
+
+
+Figure~\ref{fig:diff:convergence} shows the convergence of several of
+the methods discussed here on the diffusion of a Gaussian, for two
+different Courant numbers, 0.8 and 8.0.  For the lower case, we can do
+the diffusion explicitly as well as implicitly, and we see that all
+methods show the same trends, with the Crank-Nicolson method being the
+most accurate (since it is the only second-order-in-time method
+shown).  For the larger timestep, we only run the implicit methods
+(the explicit case is unstable).  We see that at coarse resolution,
+the errors in the methods are similar---this is because the solution
+is unresolved.  At higher resolution, the error for the Crank-Nicolson
+method is an order of magnitude lower.
 
 
 
@@ -549,6 +563,7 @@ For the case where $k = k(x)$,
  \begin{equation}
  \frac{1}{k_{i+\myhalf}} = \frac{1}{2} \left (\frac{1}{k_i} + \frac{1}{k_{i+1}} \right )
  \end{equation}
+The actual form should be motivated by the physics
  
 Slightly more complicated are state-dependent transport
 coefficients---the transport coefficients themselves depend on the
@@ -613,7 +628,9 @@ equation with both reactions and diffusion:
  \rho \frac{\partial e}{\partial t} = \nabla \cdot (k/c_v) \nabla e - \nabla \cdot (k e_\rho/c_v) \nabla \rho -A + \rho S
  \end{equation}
  This is now a diffusion equation for $e$, which can be solved by the
- techniques described above.  This is discussed, for example, in
- \cite{SNpaper,malone:2011}.
-
+ techniques described above.  Note: if the transport coefficients
+ (including $c_v$, $e_\rho$) are dependent on $e$, then we still need
+ to do a predictor-corrector method here.  This is discussed, for
+ example, in \cite{SNpaper,malone:2011}.  A simple case for this type of 
+ advection-diffusion is also shown in \S~\ref{sec:multiphys:diffreact}.
 
