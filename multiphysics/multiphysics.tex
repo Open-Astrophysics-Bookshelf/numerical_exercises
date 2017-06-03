@@ -67,9 +67,10 @@ Note that no explicit source terms describing one process appear in the other
 process's update.  The procedure for updating appears as:
 \begin{enumerate}
 \item {\em Evolve reaction ODE system for $\Delta t/2$}
-   %
+
+  Define $\phi^\star$ as the the solution to the ODE:
    \begin{equation}
-     \text{define } \phi^\star: \, \frac{d\phi}{dt} = \frac{1}{\tau} R(\phi), \quad 
+     \frac{d\phi}{dt} = \frac{1}{\tau} R(\phi), \quad 
    \phi(t^n) = \phi^n, \quad t \in [t^n, t^{n+\myhalf}]
    \end{equation}
 
@@ -81,8 +82,11 @@ process's update.  The procedure for updating appears as:
       \frac{1}{2} (D(\phi^\star) + D(\phi^{\star\star}))
    \end{equation}
 
+   Note that the starting point is $\phi^\star$.
+
 \item {\em Evolve reaction ODE system for $\Delta t/2$}
-   %
+
+  Define $\phi^{n+1}$ as the the solution to the ODE:
    \begin{equation}
      \text{define } \phi^{n+1}: \, \frac{d\phi}{dt} = \frac{1}{\tau} R(\phi), \quad 
    \phi(t^{n+\myhalf}) = \phi^{\star\star}, \quad t \in [t^{n+\myhalf}, t^{n+1}]
@@ -90,8 +94,16 @@ process's update.  The procedure for updating appears as:
 
 \end{enumerate}
 
-Figure~\ref{fig:diffreact} shows the solution to our diffusion-reaction
-equation with 256 zones, $\kappa = 0.1$, $\tau = 1.0$ at several times.
+Consider a simple reaction source
+\begin{equation}
+  \label{eq:multiphysics:react}
+  R(\phi) = \frac{1}{4} \phi (1 - \phi)
+\end{equation}
+This is called a KPP reaction source.  Here $\phi$ can be thought of
+as a progress variable that varies between pure ash ($\phi = 0$) and
+pure fuel ($\phi = 1$).  Figure~\ref{fig:diffreact} shows the solution
+to our diffusion-reaction equation with 256 zones, $\kappa = 0.1$,
+$\tau = 1.0$ at several times.
 
 \begin{figure}[t]
 \centering
@@ -105,22 +117,16 @@ equation with 256 zones, $\kappa = 0.1$, $\tau = 1.0$ at several times.
    }
 \end{figure}
 
-
-\begin{exercise}[Diffusion-reaction system]
- Consider a simple reaction source
- \begin{equation}
- R(\phi) = \frac{1}{4} \phi (1 - \phi)
- \end{equation}
- This is called a KPP reaction source.
- Here $\phi$ can be thought of as a progress variable that varies
- between pure ash ($\phi = 0$) and pure fuel ($\phi = 1$).
-
- Solve the system with this source.  Note that you should begin with
- some smooth initial conditions---if they are too sharp than the 
- C-N discretization will cause jagged features to appear.  
  The solution in this case is a wave with speed $S = \sqrt{\kappa/\tau}$
  and thickness $\delta = \sqrt{\kappa \tau}$ (see \cite{vladimirova2006} for
  some details of this system).
+
+\begin{exercise}[Diffusion-reaction system]
+ Solve the the difusion reaction equation with the source given in 
+ Eq.~\ref{eq:multiphyiscs:react}.  Note that you should begin with
+ some smooth initial conditions---if they are too sharp than the 
+ C-N discretization will cause jagged features to appear.  
+ Compare your results to Figure~\ref{fig:diffreact}.
 \end{exercise}
 
 
@@ -132,19 +138,20 @@ The viscous Burgers' equation appears as:
 \begin{equation}
 u_t + u u_x = \epsilon u_{xx}
 \end{equation}
-This admits shocks and rarefactions just like the inviscid form, but now
-the viscosity can act to smooth out the shock---instead of being
-infinitely thin, it will have a physical width.
+This admits shocks and rarefactions just like the inviscid form we
+studied in Chapter~\ref{ch:burgers}, but now the viscosity can act to
+smooth out the shock---instead of being infinitely thin, it will have
+a physical width.
 
 As we saw earlier, there are efficient, accurate methods for handling
-the explicit parts explicitly, but for diffusion, we often want to 
+the advective parts explicitly, but for diffusion, we often want to 
 solve it implicitly.  We can split the solution up, but couple the 
 two processes together to make a method that is overall second-order
 accurate in time.  We write our equation as:
 \begin{equation}
 u_t + A(u) = D(u)
 \end{equation}
-with $A(u) = [\frac{1}{2} u^2]_x$ and $D(u) = eu_{xx}$.  Then our update 
+with $A(u) = [\frac{1}{2} u^2]_x$ and $D(u) = \epsilon u_{xx}$.  Then our update 
 appears in two steps.
 \begin{enumerate}
 \item {\em Find the advective update over the timestep}:
@@ -211,3 +218,23 @@ viscosity.  Notice that the effect of the viscosity is to smooth the
 shock profile, but the shock position itself agrees between the cases.
 
 
+\subsection{Convergence without an analytic solution}
+
+Assessing the convergence of this is more difficult than the tests we
+looked at before, since there is no analytic solution to compare to.
+In this case, we can compare a very high-resolution solution and take
+this to be the {\em right} answer / benchmark solution, and then
+compare coarser simulations to a coarsened version of the benchmark solution.
+This is done in Figure~\ref{fig:multiphysics:burgersconverge}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=5.0in]{burgersvisc_converge}
+\caption[Convergence of the viscous Burgers' equation]
+  {\label{fig:multiphysics:burgersconverge} Convergence of the Burgers'
+    solution with $\epsilon = 0.005$.  To test convergence a run with 4096
+    zones was done as a benchmark solution.  We see second-order
+    convergence for the higher-resolution runs in this sample.\\
+   \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/multiphysics/burgersvisc_converge.py}{burgersvisc\_converge.py}}
+   }
+\end{figure}
