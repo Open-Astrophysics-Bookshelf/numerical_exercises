@@ -225,7 +225,10 @@ looked at before, since there is no analytic solution to compare to.
 In this case, we can compare a very high-resolution solution and take
 this to be the {\em right} answer / benchmark solution, and then
 compare coarser simulations to a coarsened version of the benchmark solution.
-This is done in Figure~\ref{fig:multiphysics:burgersconverge}
+This is done in Figure~\ref{fig:multiphysics:burgersconverge}.  The
+fine zones of the benchmark are averaged into a corresponding coarse grid zone
+to produce a coarsened representation of the benchmark, and the norm 
+of the error with the coarse simulation is computed.
 
 \begin{figure}[t]
 \centering

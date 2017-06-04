@@ -1,29 +1,43 @@
 
 \section{Introduction}
 
-Many astrophysical problems involve modeling nuclear reactions coupled
-with hydrodynamics.  For multifluid flows, the Euler equations are
-augments with continuity equations for each of the (chemical or
-nuclear) species.  If we denote the density of species $k$ as
+Many astrophysical problems involve modeling nuclear (or chemical)
+reactions coupled with hydrodynamics.  Astrophysical reacting flows
+share a lot of similarities with terrestrial combustion, including
+both subsonic (deflagrations) and supersonic (detonations) burning
+fronts.  Nice discussions of the physics of reacting flows can be
+found in, e.g., \cite{oranboris, peters:2000}
+
+
+For multifluid flows, the Euler equations are
+augmented with continuity equations for each of the nuclear (or chemical) species.  If we denote the density of species $k$ as
 $\rho_k$, then conservation of mass for each species individually
 implies:
 \begin{equation}
-\label{eq:euler:partialdensitycont}
+\label{react:eq:partialdensitycont}
 \ddt{\rho_k} + \nabla \cdot (\rho_k \Ub) = 0
 \end{equation}
-Summing Eq.~\ref{eq:euler:partialdensitycont} over $k$ gives us back
+Summing Eq.~\ref{react:eq:partialdensitycont} over $k$ gives us back
 the mass contunity equation, since $\sum_k \rho_k = \rho$.  The
-$\rho_k$ are sometimes called {\em partial densities}.  It is often
+$\rho_k$ are sometimes called {\em partial densities}.  Note that
+using both set of equations, Eq.~\ref{react:eq:partialdensitycont} 
+and the normal mass continuity equation for $\rho$ overspecifies 
+the system.
+
+It is often
 easier to define a mass fraction of species $k$, $X_k$, as
 \begin{equation}
 X_k = \frac{\rho_k}{\rho}
 \end{equation}
 and it is easy to see that $\sum_k X_k = 1$, and 
 \begin{equation}
+\label{react:eq:partialrho}
 \frac{\partial (\rho X_k)}{\partial t} + \nabla \cdot  (\rho X_k \Ub) = 0
 \end{equation}
-Using the continuity equation, we can write this as an advection
-equation:
+
+\begin{exercise}[Species advection]
+Using the continuity equation, show that we can write
+Eq.~\ref{react:eq:partialrho} as an advection equation:
 \begin{equation}
 \frac{\partial X_k}{\partial t} + \Ub \cdot \nabla X_k = 0
 \end{equation}
@@ -31,22 +45,29 @@ or
 \begin{equation}
 \DDt{X_k} = 0
 \end{equation}
+\end{exercise}
+
 This latter form says that as a fluid element advects with the flow,
 its composition does not change.  However, reactions can turn one
 species into another, so for reacting flow, $DX_k/Dt \ne 0$.  If we
-define the creation rate for species $k$ as $\omegadot_k$, then we have:
+define the creation rate for species $k$ as $\omegadot_k$, then we
+have:
 \begin{equation}
 \DDt{X_k} = \omegadot_k
 \end{equation}
+Since $\sum_k X_k = 1$, it must be that $\sum_k \omegadot_k = 0$.
+
 Reactions will also release (or consume) energy, due to the change in
 nuclear or chemical binding energy.  This energy will be a source to
-the internal energy.  In particular, if we revisit the first law of
-thermodynamics for our system,\MarginPar{this assumes chemical equilibrium}
+the internal energy.  In particular, our first law of thermodynamics
+now has a source:\MarginPar{this assumes chemical
+  equilibrium}
 \begin{equation}
 T ds = de + p d \left( \frac{1}{\rho}\right ) = q_\mathrm{react}
 \end{equation}
 where $q_\mathrm{react}$ is the specific energy release due to
-reactions.  Following a fluid element, this takes the form:
+reactions (energy / mass).  Following a fluid element, this takes the
+form:
 \begin{equation}
 T\DDt{s} = \DDt{e} + p \DDt{(1/\rho)} = \Hnuc
 \end{equation}
@@ -115,7 +136,7 @@ with $\chi_T \equiv \partial \log p / \partial \log T |_\rho$
 Putting this all together, we have:
 \begin{equation}
 \frac{Dp}{Dt} = \frac{p}{\rho}\Gamma_1  \frac{D\rho}{Dt}
-   + \frac{p \chi_T}{c_v T} \dot{q}
+   + \frac{p \chi_T}{c_v T} \Hnuc
 \end{equation}
 and using the continuity equation, $D\rho/Dt = -\rho \nabla \cdot \Ub$, 
 we finally have:
@@ -129,14 +150,12 @@ where we defined
 \end{equation}
 The $\sigma$ notation follows from \cite{ABRZ:II}.
 
-For simplicity of notation, we'll write things out in terms of a
-one-dimensional system for the following.  The primitive variable
-system, in one-dimension, is then
+The primitive variable is then
 \begin{align}
-\ddt{\rho} + u \ddx{\rho} + \rho \ddx{u} &= 0\\
-\ddt{u} + u \ddx{u} + \frac{1}{\rho} \ddx{p} &= 0\\
-\ddt{p} + u \ddx{p} + \Gamma_1 p \ddx{u} &= \Gamma_1 p \sigma \Hnuc \\
-\ddt{X_k} + u \ddx{X_k} &= \omegadot_k 
+\ddt{\rho} + \Ub \cdot \nabla \rho + \rho \nabla \cdot \Ub &= 0\\
+\ddt{\Ub} + \Ub \cdot\nabla \Ub + \frac{1}{\rho} \nabla p &= 0\\
+\ddt{p} + \Ub \cdot \nabla p + \Gamma_1 p \nabla \cdot \Ub &= \Gamma_1 p \sigma \Hnuc \\
+\ddt{X_k} + \Ub \cdot \nabla {X_k} &= \omegadot_k 
 \end{align}
 
 
@@ -175,9 +194,11 @@ of reactive sources.  The advance through $\Delta t$ in time is:
      \frac{\Uc^{\star\star}_i - \Uc^\star_i}{\Delta t} =
       \frac{\Fb^\exx(\Uc^{\star,n+\myhalf}_{i-\myhalf}) - \Fb^\exx(\Uc^{\star,n+\myhalf}_{i+\myhalf})}{\Delta x}
    \end{equation}
-  where $\Uc^{\star,n+\myhalf}_{i-\myhalf}$ is the predict interface state
-  (using the ideas from \S~\ref{sec:onedrecon}), beginning with the state
-  $\Uc^\star$.
+  where $\Uc^{\star,n+\myhalf}_{i-\myhalf}$ is the predict interface
+  state (using the ideas from \S~\ref{sec:onedrecon}), beginning with
+  the state $\Uc^\star$.
+
+  Note that $\Rc$ does not appear here explicitly.
 
 \item {\em Evolve reaction part for $\Delta t/2$}
 
@@ -194,9 +215,9 @@ of reactive sources.  The advance through $\Delta t$ in time is:
 
 \subsection{Adding species to hydrodynamics}
 
-In the hydrodynamics algorithm, we neglect the reaction terms.  Their effects
-are incorporated implicitly by performing the hydrodynamics update off of the 
-state that has already experienced burning.
+In the hydrodynamics algorithm, we neglect the reaction terms.  Their
+effects are incorporated implicitly by performing the hydrodynamics
+update starting with the state that has already experienced burning.
 \begin{align}
 \ddt{\rho} + \nabla \cdot (\rho \Ub) &= 0 \\
 \ddt{(\rho X_k)} + \nabla \cdot (\rho \Ub X_k) &= 0 \\
