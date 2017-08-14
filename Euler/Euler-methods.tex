@@ -1142,7 +1142,9 @@ $\hat{\Uc}$'s and carry it through.
 
 Note that the source here is cell-centered.  This expansion is
 second-order accurate.  This is the approach outlined in Miller
-\& Colella \cite{millercolella:2002}.
+\& Colella \cite{millercolella:2002}.  Also notice the 
+similarity of this source term to a second-order Euler method
+for integrating ODEs.
 
 Alternately, we can include the source terms in the characteristic
 tracing of the interface states.  This is the approach taken in, e.g.,
@@ -1183,15 +1185,14 @@ u_{i+\myhalf,L}^{n+\myhalf} =
 \end{align}
 where the only change from Eq.~\ref{eq:ufull} are the
 $\Ic^\evm_+(g)$ and $\Ic^\evp_+(g)$ terms.
-
-These differ from the expression in the PPM paper, where $\Delta t \Gb$,
+\footnote{These differ from the expression in the PPM paper, where $\Delta t \Gb$,
 not $(\Delta t/2) \Gb$ is used in the projection, however this appears to
 be a typo.  To see this, notice that if both waves are moving toward
 the interface, then the source term that is added to the interface
 state is $(\Delta t/4) (\Ic_+^\evm(g) +
 \Ic_+^\evp(g))$ for the left state, which reduces to $(\Delta
 t/2) g$ for constant g---this matches the result from the Taylor
-expansion above (Eq.~\ref{eq:Utaylorstatesource}).
+expansion above (Eq.~\ref{eq:Utaylorstatesource}).}
 
 Regardless of how the source term information is included in the
 interface states, we also need to include it in the conservative
