@@ -1232,6 +1232,7 @@ be solved analytically.
 
 %-----------------------------------------------------------------------------
 \section{Simple geometries}
+\label{ch:euler:geom}
 
 So far we have been working only with Cartesian geometries, but it is
 easy to extend these methods to simple non-Cartesian geometies, like
@@ -1337,7 +1338,14 @@ form of the cylindrical divergence:
 \end{equation}
 Just as with the 1-d spherical case, the pressure term in the momentum
 equation needs to be treated separately from the flux, since it enters
-as a gradient and not a divergence.
+as a gradient and not a divergence.\footnote{It is common to see the divergence
+term expressed as 
+\begin{equation}
+\nabla \cdot {\boldsymbol{\phi}} = \frac{1}{r^\alpha} \ddr{(r^\alpha \phi^{(r)})} + \ldots
+\end{equation}
+where $\alpha = 1$ for axisymmetric and $\alpha = 2$ for 1-d
+spherical.  This allows for the geometry correction to be expressed
+more concisely, as the source term takes the form $-\alpha F/r$.  }
 
 
 %-----------------------------------------------------------------------------
@@ -1956,8 +1964,17 @@ denote the reference states, we arrive at:
                        +\frac{1}{c^2} \left (\tilde{p} - \Ic^{(4)}_+(p) \right )
                \right ] h
 \end{align}
-This is the expression that is found in the Castro code.
-
+This is the expression that is found in the Castro code.  If you are dealing with
+a simple geometry, then the divergences have metric terms.  In 1-d, we then have:
+\begin{equation}
+ \ddt{(\rho e)} + \frac{1}{r^\alpha} \ddr{(r^\alpha \rho u e)} + p \frac{1}{r^\alpha} \ddr{(r^\alpha u)}
+\end{equation}
+Expanding out the derivatives gives use the equation in Cartesian form with a geometric source term:
+\begin{equation}
+ \ddt{(\rho e)} + \ddr{(\rho u e)} + p \ddr{u} = -\frac{\alpha \rho hu}{r}
+\end{equation}
+where $h$ is the specific enthalpy.  This can be accommodated using
+the procedure described in \S~\ref{ch:euler:geom}.
 
 All of these methods are designed to avoid EOS calls where possible,
 since general equations of state can be expensive.
