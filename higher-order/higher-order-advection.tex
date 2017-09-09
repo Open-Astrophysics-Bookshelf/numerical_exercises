@@ -61,8 +61,7 @@ volume methods, by considering the update formula~\eqref{eq:consup}
                                 \Fb_{i-\myhalf} \right \}.
 \end{equation}
 In the finite difference method a interpretation used is different. We are now
-thinking thinking of $\langle \Uc\rangle_{i}$ as the point value of the
-conserved quantity at $x_i$. We are also thinking of
+thinking of
 \begin{equation}
   \label{eq:fd-deriv}
   \frac{1}{\Delta x} \left \{ \Fb_{i+\myhalf} -
@@ -100,15 +99,15 @@ considered the five points $q_{j}, j \in [i-2, \dots, i+2]$ then we could use
 the information from all five of these points to approximate $q_{i+\myhalf}$ as
 \begin{equation}
   \label{eq:weno-advection-5pt}
-  q^{(\text{Fifth})}_{i+\myhalf} = \tfrac{1}{60} \left( 2 q_{i-2} - 13 q_{i-1} + 47 q_{i} + 27 q_{i+1} - 6 q_{i+2} \right) + {\cal O}(\Delta x^5).
+  q^{(\text{Fifth})}_{i+\myhalf} = \tfrac{1}{60} \left( 2 \langle q \rangle_{i-2} - 13 \langle q \rangle_{i-1} + 47 \langle q \rangle_{i} + 27 \langle q \rangle_{i+1} - 3 \langle q \rangle_{i+2} \right) + {\cal O}(\Delta x^5).
 \end{equation}
 Alternatively we could use only three of the points, in three different ways:
 \begin{subequations}
   \label{eq:weno-advection-3pt}
   \begin{align}
-    q^{(\text{Third}, 2)}_{i+\myhalf} &= \tfrac{1}{6} \left( 2 q_{i-2} - 7 q_{i-1} + 11 q_{i} \right) + {\cal O}(\Delta x^3), \\
-    q^{(\text{Third}, 1)}_{i+\myhalf} &= \tfrac{1}{6} \left( -q_{i-1} + 5 q_{i} + 2 q_{i+1} \right) + {\cal O}(\Delta x^3), \\
-    q^{(\text{Third}, 0)}_{i+\myhalf} &= \tfrac{1}{6} \left( 2 q_{i} + 5 q_{i+1} - 2 q_{i+2} \right) + {\cal O}(\Delta x^3).
+    q^{(\text{Third}, 2)}_{i+\myhalf} &= \tfrac{1}{6} \left( 2 \langle q \rangle_{i-2} - 7 \langle q \rangle_{i-1} + 11 \langle q \rangle_{i} \right) + {\cal O}(\Delta x^3), \\
+    q^{(\text{Third}, 1)}_{i+\myhalf} &= \tfrac{1}{6} \left( - \langle q \rangle_{i-1} + 5 \langle q \rangle_{i} + 2 \langle q \rangle_{i+1} \right) + {\cal O}(\Delta x^3), \\
+    q^{(\text{Third}, 0)}_{i+\myhalf} &= \tfrac{1}{6} \left( 2 \langle q \rangle_{i} + 5 \langle q \rangle_{i+1} - \langle q \rangle_{i+2} \right) + {\cal O}(\Delta x^3).
   \end{align}
 \end{subequations}
 
@@ -164,7 +163,7 @@ will need the weights to add to $1$.
 
 We can now write out the full WENO algorithm of order $(2 r - 1)$. The constant
 $r$ sets the size of the individual stencils as well as the (optimal) order of
-the scheme. This section uses the notation of Gerolymos et al.
+the scheme. This section uses the notation of Gerolymos et al., and we will drop the integral average notation (so $\langle q \rangle_i$ will be denoted $q_i$).
 
 First compute the individual stencils
 \begin{equation}
