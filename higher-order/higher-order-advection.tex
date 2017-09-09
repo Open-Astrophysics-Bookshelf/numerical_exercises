@@ -88,6 +88,12 @@ down to
 \section{WENO reconstruction}
 \label{sec:WENO}
 
+\begin{figure}
+  \includegraphics[width=0.96\linewidth]{weno-convergence}
+  \caption[Convergence rate of high-order reconstructions]{A smooth sine function is reconstructed on the unit interval from the (integral-average) data, at the blue circles in the top plot, to the right, at the red triangles in the top plot. The convergence rate with grid resolution for the 5 point stencil of equation~\eqref{eq:weno-advection-5pt} and the 3 point stencils of equation~\eqref{eq:weno-advection-3pt} are shown to match expectations in the bottom plots. The error from the WENO reconstruction described in section~\ref{sec:WENO-algorithm} is, on this smooth function, converging with the expected order but larger in magnitude.}
+  \label{fig:weno-convergence}
+\end{figure}
+
 For the advection equation with constant advection speed $u$, our higher-order
 method requires us to find a high-order approximation to $q_{i+\myhalf}$. If we
 considered the five points $q_{j}, j \in [i-2, \dots, i+2]$ then we could use
@@ -111,7 +117,7 @@ includes information from both sides of the point. This ignores information from
 the characteristics and, near discontinuities, will lead to Gibbs oscillations.
 The three point stencils give lower accuracy. However, they give us the
 flexibility to choose a stencil to avoid discontinuities, possibly using the
-characteristic information.
+characteristic information. The advantages of the higher-order methods are illustrated by reconstructing a smooth function in figure~\ref{fig:weno-convergence}. The disadvantages of using a fixed stencil are illustrated by reconstructing a non-smooth function in figure~\ref{fig:weno-weights}.
 
 
 \begin{exercise}[ENO stencils]
@@ -148,6 +154,13 @@ shock but the $q^{(2)}$ stencil does not the weights should be $\tilde{C}_0 = 0
 will need the weights to add to $1$.
 
 \subsection{WENO algorithm}
+\label{sec:WENO-algorithm}
+
+\begin{figure}
+  \includegraphics[width=0.96\linewidth]{weno-weights}
+  \caption[WENO reconstruction and weights]{A non-smooth function is reconstructed on the unit interval. The 5 point stencil of equation~\eqref{eq:weno-advection-5pt} and the 3 point stencils of equation~\eqref{eq:weno-advection-3pt} both show oscillations near the discontinuity, whilst the WENO reconstruction does not. The WENO algorithm depends on measuring the smoothness of the function. The Jiang-Shu smoothness indicators $\beta$ are mostly zero, but spike near the discontinuity. This feeds into the weight $\omega$ that the WENO algorithm gives to each 3 point stencil it uses. Away from the discontinuity the weights revert to the optimal $C$ weights, but near the discontinuity a single $\omega$ weight dominates meaning only a single 3 point stencil is used.}
+  \label{fig:weno-weights}
+\end{figure}
 
 We can now write out the full WENO algorithm of order $(2 r - 1)$. The constant
 $r$ sets the size of the individual stencils as well as the (optimal) order of
@@ -216,6 +229,7 @@ i+\myhalf}$ are the same magnitude the weights $\omega_{r, k, i+\myhalf}$ will
 match the optimal weights $C_{r, k}$, but when a smoothness indicator is large
 (i.e., when the associated stencil has large derivatives, typically associated
 with discontinuities), the contribution of its associated stencil will be small.
+An example of this is shown in figure~\ref{fig:weno-weights}.
 
 Finally, we note that this method has reconstructed $q_{i+\myhalf}$ from the
 left. For the advection equation case where the advection speed $u$ is positive
