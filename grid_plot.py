@@ -371,11 +371,14 @@ class PiecewiseConstant(object):
                  horizontalalignment='center', verticalalignment='bottom',
                  fontsize="large", color=color)
 
-    def draw_cell_avg(self, idx, color="0.5", ls="-"):
+    def draw_cell_avg(self, idx, color="0.5", ls="-", filled=False):
         plt.plot([self.gr.xl[idx], self.gr.xr[idx]],
                  [self.gr.voff+self.a[idx]/self.scale, 
                   self.gr.voff+self.a[idx]/self.scale], color=color, ls=ls)
-
+        if filled:
+            plt.fill([self.gr.xl[idx], self.gr.xl[idx], self.gr.xr[idx], self.gr.xr[idx], self.gr.xl[idx]],
+                     [self.gr.voff, self.gr.voff+self.a[idx]/self.scale, 
+                      self.gr.voff+self.a[idx]/self.scale, self.gr.voff, self.gr.voff], color=color, alpha=0.25, ls=ls, zorder=-100)
 
 class PiecewiseLinear(PiecewiseConstant):
     """ piecewise linear data defined on a 1-d finite-volume grid """

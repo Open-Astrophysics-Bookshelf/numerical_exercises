@@ -34,8 +34,8 @@ gr.label_edge(nzones//2+1, r"$i+\sfrac{1}{2}$", fontsize="small")
 
 # draw the data
 for i in range(nzones):
-    pc.draw_cell_avg(i, color="r")    
-    
+    pc.draw_cell_avg(i, color="r", filled=True)
+
 pc.label_cell_avg(nzones//2, r"$\langle f\rangle_i$", color="r")
 
 # label dx
@@ -47,5 +47,3 @@ f = plt.gcf()
 f.set_size_inches(10.0,3.0)
 
 plt.savefig("fv_grid.pdf")
-
-
