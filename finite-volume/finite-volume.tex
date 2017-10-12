@@ -93,8 +93,10 @@ Consider the set of grids show in Figure~\ref{fig:grids}.  On the top
 is a classic finite-difference grid.  The discrete data, $f_i$, are
 stored as points regularly spaced in $x$.  With this discretization,
 the spatial locations of the points are simply $x_i = i \Delta x$,
-where $i = 0, \ldots, N$.  Note that for a finite-sized domain, we
-would put a grid point precisely on the physical boundary at each end.
+where $i = 0, \ldots, N$\footnote{When you see $f_{i+1}$, you can
+  think of this as meaning $f((i+1)\Delta x)$ or $f(x_i + \Delta x)$}.
+Note that for a finite-sized domain, we would put a grid point
+precisely on the physical boundary at each end.
 
 The middle grid is also finite-difference, but now we imagine first
 dividing the domain into $N$ cells or zones, and we store the discrete
@@ -112,7 +114,7 @@ Finally, the bottom grid is a finite-volume grid.  The layout looks
 identical to the cell-centered finite difference grid, except now
 instead of the discrete data being associated at a single point in
 space, we draw a line to show that it is taken as the average in a
-zone.  We label it as $\langle f\rangle_i$ to indicate the average.
+zone.  We label it as $\favg{f}_i$ to indicate the average.
 We label the left and right edges of a zone with half-integer indices
 $i-\myhalf$ and $i+\myhalf$.  The physical coordinate of the center of the zone
 is the same as in the cell-centered finite-difference case.
@@ -152,7 +154,7 @@ the half-integer indices denote the zone edges (i.e.\ $x_{i-\myhalf} =
 x_i - \Delta x/2$):
 \begin{equation}
 \label{eq:fv_cc-a}
-\langle f\rangle_i = \frac{1}{\Delta x} \int_{x_{i-\myhalf}}^{x_{i+\myhalf}} f(x) dx
+\favg{f}_i = \frac{1}{\Delta x} \int_{x_{i-\myhalf}}^{x_{i+\myhalf}} f(x) dx
 \end{equation}
 The lower panel of Figure~\ref{fig:grids} shows a finite-volume grid,
 with the half-integer indices bounding zone $i$ marked.
@@ -166,14 +168,14 @@ with the half-integer indices bounding zone $i$ marked.
 %%   only the data associated with zone $i$.}
 %% \end{figure}
 %
-Here we've drawn $\langle f\rangle_i$ as a horizontal line spanning the entire zone---this
+Here we've drawn $\favg{f}_i$ as a horizontal line spanning the entire zone---this
 is to represent that it is an average within the volume defined by the zone
 edges.
 %
 To second-order accuracy,
 \begin{equation}
 \label{eq:fv_cc}
-\langle f\rangle_i = \frac{1}{\Delta x} \int_{x_{i-\myhalf}}^{x_{i+\myhalf}} f(x) dx \sim f(x_i)
+\favg{f}_i = \frac{1}{\Delta x} \int_{x_{i-\myhalf}}^{x_{i+\myhalf}} f(x) dx \sim f(x_i)
 \end{equation}
 
 \begin{exercise}[Finite-volume vs.\ finite-difference centering]
@@ -187,8 +189,10 @@ f(x) = f(x_i) &+ f^\prime(x_i) (x - x_i) + \frac{1}{2} f^{\prime\prime}(x_i) (x 
 }
 \end{exercise}
 
-This means that we can treat the average of $f$ over a zone as simply $f(x)$
-evaluated at the zone center if we only want second-order accuracy.
+This means that we can treat the average of $f$ over a zone as simply
+$f(x)$ evaluated at the zone center if we only want second-order
+accuracy.  Using the subscript notation, we can express the average of
+the zone to the right as $\favg{f}_{i+1}$.
 
 When we want to interpolate data on a finite-volume grid, we want to
 construct an interpolating polynomial that is conservative.  A {\em
@@ -200,28 +204,28 @@ cell-average.
 \begin{exercise}[Conservative interpolation]
 {\label{ex:consinterp} 
 
-Consider three cell averages: $\langle f \rangle_{i-1}$, $\langle f \rangle_{i}$, $\langle f \rangle_{i+1}$.  Fit a quadratic polynomial through these points,
+Consider three cell averages: $\favg{f}_{i-1}$, $\favg{f}_{i}$, $\favg{f}_{i+1}$.  Fit a quadratic polynomial through these points,
  \begin{equation}
  f(x) = A (x - x_i)^2 + B (x - x_i) + C
  \end{equation}
  where the coefficients, $A$, $B$, and $C$ are found by applying the constraints:
  \begin{align}
- \langle f\rangle_{i-1} &= \frac{1}{\Delta x}
+ \favg{f}_{i-1} &= \frac{1}{\Delta x}
       \int_{x_{i-\mythreehalf}}^{x_{i-\myhalf}} f(x) dx \\
- \langle f\rangle_{i} &= \frac{1}{\Delta x}
+ \favg{f}_{i} &= \frac{1}{\Delta x}
       \int_{x_{i-\myhalf}}^{x_{i+\myhalf}} f(x) dx \\
- \langle f\rangle_{i+1} &= \frac{1}{\Delta x}
+ \favg{f}_{i+1} &= \frac{1}{\Delta x}
       \int_{x_{i+\myhalf}}^{x_{i+\mythreehalf}} f(x) dx
  \end{align}
 
 Show that the conservative interpolant is:
 \begin{align}
-f(x) = &\frac{\langle f\rangle_{i-1} - 2 \langle f\rangle_i +
-             \langle f\rangle_{i+1}}{2\Delta x^2} (x-x_i)^2 + \nonumber \\
-       &\frac{\langle f\rangle_{i+1} - \langle f\rangle_{i-1}}
+f(x) = &\frac{\favg{f}_{i-1} - 2 \favg{f}_i +
+             \favg{f}_{i+1}}{2\Delta x^2} (x-x_i)^2 + \nonumber \\
+       &\frac{\favg{f}_{i+1} - \favg{f}_{i-1}}
             {2\Delta x} (x-x_i) + \nonumber \\
-       &\frac{-\langle f\rangle_{i-1} + 26 \langle f\rangle_i
-             -\langle f\rangle_{i+1}}{24}
+       &\frac{-\favg{f}_{i-1} + 26 \favg{f}_i
+             -\favg{f}_{i+1}}{24}
 \end{align}
 }
 \end{exercise}
@@ -273,10 +277,10 @@ Integrating this system over a zone, and normalizing by $\Delta x$, we have:
 \end{equation}
 On the left, we can take the time derivative out of the integral, and
 we are left with the definition of a zone average, so this becomes
-simply $\partial \langle \Uc\rangle_i/\partial t$.  On the right, we
+simply $\partial \favg{\Uc}_i/\partial t$.  On the right, we
 apply the divergence theorem, giving:
 \begin{equation}
-\frac{\partial \langle \Uc\rangle_i}{\partial t} =
+\frac{\partial \favg{\Uc}_i}{\partial t} =
   - \frac{1}{\Delta x} \left \{ \left . \Fb(\Uc) \right |_{x_{i+\myhalf}} -
                                 \left . \Fb(\Uc) \right |_{x_{i-\myhalf}} \right \}
 \end{equation}
@@ -286,7 +290,7 @@ is simply a difference of fluxes through the interfaces of the zone.
 For the $i+1$ zone, the update would be:
 \begin{equation}
 \label{eq:consup}
-\frac{\partial \langle \Uc\rangle_{i+1}}{\partial t} =
+\frac{\partial \favg{\Uc}_{i+1}}{\partial t} =
   - \frac{1}{\Delta x} \left \{ \left . \Fb(\Uc) \right |_{x_{i+\mythreehalf}} -
                                 \left . \Fb(\Uc) \right |_{x_{i+\myhalf}} \right \}
 \end{equation}
