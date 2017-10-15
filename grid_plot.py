@@ -263,13 +263,13 @@ class FVGrid(object):
                  fontsize="large", color=color)
 
     def mark_cell_left_state(self, idx, string, color="k", value=0.5,
-                             vertical="center", fontsize="medium"):
+                             vertical="center", fontsize="medium", zorder=None):
 
         plt.scatter(self.xl[idx]+0.05*self.dx, self.voff+value, marker="x", color=color)
 
         plt.text(self.xl[idx]+0.075*self.dx, self.voff+value, string,
                  horizontalalignment='left', verticalalignment=vertical, color=color,
-                 fontsize=fontsize)
+                 fontsize=fontsize, zorder=zorder)
 
     def mark_cell_edge(self, idx, string, color="k", value=0.5,
                        vertical="center", fontsize="medium"):
@@ -282,13 +282,13 @@ class FVGrid(object):
                  color=color, fontsize=fontsize)
 
     def mark_cell_right_state(self, idx, string, color="k", value=0.5,
-                              vertical="center", fontsize="medium"):
+                              vertical="center", fontsize="medium", zorder=None):
 
         plt.scatter(self.xr[idx]-0.05*self.dx, self.voff+value, marker="x", color=color)
 
         plt.text(self.xr[idx]-0.075*self.dx, self.voff+value, string,
                  horizontalalignment='right', verticalalignment=vertical, color=color,
-                 fontsize=fontsize)
+                 fontsize=fontsize, zorder=zorder)
 
     def label_dx(self, idx):
         # idx is the right edge of the dx interval drawn
