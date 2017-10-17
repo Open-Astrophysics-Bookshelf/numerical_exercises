@@ -113,8 +113,10 @@ e.g., putting velocity on the boundaries and density at the center.
 Finally, the bottom grid is a finite-volume grid.  The layout looks
 identical to the cell-centered finite difference grid, except now
 instead of the discrete data being associated at a single point in
-space, we draw a line to show that it is taken as the average in a
-zone.  We label it as $\favg{f}_i$ to indicate the average.
+space, keep track of the total amount of $f$ in the zone (indicated as the shaded regions).  Since we generally don't know how $f$ varies in the zone,
+we will typically talk about the average of $f$, $\favg{f}_i$, over
+the zone, and represent this by a horizontal.  The total amount of $f$ in
+the zone is then simply $\Delta x \favg{f}_i$. 
 We label the left and right edges of a zone with half-integer indices
 $i-\myhalf$ and $i+\myhalf$.  The physical coordinate of the center of the zone
 is the same as in the cell-centered finite-difference case.

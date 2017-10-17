@@ -42,6 +42,14 @@ merging of the characteristics in the $x$-$t$ plane is a {\em shock}, and
 represents just one way that nonlinear problems can differ from linear
 ones.
 
+Another type of wave not present in a linear system is a {\em
+  rarefaction}.  Figure~\ref{fig:burgers_char_rare} shows initial
+conditions of slower velocity to the left of faster velocity.  We see
+that the characteristics diverge in this case, and we will be left
+with having to fill in the solution inbetween as some intermediate
+state.
+
+
 % figure created with figures/burgers/characteristics.py
 \begin{figure}[t]
 \centering
@@ -52,6 +60,19 @@ velocity distribution (bottom) Approximate characteristic
 structure for Burgers' equation, using $u_0 = u(t)$.  Note that
 after a short period of time, the characteristics intersect, signaling
 the formation of a shock.}
+\end{figure}
+
+% figure created with figures/burgers/characteristics.py
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.6\linewidth]{burgers-characteristics-rare}
+\caption[Characteristics for rarefaction initial conditions]
+        {\label{fig:burgers_char_rare} (top) Initially discontinuous
+          velocity distribution with low velocity left of high
+          velocity (bottom) Approximate characteristic structure for
+          Burgers' equation, using $u_0 = u(t)$.  Note that after a
+          short period of time, the characteristics diverge---this is 
+          a rarefaction.}
 \end{figure}
 
 
