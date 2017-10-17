@@ -7,12 +7,17 @@ mpl.rcParams['mathtext.rm'] = 'serif'
 
 
 def fun(x):
-    state = np.zeros_like(xplot)
+    state = np.zeros_like(x)
     state[x < 0.5] = 1.0
     return state
 
 def funs(x):
     state = 0.5 + 0.25*np.sin(2.0*np.pi*x)
+    return state
+
+def funr(x):
+    state = np.ones_like(x)
+    state[x < 0.5] = 0.2
     return state
 
 npts_plot = 1000
