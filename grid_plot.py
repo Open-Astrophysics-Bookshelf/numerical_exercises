@@ -387,6 +387,7 @@ class PiecewiseLinear(PiecewiseConstant):
 
         PiecewiseConstant.__init__(self, gr, a, scale=scale)
 
+        self.fill_zero_gradient()
         self.slope = np.zeros_like(self.a)
         self.nolimit = nolimit
 
@@ -493,6 +494,7 @@ class PiecewiseParabolic(PiecewiseConstant):
         # cubic interpolation through the 4 zones centered on an
         # interface
         self.aint = np.zeros_like(a)
+        self.fill_zero_gradient()
 
         for n in range(1, len(a)-2):
 
