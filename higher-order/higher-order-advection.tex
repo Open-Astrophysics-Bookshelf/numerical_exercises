@@ -1,5 +1,3 @@
-\label{ch:higher-order-advection}
-
 
 \section{Higher-order methods for the advection equation}
 \label{sec:ho-intro}
@@ -8,7 +6,7 @@ Chapter~\ref{ch:advection} introduced numerical methods for the linear
 advection equation
 \begin{equation}
 \label{eq:ho-advect}
-q_t + u q_x = 0
+a_t + u a_x = 0
 \end{equation}
 that were first or second order in space. The advantages of using numerical
 methods that are higher order can be large, especially when in regions where
@@ -94,20 +92,20 @@ down to
 \end{figure}
 
 For the advection equation with constant advection speed $u$, our higher-order
-method requires us to find a high-order approximation to $q_{i+\myhalf}$. If we
-considered the five points $q_{j}, j \in [i-2, \dots, i+2]$ then we could use
-the information from all five of these points to approximate $q_{i+\myhalf}$ as
+method requires us to find a high-order approximation to $a_{i+\myhalf}$. If we
+considered the five points $a_{j}, j \in [i-2, \dots, i+2]$ then we could use
+the information from all five of these points to approximate $a_{i+\myhalf}$ as
 \begin{equation}
   \label{eq:weno-advection-5pt}
-  q^{(\text{Fifth})}_{i+\myhalf} = \tfrac{1}{60} \left( 2 \langle q \rangle_{i-2} - 13 \langle q \rangle_{i-1} + 47 \langle q \rangle_{i} + 27 \langle q \rangle_{i+1} - 3 \langle q \rangle_{i+2} \right) + {\cal O}(\Delta x^5).
+  a^{(\text{Fifth})}_{i+\myhalf} = \tfrac{1}{60} \left( 2 \langle q \rangle_{i-2} - 13 \langle q \rangle_{i-1} + 47 \langle q \rangle_{i} + 27 \langle q \rangle_{i+1} - 3 \langle q \rangle_{i+2} \right) + {\cal O}(\Delta x^5).
 \end{equation}
 Alternatively we could use only three of the points, in three different ways:
 \begin{subequations}
   \label{eq:weno-advection-3pt}
   \begin{align}
-    q^{(\text{Third}, 2)}_{i+\myhalf} &= \tfrac{1}{6} \left( 2 \langle q \rangle_{i-2} - 7 \langle q \rangle_{i-1} + 11 \langle q \rangle_{i} \right) + {\cal O}(\Delta x^3), \\
-    q^{(\text{Third}, 1)}_{i+\myhalf} &= \tfrac{1}{6} \left( - \langle q \rangle_{i-1} + 5 \langle q \rangle_{i} + 2 \langle q \rangle_{i+1} \right) + {\cal O}(\Delta x^3), \\
-    q^{(\text{Third}, 0)}_{i+\myhalf} &= \tfrac{1}{6} \left( 2 \langle q \rangle_{i} + 5 \langle q \rangle_{i+1} - \langle q \rangle_{i+2} \right) + {\cal O}(\Delta x^3).
+    a^{(\text{Third}, 2)}_{i+\myhalf} &= \tfrac{1}{6} \left( 2 \langle q \rangle_{i-2} - 7 \langle q \rangle_{i-1} + 11 \langle q \rangle_{i} \right) + {\cal O}(\Delta x^3), \\
+    a^{(\text{Third}, 1)}_{i+\myhalf} &= \tfrac{1}{6} \left( - \langle q \rangle_{i-1} + 5 \langle q \rangle_{i} + 2 \langle q \rangle_{i+1} \right) + {\cal O}(\Delta x^3), \\
+    a^{(\text{Third}, 0)}_{i+\myhalf} &= \tfrac{1}{6} \left( 2 \langle q \rangle_{i} + 5 \langle q \rangle_{i+1} - \langle q \rangle_{i+2} \right) + {\cal O}(\Delta x^3).
   \end{align}
 \end{subequations}
 
@@ -132,11 +130,11 @@ computational performance.
 
 An alternative that avoids the problems of ENO schemes are the \emph{Weighted}
 ENO, or WENO, schemes. These use a combination of the possible ENO stencils to
-reconstruct $q_{i+\myhalf}$. This relies on the observation that there are
+reconstruct $a_{i+\myhalf}$. This relies on the observation that there are
 constants $C_k$ such that, for example,
 \begin{equation}
   \label{eq:WENO-C-weights}
-  q^{(\text{Fifth})}_{i+\myhalf} = \sum_{k=0}^{2} C_k q^{(\text{Third}, r)}_{i+\myhalf}.
+  a^{(\text{Fifth})}_{i+\myhalf} = \sum_{k=0}^{2} C_k a^{(\text{Third}, r)}_{i+\myhalf}.
 \end{equation}
 
 \begin{exercise}[WENO weights]
@@ -147,8 +145,8 @@ equations~\eqref{eq:weno-advection-5pt} and \eqref{eq:weno-advection-3pt}.}
 
 The WENO methods work by retaining the sum over all stencils as in
 equation~\eqref{eq:WENO-C-weights}, but adjusting the weights to avoid
-oscillations. Ideally, in regions where the $q^{(0,1)}$ stencils include a
-shock but the $q^{(2)}$ stencil does not the weights should be $\tilde{C}_0 = 0
+oscillations. Ideally, in regions where the $a^{(0,1)}$ stencils include a
+shock but the $a^{(2)}$ stencil does not the weights should be $\tilde{C}_0 = 0
 = \tilde{C}_1$ and $\tilde{C}_2 = 1$. In order for this sum to make sense we
 will need the weights to add to $1$.
 
@@ -163,21 +161,21 @@ will need the weights to add to $1$.
 
 We can now write out the full WENO algorithm of order $(2 r - 1)$. The constant
 $r$ sets the size of the individual stencils as well as the (optimal) order of
-the scheme. This section uses the notation of Gerolymos et al., and we will drop the integral average notation (so $\langle q \rangle_i$ will be denoted $q_i$).
+the scheme. This section uses the notation of Gerolymos et al., and we will drop the integral average notation (so $\langle q \rangle_i$ will be denoted $a_i$).
 
 First compute the individual stencils
 \begin{equation}
   \label{eq:weno-stencils}
-  q_{r, k, i+\myhalf} = \sum_{\ell=0}^{r-1} a_{r, k, \ell} q_{i+k-\ell}, \quad k = 0, \dots, r-1.
+  a_{r, k, i+\myhalf} = \sum_{\ell=0}^{r-1} A_{r, k, \ell} A_{i+k-\ell}, \quad k = 0, \dots, r-1.
 \end{equation}
-Here the $a_{r, k, \ell}$ terms are constants which, for given scheme accuracy
+Here the $A_{r, k, \ell}$ terms are constants which, for given scheme accuracy
 $r$ are needed to compute the $k^{\text{th}}$ stencil.
 
 We then want to combine these individual stencils to compute the WENO result.
 For this we write
 \begin{equation}
   \label{eq:weno-reconstruction}
-  q_{r, WENO, i+\myhalf} = \sum_{k=0}^{r-1} \omega_{r, k, i+\myhalf} q_{r, k, i+\myhalf}.
+  a_{r, WENO, i+\myhalf} = \sum_{k=0}^{r-1} \omega_{r, k, i+\myhalf} a_{r, k, i+\myhalf}.
 \end{equation}
 Here the $\omega_{r, k, i+\myhalf}$ terms are the weights that vary from point
 to point. They must sum to one, so that we have a convex combination of the
@@ -190,7 +188,7 @@ We also want the weights to match the \emph{optimal} weights $C_{r, k}$ in
 smooth regions. The optimal weights are defined such that
 \begin{equation}
   \label{eq:weno-optimal}
-  q_{r, WENO, i+\myhalf} = \sum_{k=0}^{r-1} C_{r, k} q_{r, k, i+\myhalf}
+  a_{r, WENO, i+\myhalf} = \sum_{k=0}^{r-1} C_{r, k} a_{r, k, i+\myhalf}
 \end{equation}
 is accurate to order ${\cal O}(\Delta x^{(2 r - 1)})$ when $q$ is smooth.
 
@@ -203,7 +201,7 @@ implementation purposes this means computing the \emph{smoothness indicators}
 $\beta_{r, k, i+\myhalf}$ as
 \begin{equation}
   \label{eq:weno-smoothness}
-  \beta_{r, k, i+\myhalf} = \sigma_{r, k, \ell, m} q_{i+k-\ell} q_{i+k-m}.
+  \beta_{r, k, i+\myhalf} = \sigma_{r, k, \ell, m} a_{i+k-\ell} a_{i+k-m}.
 \end{equation}
 The terms $\sigma_{r, k, \ell, m}$ are pre-computed constants which give the
 coefficients in the quadratic form for the $k^{\text{th}}$ stencil of width $r$
@@ -230,7 +228,7 @@ match the optimal weights $C_{r, k}$, but when a smoothness indicator is large
 with discontinuities), the contribution of its associated stencil will be small.
 An example of this is shown in figure~\ref{fig:weno-weights}.
 
-Finally, we note that this method has reconstructed $q_{i+\myhalf}$ from the
+Finally, we note that this method has reconstructed $a_{i+\myhalf}$ from the
 left. For the advection equation case where the advection speed $u$ is positive
 this is all we need: the characteristic information tells us that we should use
 this reconstruction. In the case where the advection speed is negative we
@@ -240,7 +238,7 @@ order.
 
 
 \begin{exercise}[WENO reconstruction]
-{Taking the values for the $C$, $a$ and $\sigma$ constants from Gerolymos et
+{Taking the values for the $C$, $A$ and $\sigma$ constants from Gerolymos et
 al.\ or Shu's review, construct a WENO reconstruction method for $r=2$. Check
 your results on smooth and non-smooth functions.}
 \end{exercise}
