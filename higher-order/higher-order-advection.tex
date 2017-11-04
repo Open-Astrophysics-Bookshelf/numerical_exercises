@@ -37,17 +37,23 @@ quadrature, this means that a third order method would require at least two
 flux evaluations per face in two dimensions, and typically four evaluations per
 face in three dimensions.
 
-As well as the additional computational cost, there is also typically an
-additional restriction on the timestep. Intuitively this can be seen by
-thinking about the flux evaluations again. We fix the values either side of the
-cell boundary in order to compute the flux at one point.  The timestep
-restriction is given by the time it take for information to propagate from a
-different flux evaluation point, which would change the information available.
-As we need to compute the flux at more points within the cell faces, the
-distance between points where the flux is evaluated goes down, reducing the
-time it takes for information to propagate from one point to another.
+%
+% This comment about the timestep doesn't hold in general, as pointed out by
+% Mike. I think it *is* relevant for directionally split codes where the
+% transverse Riemann Problem isn't solved. That's probably too technical a
+% distinction to make this early.
+%
+%As well as the additional computational cost, there is also typically an
+%additional restriction on the timestep. Intuitively this can be seen by
+%thinking about the flux evaluations again. We fix the values either side of the
+%cell boundary in order to compute the flux at one point.  The timestep
+%restriction is given by the time it take for information to propagate from a
+%different flux evaluation point, which would change the information available.
+%As we need to compute the flux at more points within the cell faces, the
+%distance between points where the flux is evaluated goes down, reducing the
+%time it takes for information to propagate from one point to another.
 
-\subsection{Finite differences}
+  \subsection{Finite differences}
 
 The conservative finite difference method starts from the endpoint for finite
 volume methods, by considering the update formula~\eqref{eq:consup}

@@ -1,3 +1,5 @@
+\label{ch:fv}
+
 \section{Discretization}
 
 The physical systems we model are described by continuous mathematical
@@ -48,7 +50,7 @@ widely used in engineering together with unstructured grids.  A type
 of finite-element method called a {\em Galerkin method} can be formed
 by integrating the continuous function against a compact basis set
 represented by tetrahedra.  These methods work well with the irregular
-geometries that arise in engineering.  
+geometries that arise in engineering.
 \fi
 
 Once a grid is established, the system of PDEs is converted into a
@@ -198,7 +200,7 @@ that when $f(x)$ is averaged over a cell, it returns the original
 cell-average.
 
 \begin{exercise}[Conservative interpolation]
-{\label{ex:consinterp} 
+{\label{ex:consinterp}
 
 Consider three cell averages: $\langle f \rangle_{i-1}$, $\langle f \rangle_{i}$, $\langle f \rangle_{i+1}$.  Fit a quadratic polynomial through these points,
  \begin{equation}
@@ -392,10 +394,10 @@ f_{\mathrm{lo}-1} &=& f_\mathrm{lo}
   consistency.
 
 \item {\em Mapped grids}: mapped grids are (usually) logically
-  Cartesian grids that use a function (map) to transform from 
+  Cartesian grids that use a function (map) to transform from
   a rectangular mesh (that corresponds to the array in memory)
   to a general curvilinear grid.  These maintain the performance
-  characteristics of structured grids, since any zone can be 
+  characteristics of structured grids, since any zone can be
   directly indexed with an integer for each spatial dimension. \MarginPar{reference the Calhoun paper}
 
 \item {\em Lagrangian grids}: a hybrid of particle and grid methods is
