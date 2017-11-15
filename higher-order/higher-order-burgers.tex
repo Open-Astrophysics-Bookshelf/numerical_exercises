@@ -2,7 +2,6 @@
 \section{WENO methods, nonlinear equations, and flux-splitting}
 \label{sec:weno-burgers-fvs}
 
-%\todo{This shouldn't go here - probably belongs after the Euler section - but for now this keeps all the WENO stuff together}
 %\todo{Also note that I haven't followed the notation of the rest of the notes as I was too lazy to work out what it was.}
 
 For a nonlinear scalar conservation law
@@ -102,28 +101,3 @@ expected fifth and seventh order convergence rates, at least for some of the
 resolutions. At too low a resolution the higher order terms in the error
 expansion affect the solution. At too high a resolution, for the higher-order
 method, the time integration error starts to dominate.
-
-\subsection{Extensions}
-
-Extending to multiple dimensions using dimensional splitting. From the
-finite-difference form there are no transverse Riemann problems to solve. From
-using the Method of Lines there is no issue about ordering the dimensional
-sweeps: the updates in each direction are computed separately but applied
-together in the time integrator. This formally retains the high-order accuracy
-but can lose significant absolute accuracy -- compare the advection of a
-top-hat function with lower order methods using transverse Riemann problem
-solutions.
-
-The global Lax-Friedrichs flux splitting above can be excessively diffusive. A
-local Lax-Friedrichs flux splitting, where $\alpha$ is computed at each point
-by maximising over the characteristic speed within the stencil at that point, is
-less diffusive but slightly more expensive. Roe-style flux splittings are
-possible but not always stable.
-
-When dealing with nonlinear systems the flux split method generalizes directly.
-The simplest method is to compute $\alpha$ by maximizing over all
-characteristics. It is possible to significantly reduce the diffusive nature of
-the flux splitting by reconstructing the \emph{characteristic} fluxes and using
-a local computational of the specific characteristic speed. This requires both
-significant additional computational expense and the knowledge of the spectral
-information (left and right eigenvectors of the Jacobian matrix).
