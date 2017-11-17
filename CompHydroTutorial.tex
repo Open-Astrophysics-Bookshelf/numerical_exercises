@@ -21,7 +21,7 @@
 % code listings
 \usepackage{listings}
 
-\graphicspath{{preface/}{intro/}{finite-volume/}{advection/}{burgers/}{diffusion/}{Euler/}{incompressible/}{multigrid/}{multiphysics/}{low_mach/}{radiation/}{pyro/}}
+\graphicspath{{preface/}{intro/}{finite-volume/}{advection/}{burgers/}{diffusion/}{Euler/}{incompressible/}{multigrid/}{multiphysics/}{low_mach/}{radiation/}{pyro/}{higher-order/}}
 
 \usepackage{longtable}
 
@@ -500,10 +500,14 @@ Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
 
 \input advection/advection.tex
 
+\input higher-order/higher-order-advection.tex
+
 %\addtocontents{exc}{\protect\addvspace{10pt}}%
 \chapter{Burgers' Equation}
 
 \input burgers/burgers.tex
+
+\input higher-order/higher-order-burgers.tex
 
 %\addtocontents{exc}{\protect\addvspace{10pt}}%
 \chapter{Euler Equations: Theory}
@@ -515,6 +519,7 @@ Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA
 
 \input Euler/Euler-methods.tex
 
+\input higher-order/higher-order-euler.tex
 
 \ifdefined\debugmode
 \chapter{Hydrodynamics Test Problems}
