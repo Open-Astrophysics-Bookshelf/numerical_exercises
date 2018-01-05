@@ -82,7 +82,6 @@ to help understand the possible error in your simulation.
 
 
 
-
 \section{Boundary conditions}
 
 Another approximation you make is how to treat the boundaries.
@@ -121,7 +120,6 @@ away.
 
 
 
-
 \section{Timestep considerations}
 
 The timestep constraint we discussed (the CFL condition) is required
@@ -146,6 +144,32 @@ where $C_\mathrm{react} < 1$.  The species creation rate,
 $\dot{X}_\mathrm{react}$, is typically evaluated using the value from
 the previous step.
 
+
+\section{Convergence and multiphysics}
+
+For a full simulation, with hydrodynamics coupled to other physics,
+you should test your code to ensure that it is converging at the rate
+that you expect.  Usually in this case there is no analytic solution,
+so you need to measure the convergence numerically.  A standard way to
+do this is to run pairs of simulations that differ by a factor of two
+in resolution, we'll denote the coarser simulation with the subscript
+$c$ and the finer simulation with the subscript $f$.  The error is
+computed for a field $\phi$ by coarsening the finer simulation by a
+factor of two, and computing the norm of the difference:
+\begin{equation}
+\epsilon \equiv \| \phi_c - \mathcal{C}(\phi_f) \|
+\end{equation}
+Here, we denote the coarsening operator as $\mathcal{C}(.)$.  In this
+case, two simulations give us a single error.  We then repeat this,
+taking the fine simulation from this comparison as the coarse for the
+next, and using an even finer simulation to generate a new error.  We
+can then measure the convergence of a multiphysics simulation by
+comparing the errors from the two pairs of the simulations.  This procedure
+was used in, e.g., \cite{ABNZ:III,mccorquodalecolella}.
+
+Ideally, a smooth problem should be used, since discontinuities by
+definition do not converge with resolution (and limiters, if used,
+would kick in there as well).
 
 
 \section{Computational cost}
