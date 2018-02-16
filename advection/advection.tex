@@ -297,15 +297,14 @@ discretization.  Here our upwind method would appear as:
 \begin{equation}
 \frac{a^{n+1}_i - a^n_i}{\Delta t} = -u \frac{a^{n+1}_i - a^{n+1}_{i-1}}{\Delta x}
 \end{equation}
-We can write this as a linear system with coupled equations:
+The only change here is that the righthand side is evaluated at the new timelevel,
+$n+1$. We can write this as a linear system with coupled equations:
 \begin{equation}
 -\cfl a^{n+1}_{i-1} + (1 + \cfl) a^{n+1}_i = a_i^n
 \end{equation}
-The only change here is that the righthand side is evaluated at the new timelevel,
-$n+1$.
 
 If we use periodic boundary conditions, then point $0$ and $N-1$ are
-identical, so we only need to update one of these.  Taking $u_0^{n+1} = u_{N-1}^{n+1}$, our system in matrix form appears as:
+identical, so we only need to update one of these.  Taking $a_0^{n+1} = a_{N-1}^{n+1}$, our system in matrix form appears as:
 \begin{equation}
 \renewcommand{\arraystretch}{1.5}
 \left ( \begin{array}{ccccccc} 
@@ -320,24 +319,24 @@ identical, so we only need to update one of these.  Taking $u_0^{n+1} = u_{N-1}^
 \right )
 %
 \left ( \begin{array}{c}
-u_1^{n+1} \\
-u_2^{n+1} \\
-u_3^{n+1} \\
-u_4^{n+1} \\
+a_1^{n+1} \\
+a_2^{n+1} \\
+a_3^{n+1} \\
+a_4^{n+1} \\
 \vdots \\
-u_{N-2}^{n+1} \\
-u_{N-1}^{n+1} 
+a_{N-2}^{n+1} \\
+a_{N-1}^{n+1}
 \end{array}
 \right )
 =
 \left ( \begin{array}{c}
-u_1^{n} \\
-u_2^{n} \\
-u_3^{n} \\
-u_4^{n} \\
+a_1^{n} \\
+a_2^{n} \\
+a_3^{n} \\
+a_4^{n} \\
 \vdots \\
-u_{N-2}^{n} \\
-u_{N-1}^{n} 
+a_{N-2}^{n} \\
+a_{N-1}^{n}
 \end{array}
 \right )
 \end{equation}
@@ -721,7 +720,7 @@ can be found in \cite{toro:1997,leveque:2002}.
   $i+1$, the slopes are limited slightly, so as not to overshoot or
   undershoot the neighboring cell value.  Cell $i-1$ is not limited at
   all, whereas cells $i-2$, and $i+2$ are fully limited---the slope is
-  set to 0---these are extrema.}
+  set to $0$---these are extrema.}
 \end{figure}
 
 A popular extension of the MC limiter is the $4^\mathrm{th}$-order MC
