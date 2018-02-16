@@ -712,10 +712,10 @@ analysis, as well as for solving certain linear problems (see, e.g.,
 \S~\ref{elliptic:sec:fft}).
 
 For a function, $f(x)$ sampled at $N$ equally-spaced points (such that
-$f_n = f(x_n)$, the discrete Fourier transform, $\mathcal{F}_k$ is
+$f_n = f(x_n)$), the discrete Fourier transform, $\mathcal{F}_k$ is
 written as:
 \begin{equation}
-\mathcal{F}_k = \sum_{n=0}^{N-1} f_n e^{-2\pi i n k /N}
+\mathcal{F}_k = \sum_{n=0}^{N-1} f_n e^{-2\pi i n k /N} \qquad k \in [0, N-1]
 \end{equation}
 The exponential in the sum brings in a real (cosine terms, symmetric
 functions) and imaginary (sine terms, antisymmetric functions) part.
@@ -728,7 +728,7 @@ parts into an amplitude and phase.
 
 The inverse transform is:
 \begin{equation}
-f_n = \frac{1}{N} \sum_{n=0}^{N-1} \mathcal{F}_k e^{2\pi i n k /N}
+f_n = \frac{1}{N} \sum_{k=0}^{N-1} \mathcal{F}_k e^{2\pi i n k /N} \qquad n \in [0, N-1]
 \end{equation}
 The $1/N$ normalization is a consequence of Parseval's theorem---the
 total power in real space must equal the total power in frequency
