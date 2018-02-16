@@ -304,7 +304,7 @@ $n+1$. We can write this as a linear system with coupled equations:
 \end{equation}
 
 If we use periodic boundary conditions, then point $0$ and $N-1$ are
-identical, so we only need to update one of these.  Taking $u_0^{n+1} = u_{N-1}^{n+1}$, our system in matrix form appears as:
+identical, so we only need to update one of these.  Taking $a_0^{n+1} = a_{N-1}^{n+1}$, our system in matrix form appears as:
 \begin{equation}
 \renewcommand{\arraystretch}{1.5}
 \left ( \begin{array}{ccccccc} 
@@ -319,24 +319,24 @@ identical, so we only need to update one of these.  Taking $u_0^{n+1} = u_{N-1}^
 \right )
 %
 \left ( \begin{array}{c}
-u_1^{n+1} \\
-u_2^{n+1} \\
-u_3^{n+1} \\
-u_4^{n+1} \\
+a_1^{n+1} \\
+a_2^{n+1} \\
+a_3^{n+1} \\
+a_4^{n+1} \\
 \vdots \\
-u_{N-2}^{n+1} \\
-u_{N-1}^{n+1} 
+a_{N-2}^{n+1} \\
+a_{N-1}^{n+1}
 \end{array}
 \right )
 =
 \left ( \begin{array}{c}
-u_1^{n} \\
-u_2^{n} \\
-u_3^{n} \\
-u_4^{n} \\
+a_1^{n} \\
+a_2^{n} \\
+a_3^{n} \\
+a_4^{n} \\
 \vdots \\
-u_{N-2}^{n} \\
-u_{N-1}^{n} 
+a_{N-2}^{n} \\
+a_{N-1}^{n}
 \end{array}
 \right )
 \end{equation}
