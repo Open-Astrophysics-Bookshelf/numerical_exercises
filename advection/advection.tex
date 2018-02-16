@@ -297,12 +297,11 @@ discretization.  Here our upwind method would appear as:
 \begin{equation}
 \frac{a^{n+1}_i - a^n_i}{\Delta t} = -u \frac{a^{n+1}_i - a^{n+1}_{i-1}}{\Delta x}
 \end{equation}
-We can write this as a linear system with coupled equations:
+The only change here is that the righthand side is evaluated at the new timelevel,
+$n+1$. We can write this as a linear system with coupled equations:
 \begin{equation}
 -\cfl a^{n+1}_{i-1} + (1 + \cfl) a^{n+1}_i = a_i^n
 \end{equation}
-The only change here is that the righthand side is evaluated at the new timelevel,
-$n+1$.
 
 If we use periodic boundary conditions, then point $0$ and $N-1$ are
 identical, so we only need to update one of these.  Taking $u_0^{n+1} = u_{N-1}^{n+1}$, our system in matrix form appears as:
