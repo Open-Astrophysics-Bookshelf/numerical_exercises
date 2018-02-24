@@ -212,7 +212,7 @@ without bound.  There is something about that discretization that
 simply gets the physics wrong.
 
 
-\subsection{Stability}
+\section{Stability}
 
 \MarginPar{add a discussion of domain of dependence}
 
@@ -290,7 +290,41 @@ strongly peaked---the opposite of physical diffusion.
 For FTCS, a similar truncation analysis would show that the diffusion term
 is always negative.
 
-\subsection{Implicit-in-time}
+\subsection{Domain of dependence}
+
+Another important view of our numerical difference scheme is to look
+at the {\em domain of dependence}.  Figure~\ref{fig:adv:domains}
+illustrates this for the updated point $a_i^{n+1}$ (shown at the top
+of center of the space-time diagram).  The numerical domain of
+dependence shows the points that can influence the updated value of
+$a_i$ using our difference method.  For the upwind scheme, we see that
+this is a triangle that includes $a_{i-1}^n$ and $a_i^n$.  The
+physical domain of dependence is shown as the orange triangle---this
+is formed by tracing backwards in time from $a_i^{n+1}$ along a
+characteristic, reaching out to the point $x_i - C\Delta x = x_i -
+u\Delta t$ over $\Delta t$.
+
+Any stable numerical method must have a numerical domain of dependence
+that includes the physical domain of dependence.  If it does not, then
+the update to the solution simply does not see the points that
+contribute to the solution over the timestep $\Delta x$.  Notice that
+this is a necessary, but not sufficient condition for stability.  FTCS
+has a domain of dependence that includes the physical domain of dependence,
+but it is not stable.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=0.7\linewidth]{domains_upwind}\\
+\includegraphics[width=0.7\linewidth]{domains_downwind}\\
+\includegraphics[width=0.7\linewidth]{domains_FTCS}
+\caption{\label{fig:adv:domains} Space-time diagrams showing the
+  numerical domain of dependence (blue region) for three different
+  difference methods.  Also show is the physical domain of
+  dependence---that formed by tracing backwards from $a_i^{n+1}$ along
+  a characteristic.}
+\end{figure}
+
+\section{Implicit-in-time}
 
 An alternate approach to time-discretization is to do an implicit
 discretization.  Here our upwind method would appear as:

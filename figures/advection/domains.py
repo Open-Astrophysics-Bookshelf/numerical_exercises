@@ -9,7 +9,7 @@ mpl.rcParams['font.size'] = 12
 mpl.rcParams['legend.fontsize'] = 'large'
 mpl.rcParams['figure.titlesize'] = 'medium'
 
-def domains(method="ftcs"):
+def domains(method="FTCS"):
 
     # grid info
     xl = 0.0
@@ -25,6 +25,8 @@ def domains(method="ftcs"):
 
     C = 0.6
     xp = xc - C*dx
+
+    plt.clf()
 
     # plot a square representing [x, x+dx] x [t, t+dt]
 
@@ -81,7 +83,7 @@ def domains(method="ftcs"):
     # domain of dependence
     if method == "upwind":
         plt.fill([0, xc, xc, 0], [0, dt, 0, 0], color="C0", lw=2, alpha=0.5)
-    elif method == "ftcs":
+    elif method == "FTCS":
         plt.fill([0, xc, xr, 0], [0, dt, 0, 0], color="C0", lw=2, alpha=0.5)
     elif method == "downwind":
         plt.fill([xc, xc, xr, 0], [0, dt, 0, 0], color="C0", lw=2, alpha=0.5)
@@ -89,6 +91,10 @@ def domains(method="ftcs"):
     # true domain of dependence
     plt.fill([xp, xc, xc, 0], [0, dt, 0, 0], color="C1", lw=2, alpha=0.5)
 
+
+    # label
+    plt.text(xr+0.1*dx, 0.5*dt, method, fontsize=16,
+             horizontalalignment="left")
 
     plt.axis("off")
 
@@ -106,5 +112,5 @@ def domains(method="ftcs"):
 
 if __name__== "__main__":
     domains(method="upwind")
-    domains(method="ftcs")
+    domains(method="FTCS")
     domains(method="downwind")
