@@ -1337,8 +1337,16 @@ The result is the ODE:
    - \frac{(va)_{i,j+\myhalf} - (va)_{i,j-\myhalf}}{\Delta y}
 \end{equation}
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{riemann-mol}
+\caption[Method-of-lines spatial reconstruction]{\label{fig:advection:riemann-mol} Piecewise linear reconstruction
+of the zones showing the interface states used with the method of lines
+approach.}
+\end{figure}
+
 Note that there is no time-level indicated on the righthand side.  We
-find the interface values of $a$ by interpolating in space only, like:
+find the interface values of $a$ by interpolating in space only (see Figure~\ref{fig:advection:riemann-mol}, as:
 \begin{align}
 a_{i+\myhalf,j,L} &= a_{i,j} + \frac{1}{2} \Delta a_{i,j} \\
 a_{i+\myhalf,j,R} &= a_{i+1,j} - \frac{1}{2} \Delta a_{i+1,j}
