@@ -1,6 +1,6 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Second-order advection and the finite-volume method}
+\section{Advection and the finite-volume method}
 
 \label{ch:adv:sndorder}
 
@@ -39,13 +39,38 @@ $\Delta x$:
 \frac{1}{\Delta x} \int_{x_{i-\myhalf}}^{x_{i+\myhalf}} a_t \, dx &=& 
    - \frac{1}{\Delta x} \int_{x_{i-\myhalf}}^{x_{i+\myhalf}} \frac{\partial}{\partial x} f(a) \, dx \\
 \frac{\partial}{\partial t} a_i &=& 
-   - \frac{1}{\Delta x} \left \{ \left [f(a) \right ]_{i+\myhalf} - \left [f(a) \right ]_{i-\myhalf} \right \}
+   - \frac{1}{\Delta x} \left \{ \left [f(a) \right ]_{i+\myhalf} - \left [f(a) \right ]_{i-\myhalf} \right \} \label{adv:eq:fvadv}
 \end{eqnarray}
 This is an evolution equation for the zone-average of $a$, and shows
 that it updates in time based on the fluxes through the boundary of
-the zone.  We discretize in time by evaluating the righthand side at
-the midpoint in time---this gives a centered-difference in time, which
-is second-order accurate:
+the zone.
+
+We now have a choice on how to proceed with the time-discretiation:
+\begin{enumerate}
+\item We can discretize ${\partial a_i}/{\partial t}$ directly as
+  $(a_i^{n+1} - a_i^n)/\Delta t$.  Then to achieve second-order
+  accuracy, we need to evaluate the righthand side of
+  Eq.~\ref{adv:eq:fvadv} at the midpoint in time ($n+1/2$).  This
+  gives rise to a predictor-corrector method (as described in
+  \cite{colella:1990}.  Sometimes this is called a characteristic
+  tracing method (a name which will be more clear when we discuss the
+  Euler equations).
+
+\item We can recognize that with the spatial discretization done, our
+  PDE has now become an ODE, and we can use standard ODE methods (like
+  Runge-Kutta) to integrate the system in time.  This is a method-of-lines
+  integration.
+
+\end{enumerate}
+
+We'll look at both of these in the next sections.
+
+
+\section{Second-order predictor-corrector scheme}
+
+We discretize Eq.~\ref{adv:eq:fvadv} in time by evaluating the
+righthand side at the midpoint in time---this gives a
+centered-difference in time, which is second-order accurate:
 \begin{equation}
 \frac{a_i^{n+1} - a_i^n}{\Delta t} = -\frac{\left [f(a) \right ]_{i+\myhalf}^{n+\myhalf} - \left [f(a) \right ]_{i-\myhalf}^{n+\myhalf}}{\Delta x}
 \label{eq:consupdate1d}
@@ -57,8 +82,12 @@ half-time, that is, we do :
 \left [f(a) \right ]_{i+\myhalf}^{n+\myhalf} = f(a_{i+\myhalf}^{n+\myhalf}) \enskip .
 \end{equation}
 We construct a second-order accurate approximation to
-$a_{i+\myhalf}^{n+\myhalf}$ by Taylor expanding the data in the cell to the
-interface.  Note that for each interface, there are two possible
+$a_{i+\myhalf}^{n+\myhalf}$ by Taylor expanding the data in the cell
+to the interface.  The construction of the interface state at the
+midpoint in time is the prediction and the conservative update in the
+correction here.
+
+Notice that for each interface, there are two possible
 interface states we can construct---one using the data to the left of
 the interface (which we will denote with a ``L'' subscript) and the
 other using the data to the right of the interface (denoted with an
@@ -473,6 +502,49 @@ As seen in figure~\ref{fig:advnorm}, the choice of limiters can have a great
 effect on the accuracy.  Figure~\ref{fig:limiter_panel} shows the Gaussian and
 tophat profiles with several different limiters.
 
+\section{Method of lines approach}
+\label{adv:sec:mol_2d}
+
+In the above constructions, we computed a time-centered flux by
+predicting the interface state to the half-time (by Taylor-expanding
+in time through $\Delta t /2$).  Instead, we can recognize that with
+the spatial discretization done in Eq.~\ref{eq:adv:fvadv}, we are left
+with an ordinary differential equation in time that can then be solved
+using standard ODE techniques.
+
+Substituting in the flux as $f(a) = ua$, we have the ODE:
+\begin{equation}
+\ddt{a_i} = - \frac{u a_{i+1/2} - u a_{i-1/2}}{\Delta x}
+\end{equation}
+Note that there is no time-level indicated on the righthand side.  We
+find the interface values of $a$ by interpolating in space only.  For
+a second-order accurate method, we can use a piecewise linear
+reconstruction (see Figure~\ref{fig:advection:riemann-mol}), and
+evaluate the interface states as simply the point on the reconstructed
+line on the interface, e.g.,
+\begin{align}
+a_{i+\myhalf,L} &= a_{i} + \frac{1}{2} \Delta a_{i} \\
+a_{i+\myhalf,R} &= a_{i+1} - \frac{1}{2} \Delta a_{i+1}
+\end{align}
+%
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{riemann-mol}
+\caption[Method-of-lines spatial
+  reconstruction]{\label{fig:advection:riemann-mol} Piecewise linear
+  reconstruction of the zones showing the interface states used with
+  the method of lines approach.}
+\end{figure}
+%
+The same limiting ideas discussed above apply here.  As usual, we
+resolve the left-right degeneracy on the interface by solving the
+Riemann problem:
+\begin{equation}
+a_{i+\myhalf,j} = \mathcal{R}(a_{i+\myhalf,j,L}, a_{i+\myhalf,j,R})
+\end{equation}
+Once we have this interface state, we can integrate the ODE.  A
+Runge-Kutta method works fine here (it should be atleast second-order
+to match the spatial accuracy).
 \section{Multi-dimensional advection}
 
 The two-dimensional linear advection equation is:
@@ -834,16 +906,11 @@ must also explain which form of the timestep calculation
 (Eq.~\ref{eq:adv:timestep:multid} or Eq.~\ref{eq:adv:timstep:mol}) is
 being used.
 
-\section{Method of lines approach}
-\label{adv:sec:mol_2d}
+\subsection{Method-of-lines in multi-dimensions}
 
-In the above constructions, we computed a time-centered flux by
-predicting the interface state to the half-time (by Taylor-expanding
-in time through $\Delta t /2$).  Instead, we can discretize our
-equation in space only, giving us an ordinary differential equation
-in time that can then be solved using standard ODE techniques.
-
-For example, we can start with Eq.~\ref{eq:adv:multiddivergence}, and define
+The multidimensional version of method-of-lines integration
+follows the ideas from the one-dimensional case.
+We can start with Eq.~\ref{eq:adv:multiddivergence}, and define
 the fluxes over though a face as:
 \begin{itemize}
 \item x-face:
@@ -870,35 +937,32 @@ The result is the ODE:
    - \frac{(va)_{i,j+\myhalf} - (va)_{i,j-\myhalf}}{\Delta y}
 \end{equation}
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=\linewidth]{riemann-mol}
-\caption[Method-of-lines spatial reconstruction]{\label{fig:advection:riemann-mol} Piecewise linear reconstruction
-of the zones showing the interface states used with the method of lines
-approach.}
-\end{figure}
-
-Note that there is no time-level indicated on the righthand side.  We
-find the interface values of $a$ by interpolating in space only (see Figure~\ref{fig:advection:riemann-mol}, as:
+For the interface states, we separately construct slopes in each
+dimension: $\Delta^{(x)}a_{i,j}$ is the slope in the $x$-direction,
+and $\Delta^{(y)}a_{i,j}$ is the slope in the $y$-direction.  Then
+the interface states are:
 \begin{align}
-a_{i+\myhalf,j,L} &= a_{i,j} + \frac{1}{2} \Delta a_{i,j} \\
-a_{i+\myhalf,j,R} &= a_{i+1,j} - \frac{1}{2} \Delta a_{i+1,j}
+a_{i+\myhalf,j,L} &= a_{i,j} + \frac{1}{2} \Delta a^{(x)}_{i,j} \\
+a_{i+\myhalf,j,R} &= a_{i+1,j} - \frac{1}{2} \Delta a^{(x)}_{i+1,j}
 \end{align}
-As usual, we resolve the left-right degeneracy on the interface by solving 
-the Riemann problem:
-\begin{equation}
-a_{i+\myhalf,j} = \mathcal{R}(a_{i+\myhalf,j,L}, a_{i+\myhalf,j,R})
-\end{equation}
-A similar construction is done in the y-direction.  With these
-interface states, we have the method for evaluating the righthand side
-of our ODE.  We can then evolve the ODE using a Runge-Kutta
-integration method.  At each stage of the RK integration, we do the
-same construction of the interface states, solve the Riemann problem,
-etc.
+and
+\begin{align}
+a_{i,j+\myhalf,L} &= a_{i,j} + \frac{1}{2} \Delta a^{(y)}_{i,j} \\
+a_{i,j+\myhalf,R} &= a_{i,j+1} - \frac{1}{2} \Delta a^{(y)}_{i,j+1}
+\end{align}
+
+With these interface states, we have the method for evaluating the
+righthand side of our ODE.  We can then evolve the ODE using a
+Runge-Kutta integration method.  At each stage of the RK integration,
+we do the same construction of the interface states, solve the Riemann
+problem, etc.  Notice that unlike the directionally-split method, we
+are doing the update in both directions at the same time---we are
+relying on the ODE integrator to do the coupling in the different
+directions for us.
 
 This construction is a lot simpler than the unsplit method described
 previously.  The cost of this simplicity is a reduced range of
-stability.  
+stability.
 
 Performaing the stability analysis here is much more complicated.  For
 simplicity, consider a simple first-order upwind scheme in
@@ -958,6 +1022,7 @@ for this application~\cite{gottliebshu:1996}.
   which is stable.  
   This was run as {\tt ./pyro.py advection\_rk tophat inputs.tophat}}
 \end{figure}
+
 
 
 \section{High-Order Finite difference methods}
