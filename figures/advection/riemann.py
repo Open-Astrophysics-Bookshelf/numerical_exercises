@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pylab as plt
 import grid_plot as gp
 
-def riemann():
+def riemann(with_time=True):
 
     # grid info
     xmin = 0.0
@@ -13,6 +13,7 @@ def riemann():
 
     gr = gp.FVGrid(nzones, xmin=xmin, xmax=xmax)
 
+    plt.clf()
 
     #------------------------------------------------------------------------
     # plot a domain without ghostcells
@@ -36,11 +37,16 @@ def riemann():
                 edgecolor="none", facecolor="r",
                 length_includes_head=True, zorder=100)
 
-
-    gr.mark_cell_left_state(1, r"$a_{i+\myhalf,R}^{n+\myhalf}$", fontsize="large",
-                            color="b")
-    gr.mark_cell_right_state(0, r"$a_{i+\myhalf,L}^{n+\myhalf}$", fontsize="large",
-                             color="b")
+    if with_time:
+        gr.mark_cell_left_state(1, r"$a_{i+\myhalf,R}^{n+\myhalf}$", fontsize="large",
+                                color="b")
+        gr.mark_cell_right_state(0, r"$a_{i+\myhalf,L}^{n+\myhalf}$", fontsize="large",
+                                 color="b")
+    else:
+        gr.mark_cell_left_state(1, r"$a_{i+\myhalf,R}$", fontsize="large",
+                                color="b")
+        gr.mark_cell_right_state(0, r"$a_{i+\myhalf,L}$", fontsize="large",
+                                 color="b")
 
     gr.label_cell_center(0, r"$a_i$")
     gr.label_cell_center(1, r"$a_{i+1}$")
@@ -53,7 +59,11 @@ def riemann():
 
     plt.tight_layout()
 
-    plt.savefig("riemann-adv.pdf")
+    if with_time:
+        plt.savefig("riemann-adv.pdf")
+    else:
+        plt.savefig("riemann-adv-mol.pdf")
 
 if __name__== "__main__":
     riemann()
+    riemann(with_time=False)
