@@ -263,7 +263,7 @@ class FVGrid(object):
                  fontsize="large", color=color)
 
     def mark_cell_left_state(self, idx, string, color="k", value=0.5,
-                             vertical="center", fontsize="medium", zorder=None):
+                             vertical="center", fontsize="medium", zorder=100):
 
         plt.scatter(self.xl[idx]+0.05*self.dx, self.voff+value, marker="x", color=color)
 
@@ -282,7 +282,7 @@ class FVGrid(object):
                  color=color, fontsize=fontsize)
 
     def mark_cell_right_state(self, idx, string, color="k", value=0.5,
-                              vertical="center", fontsize="medium", zorder=None):
+                              vertical="center", fontsize="medium", zorder=100):
 
         plt.scatter(self.xr[idx]-0.05*self.dx, self.voff+value, marker="x", color=color)
 
