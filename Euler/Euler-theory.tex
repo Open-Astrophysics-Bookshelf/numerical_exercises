@@ -31,12 +31,18 @@ choice is the gamma-law EOS:
 p = \rho e(\gamma - 1)
 \end{equation}
 where $\gamma$ is the ratio of specific heats for the gas/fluid (for
-an ideal, monatomic gas, $\gamma = 5/3$), but any relation of the form
-$p = p(\rho, e)$ will work.
+an ideal, monatomic gas, $\gamma = 5/3$), but any relation of the form:
+\begin{equation}
+p = p(\rho, e)
+\end{equation}
+will work.  For many astrophysical environments, we may not be able to
+express this relation analytically, but instead will solve it via
+numerical integration or by interpolating from tabulated results.
 
 For a derivation of the equations of hydrodynamics using moments of
 the Boltzmann equation see \cite{shu,choudhuri}.  For a
-physically-motivated derivation from conservation, see \cite{leveque:2002}.
+physically-motivated derivation from conservation, see
+\cite{choudhuri,leveque:2002}.
 
 In one dimension, they appear as\footnote{assuming Cartesian coordinates}:
 \begin{align}
@@ -132,7 +138,7 @@ An alternate way to express these equations is using the {\em
 \begin{align}
 \ddt{\rho} + u \ddx{\rho} + \rho \ddx{u} &= 0 \\
 \ddt{u} + u \ddx{u} + \frac{1}{\rho} \ddx{p} &= 0 \\
-\ddt{p} + u \ddx{p} + \gamma p \ddx{u} &= 0
+\ddt{p} + u \ddx{p} + \gamma p \ddx{u} &= 0 \label{eq:prim:p}
 \end{align}
 }
 \end{exercise}
@@ -169,7 +175,7 @@ Note that both the conserved Jacobian matrix, $\Ab(\Uc)$, and the
 primitive variable matrix, $\Ab(\qb)$, have the same eigenvalues,
  since they represent the same physics.
 
-In Eq.~\ref{eq:primitivesystem}, we used the algebraic gamma-law
+In Eq.~\ref{eq:prim:p}, we used the algebraic gamma-law
 equation of state to replace $e$ with $p$, however, for a general
 equation of state, we can get the appropriate expression by writing $p
 = p(\rho, s)$:
@@ -243,7 +249,7 @@ $\lb^{(i)} \cdot \rb^{(j)} = \delta_{ij}$.
 }
 \end{exercise}
 A {\sf Jupyter} notebook using {\sf SymPy} that derives these
-eigenvectors is available here:
+eigenvectors is available:
 \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/compressible/euler.ipynb}{euler.ipynb}}
 \footnote{if you don't have {\sf Jupyter}, you can view this rendered online via the github link.}
 
@@ -378,7 +384,7 @@ correspond to a wave that will move out from the interface with time,
 and each wave will carry with it a jump in the characteristic
 variables.  Figure~\ref{fig:riemann:waves} shows the
 three waves moving out from the interface, separating space into 4
-regions, marked: $L$, $L^*$, $R^*$, and $R$.
+regions, marked: $L$, $L_*$, $R_*$, and $R$.
 \begin{figure}[h]
 \centering
 \includegraphics[width=\linewidth]{riemann-waves}
@@ -402,6 +408,8 @@ contact.
 The left and right waves can be either a rarefaction or a shock.  It will
 be a shock if the flow is compressing and a rarefaction otherwise.
 
+We already see that the only unknowns are $u_\star$, $p_\star$, $\rho_{\star,L}$,
+and $\rho_{\star,R}$.
 
 \subsection{Rarefactions}
 
@@ -536,7 +544,7 @@ u_{\star,R} = u_R - \frac{2c_R}{\gamma - 1} \left [ 1 - \left ( \frac{p_\star}{p
 \end{exercise}
 
 For a general equation of state, there is not a closed form, but we would need
-to integrate our system to get $u_\star = u(p_\star)$.
+to integrate our system to get $u_\star = u(p_\star)$ and $\rho_{\star,s} = 1/\tau(p_\star)$.
 
 We'll denote the solution across the left rarefaction as $u_\star =
 u_L^{rare}(p_\star)$ and across the right rarefaction as $u_\star =
@@ -692,9 +700,11 @@ get this from the mass flux, $W_s$, definition, e.g., $W_L = \rho_L
 \label{eq:euler-theory:shockgeneral}
 S = u_s \mp \frac{W_s}{\rho_s} \quad\mbox{`$-$' for left, `+' for right}\\
 \end{equation}
+This procedure gives us $\rho_{\star,s}$, $p_\star$, and $S$, the
+shock speed.
 
-Just as with the rarefaction, considerable simplification can be made if 
-we assume a gamma-law gas.
+Just as with the rarefaction, considerable simplification can be made
+if we assume a gamma-law gas.
 
 \begin{exercise}[Shock jump conditions for $\gamma$-law EOS]
 {
@@ -707,7 +717,7 @@ show that we can express the jump in density in terms of the
 ratio of pressure, $p_\star/p_s$, as:
 \begin{equation}
 \label{eq:euler:shockrhojump}
-\rho_\star = \rho_s \left [ \frac{ \frac{p_\star}{p_s} (\gamma + 1) + (\gamma - 1)}
+\rho_{\star,s} = \rho_s \left [ \frac{ \frac{p_\star}{p_s} (\gamma + 1) + (\gamma - 1)}
    {(\gamma + 1) + \frac{p_\star}{p_s} (\gamma -1)} \right ]
 \end{equation}
 }

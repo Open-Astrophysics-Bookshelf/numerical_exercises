@@ -35,12 +35,12 @@ simplicity of notation, we drop the $\langle \rangle$ going forward).
 To discretize Eq.~\ref{eq:advect-cons}, we integrate it over a zone,
 from ${x_{i-\myhalf}}$ to ${x_{i+\myhalf}}$, normalizing by the zone width,
 $\Delta x$:
-\begin{eqnarray}
-\frac{1}{\Delta x} \int_{x_{i-\myhalf}}^{x_{i+\myhalf}} a_t \, dx &=& 
+\begin{align}
+\frac{1}{\Delta x} \int_{x_{i-\myhalf}}^{x_{i+\myhalf}} a_t \, dx &= 
    - \frac{1}{\Delta x} \int_{x_{i-\myhalf}}^{x_{i+\myhalf}} \frac{\partial}{\partial x} f(a) \, dx \\
-\frac{\partial}{\partial t} a_i &=& 
+\frac{\partial}{\partial t} a_i &= 
    - \frac{1}{\Delta x} \left \{ \left [f(a) \right ]_{i+\myhalf} - \left [f(a) \right ]_{i-\myhalf} \right \} \label{adv:eq:fvadv}
-\end{eqnarray}
+\end{align}
 This is an evolution equation for the zone-average of $a$, and shows
 that it updates in time based on the fluxes through the boundary of
 the zone.
