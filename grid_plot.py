@@ -11,6 +11,8 @@ mpl.rcParams["text.usetex"] = True
 # load the xfrac package
 mpl.rcParams["text.latex.preamble"].append(r'\usepackage{xfrac}')
 mpl.rcParams["text.latex.preamble"].append(r'\newcommand{\myhalf}{\sfrac{1}{2}}')
+mpl.rcParams["text.latex.preamble"].append(r'\newcommand{\mythreehalf}{\sfrac{3}{2}}')
+mpl.rcParams["text.latex.preamble"].append(r'\newcommand{\myfivehalf}{\sfrac{5}{2}}')
 mpl.rcParams['mathtext.fontset'] = 'cm'
 mpl.rcParams['mathtext.rm'] = 'serif'
 
@@ -250,11 +252,16 @@ class FVGrid(object):
                  horizontalalignment='center', verticalalignment='top',
                  fontsize=fontsize)
 
-    def label_edge(self, idx, string, fontsize="small"):
+    def label_edge(self, idx, string, fontsize="small", right_edge=False):
 
-        plt.text(self.xl[idx], self.voff-0.075, string,
-                 horizontalalignment='center', verticalalignment='top',
-                 fontsize=fontsize)
+        if not right_edge:
+            plt.text(self.xl[idx], self.voff-0.075, string,
+                     horizontalalignment='center', verticalalignment='top',
+                     fontsize=fontsize)
+        else:
+            plt.text(self.xr[idx], self.voff-0.075, string,
+                     horizontalalignment='center', verticalalignment='top',
+                     fontsize=fontsize)
 
     def label_cell_center(self, idx, string, value=0.5, color="k"):
 

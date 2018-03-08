@@ -767,6 +767,16 @@ returns the solution at the interface:
 \begin{equation}
 \qb_{i+\myhalf}^{n+\myhalf} = \mathcal{R}(\qb_{i+\myhalf,L}^{n+\myhalf}, \qb_{i+\myhalf,R}^{n+\myhalf})
 \end{equation}
+This is done for every interface, as illustrated in Figure~\ref{fig:euler:multiple_interfaces}.
+
+% figure drawn with figures/Euler/multiple_interfaces.py
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth]{multiple_interfaces}
+\caption[Riemann wave structure at each interface]{\label{fig:euler:multiple_interfaces}
+  The Riemann wave structure resulting from the separate Riemann problems at each interface.  For each
+  interface, we find the state on the interface and use this to evaluate the flux through the interface.} 
+\end{figure}
 
 As discussed in \S~\ref{Euler:riemann:solution}, we need to determine
 which state is on our interface to compute the fluxes through the
