@@ -32,6 +32,49 @@ Note that $p$ here looks like a pressure, but it is not subject to
 any equation of state.  This system is closed as written.  The value
 of $p$ is determined such that the velocity constraint is satisfied.
 
+We can gain more insight into the applicability of the incompressible 
+equations by doing an asymptotic expansion.  Starting with the momentum
+equation from the Euler equations:
+\begin{equation}
+\frac{\partial (\rho {\bf U})}{\partial t} + {\nabla}\cdot (\rho {\bf U}{\bf U}) + {\nabla}p = 0
+\end{equation}
+we can introduce dimensionless variables:
+\begin{equation}
+\bar{\bf U} = \frac{{\bf U}}{|{\bf U}_0|} ; \quad \bar{t} = \frac{t}{t_0} ; \quad \bar{\rho} = \frac{\rho}{\rho_0} ; \quad \bar{x} = \frac{x}{L_0} ; \quad \bar{p} = \frac{p}{\rho_0 c_0^2}
+\end{equation}
+and we find the dimensionless evolution equation:
+\begin{equation}
+\frac{\partial (\bar{\rho} \bar{\bf U})}{\partial \bar{t}} + \bar{\nabla} \cdot (\bar{\rho} \bar{\bf U}\bar{\bf U}) + \frac{1}{M^2} \bar{\nabla} \bar{p} = 0
+\end{equation}
+Now we introduce an expansion of pressure in terms of Mach number:
+\begin{equation}
+p = p_0 + p_1 M + p_2 M^2
+\end{equation}
+Grouping terms by power of Mach number, we find:
+\begin{equation}
+\nabla p_0 = \nabla p_1 = 0
+\end{equation}
+and
+\begin{equation}
+\frac{\partial (\rho {\bf U})}{\partial t} + {\nabla}\cdot (\rho {\bf U}{\bf U}) + {\nabla}p_2 = 0
+\end{equation}
+Only $p_2$, which is sometimes called the {\em dynamical pressure} appears in the dynamics.
+All of the thermodynamic content is in $p_0$, consistent with our argument previously
+that no equation of state is needed.
+
+Recalling that pressure evolves according to
+\begin{equation}
+\frac{\partial p}{\partial t} + \gamma p {\nabla}\cdot {\bf U} + {\bf U}\cdot {\nabla}p = 0
+\end{equation}
+The general expression for the velocity divergence is:
+\begin{equation}
+{\nabla}\cdot {U} = -\frac{1}{\gamma p} \frac{Dp}{Dt}
+\end{equation}
+from our pressure expansion, we see that
+\begin{equation}
+\nabla \cdot {\bf U} \sim  \mathcal{O}(M^2)
+\end{equation}
+This justifies our argument that the incompressible equations apply at low Mach number.
 
 
 \section{Projection methods}
