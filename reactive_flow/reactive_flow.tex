@@ -20,7 +20,7 @@ implies:
 Summing Eq.~\ref{react:eq:partialdensitycont} over $k$ gives us back
 the mass contunity equation, since $\sum_k \rho_k = \rho$.  The
 $\rho_k$ are sometimes called {\em partial densities}.  Note that
-using both set of equations, Eq.~\ref{react:eq:partialdensitycont} 
+using both Eq.~\ref{react:eq:partialdensitycont} 
 and the normal mass continuity equation for $\rho$ overspecifies 
 the system.
 
@@ -71,16 +71,31 @@ form:
 \begin{equation}
 T\DDt{s} = \DDt{e} + p \DDt{(1/\rho)} = \Hnuc
 \end{equation}
-Where now $\Hnuc$ is the time-rate of energy release per unit mass.
+Where now $\Hnuc$ is the time-rate of energy release per unit mass
+($dq_\mathrm{react}/dt$).
 
-The conservative Euler equations with reactive source terms
+An additional energy source that we often consider along with reactions
+is thermal diffusion.  Fick's law says that the heat flux is proportional
+to $\nabla T$, so we write:
+\begin{equation}
+F_\mathrm{cond} = -\kth \nabla T
+\end{equation}
+as the conductive heat flux.  Here the `$-$' indicates that heat flows
+from hot to cold and $\kth$ is the thermal conductivity.  See
+\S~\ref{sec:diffusion} for more discussion.
+
+The conservative Euler equations with reactive and diffusive source terms
 appear as:
 \begin{align}
 \ddt{\rho} + \nabla \cdot (\rho \Ub) &= 0 \\
 \ddt{\rho X_k} + \nabla \cdot (\rho \Ub X_k) &= \rho \omegadot_k \\
 \ddt{(\rho \Ub)} + \nabla \cdot (\rho \Ub \Ub) + \nabla p &= 0 \\
-\ddt{(\rho E)} + \nabla \cdot (\rho E \Ub + p \Ub ) &= \rho \Hnuc
+\ddt{(\rho E)} + \nabla \cdot (\rho E \Ub + p \Ub ) &= \nabla \cdot (\kth \nabla T) + \rho \Hnuc
 \end{align}
+We'll write the heat sources simply as $H$, 
+\begin{equation}
+H = \Hnuc + \frac{1}{\rho} \nabla \cdot \kth \nabla T
+\end{equation}
 
 In primitive form, the derivation of the pressure equation is a
 complex.  Previously, we found the pressure evolution in the absence
@@ -103,7 +118,7 @@ This gives us the form:
 \begin{equation}
 \frac{Dp}{Dt} = \frac{p}{\rho} \Gamma_1 \frac{D\rho}{Dt} +
      \left . \rho^2 \frac{\partial T}{\partial \rho} \right |_s
-     \frac{\Hnuc}{T}
+     \frac{H}{T}
 \end{equation}
 
 We need an expression for $\partial T/\partial \rho |_s$ in terms of
@@ -136,13 +151,13 @@ with $\chi_T \equiv \partial \log p / \partial \log T |_\rho$
 Putting this all together, we have:
 \begin{equation}
 \frac{Dp}{Dt} = \frac{p}{\rho}\Gamma_1  \frac{D\rho}{Dt}
-   + \frac{p \chi_T}{c_v T} \Hnuc
+   + \frac{p \chi_T}{c_v T} H
 \end{equation}
 and using the continuity equation, $D\rho/Dt = -\rho \nabla \cdot \Ub$, 
 we finally have:
 \begin{equation}
 \label{eq:reacting:p}
-\ddt{p} + \Ub \cdot \nabla p + \Gamma_1 p \nabla \cdot \Ub = \Gamma_1 p \sigma \Hnuc
+\ddt{p} + \Ub \cdot \nabla p + \Gamma_1 p \nabla \cdot \Ub = \Gamma_1 p \sigma H
 \end{equation}
 where we defined
 \begin{equation}
@@ -154,15 +169,28 @@ The primitive variable is then
 \begin{align}
 \ddt{\rho} + \Ub \cdot \nabla \rho + \rho \nabla \cdot \Ub &= 0\\
 \ddt{\Ub} + \Ub \cdot\nabla \Ub + \frac{1}{\rho} \nabla p &= 0\\
-\ddt{p} + \Ub \cdot \nabla p + \Gamma_1 p \nabla \cdot \Ub &= \Gamma_1 p \sigma \Hnuc \\
+\ddt{p} + \Ub \cdot \nabla p + \Gamma_1 p \nabla \cdot \Ub &= \Gamma_1 p \sigma H \\
 \ddt{X_k} + \Ub \cdot \nabla {X_k} &= \omegadot_k 
 \end{align}
+
+Finally, we can derive a temperature evolution equation following the 
+method from \S~\ref{sec:euler:otherthermo}.  We find
+\begin{equation}
+c_v \DDt{T} = \left ( \left . \frac{\partial e}{\partial \rho} \right |_T - \frac{p}{\rho} \right ) \nabla \cdot \Ub
+  + H
+\end{equation}
+or
+\begin{equation}
+c_p \DDt{T} = \left ( \frac{1}{\rho} - \left . \frac{\partial h}{\partial p} \right |_T \right ) \DDt{p}
+ + H
+\end{equation}
+depending on whether we start with $e$ or $h$.  
 
 
 \section{Operator splitting approach}
 
 Using operator splitting, we separate the equations into hydrodynamics
-and reactive parts and we do this operations in turn.  Following the
+and reactive parts and we do these operations in turn.  Following the
 ideas from \S~\ref{sec:multiphys:diffreact}, we perform the update
 in stages.  If we denote the reaction update operator as $R_{\Delta t}$
 and the hydrodynamics operator as $A_{\Delta t}$, then our update 
@@ -196,9 +224,13 @@ of reactive sources.  The advance through $\Delta t$ in time is:
    \end{equation}
   where $\Uc^{\star,n+\myhalf}_{i-\myhalf}$ is the predict interface
   state (using the ideas from \S~\ref{sec:onedrecon}), beginning with
-  the state $\Uc^\star$.
+  the state $\Uc^\star$.  Note that $\Rc$ does not appear here
+  explicitly.
 
-  Note that $\Rc$ does not appear here explicitly.
+  Alternately, we
+  could use the MOL hydrodynamics update here, but the basic idea will
+  be the same---the hydrodynamics does not explicitly see the reaction
+  terms.
 
 \item {\em Evolve reaction part for $\Delta t/2$}
 
@@ -215,7 +247,7 @@ of reactive sources.  The advance through $\Delta t$ in time is:
 
 \subsection{Adding species to hydrodynamics}
 
-In the hydrodynamics algorithm, we neglect the reaction terms.  Their
+In the hydrodynamics algorithm, we neglect the diffusion and reaction terms.  Their
 effects are incorporated implicitly by performing the hydrodynamics
 update starting with the state that has already experienced burning.
 \begin{align}
@@ -258,9 +290,10 @@ this middle wave.  In the Riemann solver then, there is no `star'
 state for the species, it just jumps across the contact wave.
 
 To add species into the solver, you simply need to reconstruct $X_k$
-as described above, find the interface values using this new $\Ab(\qb)$
-and associated eigenvectors, solve the Riemann problem, with $X_k$ on
-the interface being simply the left or right state depending on the
+as described in Chapter~\ref{ch:compressible} to find the interface values.  If we 
+are doing characteristic tracing, then we use this new $\Ab(\qb)$
+and associated eigenvectors.  We then solve the Riemann problem, with $X_k$ on
+the interface taken as simply the left or right state depending on the
 sign of the contact wave speed, and do the conservative update for
 $\rho X_k$ using the species flux.
 
@@ -290,15 +323,19 @@ slope and applying this same slope to all the species.
 
 \subsection{Integrating the reaction network}
 
-The reactive portion of our system is:
+The reactive portion of our operator split system is:
 \begin{align}
 \frac{dX_k}{dt} &= \omegadot_k \\
 \frac{d(\rho e)}{dt} &= \rho \Hnuc
 \end{align}
 As written, this system is not closed without the equation of state,
 since $\omegadot_k = \omegadot_k(\rho, T, X_k)$, and likewise for
-$\Hnuc$.  We can express the internal energy in terms of the
-temperature as
+$\Hnuc$.  Our temperature evolution equation reduces to
+\begin{equation}
+c_x \DDt{T} = \Hnuc
+\end{equation}
+where $c_x$ is $c_v$ or $c_p$, depending on the physical effects we are
+trying to capture.
 \if DEBUG
 \footnote{formally, there should be a composition term here too, of the
 form
@@ -306,23 +343,12 @@ form
 \sum_k \left . \frac{\partial e}{\partial X_k} \right |_{\rho,T} \frac{dX_k}{dt}  =
       \sum_k \mu_k \frac{dX_k}{dt} 
 \]
-where $\mu_k$ is the chemical potential.  But this term is zero if we are in chemical
-equilibrium, which is usually assumed (but perhaps should be checked) for astrophysical
-flows.  
-}
+where $\mu_k$ is the chemical potential.  But this term is zero if we
+are in chemical equilibrium, which is usually assumed (but perhaps
+should be checked) for astrophysical flows.  }
 \fi
-\begin{align}
-\frac{de}{dt} &= \left . \frac{\partial e}{\partial T}\right |_\rho \frac{dT}{dt} +
-                 \left . \frac{\partial e}{\partial \rho}\right |_T \frac{d\rho}{dt} \\
-              &= c_v \frac{dT}{dt} + \cancelto{0}{\left . \frac{\partial e}{\partial \rho}\right |_T \frac{d\rho}{dt}}
-\end{align}
-where the latter term cancels only when we use operator splitting,
-because we do not evolve the density during the reaction step.  Note,
-we'd get a slightly different temperature evolution equation if we
-started with enthalpy, $h$, instead of internal energy, with $c_p$
-replacing $c_v$.  Again, this difference only arises because we are
-neglecting the hydrodynamic portions of the temperature evolution
-during the reaction step.
+This difference only arises because we are neglecting the hydrodynamic
+portions of the temperature evolution during the reaction step.
 
 Many simulation codes neglect the evolution of temperature during the
 reaction step (see, e.g., \cite{flash}).
@@ -339,14 +365,72 @@ and a Jacobian routine\footnote{although this could be calculated via
   finite-differences if needed}.
 
 
+\subsection{Incorporating explicit diffusion}
+
+
 
 \section{Burning modes}
+
 
 \subsection{Convective burning}
 
 
 \subsection{Deflagrations}
 
+A deflagration or flame is a subsonic burning front that propagates
+via a balance of diffusion and reactions.  Thermal diffusion raises
+the temperature of fuel ahead of the flame to ignition and the energy
+release heats the ash, keeping the thermal gradient needed for
+diffusion.  In terrestrial flames, species diffusion can be important
+as well, but this is usually negligible in astrophysical flames.
+
+Because the burning front is subsonic, sound waves can communicate
+across the flame and therefore the fuel and ash are at the same
+pressure.  The temperature jump across the flame means that the
+density will drop behind the flame to preserve the constant pressure.
+Our temperature evolution equation, taking $Dp/Dt = 0$, is
+\begin{equation}
+\rho c_p \DDt{T} = \nabla \cdot \kth \nabla T + \rho \Hnuc
+\end{equation}
+
+We can estimate the timescale for diffusion by neglecting the reactions
+and writing
+\begin{equation}
+\DDt{T} = \frac{1}{\rho c_p} \nabla \cdot \kth \nabla T \approx \mathcal{D} \nabla^2 T
+\end{equation}
+where $\mathcal{D} = \kth/(\rho c_p)$ is the diffusion coefficient
+(assuming $\rho c_p$ is spatially constant). Dimensional analysis suggests that the 
+diffusion timescale is then
+\begin{equation}
+t_\mathrm{diff} \approx \frac{\delta^2}{\mathcal{D}}
+\end{equation}
+where $\delta$ is the width of the region where diffusion takes
+place---we'll identify this as the flame thickness.
+
+Similarly, we can estimate the reaction timescale by considering
+\begin{equation}
+\rho c_p \DDt{T} = \rho \Hnuc
+\end{equation}
+and writing
+\begin{equation}
+t_\mathrm{burn} \approx \frac{c_p T}{\Hnuc}
+\end{equation}
+We can alternately expand $\Hnuc$ in terms of temperature
+if we wish to capture some of the temperature sensitivity.
+
+Equating these timescales gives
+\begin{equation}
+\delta \sim \left ( \frac{\kth T}{\rho \Hnuc} \right )^{1/2}
+\end{equation}
+which is an estimate of the flame thickness.  We can define the flame
+speed as the time it takes to burn through this thickness:
+\begin{equation}
+v_f \sim \frac{\delta}{t_\mathrm{burn}} \sim \left ( \frac{\kth \Hnuc}{\rho c_p T} \right )^{1/2}
+\end{equation}
+We note the main dependences are:
+\begin{equation}
+v_f \sim \sqrt{\kth \Hnuc} \qquad \delta \sim \sqrt{\frac{\kth}{\Hnuc}}
+\end{equation}
 
 \subsection{Detonations}
 
