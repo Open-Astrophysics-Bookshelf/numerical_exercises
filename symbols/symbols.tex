@@ -24,11 +24,11 @@
 \endlastfoot
 $\Ab$     & Jacobian matrix  & N/A \\
 %
-$c$     & sound speed, $c = \sqrt{\Gamma_1 p/\rho}$  & m~s$^{-1}$ \\
-%
 $C$       & Lagrangian sound speed, $C = \sqrt{\Gamma_1 p \rho}$ & g~m$^{-2}$~s$^{-1}$\\
 %
 $\cfl$    & CFL number & --\\
+%
+$c$     & sound speed, $c = \sqrt{\Gamma_1 p/\rho}$  & m~s$^{-1}$ \\
 %
 $c_p$   & specific heat at constant pressure
           ($c_p \equiv \left . \partial h / \partial T \right |_{p,X_k}$)
@@ -46,45 +46,55 @@ $\Fb$     & flux vector                                & N/A \\
 %
 $\gb$     & gravitational acceleration                 & cm~s$^{-2}$ \\
 %
-$\gamma$ & ratio of specific heats, $\gamma = c_p/c_v$ & -- \\
-%
 $\Gamma_1$ & first adiabatic exponent ($\Gamma_1 \equiv \left . d \log p/d \log \rho \right |_s$) & -- \\
 %
-$h$     & specific enthalpy                          & erg~g$^{-1}$ \\
+$\gamma$ & ratio of specific heats, $\gamma = c_p/c_v$ & -- \\
+%
+$\gamma_e$ & the quantity $p/(\rho e) + 1$ & -- \\
 %
 $H$     & heat sources                               & erg~g$^{-1}$~s$^{-1}$ \\
 %
 $\Hnuc$     & nuclear energy source                               & erg~g$^{-1}$~s$^{-1}$ \\
 %
+$h$     & specific enthalpy                          & erg~g$^{-1}$ \\
+%
 $\Ic$   & integral under a (piecewise) parabolic polynomial reconstruction & N/A \\
 %
 $\kth$  & thermal conductivity                       & erg~cm$^{-1}$~s$^{-1}$~K$^-1$ \\
 %
+${\bf L}$ & matrix of left eigenvectors              & -- \\
+%
+${\boldsymbol{\Lambda}}$ & diagonal matrix of eigenvalue & -- \\
+%
 $\lb$     & left eigenvector                           & N/A \\
 %
 $\lambda$ & eigenvalue                               & N/A \\
+%
+$M$       & Mach number, $M = |\Ub|/c$               & -- \\
+%
+$\omegadot_k$ & species creation rate                         & s$^{-1}$ \\
 % 
 $p$     & pressure                                   & erg~cm$^{-3}$ \\
 %
-$\rb$     & right eigenvector                          & N/A \\
+$\qb$     & primitive variable vector                 & N/A \\
+%
+${\bf R}$ & matrix of right eigenvectors              & -- \\
 %
 $\riemann(q_L, q_R)$ & Riemann problem between states $q_L$ and $q_R$ & N/A \\
 %
-$s$     & specific entropy                           & erg~g$^{-1}$~K$^{-1}$ \\
-%
-$S$     & source term to the divergence constraint   & s$^{-1}$ \\
-%
-$t$     & time                                       & s \\
-%
-$T$     & temperature                                & K \\
-%
-$\tau$  & specific volume ($\tau = 1/\rho$)          & cm$^3$~g$^{-1}$ \\
-%
-$X_k$   & mass fraction of the species ($\sum_k X_k = 1$) & -- \\
+$\rb$     & right eigenvector                          & N/A \\
 %
 $\rho$  & mass density  & g~cm$^{-3}$ \\
 %
-$\qb$     & primitive variable vector                 & N/A \\
+$S$     & source term to the divergence constraint   & s$^{-1}$ \\
+%
+$s$     & specific entropy                           & erg~g$^{-1}$~K$^{-1}$ \\
+%
+$T$     & temperature                                & K \\
+%
+$t$     & time                                       & s \\
+%
+$\tau$  & specific volume ($\tau = 1/\rho$)          & cm$^3$~g$^{-1}$ \\
 %
 $\Ub$   & total velocity vector, $\Ub = (u, v)^\intercal$ in 2-d & cm~s$^{-1}$ \\
 %
@@ -96,7 +106,7 @@ $v$     & y-velocity   & cm~s$^{-1}$ \\
 %
 $\wb$     & characteristic variables vector                   & N/A \\
 %
-$\omegadot_k$ & species creation rate                         & s$^{-1}$ \\
+$X_k$   & mass fraction of the species ($\sum_k X_k = 1$) & -- \\
 \end{longtable}
 \end{center}
 \renewcommand{\arraystretch}{1.0}
