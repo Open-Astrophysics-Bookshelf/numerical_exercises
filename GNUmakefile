@@ -54,7 +54,7 @@ CompHydroTutorial.pdf: CompHydroTutorial.tex conditional.tex $(TEXS) $(EPSS) $(P
 	bibtex CompHydroTutorial.aux
 	pdflatex CompHydroTutorial  < /dev/null
 	pdflatex CompHydroTutorial  < /dev/null
-	pdflatex CompHydroTutorial  < /dev/null
+	#pdflatex CompHydroTutorial  < /dev/null
 	$(RM) git_info.tex
 	$(RM) conditional.tex
 
