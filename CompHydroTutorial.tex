@@ -19,7 +19,15 @@
 \usepackage[numbers,sort&compress]{natbib}
 
 % code listings
-\usepackage{listings}
+\usepackage[procnames]{listings}
+
+\lstset{basicstyle=\ttfamily\small, 
+        keywordstyle=\color{keywords},
+        commentstyle=\color{comments},
+        stringstyle=\color{red},
+        showstringspaces=false,
+        identifierstyle=\color{blue},
+        procnamekeys={def,class}}
 
 \graphicspath{{preface/}{intro/}{finite-volume/}{advection/}{burgers/}{diffusion/}{Euler/}{incompressible/}{multigrid/}{multiphysics/}{low_mach/}{radiation/}{pyro/}{higher-order/}}
 

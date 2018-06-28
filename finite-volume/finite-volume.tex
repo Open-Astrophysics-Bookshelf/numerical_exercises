@@ -362,6 +362,28 @@ f_{\mathrm{lo}-1} &=& f_\mathrm{lo}
 \end{eqnarray}
 
 
+\section{Numerical implementation details}
+
+The computational grids used for finite-volume techniques maps nicely
+onto multidimensional arrays.  For the cell-average data, a typical
+array would be dimensioned as
+\begin{lstlisting}[language=Python]
+  ilo = nx
+  ihi = nx + ng - 1
+  state = np.zeros((nx + 2*ng, nvar))
+\end{lstlisting}
+in python (using NumPy), where {\tt nx} is the number of zones in the 
+domain and {\tt ng} is the number of ghost cells.  For some problems,
+there might be more than one state variable, so {\tt nvar}, is the number
+of state variables that live in each zone.  We would then loop from {\tt ilo}
+to {\tt ihi} to access the state data in the grid interior.
+
+Fluxes are also stored in arrays, but since we cannot index an array with
+half-integer indices, the standard convention is that the index {\tt i} in an
+array refers to the flux on the {\em left} edge of that zone.  I.e.,
+\begin{equation*}
+\mathtt{flux[i]} \quad \longleftrightarrow \quad F_{i-1/2}
+\end{equation*}
 
 \section{Going further}
 
