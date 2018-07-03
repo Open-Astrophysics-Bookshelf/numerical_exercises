@@ -735,12 +735,15 @@ total power in real space must equal the total power in frequency
 space.  One way to see that this must be the case is to consider the
 discrete transform of $f(x) = 1$, which should be a delta function.
 
-Note that if $f(x)$ is real-valued, then the transform $\mathcal{F}_k$
-has 2 numbers (the real and imaginary parts) for each of our original
-$N$ real values.  Since we cannot create information in frequency
-space where there was no corresponding real-space information, half of
-the $\mathcal{F}_k$'s are redundant (and $\mathcal{F}_{-k} =
-\mathcal{F}^\star_k$).
+The FFT of a discrete function has the same amount of information as
+the original discrete function.  Note that if $f(x)$ is real-valued,
+then the transform $\mathcal{F}_k$ has 2 numbers (the real and
+imaginary parts) for each of our original $N$ real values.  This would
+mean that we have $2N$ pieces of information in frequency space where
+we only had $N$ pieces of information in real space.  Since we cannot
+create information in frequency space where there was no corresponding
+real-space information, half of the $\mathcal{F}_k$'s are redundant
+(and $\mathcal{F}_{-k} = \mathcal{F}^\star_k$).
 
 Directly computing $\mathcal{F}_k$ for each $k$ takes $\mathcal{O}(N^2)$
 operations.  The fast Fourier transform (FFT) is a reordering of the
@@ -769,11 +772,23 @@ books can give a good introduction to how to design an FFT algorithm.
     imaginary parts will be $1/\sqrt{2}$.
   \end{itemize}
 
-An example of the transform of a pure sine wave is shown in Figure~\ref{fig:intro:fft}.
+An example of the transform of a single-frequency sine wave with a
+phase shift is shown in Figure~\ref{fig:intro:fft}.
 
 }
 \end{exercise}
 
+The FFT assumes that a function is periodic and that the points are
+evenly spaced.  If the function is not periodic, then a signal will
+show up in the FFT at a wavenumber corresponding to the size of the
+domain.  Related to this, you need to ensure that your points are
+evenly spaced even at the boundary, e.g., if you have a function on
+$[0, 1]$ represented by 5 points, you want the points to be $\{0, 0.2,
+0.4, 0.6, 0.8\}$ and not $\{0, 0.25, 0.5, 0.75, 1\}$.  In the latter
+case, $0$ and $1$ are the same function value (due to periodicity),
+but the FFT assumes that all points are evenly spaced (even across the
+boundary), so it will think that there is a spacing of $0.25$ between
+these end points.
 
 \begin{figure}[t]
 \centering
