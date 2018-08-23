@@ -15,9 +15,9 @@ over performance.
 
 \section{Getting \pyro}
 
-\pyro\ can be downloaded from its github repository, \url{https://github.com/zingale/pyro2} as:
+\pyro\ can be downloaded from its github repository, \url{https://github.com/python-hydro/pyro2} as:
 \begin{verbatim}
-git clone https://github.com/zingale/pyro2
+git clone https://github.com/python-hydro/pyro2
 \end{verbatim}
 
 \pyro\ uses the {\tt h5py}, {\sf matplotlib}, and {\sf numpy} libraries.
@@ -86,7 +86,7 @@ The following sequence will setup \pyro:
 
 The structure of the code and descriptions of the various runtime
 parameters is found on the pyro webpage,
-\url{http://zingale.github.io/pyro2/}, and described
+\url{http://python-hydro.github.io/pyro2/}, and described
 in \cite{pyro}.  Here we provide a summary.
 
 The grid structure is managed by the {\tt patch.Grid2d} class.  Data
@@ -98,7 +98,7 @@ This is a subclass of the normal NumPy {\tt ndarray} that provides
 additional methods that are useful for interacting with finite-volume
 data.  In particular, for an object {\tt a}, you can do {\tt a.ip(1)}
 to mimic $a_{i+1,j}$.  The Jupyter notebook
-\href{https://github.com/zingale/pyro2/blob/master/mesh/mesh-examples.ipynb}{mesh-examples.ipynb}
+\href{https://github.com/python-hydro/pyro2/blob/master/mesh/mesh-examples.ipynb}{mesh-examples.ipynb}
 walks through these classes to demonstrate how they work.
 
 Each \pyro\ solver is its own python module.  All but the multigrid

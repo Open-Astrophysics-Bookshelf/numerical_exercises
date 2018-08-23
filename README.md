@@ -60,7 +60,7 @@ There are two sets of companion codes that go along with these notes:
 
    simple, standalone, 1-d solvers that illustrate the basic ideas.
 
- - *pyro*: https://github.com/zingale/pyro2
+ - *pyro*: https://github.com/python-hydro/pyro2
 
    pyro is a 2-d full simulation code designed with simplicity in
    mind that implements the core solvers described in these notes
