@@ -1512,12 +1512,54 @@ which ensures that the mass matrix $\hat{M}$ is the identity matrix.
 Now that we have fixed a choice of basis functions we can evaluate the mass
 matrix (which will be the identity here) and the stiffness matrix $\hat{S}$. We
 still need to evaluate the boundary flux. If we explicitly write out equation~\ref{eq:dg_advection5}
-in index form we have
+in index form (using Einstein summation convention over $n$) we have
 %
 \begin{equation}
   \label{eq:dg_advection6}
-  \hat{M}_{mn} \ddt{\hat{a}_n} + \hat{S}^T_{mn} u \hat{a}_n = -\left[  \right]_{-1}^1.
+  \hat{M}_{mn} \ddt{\hat{a}_n} + \hat{S}^T_{mn} u \hat{a}_n = -\left[ u P_m(x) P_n(x) \hat{a}_n \right]_{-1}^1.
 \end{equation}
+%
+We can now directly use that $P_n(1) = 1$ and $P_n(-1) = (-1)^n$ to get the
+boundary flux term as
+%
+\begin{equation}
+  \label{eq:dg_boundary_flux_modal}
+  -\left[ u P_m(x) P_n(x) \hat{a}_n \right]_{-1}^1 = u \left\{ (-1)^{m+n} A_n(-1) - A_n(1) \right\}.
+\end{equation}
+%
+Here $A_n(1)$, for example, is the $n^{\text{th}}$ mode of the solution at the
+boundary. As there are two solutions at the boundary of the element - the
+solution at $x = 1_{-}$ from the interior of the element, and the solution at
+$x = 1_{+}$ from the exterior (either another element, or from the boundary
+conditions), we need a Riemann solver to give us a single solution at $x=1$. In
+the case of linear advection, as here, we can use the upwind solver for the
+modes as well as for the solution, so
+%
+\begin{equation}
+  \label{eq:dg_riemann_solver}
+  A_n(x; a^{-}_n, a^{+}_n) = \begin{cases}
+    a^{-}_n & \text{if } u \ge 0 \\ a^{+}_n & \text{otherwise.}
+\end{cases}
+\end{equation}
+%
+
+Two points should be immediately noted about this discontinuous Galerkin method.
+First, if we restrict to only one mode ($N=0$), then the only basis function we
+have is $\tilde{P}_0(x) = 1 \ sqrt{2}$, the mass matrix $\hat{M} = 1$, the
+stiffness matrix vanishes, and the boundary flux term reduces to the standard
+finite volume update. In general, the zero mode corresponds to the integral
+average over the cell or element.
+
+Second, we note that the boundary flux term always couples different modes (when
+including more than just one), and only in the linear case will it be simple to
+give a flux formula that works for all modes. As the boundary flux term is
+crucial in many cases, we need to change approach to simplify the calculation of
+this term using (possibly approximate) solutions to the Riemann problem.
+
+\subsubsection{Nodal Discontinuous Galerkin}
+\label{sec:dg_nodal}
+
+
 
 \section{Going further}
 
