@@ -1356,11 +1356,14 @@ as
 Here the \emph{modes} or \emph{modal coefficients} $\hat{a}_n$ are constants. An
 example of a function basis would be
 %
-\begin{align*}
-  \psi_{0}(t, x) &= 1, & \psi_{1}(t, x) &= x, & \psi_{2}(t, x) &= t, \\
-  \psi_{3}(t, x) &= \tfrac{1}{2} x^2, & \psi_{4}(t, x) &= \tfrac{1}{2} t^2, &
-  \psi_{5}(t, x) &= x t.
-\end{align*}
+\begin{equation}
+  \label{eq:dg_monomial_basis}
+  \begin{aligned}
+    \psi_{0}(t, x) &= 1, & \psi_{1}(t, x) &= x, & \psi_{2}(t, x) &= t, \\
+    \psi_{3}(t, x) &= \tfrac{1}{2} x^2, & \psi_{4}(t, x) &= \tfrac{1}{2} t^2, &
+    \psi_{5}(t, x) &= x t.
+  \end{aligned}
+\end{equation}
 %
 These six modes will perfectly describe any function that remains quadratic for
 all space and time.
@@ -1399,20 +1402,122 @@ Therefore our advection equation, including the error term, becomes
 \end{equation}
 %
 
-This looks like a mess. However, the whole point of having a function \emph{basis}
-is to use linear algebra techniques on the basis functions $\psi_n$. By using
+We will now restrict our function basis to be finite, so we only work with a
+finite number of modes. This is of course necessary in order to solve it on a
+computer. We will also choose, or enforce, that the error does not appear in the
+modes that we choose. In other words,
+%
+\begin{align}
+  a(t, x) &= \sum_{n=0}^N \hat{a}(t) \psi_n(x), \\
+  \epsilon(t, x) &= \sum_{n=N+1}^{\infty} \hat{\epsilon}(t) \psi_n(x).
+\end{align}
+%
+We can construct an exact solution to the resulting equation: however, this
+equation is no longer exactly the original problem (although it approaches it
+rapidly as $N \to \infty$). We now have
+%
+\begin{equation}
+  \label{eq:dg_advection2}
+  \sum_{n=0}^{N} \left[ \ddt{\hat{a}_n} \psi_n(x) + \hat{a}_n \ddx{\psi_n}(x) \right] = 0.
+\end{equation}
+%
+We can now use linear algebra techniques on the basis functions $\psi_n$. By using
 the appropriate inner product we can split any equation like~\ref{eq:dg_advection}
 into individual equations for each basis function separately. The standard inner
 product to use is to multiply by another basis function, $\psi_m(x)$, and then
 integrate over the domain. Here that gives, after integration by parts,
 %
 \begin{equation}
-  \label{eq:dg_advection2}
-  \sum_n \left[ \left( \int_V \psi_m(x) \psi_n(x) \right) \left( \ddt{\hat{a}_n} - \hat{\epsilon}_n \right) + \left( \int_{\partial V} \hat{a}_n \psi_m(x) \psi_n(x) \right) - \left( \int_V \hat{a}_n \psi_n(x) \ddx{\psi_m}(x) \right) \right] = 0.
+  \label{eq:dg_advection3}
+  \sum_n \left[ \left( \int_V \psi_m(x) \psi_n(x) \right) \ddt{\hat{a}_n} + \left( \int_{\partial V} \psi_m(x) \psi_n(x) \right) \hat{a}_n - \left( \int_V \psi_n(x) \ddx{\psi_m}(x) \right) \hat{a}_n \right] = 0.
+\end{equation}
+%
+We will, for now, restrict to one dimension and set $V = [-1, 1]$. This can be
+rescaled to cover any cell in one dimension. This simplifies the general form to
+%
+\begin{equation}
+  \label{eq:dg_advection4}
+  \sum_n \left[ \left( \int_{-1}^1 \psi_m(x) \psi_n(x) \right) \ddt{\hat{a}_n} - \left( \int_{-1}^1 \psi_n(x) \ddx{\psi_m}(x) \right) \hat{a}_n \right] = \sum_n -\left[ \psi_m(x) \psi_n(x) \hat{a}_n \right]_{-1}^1.
 \end{equation}
 %
 
+We can write this result as a matrix equation. Define the state vector
+%
+\begin{equation}
+  \label{eq:dg_state_vector}
+  \mathbf{\hat{a}} = (\hat{a}_0, \dots, \hat{a}_N).
+\end{equation}
+%
+Then define the matrices
+%
+\begin{align}
+  \label{eq:dg_mass_matrix}
+  \hat{M}_{mn} &= \int_V \psi_m(x) \psi_n(x), \\
+  \label{eq:dg_stiffness_matrix}
+  \hat{S}_{mn} &= \int_V \psi_n(x) \ddx{\psi_m}(x),
+\end{align}
+%
+which can be pre-calculated and stored for repeated use. These are typically
+referred to (building on finite \emph{element} work) as the \emph{mass} matrix
+($\hat{M}$) and the \emph{stiffness} matrix ($\hat{S}$). We therefore finally
+have
+%
+\begin{equation}
+  \label{eq:dg_advection5}
+  \hat{M} \ddt \mathbf{\hat{a}} + \hat{S} \mathbf{\hat{a}} = -\left[ \dots \right]_{-1}^1.
+\end{equation}
+%
+The right hand side term is not yet expanded as it requires coupling to
+neighbouring cells, or boundary conditions. Focus on the other terms first.
 
+We see that, once we have evaluated the mass and stiffness matrices, we can then
+update \emph{all} modes $\mathbf{\hat{a}}$ by evaluating the boundary flux term
+on the right hand side and solving a linear system. This illustrates the small
+stencil of discontinuous Galerkin schemes: the only coupling to the other cells
+is through that boundary integral, which only couples to direct neighbours.
+
+We also see that the behaviour of the scheme will crucially depend on the mass
+matrix $\hat{M}$. If it is singular the scheme cannot work. If it is poorly
+conditioned then the scheme will rapidly lose accuracy. Crucially, with the
+monomial basis of equation~\ref{eq:dg_monomial_basis}, the condition number of
+the mass matrix grows very rapidly, and the scheme loses accuracy for moderate
+$N$. Instead, it is sensible to pick as a function basis something from the class
+of \emph{orthogonal polynomials}, where
+%
+\begin{equation}
+  \label{eq:dg_orthog_polys}
+  \int_V w(x) \psi_m(x) \psi_n(x) \propto \delta_{mn}.
+\end{equation}
+%
+The Kronecker delta $\delta_{mn}$ ensures that the mass matrix is diagonal, and
+hence always easy to invert.
+When the \emph{weight function} $w(x)$ is identically $1$, as needed for the
+mass matrix in equation~\ref{eq:dg_mass_matrix}, this suggests we should use the
+\emph{Legendre polynomials} $\psi_n(x) = P_n(x)$, which obey
+%
+\begin{equation}
+  \label{eq:dg_legendre_poly}
+  \int_{-1}^1 P_m(x) P_n(x) = \frac{2}{2 n + 1} \delta_{mn}.
+\end{equation}
+%
+A further simplification comes from choosing the normalized Legendre polynomials
+%
+\begin{equation}
+  \label{eq:dg_legendre_poly_norm}
+  \tilde{P}_n(x) = \sqrt{\frac{2 n + 1}{2}} P_n(x)
+\end{equation}
+%
+which ensures that the mass matrix $\hat{M}$ is the identity matrix.
+
+Now that we have fixed a choice of basis functions we can evaluate the mass
+matrix (which will be the identity here) and the stiffness matrix $\hat{S}$. We
+still need to evaluate the boundary flux. If we explicitly write out equation~\ref{eq:dg_advection5}
+in index form we have
+%
+\begin{equation}
+  \label{eq:dg_advection6}
+  \hat{M}_{mn} \ddt \hat{a}_n + \hat{S}_{mn} \hat{a}_n = -\left[  \right]_{-1}^1.
+\end{equation}
 
 \section{Going further}
 
