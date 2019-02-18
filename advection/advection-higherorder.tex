@@ -1398,7 +1398,7 @@ Therefore our advection equation, including the error term, becomes
 \begin{equation}
   \label{eq:dg_advection}
   \sum_n \left[ \left( \ddt{\hat{a}_n} - \hat{\epsilon}_n \right) \psi_n(x) +
-  \hat{a}_n \ddx{\psi_n}(x) \right] = 0.
+  u \hat{a}_n \ddx{\psi_n}(x) \right] = 0.
 \end{equation}
 %
 
@@ -1418,7 +1418,7 @@ rapidly as $N \to \infty$). We now have
 %
 \begin{equation}
   \label{eq:dg_advection2}
-  \sum_{n=0}^{N} \left[ \ddt{\hat{a}_n} \psi_n(x) + \hat{a}_n \ddx{\psi_n}(x) \right] = 0.
+  \sum_{n=0}^{N} \left[ \ddt{\hat{a}_n} \psi_n(x) + u \hat{a}_n \ddx{\psi_n}(x) \right] = 0.
 \end{equation}
 %
 We can now use linear algebra techniques on the basis functions $\psi_n$. By using
@@ -1429,7 +1429,7 @@ integrate over the domain. Here that gives, after integration by parts,
 %
 \begin{equation}
   \label{eq:dg_advection3}
-  \sum_n \left[ \left( \int_V \psi_m(x) \psi_n(x) \right) \ddt{\hat{a}_n} + \left( \int_{\partial V} \psi_m(x) \psi_n(x) \right) \hat{a}_n - \left( \int_V \psi_n(x) \ddx{\psi_m}(x) \right) \hat{a}_n \right] = 0.
+  \sum_n \left[ \left( \int_V \psi_m(x) \psi_n(x) \right) \ddt{\hat{a}_n} + \left( \int_{\partial V} \psi_m(x) \psi_n(x) \right) u \hat{a}_n - \left( \int_V \psi_n(x) \ddx{\psi_m}(x) \right) u \hat{a}_n \right] = 0.
 \end{equation}
 %
 We will, for now, restrict to one dimension and set $V = [-1, 1]$. This can be
@@ -1437,7 +1437,7 @@ rescaled to cover any cell in one dimension. This simplifies the general form to
 %
 \begin{equation}
   \label{eq:dg_advection4}
-  \sum_n \left[ \left( \int_{-1}^1 \psi_m(x) \psi_n(x) \right) \ddt{\hat{a}_n} - \left( \int_{-1}^1 \psi_n(x) \ddx{\psi_m}(x) \right) \hat{a}_n \right] = \sum_n -\left[ \psi_m(x) \psi_n(x) \hat{a}_n \right]_{-1}^1.
+  \sum_n \left[ \left( \int_{-1}^1 \psi_m(x) \psi_n(x) \right) \ddt{\hat{a}_n} - \left( \int_{-1}^1 \psi_n(x) \ddx{\psi_m}(x) \right) u \hat{a}_n \right] = \sum_n -\left[ \psi_m(x) \psi_n(x) u \hat{a}_n \right]_{-1}^1.
 \end{equation}
 %
 
@@ -1454,7 +1454,7 @@ Then define the matrices
   \label{eq:dg_mass_matrix}
   \hat{M}_{mn} &= \int_V \psi_m(x) \psi_n(x), \\
   \label{eq:dg_stiffness_matrix}
-  \hat{S}_{mn} &= \int_V \psi_n(x) \ddx{\psi_m}(x),
+  \hat{S}_{mn} &= \int_V \psi_m(x) \ddx{\psi_n}(x),
 \end{align}
 %
 which can be pre-calculated and stored for repeated use. These are typically
@@ -1464,7 +1464,7 @@ have
 %
 \begin{equation}
   \label{eq:dg_advection5}
-  \hat{M} \ddt{\mathbf{\hat{a}}} + \hat{S} \mathbf{\hat{a}} = -\left[ \dots \right]_{-1}^1.
+  \hat{M} \ddt{\mathbf{\hat{a}}} + \hat{S}^T u \mathbf{\hat{a}} = -\left[ \dots \right]_{-1}^1.
 \end{equation}
 %
 The right hand side term is not yet expanded as it requires coupling to
@@ -1516,7 +1516,7 @@ in index form we have
 %
 \begin{equation}
   \label{eq:dg_advection6}
-  \hat{M}_{mn} \ddt{\hat{a}_n} + \hat{S}_{mn} \hat{a}_n = -\left[  \right]_{-1}^1.
+  \hat{M}_{mn} \ddt{\hat{a}_n} + \hat{S}^T_{mn} u \hat{a}_n = -\left[  \right]_{-1}^1.
 \end{equation}
 
 \section{Going further}
