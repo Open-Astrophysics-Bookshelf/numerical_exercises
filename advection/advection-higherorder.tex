@@ -1600,7 +1600,7 @@ By defining a (generalized) \emph{Vandermonde} matrix $\hat{V}$ as
 %
 \begin{equation}
   \label{eq:dg_nodal_vandermonde2}
-  \hat{V}_{nj} = \psi_n(\xi_j)
+  \hat{V}_{jn} = \psi_n(\xi_j)
 \end{equation}
 %
 we see that we can translate from the modal state vector
@@ -1612,14 +1612,46 @@ $\mathbf{a} = (a_0, \dots, a_N)^T$ via the matrix equation
   \hat{V} \mathbf{\hat{a}} = \mathbf{a}.
 \end{equation}
 
-We have constructed the modal scheme to be well conditioned by looking at the
-mass matrix. This suggests that to make the nodal scheme well behaved we should
-ensure good conditioning of the Vandermonde matrix. This requires carefully
-choosing the nodes $\xi_i$. We also want to ensure that two of the nodes are at
-$x = \pm 1$, and that the accuracy of the scheme is as good as possible. All
-these conditions combine to suggest that the nodes $\xi_i$ should be given by
-the \emph{Legendre-Gauss-Lobatto} points, which are the zeros of $P_N'(x)$
-combined with $\pm 1$.
+We can also connect the basis functions $\psi_n$ to the interpolating polynomials
+$\ell_i$ via the Vandermonde matrix. Note that
+%
+\begin{subequations}
+  \label{eq:dg_nodal_vandermonde4}
+  \begin{align}
+      && a(t, x) &= \sum_n \hat{a}_n \psi_n(x) \\
+      && &= \sum_i a_i \ell_i(x) \\
+      && &= \sum_i \sum_n \hat{V}_{in} \hat{a}_n \ell_i(x) \\
+      && &= \sum_n \sum_i \hat{V}_{in} \hat{a}_n \ell_i(x) \\
+      \implies && 0 &= \sum_n \hat{a}_n \left( \sum_i \left[ \hat{V}_{in} \ell_i(x) - \psi_n(x) \right] \right).
+  \end{align}
+\end{subequations}
+%
+This immediately gives
+%
+\begin{equation}
+  \label{eq:dg_nodal_vandermonde5}
+  \hat{V}_{in} \ell_i(x) = \psi_n(x)
+\end{equation}
+%
+or, by thinking of the basis functions and interpolating polynomials as vectors,
+%
+\begin{equation}
+  \label{eq:dg_nodal_vandermonde6}
+  \hat{V}^T \mathbf{\ell}(x) = \mathbf{\psi}(x).
+\end{equation}
+%
+This allows us to convert the modal approach to deriving a scheme to a nodal
+approach directly through the Vandermonde matrix.
+
+Before constructing the nodal scheme we should fix the location of the nodal
+points. We have constructed the modal scheme to be well conditioned by looking
+at the mass matrix. This suggests that to make the nodal scheme well behaved we
+should ensure good conditioning of the Vandermonde matrix. This requires
+carefully choosing the nodes $\xi_i$. We also want to ensure that two of the
+nodes are at $x = \pm 1$, and that the accuracy of the scheme is as good as
+possible. All these conditions combine to suggest that the nodes $\xi_i$ should
+be given by the \emph{Legendre-Gauss-Lobatto} points, which are the zeros of
+$P_N'(x)$ combined with $\pm 1$.
 
 
 
