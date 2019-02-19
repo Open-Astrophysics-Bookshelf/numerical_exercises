@@ -1452,9 +1452,9 @@ Then define the matrices
 %
 \begin{align}
   \label{eq:dg_mass_matrix}
-  \hat{M}_{mn} &= \int_V \psi_m(x) \psi_n(x), \\
+  \hat{M}_{mn} &= \int_{-1}^1 \psi_m(x) \psi_n(x), \\
   \label{eq:dg_stiffness_matrix}
-  \hat{S}_{mn} &= \int_V \psi_m(x) \ddx{\psi_n}(x),
+  \hat{S}_{mn} &= \int_{-1}^1 \psi_m(x) \ddx{\psi_n}(x),
 \end{align}
 %
 which can be pre-calculated and stored for repeated use. These are typically
@@ -1558,6 +1558,68 @@ this term using (possibly approximate) solutions to the Riemann problem.
 
 \subsubsection{Nodal Discontinuous Galerkin}
 \label{sec:dg_nodal}
+
+A problem with the modal form used above is with the boundary flux term. In
+standard finite volume schemes we need the value of the function either side of
+the interface. This suggests that, rather than using a modal expansion as above,
+we should use a \emph{nodal} expansion where the values of the functions are
+known at particular points. If two of those points are at the boundaries of the
+cell then those values can be used to compute the flux.
+
+Let us denote these nodal locations by $\xi_i$, and the values of the solution
+at these locations by $a_i$. We therefore have our solution in the form
+%
+\begin{equation}
+  \label{eq:dg_nodal_interp}
+  a(t, x) = \sum_{i=0}^N a_i(t) \ell_i(x)
+\end{equation}
+%
+where the $\ell_i(x)$ are the standard indicator interpolating polynomials that
+obey
+%
+\begin{equation}
+  \label{eq:dg_nodal_interp_indicator}
+  \ell_i(\xi_j) = \delta_{ij}.
+\end{equation}
+%
+Our \emph{modal} form of the solution writes
+%
+\begin{equation}
+  \tag{\ref{eq:dg_fn_basis_split}}
+  a(t, x) = \sum_n \hat{a}_n(t) \psi_n(x),
+\end{equation}
+%
+so by evaluating both forms at a node $\xi_j$ we get
+%
+\begin{equation}
+  \label{eq:dg_nodal_vandermonde1}
+  a_j = \sum_n \psi_n(\xi_j) \hat{a}_n.
+\end{equation}
+%
+By defining a (generalized) \emph{Vandermonde} matrix $\hat{V}$ as
+%
+\begin{equation}
+  \label{eq:dg_nodal_vandermonde2}
+  \hat{V}_{nj} = \psi_n(\xi_j)
+\end{equation}
+%
+we see that we can translate from the modal state vector
+$\mathbf{\hat{a}} = (\hat{a}_0, \dots, \hat{a}_N)^T$ to the nodal state vector
+$\mathbf{a} = (a_0, \dots, a_N)^T$ via the matrix equation
+%
+\begin{equation}
+  \label{eq:dg_nodal_vandermonde3}
+  \hat{V} \mathbf{\hat{a}} = \mathbf{a}.
+\end{equation}
+
+We have constructed the modal scheme to be well conditioned by looking at the
+mass matrix. This suggests that to make the nodal scheme well behaved we should
+ensure good conditioning of the Vandermonde matrix. This requires carefully
+choosing the nodes $\xi_i$. We also want to ensure that two of the nodes are at
+$x = \pm 1$, and that the accuracy of the scheme is as good as possible. All
+these conditions combine to suggest that the nodes $\xi_i$ should be given by
+the \emph{Legendre-Gauss-Lobatto} points, which are the zeros of $P_N'(x)$
+combined with $\pm 1$.
 
 
 
