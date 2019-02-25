@@ -1691,7 +1691,7 @@ or, by thinking of the basis functions and interpolating polynomials as vectors,
 This allows us to convert the modal approach to deriving a scheme to a nodal
 approach directly through the Vandermonde matrix.
 
-Before constructing the nodal scheme we should fix the location of the nodal
+To construct the nodal scheme we need to fix the location of the nodal
 points. We have constructed the modal scheme to be well conditioned by looking
 at the mass matrix. This suggests that to make the nodal scheme well behaved we
 should ensure good conditioning of the Vandermonde matrix. This requires
@@ -1701,6 +1701,102 @@ possible. All these conditions combine to suggest that the nodes $\xi_i$ should
 be given by the \emph{Legendre-Gauss-Lobatto} points, which are the zeros of
 $P_N'(x)$ combined with $\pm 1$.
 
+With these restrictions, we can now construct the nodal scheme. As noted above,
+this scheme remains a modal scheme as generally introduced in section~\ref{sec:dg_basis},
+but the basis functions are the indicator polynomials $\ell_n(x)$. Thus the
+scheme can be written in the mass matrix form
+%
+\begin{equation}
+  \tag{\ref{eq:dg_advection5}}
+  \hat{M} \ddt{\bm{\hat{a}}} + \hat{S}^T u \bm{\hat{a}} = -\left[ \bm{\psi F} \right]_{-1}^1,
+\end{equation}
+%
+but now the two matrices are given by
+%
+\begin{align}
+  \label{eq:dg_nodal_mass_matrix}
+  \hat{M}_{ln} &= \int_{-1}^1 \ell_l(x) \ell_n(x), \\
+  \label{eq:dg_nodal_stiffness_matrix}
+  \hat{S}_{ln} &= \int_{-1}^1 \ell_l(x) \ddx{\ell_n}(x).
+\end{align}
+%
+By using the Vandermonde matrix to link the nodal basis to an orthogonal basis
+such as the Legendre polynomials we can simplify the mass matrix to
+%
+\begin{equation}
+  \label{eq:dg_nodal_mass_matrix_from_V}
+  \hat{M} = \left( \hat{V} \hat{V}^T \right)^{-1}.
+\end{equation}
+%
+The stiffness matrix can also be simplified, by re-writing $\ddx{\ell_n}(x)$ as
+an expansion in terms of $\ell_n(x)$. Defining the \emph{differentiation matrix}
+$\hat{D}$ as
+%
+\begin{equation}
+  \label{eq:dg_nodal_differentiation}
+  \hat{D}_{ln} = \left. \ddx{\ell_n}(x) \right|_{x = \xi_l}
+\end{equation}
+%
+we have $\ddx{\ell_n}(x) = \sum_k \hat{D}_{kn} \ell_k(x)$
+%
+\begin{subequations}
+  \label{eq:dg_nodal_stiffness_matrix_from_D_steps}
+  \begin{align}
+    \hat{S}_{ln} &= \int_{-1}^1 \ell_l(x) \ddx{\ell_n}(x) \\
+    &= \int_{-1}^1 \ell_l(x) \sum_k \hat{D}_{kn} \ell_k(x) \\
+    &= \sum_k \left( \ell_l(x) \ell_k(x) \right) \hat{D}_{kn} \\
+    &= \hat{M}_{lk} \hat{D}_kn.
+  \end{align}
+\end{subequations}
+%
+This shows that the stiffness matrix simplifies to
+%
+\begin{equation}
+  \label{eq:dg_nodal_stiffness_matrix_from_V}
+  \hat{S} = \hat{M} \hat{D}.
+\end{equation}
+%
+Finally, using similar methods to the steps above, we can link the differentiation
+matrix back to the Vandermonde matrix, via
+%
+\begin{equation}
+  \label{eq:dg_nodal_D_matrix_from_V}
+  \hat{D} = \left( \ddx{V} \right) \hat{V}^{-1}.
+\end{equation}
+%
+This is primarily useful when the modal function basis is a standard library
+function such as the (normalized) Legendre polynomials. This means that the
+basis functions and their derivatives, and hence the Vandermonde matrix and its
+derivatives, can be written solely in terms of library functions. For example,
+in Python the \texttt{numpy} package contains (in \texttt{numpy.polynomial.legendre})
+the functions \texttt{legval} (which evaluates the Legendre polynomials),
+\texttt{legder} (which links the derivatives of the Legendre polynomials back to
+the Legendre polynomials themselves), and \texttt{legvander} (which evaluates
+the Vandermonde matrix directly, but in un-normalized form).
+
+There is one final step needed to construct the full scheme. So far, the method
+has been built assuming a single element with the coordinates $x \in [-1, 1]$.
+For most cases we will want to use a ``small'' number of modes, say $m \le 5$,
+and split the domain into $N$ elements, like the cells in a finite volume scheme.
+If we assume a general element has coordinates $x \in [x_{j-1/2}, x_{j+1/2}]$
+with width $\Delta x$, then the \emph{form} of the scheme remains the same:
+%
+\begin{equation}
+  \label{eq:dg_nodal_final}
+  M \ddt{\bm{\hat{a}}} + S^T u \bm{\hat{a}} = -\left[ \bm{\psi F} \right]_{x_{j-1/2}}^{x_{j+1/2}}.
+\end{equation}
+%
+However, the change of coordinates needs to be factored in. We can see how this
+works by looking at the integral definitions, such as~\eqref{eq:dg_nodal_mass_matrix}
+and~\eqref{eq:dg_nodal_stiffness_matrix}. We see that the mass matrix transforms
+as
+%
+\begin{equation}
+  \label{eq:dg_nodal_mass_matrix_with_h}
+  M = \frac{\Delta x}{2} \hat{M},
+\end{equation}
+%
+but that the stiffness matrix is unchanged.
 
 
 \section{Going further}
