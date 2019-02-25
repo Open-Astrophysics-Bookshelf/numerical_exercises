@@ -1380,13 +1380,24 @@ represent the solution using a purely spatial function basis, as
 Now the modes depend on time, and there will only be three basis functions
 needed to describe quadratic data.
 
-Let us take our solution written in terms of a function basis from equation~\ref{eq:dg_fn_basis_split}
-and plug it into the advection equation~\ref{eq:ho-advect}. Unless we use an
-infinite number of basis functions $\psi_n$ we will not have a perfect solution
-to the advection equation in general, and so the equation will not be perfectly
-satisfied. There will be some resulting error, $\epsilon(t, x)$. As our function
-basis can describe any function, we expand the error in terms of the $\psi_n$ as
-well, as
+Clearly we cannot store an infinite number of modes. By restricting our sum to
+the $m+1$ modes by writing
+%
+\begin{equation}
+  \label{eq:dg_fn_basis_split}
+  a(t, x) = \sum_{n=0}^{m} \hat{a}_n(t) \psi_n(x)
+\end{equation}
+%
+we are restricting out solution to live in a finite dimensional function space
+(denoted $\mathbb{V}$) with basis $\{ \psi_n \}, \ n = 0, \dots, m$.
+That means that, in general, any solution $a(t, x)$ will have an error when
+plugged into the advection equation~\ref{eq:ho-advect}.
+We can pick out \emph{a} solution by insisting that this error is orthogonal to
+$\mathbb{V}$.
+
+To see how this works, write the error term as $\epsilon(t, x)$.
+As our (infinite dimensional) function basis can describe any function, we
+expand the error in terms of the $\psi_n$ as well, as
 %
 \begin{equation}
   \label{eq:dg_error}
@@ -1401,45 +1412,38 @@ Therefore our advection equation, including the error term, becomes
   u \hat{a}_n \ddx{\psi_n}(x) \right] = 0.
 \end{equation}
 %
-
-We will now restrict our function basis to be finite, so we only work with a
-finite number of modes. This is of course necessary in order to solve it on a
-computer. We will also choose, or enforce, that the error does not appear in the
-modes that we choose. In other words,
-%
-\begin{align}
-  a(t, x) &= \sum_{n=0}^N \hat{a}(t) \psi_n(x), \\
-  \epsilon(t, x) &= \sum_{n=N+1}^{\infty} \hat{\epsilon}(t) \psi_n(x).
-\end{align}
-%
-We can construct an exact solution to the resulting equation: however, this
-equation is no longer exactly the original problem (although it approaches it
-rapidly as $N \to \infty$). We now have
+As our solution is finite dimensional this can be written as
 %
 \begin{equation}
   \label{eq:dg_advection2}
-  \sum_{n=0}^{N} \left[ \ddt{\hat{a}_n} \psi_n(x) + u \hat{a}_n \ddx{\psi_n}(x) \right] = 0.
+  \sum_{n=0}^{m} \left[ \ddt{\hat{a}_n} \psi_n(x) +
+  u \hat{a}_n \ddx{\psi_n}(x) \right] = \sum{n=m+1}^{\infty} \hat{\epsilon}_n \psi_n(x).
 \end{equation}
 %
-We can now use linear algebra techniques on the basis functions $\psi_n$. By using
-the appropriate inner product we can split any equation like~\ref{eq:dg_advection}
-into individual equations for each basis function separately. The standard inner
-product to use is to multiply by another basis function, $\psi_m(x)$, and then
-integrate over the domain. Here that gives, after integration by parts,
+We have used here that the orthogonality of the error requires $\hat{\epsilon}_n$
+does not contribute for $n = 0, \dots, m$.
+Using standard linear algebra techniques (as $\psi_n$ is a \emph{basis}), we can
+get individual equations by taking the inner product with another member of the
+basis. If we were dealing with vectors in $\mathbb{R}^n$ then the inner product
+would be a vector dot product. As we are dealing with functions the inner
+product requires multiplication and integration over the domain,
 %
 \begin{equation}
-  \label{eq:dg_advection3}
-  \sum_n \left[ \left( \int_V \psi_m(x) \psi_n(x) \right) \ddt{\hat{a}_n} + \left( \int_{\partial V} \psi_m(x) \psi_n(x) \right) u \hat{a}_n - \left( \int_V \psi_n(x) \ddx{\psi_m}(x) \right) u \hat{a}_n \right] = 0.
+  \label{eq:dg_inner_product}
+  \langle f(x), \psi_l(x) \rangle = \int_V \text{d} x \, f(x) \psi_l(x).
 \end{equation}
 %
-We will, for now, restrict to one dimension and set $V = [-1, 1]$. This can be
-rescaled to cover any cell in one dimension. This simplifies the general form to
+This will also write the conservation law in the integral, weak, form.
+This leads to, after integrating by parts,
 %
 \begin{equation}
-  \label{eq:dg_advection4}
-  \sum_n \left[ \left( \int_{-1}^1 \psi_m(x) \psi_n(x) \right) \ddt{\hat{a}_n} - \left( \int_{-1}^1 \psi_n(x) \ddx{\psi_m}(x) \right) u \hat{a}_n \right] = \sum_n -\left[ \psi_m(x) \psi_n(x) u \hat{a}_n \right]_{-1}^1.
+  \label{eq:dg_advection2}
+  \sum_{n=0}^{m} \left[ \ddt{\hat{a}_n} \left( \int_V \text{d} x \ \psi_n(x) \psi_l(x) \right) + \left\{ \int_{\partial V} u \hat{a}_n \psi_n(x) \psi_l(x) \right\} -
+  u \hat{a}_n \int_V \text{d} x \, \psi_n \ddx{\psi_l }(x) \right] = \sum{n=m+1}^{\infty} \hat{\epsilon}_n \int_V \text{d} x\, \psi_n(x) \psi_l(x).
 \end{equation}
 %
+Restricting ourselves to the first $m+1$ modes we see only the left hand side
+contributes.
 
 We can write this result as a matrix equation. Define the state vector
 %
@@ -1448,13 +1452,14 @@ We can write this result as a matrix equation. Define the state vector
   \mathbf{\hat{a}} = (\hat{a}_0, \dots, \hat{a}_N)^T.
 \end{equation}
 %
-Then define the matrices
+For now, restrict to one dimension and set $V = [-1, 1]$: we can use a
+coordinate transformation to covert to other domains. Then define the matrices
 %
 \begin{align}
   \label{eq:dg_mass_matrix}
-  \hat{M}_{mn} &= \int_{-1}^1 \psi_m(x) \psi_n(x), \\
+  \hat{M}_{ln} &= \int_{-1}^1 \psi_l(x) \psi_n(x), \\
   \label{eq:dg_stiffness_matrix}
-  \hat{S}_{mn} &= \int_{-1}^1 \psi_m(x) \ddx{\psi_n}(x),
+  \hat{S}_{ln} &= \int_{-1}^1 \psi_l(x) \ddx{\psi_n}(x),
 \end{align}
 %
 which can be pre-calculated and stored for repeated use. These are typically
@@ -1464,32 +1469,50 @@ have
 %
 \begin{equation}
   \label{eq:dg_advection5}
-  \hat{M} \ddt{\mathbf{\hat{a}}} + \hat{S}^T u \mathbf{\hat{a}} = -\left[ \dots \right]_{-1}^1.
+  \hat{M} \ddt{\mathbf{\hat{a}}} + \hat{S}^T u \mathbf{\hat{a}} = -\left[ \mathbf{\psi F} \right]_{-1}^1.
 \end{equation}
 %
-The right hand side term is not yet expanded as it requires coupling to
-neighbouring cells, or boundary conditions. Focus on the other terms first.
+The right hand side term is the \emph{boundary flux} and requires coupling to
+neighbouring cells, or boundary conditions. It requires evaluating a product of
+basis functions $\psi_l(x) \psi_n(x)$ at the boundary of the domain.
 
 We see that, once we have evaluated the mass and stiffness matrices, we can then
 update \emph{all} modes $\mathbf{\hat{a}}$ by evaluating the boundary flux term
 on the right hand side and solving a linear system. This illustrates the small
 stencil of discontinuous Galerkin schemes: the only coupling to the other cells
 is through that boundary integral, which only couples to direct neighbours.
+However, if the flux terms couple different modes (as evaluating them requires
+evaluating a product of basis functions $\psi_l(x) \psi_n(x)$), then the amount
+of information communicated may still be large. Therefore the communication cost
+of the scheme is linked to the properties of the basis functions at the domain
+boundary.
 
 We also see that the behaviour of the scheme will crucially depend on the mass
 matrix $\hat{M}$. If it is singular the scheme cannot work. If it is poorly
 conditioned then the scheme will rapidly lose accuracy. Crucially, with the
 monomial basis of equation~\ref{eq:dg_monomial_basis}, the condition number of
 the mass matrix grows very rapidly, and the scheme loses accuracy for moderate
-$N$. Instead, it is sensible to pick as a function basis something from the class
+$m$.
+
+The choice of whether to prioritize the behaviour of the mass matrix or the
+flux terms leads to two different schemes.
+
+\subsubsection{Modal Discontinuous Galerkin}
+\label{sec:dg_modal}
+
+If we prioritize the behaviour of the mass matrix as the most important starting
+point for our scheme we are led to the \emph{modal} Discontinuous Galerkin
+approach. We noted above that the choice of a monomial basis led to a poorly
+conditioned mass matrix.
+Instead, it is sensible to pick as a function basis something from the class
 of \emph{orthogonal polynomials}, where
 %
 \begin{equation}
   \label{eq:dg_orthog_polys}
-  \int_V w(x) \psi_m(x) \psi_n(x) \propto \delta_{mn}.
+  \int_V w(x) \psi_l(x) \psi_n(x) \propto \delta_{ln}.
 \end{equation}
 %
-The Kronecker delta $\delta_{mn}$ ensures that the mass matrix is diagonal, and
+The Kronecker delta $\delta_{ln}$ ensures that the mass matrix is diagonal, and
 hence always easy to invert.
 When the \emph{weight function} $w(x)$ is identically $1$, as needed for the
 mass matrix in equation~\ref{eq:dg_mass_matrix}, this suggests we should use the
@@ -1497,7 +1520,7 @@ mass matrix in equation~\ref{eq:dg_mass_matrix}, this suggests we should use the
 %
 \begin{equation}
   \label{eq:dg_legendre_poly}
-  \int_{-1}^1 P_m(x) P_n(x) = \frac{2}{2 n + 1} \delta_{mn}.
+  \int_{-1}^1 P_l(x) P_n(x) = \frac{2}{2 n + 1} \delta_{ln}.
 \end{equation}
 %
 A further simplification comes from choosing the normalized Legendre polynomials
@@ -1516,7 +1539,7 @@ in index form (using Einstein summation convention over $n$) we have
 %
 \begin{equation}
   \label{eq:dg_advection6}
-  \hat{M}_{mn} \ddt{\hat{a}_n} + \hat{S}^T_{mn} u \hat{a}_n = -\left[ u P_m(x) P_n(x) \hat{a}_n \right]_{-1}^1.
+  \hat{M}_{ln} \ddt{\hat{a}_n} + \hat{S}^T_{ln} u \hat{a}_n = -\left[ u P_l(x) P_n(x) \hat{a}_n \right]_{-1}^1.
 \end{equation}
 %
 We can now directly use that $P_n(1) = 1$ and $P_n(-1) = (-1)^n$ to get the
@@ -1524,7 +1547,7 @@ boundary flux term as
 %
 \begin{equation}
   \label{eq:dg_boundary_flux_modal}
-  -\left[ u P_m(x) P_n(x) \hat{a}_n \right]_{-1}^1 = u \left\{ (-1)^{m+n} A_n(-1) - A_n(1) \right\}.
+  -\left[ u P_l(x) P_n(x) \hat{a}_n \right]_{-1}^1 = u \left\{ (-1)^{l+n} A_n(-1) - A_n(1) \right\}.
 \end{equation}
 %
 Here $A_n(1)$, for example, is the $n^{\text{th}}$ mode of the solution at the
@@ -1559,19 +1582,23 @@ this term using (possibly approximate) solutions to the Riemann problem.
 \subsubsection{Nodal Discontinuous Galerkin}
 \label{sec:dg_nodal}
 
-A problem with the modal form used above is with the boundary flux term. In
-standard finite volume schemes we need the value of the function either side of
-the interface. This suggests that, rather than using a modal expansion as above,
-we should use a \emph{nodal} expansion where the values of the functions are
-known at particular points. If two of those points are at the boundaries of the
-cell then those values can be used to compute the flux.
+A problem with the modal form used above is with the boundary flux term.
+The solution (for nonlinear equations) of the flux for higher order modes is
+complex. The mode coupling at the boundary also means the amount of information
+communicated could be large, meaning the scheme is not as efficient as it could
+be. Instead we note that in standard finite volume schemes we need the value of
+the function either side of the interface. This suggests that, rather than using
+a modal expansion as above, we should use a \emph{nodal} expansion where the
+values of the functions are known at particular points. If two of those points
+are at the boundaries of the cell then those values can be used to compute the
+flux.
 
 Let us denote these nodal locations by $\xi_i$, and the values of the solution
 at these locations by $a_i$. We therefore have our solution in the form
 %
 \begin{equation}
   \label{eq:dg_nodal_interp}
-  a(t, x) = \sum_{i=0}^N a_i(t) \ell_i(x)
+  a(t, x) = \sum_{i=0}^m a_i(t) \ell_i(x)
 \end{equation}
 %
 where the $\ell_i(x)$ are the standard indicator interpolating polynomials that
@@ -1582,14 +1609,32 @@ obey
   \ell_i(\xi_j) = \delta_{ij}.
 \end{equation}
 %
-Our \emph{modal} form of the solution writes
+This directly matches the \emph{modal} form of the solution,
 %
 \begin{equation}
   \tag{\ref{eq:dg_fn_basis_split}}
   a(t, x) = \sum_n \hat{a}_n(t) \psi_n(x),
 \end{equation}
 %
-so by evaluating both forms at a node $\xi_j$ we get
+with the basis functions $\psi_n$ being the indicator polynomials $\ell_n$. We
+immediately see that the boundary flux term will simplify hugely, as the only
+term that is non-zero at $x=-1$ comes from the product of $\ell_0(-1) \ell_0(-1)$,
+using the convention that $\xi_0 = -1$, as $\ell_n(-1) = 0$ for $n \ne 0$.
+Similarly the only term that is non-zero at $x=+1$ comes from the product of
+$\ell_m(-1) \ell_m(-1)$. Therefore, for any number of modes $m$, we only need to
+communicate one piece of information from the neighbouring element in order to
+solve the Riemann problem, and this is the value of the solution at that interface.
+
+However, by choosing as a basis the indicator polynomials $\ell_n(x)$, the
+resulting mass matrix will not be the identity, as the indicator polynomials are
+not orthogonal. The properties of the mass matrix will now crucially depend on
+how we choose the locations of the nodes, $\xi_i$. This is most easily done by
+linking the nodal form of equation~\eqref{eq:dg_nodal_interp} to the modal
+form~\eqref{eq:dg_fn_basis_split}, where here we are thinking of $\psi_n$ as
+being a different basis ($\psi_n \ne \ell_n$) which is known to be well behaved.
+This implicitly allows us to restrict $\xi_j$.
+
+By evaluating both forms at a node $\xi_j$ we get
 %
 \begin{equation}
   \label{eq:dg_nodal_vandermonde1}
