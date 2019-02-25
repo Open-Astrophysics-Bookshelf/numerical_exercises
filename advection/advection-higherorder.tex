@@ -1416,8 +1416,9 @@ As our solution is finite dimensional this can be written as
 %
 \begin{equation}
   \label{eq:dg_advection2}
-  \sum_{n=0}^{m} \left[ \ddt{\hat{a}_n} \psi_n(x) +
-  u \hat{a}_n \ddx{\psi_n}(x) \right] = \sum{n=m+1}^{\infty} \hat{\epsilon}_n \psi_n(x).
+    \sum_{n=0}^{m} \left[ \ddt{\hat{a}_n} \psi_n(x) +
+    u \hat{a}_n \ddx{\psi_n}(x) \right] =
+    \sum_{n=m+1}^{\infty} \hat{\epsilon}_n \psi_n(x).
 \end{equation}
 %
 We have used here that the orthogonality of the error requires $\hat{\epsilon}_n$
@@ -1437,9 +1438,11 @@ This will also write the conservation law in the integral, weak, form.
 This leads to, after integrating by parts,
 %
 \begin{equation}
-  \label{eq:dg_advection2}
-  \sum_{n=0}^{m} \left[ \ddt{\hat{a}_n} \left( \int_V \text{d} x \ \psi_n(x) \psi_l(x) \right) + \left\{ \int_{\partial V} u \hat{a}_n \psi_n(x) \psi_l(x) \right\} -
-  u \hat{a}_n \int_V \text{d} x \, \psi_n \ddx{\psi_l }(x) \right] = \sum{n=m+1}^{\infty} \hat{\epsilon}_n \int_V \text{d} x\, \psi_n(x) \psi_l(x).
+  \label{eq:dg_advection3}
+  \begin{split}
+    \sum_{n=0}^{m} & \left[ \ddt{\hat{a}_n} \left( \int_V \text{d} x \ \psi_n(x) \psi_l(x) \right) + \left\{ \int_{\partial V} u \hat{a}_n \psi_n(x) \psi_l(x) \right\} -
+    u \hat{a}_n \int_V \text{d} x \, \psi_n \ddx{\psi_l }(x) \right] = \\ \sum_{n=m+1}^{\infty} & \hat{\epsilon}_n \int_V \text{d} x\, \psi_n(x) \psi_l(x).
+  \end{split}
 \end{equation}
 %
 Restricting ourselves to the first $m+1$ modes we see only the left hand side
@@ -1449,7 +1452,7 @@ We can write this result as a matrix equation. Define the state vector
 %
 \begin{equation}
   \label{eq:dg_state_vector}
-  \mathbf{\hat{a}} = (\hat{a}_0, \dots, \hat{a}_N)^T.
+  \bm{\hat{a}} = (\hat{a}_0, \dots, \hat{a}_N)^T.
 \end{equation}
 %
 For now, restrict to one dimension and set $V = [-1, 1]$: we can use a
@@ -1469,7 +1472,7 @@ have
 %
 \begin{equation}
   \label{eq:dg_advection5}
-  \hat{M} \ddt{\mathbf{\hat{a}}} + \hat{S}^T u \mathbf{\hat{a}} = -\left[ \mathbf{\psi F} \right]_{-1}^1.
+  \hat{M} \ddt{\bm{\hat{a}}} + \hat{S}^T u \bm{\hat{a}} = -\left[ \bm{\psi F} \right]_{-1}^1.
 \end{equation}
 %
 The right hand side term is the \emph{boundary flux} and requires coupling to
@@ -1477,7 +1480,7 @@ neighbouring cells, or boundary conditions. It requires evaluating a product of
 basis functions $\psi_l(x) \psi_n(x)$ at the boundary of the domain.
 
 We see that, once we have evaluated the mass and stiffness matrices, we can then
-update \emph{all} modes $\mathbf{\hat{a}}$ by evaluating the boundary flux term
+update \emph{all} modes $\bm{\hat{a}}$ by evaluating the boundary flux term
 on the right hand side and solving a linear system. This illustrates the small
 stencil of discontinuous Galerkin schemes: the only coupling to the other cells
 is through that boundary integral, which only couples to direct neighbours.
@@ -1649,12 +1652,12 @@ By defining a (generalized) \emph{Vandermonde} matrix $\hat{V}$ as
 \end{equation}
 %
 we see that we can translate from the modal state vector
-$\mathbf{\hat{a}} = (\hat{a}_0, \dots, \hat{a}_N)^T$ to the nodal state vector
-$\mathbf{a} = (a_0, \dots, a_N)^T$ via the matrix equation
+$\bm{\hat{a}} = (\hat{a}_0, \dots, \hat{a}_N)^T$ to the nodal state vector
+$\bm{a} = (a_0, \dots, a_N)^T$ via the matrix equation
 %
 \begin{equation}
   \label{eq:dg_nodal_vandermonde3}
-  \hat{V} \mathbf{\hat{a}} = \mathbf{a}.
+  \hat{V} \bm{\hat{a}} = \bm{a}.
 \end{equation}
 
 We can also connect the basis functions $\psi_n$ to the interpolating polynomials
@@ -1682,7 +1685,7 @@ or, by thinking of the basis functions and interpolating polynomials as vectors,
 %
 \begin{equation}
   \label{eq:dg_nodal_vandermonde6}
-  \hat{V}^T \mathbf{\ell}(x) = \mathbf{\psi}(x).
+  \hat{V}^T \bm{\ell}(x) = \bm{\psi}(x).
 \end{equation}
 %
 This allows us to convert the modal approach to deriving a scheme to a nodal
