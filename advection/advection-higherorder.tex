@@ -1701,6 +1701,25 @@ possible. All these conditions combine to suggest that the nodes $\xi_i$ should
 be given by the \emph{Legendre-Gauss-Lobatto} points, which are the zeros of
 $P_N'(x)$ combined with $\pm 1$.
 
+\begin{exercise}[Vandermonde matrices]
+{Construct the Vandermonde matrix converting modal coefficients, based on
+orthonormal Legendre polynomials, to nodal coefficients, based on Gauss-Lobatto
+nodal points, on the interval $x \in [-1, 1]$. For example, for $m=2$ the result
+is, to $4$ significant figures,
+%
+\begin{equation*}
+  V = \begin{pmatrix}
+        0.7071 & -1.225 & 1.581 \\
+        0.7071 & 0 & -0.7906 \\
+        0.7071 & 1.225 & 1.581
+      \end{pmatrix}.
+\end{equation*}
+%
+Using the Vandermonde matrix and its inverse, check that you can convert from
+nodes to modes and vice versa. Check that the condition number grows slowly with
+$m$ (roughly as $m^{1/2}$ for large $m$).}
+\end{exercise}
+
 With these restrictions, we can now construct the nodal scheme. As noted above,
 this scheme remains a modal scheme as generally introduced in section~\ref{sec:dg_basis},
 but the basis functions are the indicator polynomials $\ell_n(x)$. Thus the
@@ -1798,6 +1817,31 @@ as
 %
 but that the stiffness matrix is unchanged.
 
+\begin{exercise}[Mass and stiffness matrices]
+{From the Vandermonde matrices constructed above, build the mass, differentiation
+and stiffness matrices $\hat{M}, \hat{D}, \hat{S}$, on the interval
+$x \in [-1, 1]$. For example, for $m=2$ the results are, to $4$ significant
+figures,
+%
+\begin{align*}
+  \hat{M} &= \begin{pmatrix}
+        0.2667 & 0.1333 & -0.0667 \\
+        0.1333 & 1.067 & 0.1333 \\
+        -0.06667 & 0.1333 & 0.2667
+      \end{pmatrix}, \\
+  \hat{D} &= \begin{pmatrix}
+        -1.5 & 2 & -0.5 \\
+        -0.5 & 0 & 0.5 \\
+        0.5 & -2 & 1.5
+      \end{pmatrix}, \\
+  \hat{S} &= \begin{pmatrix}
+        -0.5 & 0.6667 & -1.667 \\
+        -0.6667 & 0 & 0.6667 \\
+        1.667 & -0.6667 & 0.5
+      \end{pmatrix}.
+\end{align*}
+}
+\end{exercise}
 
 \section{Going further}
 
