@@ -1334,6 +1334,9 @@ efficient and more local (with a smaller stencil, and hence better on parallel
 machines). Their disadvantages will come in the timestep and with discontinuous
 data.
 
+The presentation here closely follows~\cite{hesthaven2018numerical} -- check
+there for considerably more details, particularly on the theoretical results.
+
 \subsubsection{Function basis and weak form}
 \label{sec:dg_basis}
 
@@ -1882,15 +1885,22 @@ discontinuities. The moment limited method shows no oscillations. \\
 \end{figure}
 %
 By combining the nodal DG update described above with a time integrator we can
-look at the performance of the scheme. Figure~\ref{fig:dg_limiter} advects two
-initial profiles one period around a periodic domain. In the left panel we see
-the excellent performance when applied to a smooth profile. The unlimited method
-is essentially indistinguishable from the exact solution. However, the right
-panel shows that when the unlimited method is applied to a discontinuous initial
-profile then Gibbs oscillations result. The only ``nice'' feature of the
-Discontinuous Galerkin method here is that these oscillations are confined to
-the elements next to the discontinuities, and do not spread to cover the entire
-grid.
+look at the performance of the scheme. We need to take care in choosing the
+timestep. From the nodal point of view we can see that the width of the cell,
+$\Delta x$, is not going to be the limiting factor. Instead, the smallest
+distance between the (unequally spaced!) nodes is going to be crucial. General
+results (see e.g.~\cite{hesthaven2018numerical}) suggest that reducing the
+timestep by a factor of $2 m + 1$ is sufficient to ensure stability, but it does
+increase computational cost.
+
+Figure~\ref{fig:dg_limiter} advects two initial profiles one period around a
+periodic domain. In the left panel we see the excellent performance when applied
+to a smooth profile. The unlimited method is essentially indistinguishable from
+the exact solution. However, the right panel shows that when the unlimited
+method is applied to a discontinuous initial profile then Gibbs oscillations
+result. The only ``nice'' feature of the Discontinuous Galerkin method here is
+that these oscillations are confined to the elements next to the
+discontinuities, and do not spread to cover the entire grid.
 
 As with finite difference schemes, there are a range of modifications that can
 be made to limit or eliminate these oscillations. In Discontinuous Galerkin
@@ -1899,10 +1909,10 @@ need limiting, and second, modify the data in the required cells. The
 identification step can be done using the nodal values: construct limited slopes
 from cell average values and compare the predicted values at cell boundaries to
 the nodal values actually stored. The modification step can be done in many
-ways. Here we show a method that modifies the modal values, rather than the
-nodal values (\textbf{see Hesthaven, refs in there}). This
-\emph{moment limiting} approach removes the oscillations, as seen in
-Figure~\ref{fig:dg_limiter}.
+ways. A number are outlined in~\cite{hesthaven2018numerical}, but here we show a
+method that modifies the modal values, rather than the nodal values, as
+developed by~\cite{burbeau2001problem}. This \emph{moment limiting} approach
+removes the oscillations, as seen in Figure~\ref{fig:dg_limiter}.
 
 \begin{figure}[t]
 \centering
