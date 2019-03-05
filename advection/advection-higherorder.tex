@@ -1966,10 +1966,10 @@ information per cell than a typical finite difference scheme. Instead, it is
 better to compare the efficiency of the methods -- for example, by comparing
 the runtime required to get a solution with a certain accuracy. This figure
 shows the efficiency for high order DG and WENO schemes, by advecting a sine
-wave once around a periodic domain and comparing the errors. We see that, for
-the particular implementations here, the DG schemes are typically more
-efficient. We might expect the WENO schemes to be more competitive when the data
-is less smooth.\\
+wave once around a periodic domain and comparing the errors. By comparing the
+plain Python WENO implementation to one optimized using \texttt{numba} we see
+the importance of the specific implementation. The impact of higher order
+schemes is also apparent.\\
 \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/advection/compare_schemes.py}{compare\_schemes.py}}}
 \end{figure}
 %
@@ -1992,7 +1992,11 @@ in efficiency with more resources, as expected (the WENO7 scheme converges at
 $13^{\text{th}}$ order, compared to the DG4 scheme which converges at
 $5^{\text{th}}$ order). However, for this problem where the data remains very
 smooth, the Discontinuous Galerkin methods are clearly better, even with
-limiting on. This advantage may not remain when discontinuities appear.
+limiting on. The importance of the specific implementation is also shown by
+comparing to an optimized WENO code using the just-in-time \texttt{numba}
+module. The structure of the DG code makes it harder to optimize. The advantage
+that the DG code has over the plain Python WENO implementation may also depend
+on the initial data, and may not remain when discontinuities appear.
 
 \section{Going further}
 
