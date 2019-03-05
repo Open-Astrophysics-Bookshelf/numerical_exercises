@@ -1459,7 +1459,7 @@ We can write this result as a matrix equation. Define the state vector
 \end{equation}
 %
 For now, restrict to one dimension and set $V = [-1, 1]$: we can use a
-coordinate transformation to covert to other domains. Then define the matrices
+coordinate transformation to convert to other domains. Then define the matrices
 %
 \begin{align}
   \label{eq:dg_mass_matrix}
@@ -1475,7 +1475,8 @@ have
 %
 \begin{equation}
   \label{eq:dg_advection5}
-  \hat{M} \ddt{\bm{\hat{a}}} + \hat{S}^T u \bm{\hat{a}} = -\left[ \bm{\psi F} \right]_{-1}^1.
+  \hat{M} \ddt{\bm{\hat{a}}} + \hat{S}^T \left( u \bm{\hat{a}} \right) =
+  -\left[ \bm{\psi F} \right]_{-1}^1.
 \end{equation}
 %
 The right hand side term is the \emph{boundary flux} and requires coupling to
