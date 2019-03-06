@@ -1966,10 +1966,10 @@ information per cell than a typical finite difference scheme. Instead, it is
 better to compare the efficiency of the methods -- for example, by comparing
 the runtime required to get a solution with a certain accuracy. This figure
 shows the efficiency for high order DG and WENO schemes, by advecting a sine
-wave once around a periodic domain and comparing the errors. By comparing the
-plain Python WENO implementation to one optimized using \texttt{numba} we see
-the importance of the specific implementation. The impact of higher order
-schemes is also apparent.\\
+wave once around a periodic domain and comparing the errors. The two
+implementations here are comparable, particularly when the order of the schemes
+match (both WENO with $r=3$ and DG with $m=4$ should converge at $5^{}\text{th}}$
+order).\\
 \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/advection/compare_schemes.py}{compare\_schemes.py}}}
 \end{figure}
 %
@@ -1990,13 +1990,16 @@ done carefully. An example of this, comparing WENO and DG schemes, is given in
 Figure~\ref{fig:dg_weno_efficiency}. We see that higher-order schemes increase
 in efficiency with more resources, as expected (the WENO7 scheme converges at
 $13^{\text{th}}$ order, compared to the DG4 scheme which converges at
-$5^{\text{th}}$ order). However, for this problem where the data remains very
-smooth, the Discontinuous Galerkin methods are clearly better, even with
-limiting on. The importance of the specific implementation is also shown by
-comparing to an optimized WENO code using the just-in-time \texttt{numba}
-module. The structure of the DG code makes it harder to optimize. The advantage
-that the DG code has over the plain Python WENO implementation may also depend
-on the initial data, and may not remain when discontinuities appear.
+$5^{\text{th}}$ order). The implementations here are both optimized using
+\texttt{numba}, and the DG scheme is using moment limiting. We see that results
+are comparable, particularly when the orders of convergence match. In particular,
+the WENO($r=3$) scheme should be compared to the DG($m=4$), and the WENO($r=5$)
+scheme should be compared to the DG($m=8$). Note that whilst the efficiency
+comparison may be comparable, the number of grid points is not. The closest
+comparable single point between WENO($r=3$) and DG($m=4$) uses $54$ grid points
+for the WENO scheme and $8$ for the DG (hence $40 = 8 \times (4 + 1)$ total
+nodal values). These results are likely to depend heavily on the implementation
+and the initial data.
 
 \section{Going further}
 
