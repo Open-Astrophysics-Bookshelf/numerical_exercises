@@ -253,14 +253,14 @@ where we use $\nu$ to indicate which wave we are summing over.  A similar
 expansion is used for $\Rb\Lb \overline{\Delta \qb}$.  In fact, any vector
 can be decomposed in this fashion:
 \begin{equation}
-{\boldsymbol{\chi}} = {\bf I} {\boldsymbol{\chi}} = \Rb \Lb {\boldsymbol{\chi}} = 
+{\boldsymbol{\chi}} = {\bf I} {\boldsymbol{\chi}} = \Rb \Lb {\boldsymbol{\chi}} =
    \sum_\nu (\lb^\enu \cdot {\boldsymbol{\chi}}) \rb^\enu
 \end{equation}
 And then it is easy to see that the above manipulations for $\Ab \Delta \qb$
 can be expressed as:
 \begin{equation}
-\Ab \Delta \qb =  \Ab \sum_\nu (\lb^\enu \cdot \overline{\Delta \qb}) \rb^\enu = 
-  \sum_\nu (\lb^\enu \cdot \overline{\Delta \qb}) \Ab \rb^\enu = 
+\Ab \Delta \qb =  \Ab \sum_\nu (\lb^\enu \cdot \overline{\Delta \qb}) \rb^\enu =
+  \sum_\nu (\lb^\enu \cdot \overline{\Delta \qb}) \Ab \rb^\enu =
   \sum_\nu (\lb^\enu \cdot \overline{\Delta \qb}) \lambda^\enu \rb^\enu
 \end{equation}
 where we used $\Ab \rb^\enu = \lambda^\enu \rb^\enu$.  The quantity $(\lb^\enu
@@ -735,18 +735,18 @@ Some authors (see for example, \cite{athena} Eqs.~37, 38) advocate
 limiting on the characteristic variables rather than the primitive
 variables.  The characteristic slopes for the quantity carried by the
 wave $\nu$ can be found from the primitive variables
-as: 
+as:
 %
-\begin{equation} 
-\Delta w^{(\nu)} = \lb^{(\nu)} \cdot \Delta \qb 
-\end{equation} 
+\begin{equation}
+\Delta w^{(\nu)} = \lb^{(\nu)} \cdot \Delta \qb
+\end{equation}
 %
 any limiting would then be done to $\Delta w^{(\nu)}$ and the limited
 primitive variables would be recovered as:
 \begin{equation}
   \overline{\Delta \qb} = \sum_\nu \overline{\Delta w}^{(\nu)}
-  \rb^{(\nu)} 
-\end{equation} 
+  \rb^{(\nu)}
+\end{equation}
 (here we use an overline to indicate limiting).
 
 This is attractive because it is more in the spirit of the linear
@@ -775,7 +775,7 @@ This is done for every interface, as illustrated in Figure~\ref{fig:euler:multip
 \includegraphics[width=\linewidth]{multiple_interfaces}
 \caption[Riemann wave structure at each interface]{\label{fig:euler:multiple_interfaces}
   The Riemann wave structure resulting from the separate Riemann problems at each interface.  For each
-  interface, we find the state on the interface and use this to evaluate the flux through the interface.} 
+  interface, we find the state on the interface and use this to evaluate the flux through the interface.}
 \end{figure}
 
 As discussed in \S~\ref{Euler:riemann:solution}, we need to determine
@@ -817,8 +817,8 @@ star state.
   approximation does a reasonable job near the intersection and only
   diverges significantly for small $p$ (which is where the solution
   should really be a
-  rarefaction).\\ 
-  \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/compressible/riemann-2shock.py}{riemann-2shock.py}}}
+  rarefaction).\\
+  \hydroexdoit{\href{https://github.com/python-hydro/hydro_examples/blob/master/compressible/riemann-2shock.py}{riemann-2shock.py}}}
 \end{figure}
 
 An additional approximation concerns rarefactions.  Recall that a
@@ -856,7 +856,7 @@ Rankine-Hugoniot jump conditions to give the fluxes.
 
 Once we have the fluxes, the conservative update is done as
 \begin{equation}
-\Uc^{n+1}_i = \Uc^n_i + \frac{\Delta t}{\Delta x} 
+\Uc^{n+1}_i = \Uc^n_i + \frac{\Delta t}{\Delta x}
    \left ( \Fb_{i-\myhalf}^{n+\myhalf} - \Fb_{i+\myhalf}^{n+\myhalf} \right )
 \end{equation}
 The timestep, $\Delta t$ is determined by the time it takes for the
@@ -1152,7 +1152,7 @@ $\hat{\Uc}$'s and carry it through.
 
 Note that the source here is cell-centered.  This expansion is
 second-order accurate.  This is the approach outlined in Miller
-\& Colella \cite{millercolella:2002}.  Also notice the 
+\& Colella \cite{millercolella:2002}.  Also notice the
 similarity of this source term to a second-order Euler method
 for integrating ODEs.
 
@@ -1215,22 +1215,22 @@ usually means averaging the time-level $n$ and $n+1$ sources:
 \end{align}
 As written, this appears to be an implicit update (since $\Uc^{n+1}$
 depends on $\Hb^{n+1}$), but often, the form of the source terms allows
-you to update the equations in sequence explicitly.  
+you to update the equations in sequence explicitly.
 
 Again, using a constant gravitational acceleration as an example, and
 looking in 1-d for simplicity, $\Uc = (\rho, \rho u, \rho E)^\intercal$
 and $\Hb = (0, \rho g, \rho u g)^\intercal$, so our update sequence is:
 \begin{align}
-\rho^{n+1}_i = \rho^n_i &+ \frac{\Delta t}{\Delta x} 
-   \left [\rho_{i-\myhalf}^{n+\myhalf} u_{i-\myhalf}^{n+\myhalf} - 
+\rho^{n+1}_i = \rho^n_i &+ \frac{\Delta t}{\Delta x}
+   \left [\rho_{i-\myhalf}^{n+\myhalf} u_{i-\myhalf}^{n+\myhalf} -
           \rho_{i+\myhalf}^{n+\myhalf} u_{i+\myhalf}^{n+\myhalf} \right ] \\
-(\rho u)^{n+1}_i = (\rho u)^n_i &+ \frac{\Delta t}{\Delta x} 
-   \left [ \rho_{i-\myhalf}^{n+\myhalf} (u_{i-\myhalf}^{n+\myhalf})^2  - 
+(\rho u)^{n+1}_i = (\rho u)^n_i &+ \frac{\Delta t}{\Delta x}
+   \left [ \rho_{i-\myhalf}^{n+\myhalf} (u_{i-\myhalf}^{n+\myhalf})^2  -
            \rho_{i+\myhalf}^{n+\myhalf} (u_{i+\myhalf}^{n+\myhalf})^2  \right ]
-         + \frac{\Delta t}{\Delta x} \left ( p_{i-\myhalf}^{n+\myhalf} - 
+         + \frac{\Delta t}{\Delta x} \left ( p_{i-\myhalf}^{n+\myhalf} -
                                               p_{i+\myhalf}^{n+\myhalf} \right ) \nonumber \\
        &+ \frac{\Delta t}{2}(\rho^n_i + \rho^{n+1}_i) g \\
-(\rho E)^{n+1}_i = (\rho E)^n_i &+ \frac{\Delta t}{\Delta x} 
+(\rho E)^{n+1}_i = (\rho E)^n_i &+ \frac{\Delta t}{\Delta x}
    \left [ \left (\rho_{i-\myhalf}^{n+\myhalf} E_{i-\myhalf}^{n+\myhalf}  + p_{i-\myhalf}^{n+\myhalf} \right ) u_{i-\myhalf}^{n+\myhalf} - \right . \nonumber \\
    &\phantom{+ \frac{\Delta t}{\Delta x} \left[ \right.}   \left .   \left (\rho_{i+\myhalf}^{n+\myhalf} E_{i+\myhalf}^{n+\myhalf}  + p_{i+\myhalf}^{n+\myhalf} \right ) u_{i+\myhalf}^{n+\myhalf} \right ]
     + \frac{\Delta t}{2} \left [ (\rho u)^n + (\rho u)^{n+1} \right] g
@@ -1282,19 +1282,19 @@ geometric source terms as sources to the interface state, following
 the same ideas as in \S~\ref{euler:sec:sourceterms}.
 
 The conservative update now needs to include the geometry factors.  However,
-it is complicated by the fact that in the momentum equation, the pressure 
-term is a gradient, not a divergence, and therefore has different 
+it is complicated by the fact that in the momentum equation, the pressure
+term is a gradient, not a divergence, and therefore has different
 geometic factors.  The update of the system appears as:
 \begin{align}
-\rho^{n+1}_i = \rho^n_i &+ \frac{\Delta t}{V_i} 
-   \left [A_{i-\myhalf} \rho_{i-\myhalf}^{n+\myhalf} u_{i-\myhalf}^{n+\myhalf} - 
+\rho^{n+1}_i = \rho^n_i &+ \frac{\Delta t}{V_i}
+   \left [A_{i-\myhalf} \rho_{i-\myhalf}^{n+\myhalf} u_{i-\myhalf}^{n+\myhalf} -
           A_{i+\myhalf} \rho_{i+\myhalf}^{n+\myhalf} u_{i+\myhalf}^{n+\myhalf} \right ] \\
-(\rho u)^{n+1}_i = (\rho u)^n_i &+ \frac{\Delta t}{V_i} 
-   \left [ A_{i-\myhalf} \rho_{i-\myhalf}^{n+\myhalf} (u_{i-\myhalf}^{n+\myhalf})^2  - 
+(\rho u)^{n+1}_i = (\rho u)^n_i &+ \frac{\Delta t}{V_i}
+   \left [ A_{i-\myhalf} \rho_{i-\myhalf}^{n+\myhalf} (u_{i-\myhalf}^{n+\myhalf})^2  -
            A_{i+\myhalf} \rho_{i+\myhalf}^{n+\myhalf} (u_{i+\myhalf}^{n+\myhalf})^2  \right ]\nonumber \\
-        & + \frac{\Delta t}{\Delta r} \left ( p_{i-\myhalf}^{n+\myhalf} - 
+        & + \frac{\Delta t}{\Delta r} \left ( p_{i-\myhalf}^{n+\myhalf} -
                                               p_{i+\myhalf}^{n+\myhalf} \right ) \\
-(\rho E)^{n+1}_i = (\rho E)^n_i &+ \frac{\Delta t}{V_i} 
+(\rho E)^{n+1}_i = (\rho E)^n_i &+ \frac{\Delta t}{V_i}
    \left [ A_{i-\myhalf} \left (\rho_{i-\myhalf}^{n+\myhalf} E_{i-\myhalf}^{n+\myhalf}  + p_{i-\myhalf}^{n+\myhalf} \right ) u_{i-\myhalf}^{n+\myhalf} - \right . \nonumber \\
    &\phantom{+ \frac{\Delta t}{V_i} \left[ \right.}   \left .   A_{i+\myhalf} \left (\rho_{i+\myhalf}^{n+\myhalf} E_{i+\myhalf}^{n+\myhalf}  + p_{i+\myhalf}^{n+\myhalf} \right ) u_{i+\myhalf}^{n+\myhalf} \right ]
 \end{align}
@@ -1349,7 +1349,7 @@ form of the cylindrical divergence:
 Just as with the 1-d spherical case, the pressure term in the momentum
 equation needs to be treated separately from the flux, since it enters
 as a gradient and not a divergence.\footnote{It is common to see the divergence
-term expressed as 
+term expressed as
 \begin{equation}
 \nabla \cdot {\boldsymbol{\phi}} = \frac{1}{r^\alpha} \ddr{(r^\alpha \phi^{(r)})} + \ldots
 \end{equation}
@@ -1541,7 +1541,7 @@ profile of this and compare to the analytic solution, shown in Figure~\ref{fig:E
 \begin{figure}[t]
 \centering
 \includegraphics[width=0.75\linewidth]{sedov_compare}
-\caption[2-d cylindrical Sedov problem]{\label{fig:Euler:sedov2d_compare} Angle-average 
+\caption[2-d cylindrical Sedov problem]{\label{fig:Euler:sedov2d_compare} Angle-average
   profile for the 2-d Sedov explosion from Figure~\ref{fig:Euler:sedov2d} shown
   with the analytic solution.  This was constructed using the {\tt sedov\_compare.py}
   script in \pyro.}
@@ -1552,7 +1552,7 @@ profile of this and compare to the analytic solution, shown in Figure~\ref{fig:E
 
 We can run a simple advection test analogous to the tests we used in
 Ch.~\ref{ch:advection}.  However, because we are now doing hydrodynamics,
-we need to suppress the dynamics.  This is accomplished by putting the 
+we need to suppress the dynamics.  This is accomplished by putting the
 profile we want to advect in the density field and then put it in
 pressure equilibrium by adjusting the internal energy.  For example, consider
 a Gaussian profile.  We initialize the density as:
@@ -1598,9 +1598,9 @@ Gaussian is clipped.
 Slow moving (or stationary) shocks can be difficult to model, as
 oscillations can be setup behind the shock (this is discussed a little
 in \cite{colellawoodward:1984,leveque:2002}).  We can produce a slow
-moving shock as a shock tube, and we can use the jump conditions 
+moving shock as a shock tube, and we can use the jump conditions
 across a shock that were derived for the Riemann problem to find the
-conditions to setup a stationary (or slow-moving) shock.  
+conditions to setup a stationary (or slow-moving) shock.
 
 The speed of a right-moving shock was found (see
 Eq.~\ref{eq:euler:shockspeedjump}) as:
@@ -1619,7 +1619,7 @@ know the entire pre-shock state.  We can compute the post-shock state
 (which was the star state when we discussed the Riemann problem) using
 the jump conditions, Eqs.~\ref{eq:euler:shockrhojump} and
 \ref{eq:euler:shockujump}.\footnote{The script
-  \href{https://github.com/zingale/hydro_examples/blob/master/compressible/slow_shock.py}{\tt
+  \href{https://github.com/python-hydro/hydro_examples/blob/master/compressible/slow_shock.py}{\tt
     slow\_shock.py} will find the initial conditions to generate a
   stationary shock.}
 
@@ -1660,7 +1660,7 @@ interactive of the different hydrodynamic waves.  These
 problems initialize the 4 quadrants of the domain with different
 states, and watch the ensuing evolution.  There are some
 analytic estimates that can be compared to, but also these
-tests can provide a means of assessing the symmetry of 
+tests can provide a means of assessing the symmetry of
 a code in the presence of complex flows.  We use the setup
 corresponding to {\em configuration 3} in that paper (this
 same setup is used in \cite{leveque:1997}).
@@ -1811,12 +1811,12 @@ but higher-order is more tricky.
 
 The above methods were formulated with a constant gamma equation of
 state.  A general equation of state (such as degenerate electrons)
-requires a more complex method.  Most methods are designed to 
+requires a more complex method.  Most methods are designed to
 reduce the need to call a complex equation of state frequently,
-and work by augmenting the vector of primitive variables with 
-additional thermodynamic information.  There are two parts of the 
-adaption to a general equation of state: the interface states and 
-the Riemann problem. 
+and work by augmenting the vector of primitive variables with
+additional thermodynamic information.  There are two parts of the
+adaption to a general equation of state: the interface states and
+the Riemann problem.
 
 \subsubsection{Carrying $\gamma_e$}
 
@@ -1851,8 +1851,8 @@ We can derive the characteristic structure of this system for use
 in the tracing in the construction of interface states%
 \footnote{A {\sf Jupyter} notebook using {\sf SymPy} that derives these
 eigenvectors is available here:
-\hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/compressible/euler-generaleos.ipynb}{euler-generaleos.ipynb}}}.
-If we write 
+\hydroexdoit{\href{https://github.com/python-hydro/hydro_examples/blob/master/compressible/euler-generaleos.ipynb}{euler-generaleos.ipynb}}}.
+If we write
 our system as
 \begin{equation}
 \qb = \left ( \begin{array}{c} \tau \\ u \\ p \\ \gamma_e \end{array} \right )
@@ -1996,6 +1996,3 @@ deals with a conserved state of $\Uc = (\rho, \rho \Ub, \rho E, p)$, and
 explicitly adds the transverse terms found in the multi-dimensional form
 of Eq.~\ref{eq:euler:pgeneral}
 to the normal states of $p$.
-
-
-

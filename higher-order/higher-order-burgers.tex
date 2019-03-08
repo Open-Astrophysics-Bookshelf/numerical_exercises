@@ -58,7 +58,7 @@ The simplest flux-split algorithm is then
 \includegraphics[width=0.8\linewidth]{weno-vs-plm-burger}
 \caption[Comparing PLM and WENO methods for Burgers' equation]
 {\label{fig:weno-vs-plm-burger} Numerical solutions to Burgers' equation using the piecewise linear method as in figure~\ref{fig:burgers-shock} and two flux-split WENO methods as outlined in section~\ref{sec:weno-burgers-fvs}. This uses the same sinusoidal data as figure~\ref{fig:burgers-shock} shortly after shock formation. Note that the WENO methods are not obviously any better at resolving the shock than the simpler piecewise linear approach.\\
-\hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/advection/weno_burgers.py}{weno\_burgers.py}}}
+\hydroexdoit{\href{https://github.com/python-hydro/hydro_examples/blob/master/advection/weno_burgers.py}{weno\_burgers.py}}}
 \end{figure}
 %
 
@@ -87,7 +87,7 @@ discontinuous. A fourth order Runge-Kutta method is used for time evolution.
 For $r=3$ we see the expected fifth ($2 r - 1$) order convergence.
 For $r=5$ we see seventh order convergence briefly, before the error from the
 time integrator dominates. \\
-\hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/advection/weno_burgers.py}{weno\_burgers.py}}}
+\hydroexdoit{\href{https://github.com/python-hydro/hydro_examples/blob/master/advection/weno_burgers.py}{weno\_burgers.py}}}
 \end{figure}
 %
 

@@ -25,11 +25,11 @@ Unlike advection, there is no sense of upwinding in diffusion.  As we
 will see, we can cast our differenced equations in a form reminiscent
 of an elliptic problem.
 
-In one-dimension, and assuming that the diffusion coefficient, $k$, is 
+In one-dimension, and assuming that the diffusion coefficient, $k$, is
 constant, we have
 \begin{equation}
-\frac{\partial \phi}{\partial t} = 
-  \frac{\partial }{\partial x} 
+\frac{\partial \phi}{\partial t} =
+  \frac{\partial }{\partial x}
   \left ( k \frac{\partial \phi}{\partial x} \right )
 \end{equation}
 
@@ -38,7 +38,7 @@ The diffusion equation can describe thermal diffusion (for example, as
 part of the energy equation in compressible flow), species/mass
 diffusion for multi-species flows, or the viscous terms in
 incompressible flows.  In this form, the diffusion coefficient (or
-conductivity), $k$, can be a function of $x$, or even $\phi$.  
+conductivity), $k$, can be a function of $x$, or even $\phi$.
 
 
 We will consider a constant diffusion coefficient as our model problem:
@@ -52,12 +52,12 @@ concentrations of $\phi$ and smooth them out with time.
 \section{Explicit differencing}
 
 A nice overview of the discretizations for diffusion and their stability
-is given in \cite{richtmyermorton}.  
+is given in \cite{richtmyermorton}.
 The simplest way to difference this equation is {\em explicit} in time
 (i.e., the righthand side depends only on the old state):
 \begin{equation}
 \label{eq:diff:explicitdiff}
-\frac{\phi_i^{n+1} - \phi_i^n}{\Delta t} = 
+\frac{\phi_i^{n+1} - \phi_i^n}{\Delta t} =
   k \frac{\phi_{i+1}^n - 2\phi_i^n + \phi_{i-1}^n}{\Delta x^2}
 \end{equation}
 This is second-order accurate in space, but only first order accurate in
@@ -82,7 +82,7 @@ As with advection, we often write the timestep as
 \begin{equation}
 \Delta t = \frac{C}{2} \frac{\Delta x^2}{k}
 \end{equation}
-where $C$ is a constant, $C < 1$. 
+where $C$ is a constant, $C < 1$.
 Note the $\Delta x^2$ dependence---this constraint can become really
 restrictive.
 
@@ -142,7 +142,7 @@ not well resolve initially, then the solution will be bad
 Diffusion of a Gaussian using the explicit differencing of
 Eq.~\ref{eq:diff:explicitdiff} with 64 zones and C = 0.8, shown at
 several times.  The dotted line is the analytic
-solution.  \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/diffusion/diffusion_explicit.py}{diffusion\_explicit.py}}}
+solution.  \\ \hydroexdoit{\href{https://github.com/python-hydro/hydro_examples/blob/master/diffusion/diffusion_explicit.py}{diffusion\_explicit.py}}}
 \end{figure}
 
 
@@ -153,7 +153,7 @@ solution.  \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/
 Diffusion of a Gaussian using the explicit differencing of
 Eq.~\ref{eq:diff:explicitdiff} with different resolutions.
 several times.  The dotted line is the analytic
-solution.  \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/diffusion/diffusion_explicit.py}{diffusion\_explicit.py}}}
+solution.  \\ \hydroexdoit{\href{https://github.com/python-hydro/hydro_examples/blob/master/diffusion/diffusion_explicit.py}{diffusion\_explicit.py}}}
 \end{figure}
 
 As with advection, if we exceed the timestep limit ($C > 1$), then
@@ -166,7 +166,7 @@ the solution is unstable.  This is shown in Figure~\ref{fig:diff_explicit_bad}.
 Diffusion of a Gaussian using the explicit differencing of
 Eq.~\ref{eq:diff:explicitdiff} with 64 zones, but a timestep
 with $C > 1$, showing that the solution is unstable.
- \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/diffusion/diffusion_explicit.py}{diffusion\_explicit.py}}}
+ \\ \hydroexdoit{\href{https://github.com/python-hydro/hydro_examples/blob/master/diffusion/diffusion_explicit.py}{diffusion\_explicit.py}}}
 \end{figure}
 
 Our spatial order-of-accuracy is second-order.
@@ -190,9 +190,9 @@ in our spatial and temporal discretizations.
 \centering
 \includegraphics[width=\linewidth]{diffexplicit-converge-0_8}
 \caption[Error convergence of explicit diffusion]{\label{fig:diffexplicit_converge}
-Error convergence with resolution of the explicit diffusion using the differencing of 
+Error convergence with resolution of the explicit diffusion using the differencing of
 Eq.~\ref{eq:diff:explicitdiff}
- \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/diffusion/diffusion_explicit.py}{diffusion\_explicit.py}}}
+ \\ \hydroexdoit{\href{https://github.com/python-hydro/hydro_examples/blob/master/diffusion/diffusion_explicit.py}{diffusion\_explicit.py}}}
 \end{figure}
 
 \section{Implicit with direct solve}
@@ -202,7 +202,7 @@ timestep restriction for stability.  The same holds true for
 diffusion.  A backward-Euler implicit discretization would be:
 \begin{equation}
 \label{eq:diff:foimplicit}
-\frac{\phi_i^{n+1} - \phi_i^n}{\Delta t} = 
+\frac{\phi_i^{n+1} - \phi_i^n}{\Delta t} =
   k \frac{\phi_{i+1}^{n+1} - 2\phi_i^{n+1} + \phi_{i-1}^{n+1}}{\Delta x^2}
 \end{equation}
 The only difference with Eq.~\ref{eq:diff:explicitdiff} is the
@@ -226,7 +226,7 @@ We can write Eq.~\ref{eq:diff:foimplicit} as:
 \end{equation}
 This is a set of coupled algebraic equations.  We can write this in
 matrix form.  Using a cell-centered grid, we will solve for the values
-$[\mathrm{lo},\mathrm{hi}]$.  
+$[\mathrm{lo},\mathrm{hi}]$.
 The implicit method can use any $C > 0$.
 
 We specify boundary conditions by modifying the stencil
@@ -239,7 +239,7 @@ Neumann BCs on the left mean:
 \end{equation}
 and substituting this into Eq~\ref{eq:diff:implicit}, the update for the leftmost cell is:
 \begin{equation}
- (1 + \alpha) \phi_\mathrm{lo}^{n+1} -\alpha \phi_\mathrm{lo+1}^{n+1}  = 
+ (1 + \alpha) \phi_\mathrm{lo}^{n+1} -\alpha \phi_\mathrm{lo+1}^{n+1}  =
   \phi_\mathrm{lo}^n
 \end{equation}
 If we choose Dirichlet BCs on the right ($\phi |_{x=x_l} = A$), then:
@@ -299,7 +299,7 @@ linear system---we are only updating the interior points.
 A second-order in time discretization requires us to center the
 righthand side in time.  We do this as:
 \begin{equation}
-\frac{\phi_i^{n+1} - \phi_i^n}{\Delta t} = 
+\frac{\phi_i^{n+1} - \phi_i^n}{\Delta t} =
   \frac{k}{2} \left ( \frac{\phi_{i+1}^{n} - 2\phi_i^{n} + \phi_{i-1}^{n}}{\Delta x^2} +
                       \frac{\phi_{i+1}^{n+1} - 2\phi_i^{n+1} + \phi_{i-1}^{n+1}}{\Delta x^2} \right )
 \end{equation}
@@ -367,7 +367,7 @@ The matrix form of this system is:
 \right )
 \end{equation}
 
-Figure~\ref{fig:diffuse} shows the result of using $\alpha = 0.8$ and $\alpha = 8.0$.  We 
+Figure~\ref{fig:diffuse} shows the result of using $\alpha = 0.8$ and $\alpha = 8.0$.  We
 see that they are both stable, but that the smaller timestep is closer to the analytic
 solution (especially at early times).
 
@@ -379,7 +379,7 @@ solution (especially at early times).
   Implicit diffusion of a Gaussian (with Crank-Nicolson
   discretization) with $C = 0.8$ and $C = 8.0$.  The exact solution at
   each time is shown as the dotted
-  line. \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/diffusion/diffusion_implicit.py}{diffusion\_implicit.py}}}
+  line. \\ \hydroexdoit{\href{https://github.com/python-hydro/hydro_examples/blob/master/diffusion/diffusion_implicit.py}{diffusion\_implicit.py}}}
 \end{figure}
 
 \begin{exercise}[1-d implicit diffusion]
@@ -389,7 +389,7 @@ solution (especially at early times).
   that above.  Use a timestep close to the explicit step, a grid with
   N = 128 zones.
 
-  Use a Gaussian for your initial conditions (as you did for the 
+  Use a Gaussian for your initial conditions (as you did for the
   explicit problem.}
 \end{exercise}
 
@@ -397,17 +397,17 @@ solution (especially at early times).
 \section{Implicit multi-dimensional diffusion via multigrid}
 \label{diff:sec:implicit_mg}
 
-Instead of doing a direct solve of the matrix form of the system, we 
-can use multigrid techniques.  Consider the Crank-Nicolson system we just 
+Instead of doing a direct solve of the matrix form of the system, we
+can use multigrid techniques.  Consider the Crank-Nicolson system we just
 looked at:
 \begin{equation}
-\frac{\phi^{n+1}_i - \phi^n_i}{\Delta t} = 
+\frac{\phi^{n+1}_i - \phi^n_i}{\Delta t} =
    \frac{1}{2} \left ( k \nabla^2 \phi^n_i + k \nabla^2 \phi^{n+1}_i \right )
 \end{equation}
-Grouping all the 
+Grouping all the
 $n+1$ terms on the left, we find:
 \begin{equation}
-\phi^{n+1}_i - \frac{\Delta t}{2} k \nabla^2 \phi^{n+1}_i = 
+\phi^{n+1}_i - \frac{\Delta t}{2} k \nabla^2 \phi^{n+1}_i =
     \phi^n_i + \frac{\Delta t}{2} k \nabla^2 \phi^n_i
 \end{equation}
 This is in the form of a constant-coefficient Helmholtz equation,
@@ -433,7 +433,7 @@ operation of the form:
 \label{eq:diff:discrete1d}
 \phi_{i} \leftarrow
  \left .    \left ( f_{i} + \frac{\beta}{\Delta x^2} [\phi_{i+1}
-                             + \phi_{i-1}] \right ) \middle / 
+                             + \phi_{i-1}] \right ) \middle /
 \left ( \alpha + \frac{2 \beta}{\Delta x^2}  \right )  \right .
 \end{equation}
 Note that when you take $\alpha = 0$ and $\beta = -1$ in
@@ -466,7 +466,7 @@ solver).
 \caption[Comparison of 2-d implicit diffusion with analytic
   solution]{\label{fig:diffusion:multid} A comparison of 2-d implicit
   diffusion from Figure~\ref{fig:diff:twodcompare} with the analytic solution at several times.
-  The 2-d solution was averaged over angles to yield a profile as a 
+  The 2-d solution was averaged over angles to yield a profile as a
   function of radius, using the {\tt
     gauss\_diffusion\_compare.py} in \pyro.}
 \end{figure}
@@ -480,10 +480,10 @@ models the diffusion of an initially resolved Gaussian well.
 
 
 \begin{exercise}[Implicit multi-dimensional diffusion]
-{The diffusion solver in \pyro\ uses Crank-Nicolson differencing in time.  
+{The diffusion solver in \pyro\ uses Crank-Nicolson differencing in time.
 Modify the solver to do first-order backward Euler.  This will change
 the form of the linear system (coefficients and righthand side), but
-should not require any changes to the multigrid solver itself. 
+should not require any changes to the multigrid solver itself.
 
 Compare the solution with the Crank-Nicolson solution for a very coarsely-resolved
 Gaussian and a finely-resolved Gaussian.
@@ -509,21 +509,21 @@ of stability can be found in \cite{leveque:fd}.
 \caption[Under-resolved Crank-Nicolson diffusion]
 {\label{fig:diff:cnunstable} Crank-Nicolson diffusion of a Gaussian
 on under-resolved initial data with a large timestep.  Here we use
-$64$ zones and $C= 10$.  \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/diffusion/diffusion_implicit.py}{diffusion\_implicit.py}}}
+$64$ zones and $C= 10$.  \\ \hydroexdoit{\href{https://github.com/python-hydro/hydro_examples/blob/master/diffusion/diffusion_implicit.py}{diffusion\_implicit.py}}}
 \end{figure}
 
 
 \begin{figure}
 \centering
 \includegraphics[width=0.75\linewidth]{diffimplicit-converge-0_8} \\
-\includegraphics[width=0.75\linewidth]{diffimplicit-converge-8_0} 
+\includegraphics[width=0.75\linewidth]{diffimplicit-converge-8_0}
 \caption[Convergence of diffusion methods]
 {\label{fig:diff:convergence} Convergence of the explicit, backward-difference,
 and Crank-Nicolson diffusion methods for $C = 0.8$ (top) and $C = 8.0$ (bottom).
 For the latter case, the explicit method is not valid and is not shown.
 We see that the Crank-Nicolson method has the lowest error, and when resolving
 the data, has second-order convergence.\\
-\hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/diffusion/diff_converge.py}{diff\_converge.py}}}
+\hydroexdoit{\href{https://github.com/python-hydro/hydro_examples/blob/master/diffusion/diff_converge.py}{diff\_converge.py}}}
 \end{figure}
 
 
@@ -551,7 +551,7 @@ For a non-constant conductivity, our equation has the form:
 For the case where $k = k(x)$,
   we discretize as:
   \begin{equation}
-  \frac{\phi_i^{n+1} - \phi_i^n}{\Delta t} = 
+  \frac{\phi_i^{n+1} - \phi_i^n}{\Delta t} =
         \frac{ \{ k \nabla \phi \}_{i+\myhalf} -
                \{ k \nabla \phi \}_{i-\myhalf}}{\Delta x}
   \end{equation}
@@ -566,15 +566,15 @@ For the case where $k = k(x)$,
  \frac{1}{k_{i+\myhalf}} = \frac{1}{2} \left (\frac{1}{k_i} + \frac{1}{k_{i+1}} \right )
  \end{equation}
 The actual form should be motivated by the physics
- 
+
 Slightly more complicated are state-dependent transport
 coefficients---the transport coefficients themselves depend on the
 quantity being diffused:
   \begin{equation}
-  \frac{\phi_i^{n+1} - \phi_i^n}{\Delta t} = 
+  \frac{\phi_i^{n+1} - \phi_i^n}{\Delta t} =
         \frac{1}{2} \left \{
                \nabla \cdot [ k(\phi^n) \nabla \phi^n ]_i +
-               \nabla \cdot [ k(\phi^{n+1}) \nabla \phi^{n+1} ]_i 
+               \nabla \cdot [ k(\phi^{n+1}) \nabla \phi^{n+1} ]_i
                \right \}
   \end{equation}
   (for example, with thermal diffusion, the conductivity can
@@ -583,25 +583,25 @@ quantity being diffused:
   the transport coefficients evaluated at the old time, giving a provisional
   state, $\phi^\star$:
   \begin{equation}
-  \frac{\phi_i^\star - \phi_i^n}{\Delta t} = 
+  \frac{\phi_i^\star - \phi_i^n}{\Delta t} =
         \frac{1}{2} \left \{
                \nabla \cdot [ k(\phi^n) \nabla \phi^n ] +
-               \nabla \cdot [ k(\phi^n) \nabla \phi^\star ] 
+               \nabla \cdot [ k(\phi^n) \nabla \phi^\star ]
                \right \}
   \end{equation}
   Then we redo the diffusion, evaluating $k$ with $\phi^\star$ to
   center the righthand side in time, giving the new state, $\phi^{n+1}$:
   \begin{equation}
-  \frac{\phi_i^{n+1} - \phi_i^n}{\Delta t} = 
+  \frac{\phi_i^{n+1} - \phi_i^n}{\Delta t} =
         \frac{1}{2} \left \{
                \nabla \cdot [ k(\phi^n) \nabla \phi^n ] +
-               \nabla \cdot [ k(\phi^\star) \nabla \phi^{n+1} ] 
+               \nabla \cdot [ k(\phi^\star) \nabla \phi^{n+1} ]
                \right \}
   \end{equation}
   This is the approach used, for example, in \cite{SNpaper}.
 
 
-\section{Diffusion in Hydrodynamics} 
+\section{Diffusion in Hydrodynamics}
 
 Often we find diffusion represented as one of many physical processes
 in a single equation.  For example, consider the internal energy
@@ -633,6 +633,5 @@ equation with both reactions and diffusion:
  techniques described above.  Note: if the transport coefficients
  (including $c_v$, $e_\rho$) are dependent on $e$, then we still need
  to do a predictor-corrector method here.  This is discussed, for
- example, in \cite{SNpaper,malone:2011}.  A simple case for this type of 
+ example, in \cite{SNpaper,malone:2011}.  A simple case for this type of
  advection-diffusion is also shown in \S~\ref{sec:multiphys:diffreact}.
-

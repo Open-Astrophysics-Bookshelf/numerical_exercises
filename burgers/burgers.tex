@@ -71,7 +71,7 @@ the formation of a shock.}
           velocity distribution with low velocity left of high
           velocity (bottom) Approximate characteristic structure for
           Burgers' equation, using $u_0 = u(t)$.  Note that after a
-          short period of time, the characteristics diverge---this is 
+          short period of time, the characteristics diverge---this is
           a rarefaction.}
 \end{figure}
 
@@ -203,7 +203,7 @@ condition over all the zones:
   This initial velocity state creates a divergent flow.  The curves
   are shown 0.02~s apart, with the darker grayscale representing later
   in
-  time. \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/burgers/burgers.py}{burgers.py}}}
+  time. \\ \hydroexdoit{\href{https://github.com/python-hydro/hydro_examples/blob/master/burgers/burgers.py}{burgers.py}}}
 \end{figure}
 
 
@@ -224,7 +224,7 @@ the state on the left, and spread out like a fan.  This is called a
   The initial conditions here are sinusoidal and the solution quickly
   steepens into a shock.The curves are shown 0.02~s apart, with the
   darker grayscale representing later in
-  time. \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/burgers/burgers.py}{burgers.py}}}
+  time. \\ \hydroexdoit{\href{https://github.com/python-hydro/hydro_examples/blob/master/burgers/burgers.py}{burgers.py}}}
 \end{figure}
 
 Figure~\ref{fig:burgers-shock} shows the solution to Burgers'
@@ -276,12 +276,12 @@ in Ch.~\ref{ch:advection} for linear advection, difference the
 conservative and non-conservation formulations of Burgers' equation
 as:
 \begin{equation}
-\frac{u^{n+1}_i - u^n_i}{\Delta t} = 
+\frac{u^{n+1}_i - u^n_i}{\Delta t} =
    -\frac{1}{2} \frac{(u^n_i)^2 - (u^n_{i-1})^2}{\Delta x}
 \end{equation}
 and
 \begin{equation}
-  \frac{u_{i}^{n+1} - u_i^n}{\Delta t} = - 
+  \frac{u_{i}^{n+1} - u_i^n}{\Delta t} = -
       \frac{u_i^n (u_i^n - u_{i-1}^n)}{\Delta x}
 \end{equation}
 (Note: these discretizations are upwind so long as $u > 0$).
