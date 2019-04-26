@@ -368,7 +368,7 @@ The computational grids used for finite-volume techniques maps nicely
 onto multidimensional arrays.  For the cell-average data, a typical
 array would be dimensioned as
 \begin{lstlisting}[language=Python]
-  ilo = nx
+  ilo = ng
   ihi = nx + ng - 1
   state = np.zeros((nx + 2*ng, nvar))
 \end{lstlisting}
