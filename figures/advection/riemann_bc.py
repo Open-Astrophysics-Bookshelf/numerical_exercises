@@ -16,7 +16,7 @@ def riemann():
     # interior and ghost cell initialization
     a = gr.scratch_array()
 
-    a[gr.ilo:gr.ihi+1] = np.array([0.8, 0.7, 0.4, 0.5])
+    a[gr.ilo:gr.ihi+1] = np.array([0.8, 0.4, 0.3, 0.5])
     a[0:gr.ilo] = a[gr.ihi-1:gr.ihi+1]
     a[gr.ihi:2*gr.ng+gr.nx] = a[gr.ihi]
 
@@ -47,16 +47,18 @@ def riemann():
 
 
     # compute the states to the left and right of lo-1/2
-    C = 0.7 # CFL
-    al = a[gr.ilo-1] + 0.5*gr.dx*(1.0 - C)*pl.slope[gr.ilo-1]
-    ar = a[gr.ilo] - 0.5*gr.dx*(1.0 + C)*pl.slope[gr.ilo]
+    C = 0.5 # CFL
+    print(a)
+    print(pl.slope)
+    al = a[gr.ilo-1] + 0.5*(1.0 - C)*pl.slope[gr.ilo-1]
+    ar = a[gr.ilo] - 0.5*(1.0 + C)*pl.slope[gr.ilo]
 
     # L
-    gr.mark_cell_right_state(ng-1, r"$a_{\mathrm{lo}+\myhalf,L}^{n+\myhalf}$", 
-                             value=al, vertical="top", color="b")
+    gr.mark_cell_right_state(ng-1, r"$a_{\mathrm{lo}-\myhalf,L}^{n+\myhalf}$", 
+                             value=al, vertical="center", color="b")
 
     # R
-    gr.mark_cell_left_state(ng, r"$a_{\mathrm{lo}+\myhalf,R}^{n+\myhalf}$", 
+    gr.mark_cell_left_state(ng, r"$a_{\mathrm{lo}-\myhalf,R}^{n+\myhalf}$", 
                             value=ar, vertical="top", color="b")
 
 
