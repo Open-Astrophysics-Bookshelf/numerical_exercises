@@ -51,11 +51,11 @@ def riemann():
     ar = a[zi+1] - 0.5*pl.slope[zi+1]
 
     # L
-    gr.mark_cell_right_state(zi, r"$a_{i+\myhalf,L}$",
+    gr.mark_cell_right_state(zi, r"$q_{i+\myhalf,L}$",
                              value=al, vertical="top", color="b", zorder=100)
 
     # R
-    gr.mark_cell_left_state(zi+1, r"$a_{i+\myhalf,R}$",
+    gr.mark_cell_left_state(zi+1, r"$q_{i+\myhalf,R}$",
                             value=ar, vertical="top", color="b", zorder=100)
 
 
