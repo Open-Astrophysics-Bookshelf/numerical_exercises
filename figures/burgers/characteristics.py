@@ -20,65 +20,73 @@ def funr(x):
     state[x < 0.5] = 0.2
     return state
 
-npts_plot = 1000
-xplot = np.linspace(0.0, 1.0, npts_plot)
+def make_plot(icfun=None, label=""):
 
-nchar = 20
-xchar = np.linspace(0.0, 1.0, nchar)
+    npts_plot = 1000
+    xplot = np.linspace(0.0, 1.0, npts_plot)
 
-state = funr(xplot)
-print(type(state))
+    nchar = 20
+    xchar = np.linspace(0.0, 1.0, nchar)
 
-plt.subplot(211)
+    state = icfun(xplot)
+    print(type(state))
 
-plt.plot(xplot, state, lw=2)
+    plt.clf()
 
+    plt.subplot(211)
 
-ax = plt.gca()
-ax.spines['right'].set_visible(False)
-ax.spines['top'].set_visible(False)
-ax.spines['right'].set_visible(False)
-ax.spines['top'].set_visible(False)
-ax.spines['right'].set_visible(False)
-ax.spines['top'].set_visible(False)
-ax.xaxis.set_ticks_position('bottom')
-ax.yaxis.set_ticks_position('left')
-
-plt.ylim(-0.1, 1.1)
-
-plt.xlabel(r"$x$", fontsize="large")
-plt.ylabel(r"$u$", fontsize="large")
+    plt.plot(xplot, state, lw=2)
 
 
+    ax = plt.gca()
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
+    ax.xaxis.set_ticks_position('bottom')
+    ax.yaxis.set_ticks_position('left')
 
-plt.subplot(212)
+    plt.ylim(-0.1, 1.1)
 
-uchar = funr(xchar)
-t = np.linspace(0.0, 1.0, 100)
-for n in range(nchar):
-    xc = xchar[n] + uchar[n]*t
-    plt.plot(xc, t, color="0.5")
+    plt.xlabel(r"$x$", fontsize="large")
+    plt.ylabel(r"$u$", fontsize="large")
 
-ax = plt.gca()
-ax.spines['right'].set_visible(False)
-ax.spines['top'].set_visible(False)
-ax.spines['right'].set_visible(False)
-ax.spines['top'].set_visible(False)
-ax.spines['right'].set_visible(False)
-ax.spines['top'].set_visible(False)
-ax.xaxis.set_ticks_position('bottom')
-ax.yaxis.set_ticks_position('left')
 
-plt.xlabel(r"$x$", fontsize="large")
-plt.ylabel(r"$t$", fontsize="large")
 
-plt.xlim(0.0, 1.0)
-plt.ylim(0.0, 1.1)
+    plt.subplot(212)
 
-f = plt.gcf()
-f.set_size_inches(6.0, 8.0)
+    uchar = icfun(xchar)
+    t = np.linspace(0.0, 1.0, 100)
+    for n in range(nchar):
+        xc = xchar[n] + uchar[n]*t
+        plt.plot(xc, t, color="0.5")
 
-plt.tight_layout()
+    ax = plt.gca()
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
+    ax.xaxis.set_ticks_position('bottom')
+    ax.yaxis.set_ticks_position('left')
 
-plt.savefig("burgers-characteristics-rare.pdf")
+    plt.xlabel(r"$x$", fontsize="large")
+    plt.ylabel(r"$t$", fontsize="large")
 
+    plt.xlim(0.0, 1.0)
+    plt.ylim(0.0, 1.1)
+
+    f = plt.gcf()
+    f.set_size_inches(6.0, 8.0)
+
+    plt.tight_layout()
+
+    plt.savefig(f"burgers-characteristics-{label}.png")
+
+if __name__ == "__main__":
+
+    make_plot(funr, "rare")
+    make_plot(funs, "shock")
