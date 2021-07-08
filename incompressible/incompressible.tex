@@ -20,9 +20,9 @@ fluid obeys the velocity constraint:
 \begin{equation}
 \nabla \cdot \Ub = 0
 \end{equation}
-(since $D\rho / Dt = 0$).  The incompressible fluid approximation is 
+(since $D\rho / Dt = 0$).  The incompressible fluid approximation is
 a reasonable approximation when the Mach number of the fluid is small
-($\ll 1$).  To complete the system, we add the momentum equation.  If 
+($\ll 1$).  To complete the system, we add the momentum equation.  If
 we take the density to be constant everywhere in the domain (not just
 in our fluid element), then we have:
 \begin{equation}
@@ -32,7 +32,7 @@ Note that $p$ here looks like a pressure, but it is not subject to
 any equation of state.  This system is closed as written.  The value
 of $p$ is determined such that the velocity constraint is satisfied.
 
-We can gain more insight into the applicability of the incompressible 
+We can gain more insight into the applicability of the incompressible
 equations by doing an asymptotic expansion.  Starting with the momentum
 equation from the Euler equations:
 \begin{equation}
@@ -80,9 +80,9 @@ This justifies our argument that the incompressible equations apply at low Mach 
 \section{Projection methods}
 
 The basic idea behind a projection method is that any vector field
-can be decomposed into a divergence free part and the gradient of 
-a scalar (this is sometimes called a {\em Hodge decomposition}).  
-Given a velocity field $\Ub^\star$, we can express it in terms of the 
+can be decomposed into a divergence free part and the gradient of
+a scalar (this is sometimes called a {\em Hodge decomposition}).
+Given a velocity field $\Ub^\star$, we can express it in terms of the
 divergence free part $\Ub^d$ and a scalar, $\phi$ as:
 \begin{equation}
 \Ub^\star = \Ub^d + \nabla \phi
@@ -150,7 +150,7 @@ which is divergence free and doubly-periodic.  This is then modified
 by adding the gradient of a scalar, $\phi$, of the form:
 \begin{equation}
 \label{eq:incomp:projphi}
-\phi = \frac{1}{10} \cos(2\pi y) \cos(2\pi x) 
+\phi = \frac{1}{10} \cos(2\pi y) \cos(2\pi x)
 \end{equation}
 yielding a new velocity, $\Ub_p = \Ub + \nabla \phi$.
 The result is the middle panel in the figure, and is not divergence free.
@@ -163,7 +163,7 @@ built via centered-differences:
 \begin{equation}
 \nabla \cdot \Ub = \frac{u_{i+1,j} - u_{i-1,j}}{2\dx} + \frac{v_{i,j+1} - v_{i,j-1}}{2\dy}
 \end{equation}
-Together, these represent an approximation projection. 
+Together, these represent an approximation projection.
 
 \begin{figure}[t]
 \centering
@@ -175,7 +175,7 @@ Together, these represent an approximation projection.
   scalar, Eq.~\ref{eq:incomp:projphi} (middle) and then a projection
   was done to recover the original velocity field (bottom).  In this
   case, the L$_2$ norm of the error on the velocity (comparing before
-  and after projection) is $0.000189$. \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/incompressible/project.py}{project.py}}}
+  and after projection) is $0.000189$. \hydroexdoit{\href{https://github.com/python-hydro/hydro_examples/blob/master/incompressible/project.py}{project.py}}}
 \end{figure}
 
 \begin{exercise}[An approximate projection]
@@ -183,7 +183,7 @@ Implement an approximate projection, using pure smoothing for solving
 the elliptic equation.  Start with the velocity field described
 by Eqs.~\ref{eq:incomp:proju} and \ref{eq:incomp:projv} and the scalar
 from Eq.~\ref{eq:incomp:projphi}.  Compute a poluted velocity field,
-$\Ub_p = \Ub + \nabla \phi$ and then project it to recover the 
+$\Ub_p = \Ub + \nabla \phi$ and then project it to recover the
 original velocity field.
 \end{exercise}
 
@@ -192,7 +192,7 @@ original velocity field.
 Here we describe an incompressible algorithm that uses cell-centered
 data throughout---$\Ub$ and $p$ are both cell-centered.  The
 projection at the end is an approximate projection.  The basic
-algorithm flow is 
+algorithm flow is
 \begin{itemize}
 \item Create the time-centered advective velocities through the faces
   of the zones.
@@ -241,12 +241,12 @@ sometimes called a MAC grid.
 We follow ABS.  Our velocity evolution system (writing out the
 individual components of $\Ub$: $u$ and $v$) is
 \begin{eqnarray}
-\frac{\partial u}{\partial t} &=& -u \frac{\partial u}{\partial x} 
-                                  -v \frac{\partial u}{\partial y} 
+\frac{\partial u}{\partial t} &=& -u \frac{\partial u}{\partial x}
+                                  -v \frac{\partial u}{\partial y}
                                   -\frac{\partial p}{\partial x} = 0 \\
-\frac{\partial v}{\partial t} &=& -u \frac{\partial v}{\partial x} 
-                                  -v \frac{\partial v}{\partial y} 
-                                  -\frac{\partial p}{\partial y} = 0 
+\frac{\partial v}{\partial t} &=& -u \frac{\partial v}{\partial x}
+                                  -v \frac{\partial v}{\partial y}
+                                  -\frac{\partial p}{\partial y} = 0
 \end{eqnarray}
 Our goal in this step is to predict time-centered interface values of
 the normal velocity ($u$ on x-edges and $v$ on y-edges).  The
@@ -256,16 +256,16 @@ $\Delta t/2$).  As with the regular advection, we can have left and
 right states which we will resolve by solving a Riemann problem.  The
 left interface state of $u$ at $i+\myhalf,j$ is found as:
 \begin{eqnarray}
-u_{i+\myhalf,j,L}^{n+\myhalf} 
-  &=& u_{i,j} 
+u_{i+\myhalf,j,L}^{n+\myhalf}
+  &=& u_{i,j}
     + \frac{\Delta x}{2} \left . \frac{\partial u}{\partial x} \right |_{i,j}
     + \frac{\Delta t}{2} \left . \frac{\partial u}{\partial t} \right |_{i,j}\\
-  &=& u_{i,j} 
+  &=& u_{i,j}
     + \frac{\Delta x}{2} \left . \frac{\partial u}{\partial x} \right |_{i,j}
     + \frac{\Delta t}{2} \left . \left (-u \frac{\partial u}{\partial x}
                                 -v \frac{\partial u}{\partial y}
                                 -\frac{\partial p}{\partial x} \right ) \right |_{i,j}\\
-  &=& u_{i,j} 
+  &=& u_{i,j}
     + \frac{\Delta x}{2} \left ( 1 - \frac{\Delta t}{\Delta x} u_{i,j} \right )
                          \left .  \frac{\partial u}{\partial x}\right |_{i,j}
     - \frac{\Delta t}{2} \left ( v \frac{\partial u}{\partial y}\right )_{i,j}
@@ -275,22 +275,22 @@ We express ${\partial u}/{\partial x} |_{i,j}$ as $\Dux_{i,j} / \Delta
 x$, where $\Dux_{i,j}$ is the limited slope of $u$ in the
 $x$-direction in zone $i,j$.  Our interface state is then:
 \begin{equation}
-u_{i+\myhalf,j,L}^{n+\myhalf} 
+u_{i+\myhalf,j,L}^{n+\myhalf}
     = \underbrace{u_{i,j} + \frac{1}{2} \left ( 1 - \frac{\Delta t}{\Delta x} u \right ) \Dux_{i,j}}_{\equiv \hat{u}_{i+\myhalf,j,L}^{n+\myhalf}}
     - \underbrace{\frac{\Delta t}{2} \left ( v \frac{\partial u}{\partial y} \right )_{i,j}}_{\mathrm{transverse~term}}
     - \frac{\Delta t}{2} \left . \frac{\partial p}{\partial x} \right |_{i,j}
 \label{eq:uMAC_l}
-\end{equation} 
+\end{equation}
 
 
 Similarly, for $v$ through the $y$ faces, we find:
 \begin{equation}
-v_{i,j+\myhalf,L}^{n+\myhalf} 
+v_{i,j+\myhalf,L}^{n+\myhalf}
     = \underbrace{v_{i,j} + \frac{1}{2} \left ( 1 - \frac{\Delta t}{\Delta x} v \right ) \Dvy_{i,j}}_{\equiv \hat{v}_{i,j+\myhalf,L}^{n+\myhalf}}
     - \underbrace{\frac{\Delta t}{2} \left ( u \frac{\partial v}{\partial x} \right )_{i,j}}_{\mathrm{transverse~term}}
     - \frac{\Delta t}{2} \left . \frac{\partial p}{\partial y} \right |_{i,j}
 \label{eq:vMAC_l}
-\end{equation} 
+\end{equation}
 
 As indicated above (and following ABS and the similar notation used by
 Colella~\cite{colella:1990}), we denote the quantities that will be used to evaluate
@@ -306,51 +306,51 @@ states on each interface.
 \begin{eqnarray}
 \hat{u}_{i+\myhalf,j,L}^{n+\myhalf} &=&
    u_{i,j} + \frac{1}{2} \left ( 1 - \frac{\Delta t}{\Delta x} u_{i,j} \right )
-       \Dux_{i,j} \\ 
+       \Dux_{i,j} \\
 %
 \hat{u}_{i+\myhalf,j,R}^{n+\myhalf} &=&
    u_{i+1,j} - \frac{1}{2} \left ( 1 + \frac{\Delta t}{\Delta x} u_{i+1,j} \right )
-       \Dux_{i+1,j} 
+       \Dux_{i+1,j}
 \end{eqnarray}
 
 \noindent $v$ on $x$-interfaces:
 \begin{eqnarray}
 \hat{v}_{i+\myhalf,j,L}^{n+\myhalf} &=&
    v_{i,j} + \frac{1}{2} \left ( 1 - \frac{\Delta t}{\Delta x} u_{i,j} \right )
-       \Dvx_{i,j} \\ 
+       \Dvx_{i,j} \\
 %
 \hat{v}_{i,j+\myhalf,R}^{n+\myhalf} &=&
    v_{i+1,j} - \frac{1}{2} \left ( 1 + \frac{\Delta t}{\Delta x} u_{i+1,j} \right )
-       \Dvx_{i+1,j} 
+       \Dvx_{i+1,j}
 \end{eqnarray}
 
 \noindent $u$ on $y$-interfaces:
 \begin{eqnarray}
 \hat{u}_{i,j+\myhalf,L}^{n+\myhalf} &=&
    u_{i,j} + \frac{1}{2} \left ( 1 - \frac{\Delta t}{\Delta y} v_{i,j} \right )
-       \Duy_{i,j} \\ 
+       \Duy_{i,j} \\
 %
 \hat{u}_{i,j+\myhalf,R}^{n+\myhalf} &=&
    u_{i,j+1} - \frac{1}{2} \left ( 1 + \frac{\Delta t}{\Delta y} v_{i,j+1} \right )
-       \Duy_{i,j+1} 
+       \Duy_{i,j+1}
 \end{eqnarray}
 
 \noindent $v$ on $y$-interfaces:
 \begin{eqnarray}
 \hat{v}_{i,j+\myhalf,L}^{n+\myhalf} &=&
    v_{i,j} + \frac{1}{2} \left ( 1 - \frac{\Delta t}{\Delta y} v_{i,j} \right )
-       \Dvy_{i,j} \\ 
+       \Dvy_{i,j} \\
 %
 \hat{v}_{i,j+\myhalf,R}^{n+\myhalf} &=&
    v_{i,j+1} - \frac{1}{2} \left ( 1 + \frac{\Delta t}{\Delta y} v_{i,j+1} \right )
-       \Dvy_{i,j+1} 
+       \Dvy_{i,j+1}
 \end{eqnarray}
 
 Note that the `right' state is constructed using the data to the right
 of the interface.  Also note that in constructing these transverse
 velocities, we do not include the $p$ term.
 
-Next we find the advective velocity through each interface.  
+Next we find the advective velocity through each interface.
 The incompressible
 velocity equation looks like the inviscid Burger's equation, and the
 Riemann solver follows that construction.  BCG provide the implementation
@@ -368,10 +368,10 @@ problem solution is:
 \end{equation}
 We solve this for each of the normal velocities, giving:
 \begin{eqnarray}
-\hat{u}^\mathrm{adv}_{i+\myhalf,j} &=& 
+\hat{u}^\mathrm{adv}_{i+\myhalf,j} &=&
     \mathcal{R}(\hat{u}_{i+\myhalf,j,L}^{n+\myhalf}, \hat{u}_{i+\myhalf,j,R}^{n+\myhalf}) \\
 %
-\hat{v}^\mathrm{adv}_{i,j+\myhalf} &=& 
+\hat{v}^\mathrm{adv}_{i,j+\myhalf} &=&
     \mathcal{R}(\hat{v}_{i,j+\myhalf,L}^{n+\myhalf}, \hat{v}_{i,j+\myhalf,R}^{n+\myhalf})
 \end{eqnarray}
 These advective velocities (sometimes called the {\em transverse
@@ -399,7 +399,7 @@ Then the interface states are:
 \hat{u}_{i,j+\myhalf} &=& \mathcal{U}[\hat{v}_{i,j+\myhalf}^\mathrm{adv}]
              (\hat{u}_{i,j+\myhalf,L}^{n+\myhalf}, \hat{u}_{i,j+\myhalf,R}^{n+\myhalf} ) \\
 \hat{v}_{i,j+\myhalf} &=& \mathcal{U}[\hat{v}_{i,j+\myhalf}^\mathrm{adv}]
-             (\hat{v}_{i,j+\myhalf,L}^{n+\myhalf}, \hat{v}_{i,j+\myhalf,R}^{n+\myhalf} ) 
+             (\hat{v}_{i,j+\myhalf,L}^{n+\myhalf}, \hat{v}_{i,j+\myhalf,R}^{n+\myhalf} )
 \end{eqnarray}
 
 Now we can construct the full left and right predictions for the
@@ -407,23 +407,23 @@ normal velocities on each interface (Eqs.~\ref{eq:uMAC_l} and
 \ref{eq:vMAC_l}).  This involves simply adding the transverse term to
 the hat quantities and adding the pressure gradient.
 \begin{equation}
-u_{i+\myhalf,j,L}^{n+\myhalf} = \hat{u}_{i+\myhalf,j,L}^{n+\myhalf} 
-    - \frac{\Delta t}{2} 
+u_{i+\myhalf,j,L}^{n+\myhalf} = \hat{u}_{i+\myhalf,j,L}^{n+\myhalf}
+    - \frac{\Delta t}{2}
        \left [ \frac{1}{2} \left (\hat{v}^\mathrm{adv}_{i,j-\myhalf} +
                                   \hat{v}^\mathrm{adv}_{i,j+\myhalf} \right )
       \right ]
-      \left ( \frac{\hat{u}_{i,j+\myhalf}^{n+\myhalf} - 
+      \left ( \frac{\hat{u}_{i,j+\myhalf}^{n+\myhalf} -
                     \hat{u}_{i,j-\myhalf}^{n+\myhalf}}{\Delta y} \right )
     - \frac{\Delta t}{2} (Gp)^{(x),n-\myhalf}_{i,j}
 \end{equation}
 and
 \begin{equation}
-v_{i,j+\myhalf,L}^{n+\myhalf} = \hat{v}_{i,j+\myhalf,L}^{n+\myhalf} 
-    - \frac{\Delta t}{2} 
+v_{i,j+\myhalf,L}^{n+\myhalf} = \hat{v}_{i,j+\myhalf,L}^{n+\myhalf}
+    - \frac{\Delta t}{2}
        \left [ \frac{1}{2} \left (\hat{u}^\mathrm{adv}_{i-\myhalf,j} +
                                   \hat{u}^\mathrm{adv}_{i+\myhalf,j} \right )
       \right ]
-      \left ( \frac{\hat{v}_{i+\myhalf,j}^{n+\myhalf} - 
+      \left ( \frac{\hat{v}_{i+\myhalf,j}^{n+\myhalf} -
                     \hat{v}_{i-\myhalf,j}^{n+\myhalf}}{\Delta x} \right )
     - \frac{\Delta t}{2} (Gp)^{(y),n-\myhalf}_{i,j}
 \end{equation}
@@ -436,22 +436,22 @@ construction is done for the right states at the interface.
 
 Finally, we do a Riemann solve (again, using the Burger's form of the
 Riemann problem) followed by upwinding to get the normal advective
-velocities.  This is basically the $\mathcal{R}(.,.)$ operation followed 
+velocities.  This is basically the $\mathcal{R}(.,.)$ operation followed
 by $\mathcal{U}(.,.)$.  Together, it is:
 \begin{equation}
 u^\mathrm{adv}_{i+\myhalf,j} = \left \{ \begin{array}{cl}
-   u_{i+\myhalf,j,L}^{n+\myhalf}  & 
-         \mathrm{~if~} u_{i+\myhalf,j,L}^{n+\myhalf} > 0, \qquad 
+   u_{i+\myhalf,j,L}^{n+\myhalf}  &
+         \mathrm{~if~} u_{i+\myhalf,j,L}^{n+\myhalf} > 0, \qquad
                        u_{i+\myhalf,j,L}^{n+\myhalf} + u_{i+\myhalf,j,R}^{n+\myhalf} > 0 \\
    \frac{1}{2} \left ( u_{i+\myhalf,j,L}^{n+\myhalf} +
                        u_{i+\myhalf,j,R}^{n+\myhalf} \right )  &
-          \mathrm{~if~} u_{i+\myhalf,j,L}^{n+\myhalf} \le 0, \qquad 
+          \mathrm{~if~} u_{i+\myhalf,j,L}^{n+\myhalf} \le 0, \qquad
                         u_{i+\myhalf,j,R}^{n+\myhalf} \ge 0 \\
    u_{i+\myhalf,j,R}^{n+\myhalf}  & \mathrm{~otherwise}
   \end{array}
   \right .
 \end{equation}
-and similar for $v^\mathrm{adv}_{i,j+\myhalf}$.  
+and similar for $v^\mathrm{adv}_{i,j+\myhalf}$.
 These velocities are sometimes referred to as the MAC velocities.
 
 
@@ -494,10 +494,10 @@ L\phi = D\Ub
 \end{equation}
 using multigrid V-cycles and then update the MAC velocities as:
 \begin{eqnarray}
-u^\mathrm{adv}_{i+\myhalf,j} &=& u^\mathrm{adv}_{i+\myhalf,j} - 
+u^\mathrm{adv}_{i+\myhalf,j} &=& u^\mathrm{adv}_{i+\myhalf,j} -
     \frac{\phi_{i+1,j} - \phi_{i,j}}{\Delta x} \\
 %
-v^\mathrm{adv}_{i,j+\myhalf} &=& v^\mathrm{adv}_{i,j+\myhalf} - 
+v^\mathrm{adv}_{i,j+\myhalf} &=& v^\mathrm{adv}_{i,j+\myhalf} -
     \frac{\phi_{i,j+1} - \phi_{i,j}}{\Delta y}
 \end{eqnarray}
 
@@ -530,7 +530,7 @@ the new time by discretizing the advective terms ($\Ub\cdot \nabla \Ub$).
 We express the advective terms for $u$ as $A^{(u),n+\myhalf}_{i,j}$ and
 those for $v$ as $A^{(v),n+\myhalf}_{i,j}$.  These have the form:
 \begin{eqnarray}
-A^{(u),n+\myhalf}_{i,j} =   
+A^{(u),n+\myhalf}_{i,j} =
    && \frac{1}{2}
      \left ( u^\mathrm{adv}_{i-\myhalf,j} + u^\mathrm{adv}_{i+\myhalf,j} \right )
      \frac{u^{n+\myhalf}_{i+\myhalf,j} - u^{n+\myhalf}_{i-\myhalf,j}}{\Delta x} + \nonumber \\
@@ -538,7 +538,7 @@ A^{(u),n+\myhalf}_{i,j} =
      \left ( v^\mathrm{adv}_{i,j-\myhalf} + v^\mathrm{adv}_{i,j+\myhalf} \right )
      \frac{u^{n+\myhalf}_{i,j+\myhalf} - u^{n+\myhalf}_{i,j-\myhalf}}{\Delta y} \\
 %
-A^{(v),n+\myhalf}_{i,j} = 
+A^{(v),n+\myhalf}_{i,j} =
    && \frac{1}{2}
      \left ( u^\mathrm{adv}_{i-\myhalf,j} + u^\mathrm{adv}_{i+\myhalf,j} \right )
      \frac{v^{n+\myhalf}_{i+\myhalf,j} - v^{n+\myhalf}_{i-\myhalf,j}}{\Delta x} \nonumber +\\
@@ -551,7 +551,7 @@ The normal update for $u$, $v$ would include the $Gp$ term and appear
 as:
 \begin{eqnarray}
 u^{\star}_{i,j} &=& u^n_{i,j} - \Delta t A^{(u),n+\myhalf}_{i,j} - \Delta t (G p)^{(x),n-\myhalf}_{i,j} \\
-v^{\star}_{i,j} &=& v^n_{i,j} - \Delta t A^{(v),n+\myhalf}_{i,j} - \Delta t (G p)^{(y),n-\myhalf}_{i,j} 
+v^{\star}_{i,j} &=& v^n_{i,j} - \Delta t A^{(v),n+\myhalf}_{i,j} - \Delta t (G p)^{(y),n-\myhalf}_{i,j}
 \end{eqnarray}
 Note that at this point, we don't have an updated $p$, so we use a lagged
 value from the previous step's projection.
@@ -561,7 +561,7 @@ of a scalar and would be removed by the projection, so we can omit it in
 this update, giving an alternate provisional update:
 \begin{eqnarray}
 u^{\star\star}_{i,j} &=& u^n_{i,j} - \Delta t A^{(u),n+\myhalf}_{i,j}  \\
-v^{\star\star}_{i,j} &=& v^n_{i,j} - \Delta t A^{(v),n+\myhalf}_{i,j}  
+v^{\star\star}_{i,j} &=& v^n_{i,j} - \Delta t A^{(v),n+\myhalf}_{i,j}
 \end{eqnarray}
 
 
@@ -581,7 +581,7 @@ enforce the constraint, we need to do a projection.  Here is where we
 have the flexibility on whether to include the $G p^{n-\myhalf}$ term.  If
 we were doing an exact projection, then adding the gradient of a
 scalar would not change the divergence-free velocity field, so there
-would be no need to add it.  
+would be no need to add it.
 
 BCH did an exact projection on a cell-centered grid.  There, the
 divergence operator is:
@@ -590,7 +590,7 @@ divergence operator is:
               \frac{v_{i,j+1} - v_{i,j-1}}{2\Delta y} \label{eq:ccdiv}
 \end{equation}
 This gives a cell-centered $D\Ub$.  If we want $\phi$ cell-centered, then
-the gradient, $G\phi$ must also be cell centered so $L\phi = DG\phi$ is 
+the gradient, $G\phi$ must also be cell centered so $L\phi = DG\phi$ is
 cell-centered.  This means that we must have
 \begin{eqnarray}
 (G\phi)^{(x)}_{i,j} &=& \frac{\phi_{i+1,j} - \phi_{i-1,j}}{2\Delta x} \\
@@ -602,7 +602,7 @@ the immediate neighbors:
 (L\phi)_{i,j} = \frac{\phi_{i+2,j} -2\phi_{i,j} + \phi_{i-2,j}}{4 \Delta x^2} +
     \frac{\phi_{i,j+2} -2\phi_{i,j} + \phi_{i,j-2}}{4 \Delta y^2}
 \end{equation}
-This decomposes the domain into 4 distinct grids that are only linked 
+This decomposes the domain into 4 distinct grids that are only linked
 together at the boundaries.  While an exact projection, this decoupling
 can be undesirable.
 
@@ -610,7 +610,7 @@ Approximate projections relax the idea that $L = DG$.  In an exact
 projection, when you apply the projection operator, $P$, in
 succession, the result is unchanged ($P^2 = P$).  This is not the case
 for an approximate projection.  As a result, exactly what form you
-project matters.  For an approximate projection, we can use the 
+project matters.  For an approximate projection, we can use the
 standard 5-point stencil for the Laplacian,
 \begin{equation}
 (L\phi)_{i,j} = \frac{\phi_{i+1,j} -2\phi_{i,j} + \phi_{i-1,j}}{\Delta x^2} +
@@ -636,7 +636,7 @@ When projecting the new velocity, we scale by $\Delta t$ to get a quantity
 that has dimensions of pressure.  The procedure for the projection
 differs slightly depending on whether we project $\Ub^\star$ or $\Ub^{\star\star}$:
 \begin{itemize}
-\item case I: projecting $\Ub^{\star}/\Delta t$.  
+\item case I: projecting $\Ub^{\star}/\Delta t$.
 
 From the expression above,
 this looks like:
@@ -667,12 +667,12 @@ Gp^{n+\myhalf} = Gp^{n-\myhalf} + G\phi
 (see Martin 2.5 or ABC).  We store this for the next timestep.
 
 
-\item case II: projecting $\Ub^{\star\star}/\Delta t$.  
+\item case II: projecting $\Ub^{\star\star}/\Delta t$.
 
 From the expression above,
 this looks like:
 \begin{equation}
-\frac{\Ub^{\star\star}}{\Delta t} = \frac{\Ub^n}{\Delta t} - A^{(u),n+\myhalf} 
+\frac{\Ub^{\star\star}}{\Delta t} = \frac{\Ub^n}{\Delta t} - A^{(u),n+\myhalf}
 \end{equation}
 There is no explicit $Gp^{n-\myhalf}$ term.  We solve:
 \begin{equation}
@@ -685,7 +685,7 @@ We then find the new, divergence free velocity field as:
 \end{equation}
 
 Since there was no $Gp^{n-\myhalf}$ in what we projected, $p^{n+\myhalf} = \phi$,
-and 
+and
 \begin{equation}
 Gp^{n+\myhalf} = G\phi
 \end{equation}
@@ -701,7 +701,7 @@ in the projected velocity field.
 
 For the advection portion of the algorithm, the boundary conditions
 on $u$ and $v$ are implemented in the usual way, using ghost cells.
-For the projection, 
+For the projection,
 
 For a periodic domain, the boundary conditions on $\phi$ are likewise
 periodic.  At a solid wall or inflow boundary, we already predicted
@@ -711,7 +711,7 @@ correction is:
 \begin{equation}
 \Ub^{n+1} = \Ub^\star - \nabla \phi
 \end{equation}
-we want $\nabla \phi \cdot n = 0$.  
+we want $\nabla \phi \cdot n = 0$.
 
 At outflow boundaries, we do not want to introduce any shear as we go
 through the boundary.  This means that we do not want any tangential
@@ -753,7 +753,7 @@ Minion also gives the pressure, but this is not needed for the
 solution.  This is run on a doubly-periodic unit square domain.  The
 main utility of this set of initial conditions is that we can use the
 analytic solution to measure the convergence behavior of the
-algorithm. 
+algorithm.
 
 
 \section{Extensions}
@@ -767,7 +767,7 @@ algorithm.
   This can arise, for instance, in modeling the Rayleigh-Taylor
   instability.
 
-  The basic idea follows the method described above.  Now the 
+  The basic idea follows the method described above.  Now the
   mass continuity equation is also evolved:
   \begin{equation}
   \frac{\partial \rho}{\partial t} + \nabla \cdot (\rho \Ub) = 0
@@ -799,23 +799,23 @@ algorithm.
   for $u$ and one for $v$).  These are differenced using
   Crank-Nicolson centering:
   \begin{eqnarray}
-  \frac{u^\star - u^n}{\Delta t} &=& - A^{(u),n+\myhalf} - \nabla p^{(x),n-\myhalf} 
+  \frac{u^\star - u^n}{\Delta t} &=& - A^{(u),n+\myhalf} - \nabla p^{(x),n-\myhalf}
        + \frac{\epsilon }{2} \nabla^2 (u^n + u^\star) \\
-  \frac{v^\star - v^n}{\Delta t} &=& - A^{(v),n+\myhalf} - \nabla p^{(y),n-\myhalf} 
-       + \frac{\epsilon }{2} \nabla^2 (v^n + v^\star) 
+  \frac{v^\star - v^n}{\Delta t} &=& - A^{(v),n+\myhalf} - \nabla p^{(y),n-\myhalf}
+       + \frac{\epsilon }{2} \nabla^2 (v^n + v^\star)
   \end{eqnarray}
   This involves two separate multigrid solves.  Once $\Ub^\star$ is found,
   the final projection is done as usual.
 
 \item {\em Low Mach number combustion}: In low-Mach number combustion
-  flows, the fluid is allowed to respond to local heat release 
+  flows, the fluid is allowed to respond to local heat release
   by expanding.  The velocity constraint is derived by differentiating
   the equation of state along particle paths, leading to the appearance
   of a source term:
   \begin{equation}
   \nabla \cdot \Ub = S
   \end{equation}
-  Here, $S$, incorporates the compressibility effects due to the 
+  Here, $S$, incorporates the compressibility effects due to the
   heat release and diffusion.  This system is used when modeling
   burning fronts (flames).  This type of flow can be thought
   of as linking two incompressible states (the fuel and the ash)
@@ -852,5 +852,3 @@ algorithm.
   projections stumble on.
 
 \end{itemize}
-
-

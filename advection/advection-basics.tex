@@ -75,7 +75,7 @@ A simple first-order accurate discretization is:
 \label{eq:fo}
 \end{equation}
 This is an {\em explicit} method, since the new solution, $a_i^{n+1}$,
-depends only on information at the old time level, $n$.  
+depends only on information at the old time level, $n$.
 
 Finally, we also need to specify a boundary condition for this.  Our
 choice of spatial derivative is one-sided---it uses information from
@@ -112,10 +112,10 @@ to propagate across a single zone.  That is:
 \Delta t \le \frac{\Delta x}{u} \enskip .
 \end{equation}
 This is called the {\em Courant-Friedrichs-Lewy} or {\em CFL}
-condition.  A dimensionless quantity called the {\em CFL number} is 
-defined as 
+condition.  A dimensionless quantity called the {\em CFL number} is
+defined as
 \begin{equation}
-\cfl = \frac{\Delta t u }{\Delta x} 
+\cfl = \frac{\Delta t u }{\Delta x}
 \end{equation}
 Stability requires $\cfl \le 1$.
 %
@@ -133,7 +133,7 @@ and specify $\cfl$ as part of the problem (a typical value may be $\cfl = 0.7$).
 \end{exercise}
 
 Keep in mind that, in general, we will be solving a non-linear
-system of equations, so it is not possible to run with $\cfl=1$, 
+system of equations, so it is not possible to run with $\cfl=1$,
 since $u$ (and therefore $\cfl$) will change from zone to zone.
 Instead, one looks at the most restrictive timestep over all the
 zones and uses that for the entire system.
@@ -174,10 +174,10 @@ zones and uses that for the entire system.
 {\label{fig:fdadvect} Finite-difference solution to the first-order
 finite-difference upwind method for advection, using 65 points and
 a variety of CFL numbers. \\
-\hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/advection/fdadvect.py}{fdadvect.py}}}
+\hydroexdoit{\href{https://github.com/python-hydro/hydro_examples/blob/master/advection/fdadvect.py}{fdadvect.py}}}
 \end{figure}
 %
-This method is first-order accurate.  
+This method is first-order accurate.
 
 
 Ultimately we will want higher-order accurate methods.  The most obvious
@@ -201,7 +201,7 @@ derivative.
 finite-difference method for advection using 65 points, modeling for
 only 1/10$^\mathrm{th}$ of a period.  The panel of the left is
 with $\cfl = 0.1$ and the panel on the right is $\cfl = 0.5$.\\
-\hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/advection/fdadvect.py}{fdadvect.py}}}
+\hydroexdoit{\href{https://github.com/python-hydro/hydro_examples/blob/master/advection/fdadvect.py}{fdadvect.py}}}
 \end{figure}
 
 You will find that no matter what value of $\cfl$ you choose with the
@@ -216,7 +216,7 @@ simply gets the physics wrong.
 
 \MarginPar{add a discussion of domain of dependence}
 
-The classic method for understanding stability is to consider the growth 
+The classic method for understanding stability is to consider the growth
 of a single Fourier mode in our discretization.  That is, substitute in
 $a_i^n = A^n e^{Ii\theta}$, where $I = \sqrt{-1}$\footnote{our use of $i$ and $j$ as spatial indices presents an unfortunate clash of notation here, hence the use of $I$ for the imaginary unit}, and $\theta$ represents a
 phase.  A method is stable if $|A^{n+1}/A^n| \le 1$.  FTCS appears as:
@@ -237,14 +237,14 @@ so the magnitude of the amplification is
 We see that there is no value of $\cfl$ that can make the method stable
 ($|A^{n+1}/A^n| > 1$ always).  Doing the same analysis for
 Eq.~\ref{eq:fo} would show that the upwind method is stable for $0\le
-\cfl \le 1$. 
+\cfl \le 1$.
 
 \begin{exercise}[Stability of the upwind method]
 {Using the above stability analysis, considering the amplitude of a
   single Fourier mode, show that the growth of a mode for the upwind
   method (Eq.~\ref{eq:fo}) is:
   \begin{equation}
-    \left | \frac{A^{n+1}}{A^n} \right |^2 = 
+    \left | \frac{A^{n+1}}{A^n} \right |^2 =
            1 - 2\cfl(1-\cfl)(1-\cos\theta)
   \end{equation}
   and stability requires $2\cfl(1-\cfl) \ge 0$ or $0 \le \cfl \le 1$.
@@ -270,8 +270,8 @@ how they modify the actual equation you are trying to solve.
 and replace $a_i^{n+1}$ with a Taylor expansion in time, and replace
 $a_{i-1}^n$ with a Taylor expansion in space, keeping terms to
 $O(\Delta t^3)$ and $O(\Delta x^3)$.  Replacing $\partial a/\partial t$
-with $-u \partial a/ \partial x$ in the higher-order terms, show 
-that our difference equation more closely corresponds to 
+with $-u \partial a/ \partial x$ in the higher-order terms, show
+that our difference equation more closely corresponds to
 \begin{eqnarray}
 \label{eq:advect_trunc_analysis}
 a_t + u a_x &=& \frac{u \Delta x}{2} \left ( 1 - \frac{\Delta t u}{\Delta x} \right ) \frac{\partial^2 a}{\partial x^2} \\
@@ -341,7 +341,7 @@ If we use periodic boundary conditions, then point $0$ and $N-1$ are
 identical, so we only need to update one of these.  Taking $a_0^{n+1} = a_{N-1}^{n+1}$, our system in matrix form appears as:
 \begin{equation}
 \renewcommand{\arraystretch}{1.5}
-\left ( \begin{array}{ccccccc} 
+\left ( \begin{array}{ccccccc}
 1+\cfl & & & & & & -\cfl \\
 -\cfl  & 1+\cfl &  \\
  &  -\cfl & 1+\cfl &  \\
@@ -378,7 +378,7 @@ This requires a matrix solve---this makes implicit methods generally more
 expensive than explicit methods.  However, stability analysis would show
 that this implicit discretization is stable for any choice of $\cfl$. (But
 one must not confuse stability with accuracy---the most accurate solutions
-with this method will still have a small $\cfl$).  Also note that the form of 
+with this method will still have a small $\cfl$).  Also note that the form of
 the matrix will change depending on the choice of boundary conditions.
 Figure~\ref{fig:fdadvect-implicit} shows the result of solving this
 implicit system.
@@ -391,7 +391,7 @@ implicit system.
 {\label{fig:fdadvect-implicit} Finite-difference solution to the implicit first-order
 finite-difference upwind method for advection, using 65 points and
 a variety of CFL numbers. \\
-\hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/advection/fdadvect_implicit.py}{fdadvect\_implicit.py}}}
+\hydroexdoit{\href{https://github.com/python-hydro/hydro_examples/blob/master/advection/fdadvect_implicit.py}{fdadvect\_implicit.py}}}
 \end{figure}
 
 \begin{exercise}[Implicit advection]
@@ -412,10 +412,10 @@ time.  The full time derivative is:
    \frac{dx}{dt}
 \end{equation}
 So the value of this derivative depends on the path, $x(t)$, that we choose
-to follow.  
+to follow.
 
 Consider an observer who is stationary.  They will watch the flow move
-past them, so $dx/dt = 0$, and $da/dt = \partial a/\partial t$.  
+past them, so $dx/dt = 0$, and $da/dt = \partial a/\partial t$.
 This fixed frame is called {\em Eulerian frame}.
 
 Instead imagine an observer who moves with the flow, at the velocity $u$.
@@ -449,7 +449,7 @@ taking the norm of error\footnote{see \S~\ref{intro:sec:norm} for the
   definition of the norms} as:
 \begin{equation}
 \epsilon^\mathrm{abs} = \| a^\mathrm{final} - a^\mathrm{init} \|_2 \equiv
-   \left [ \frac{1}{N} \sum_{i=1}^N 
+   \left [ \frac{1}{N} \sum_{i=1}^N
    ( a_i^\mathrm{final} - a_i^\mathrm{init} )^2
   \right ]^{\myhalf}
 \end{equation}

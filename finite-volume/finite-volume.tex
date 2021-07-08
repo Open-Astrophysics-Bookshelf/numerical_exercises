@@ -118,7 +118,7 @@ instead of the discrete data being associated at a single point in
 space, keep track of the total amount of $f$ in the zone (indicated as the shaded regions).  Since we generally don't know how $f$ varies in the zone,
 we will typically talk about the average of $f$, $\favg{f}_i$, over
 the zone, and represent this by a horizontal.  The total amount of $f$ in
-the zone is then simply $\Delta x \favg{f}_i$. 
+the zone is then simply $\Delta x \favg{f}_i$.
 We label the left and right edges of a zone with half-integer indices
 $i-\myhalf$ and $i+\myhalf$.  The physical coordinate of the center of the zone
 is the same as in the cell-centered finite-difference case.
@@ -235,7 +235,7 @@ f(x) = &\frac{\favg{f}_{i-1} - 2 \favg{f}_i +
 \end{exercise}
 
 The {\sf Jupyter} notebook
-\hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/finite-volume/conservative-interpolation.ipynb}{conservative-interpolation.ipynb}}
+\hydroexdoit{\href{https://github.com/python-hydro/hydro_examples/blob/master/finite-volume/conservative-interpolation.ipynb}{conservative-interpolation.ipynb}}
 shows how to derive these interpolants using {\sf SymPy}, and gives
 higher-order interpolants.
 
@@ -372,7 +372,7 @@ array would be dimensioned as
   ihi = nx + ng - 1
   state = np.zeros((nx + 2*ng, nvar))
 \end{lstlisting}
-in python (using NumPy), where {\tt nx} is the number of zones in the 
+in python (using NumPy), where {\tt nx} is the number of zones in the
 domain and {\tt ng} is the number of ghost cells.  For some problems,
 there might be more than one state variable, so {\tt nvar}, is the number
 of state variables that live in each zone.  We would then loop from {\tt ilo}

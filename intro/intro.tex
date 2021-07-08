@@ -49,7 +49,7 @@ simulations reveal.  To really understand the limits of your
 simulations, you should do parameter and convergence studies.
 
 There is no ``\"uber-code''.  Every algorithm begins with
-approximations and has limitations.  
+approximations and has limitations.
 Comparisons between different codes are important and common in our
 field (see, for example,
 \cite{frenk:1999,dimonte:2004,devalborro:2006}), and build confidence
@@ -99,7 +99,7 @@ numbers is provided in \cite{goldberg:1991}.
 In your choice of programming language, create a floating point
 variable and initialize it to 0.1.  Now, print it out in full
 precision (you may need to use format specifiers in your language to
-get all significant digits the computer tracks).  
+get all significant digits the computer tracks).
 
 You should see that it is not exactly 0.1 to the computer---this is
 the floating point error.  The number 0.1 is not exactly representable
@@ -166,7 +166,7 @@ encounter:
   number of points, $x_0$, $x_1$, $\ldots$, and we want to compute the
   derivative at a point or integration over a range of points.
 \item We know a function analytically and we want to construct a
-  derivative or integral of this function numerically. 
+  derivative or integral of this function numerically.
 \end{enumerate}
 
  In these notes, we will mainly be concerned with the first case.
@@ -193,8 +193,8 @@ a_{i+1} = a_i + \Delta x \left . \frac{\partial a}{\partial x} \right |_i + \fra
 \end{equation}
 Solving for ${\partial a}/{\partial x} |_i$, we see
 \begin{align}
-\left . \frac{\partial a}{\partial x} \right |_i &= 
-    \frac{a_i - a_{i-1}}{\Delta x} - \frac{1}{2}\Delta x \left . \frac{\partial^2 a}{\partial x^2} \right |_i + \ldots \\ 
+\left . \frac{\partial a}{\partial x} \right |_i &=
+    \frac{a_i - a_{i-1}}{\Delta x} - \frac{1}{2}\Delta x \left . \frac{\partial^2 a}{\partial x^2} \right |_i + \ldots \\
 %
  &= \frac{a_i - a_{i-1}}{\Delta x} + \mathcal{O}(\Delta x)
 \end{align}
@@ -225,7 +225,7 @@ accurate, i.e.\ its truncation error is $\mathcal{O}(\Delta x^2)$.}
 \caption[Difference approximations to the derivative of $\sin(x)$]
         {\label{fig:derivs} A comparison of one-sided and centered
           difference approximations to the derivative of $\sin(x)$.
-\hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/basic_numerics/derivatives/derivatives.py}{derivatives.py}}}
+\hydroexdoit{\href{https://github.com/python-hydro/hydro_examples/blob/master/basic_numerics/derivatives/derivatives.py}{derivatives.py}}}
 \end{figure}
 
 Figure~\ref{fig:derivs} shows the left- and right-sided first-order
@@ -272,7 +272,7 @@ method called {\em Richardson extrapolation}).
     \sin(x)$ at $x_0 = 1$ as a function of the spacing $\delta x$.  For
     small $\delta x$, roundoff error dominates the error in the
     approximation.  For large $\delta x$, truncation error dominates. \\
-    \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/basic_numerics/derivatives/deriv_error.py}{deriv\_error.py}}}
+    \hydroexdoit{\href{https://github.com/python-hydro/hydro_examples/blob/master/basic_numerics/derivatives/deriv_error.py}{deriv\_error.py}}}
 \end{figure}
 
 
@@ -410,7 +410,7 @@ iteration.
   defines the next approximation to the root.  The vertical dotted
   line to the function shows the new slope that will be used for
   extrapolation in the next iteration. \\
-\hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/basic_numerics/roots/roots_plot.py}{roots\_plot.py}}}
+\hydroexdoit{\href{https://github.com/python-hydro/hydro_examples/blob/master/basic_numerics/roots/roots_plot.py}{roots\_plot.py}}}
 \end{figure}
 
 
@@ -447,15 +447,15 @@ $f(x)$ and we have have an approximation, $f_i$ defined at $N$ points,
 $i = 0, \ldots, N-1$.  The error at each point $i$ is $\epsilon_i =
 |f_i - f(x_i)|$.  But this is $N$ separate errors---we want a single
 number that represents the error of our approximation.  This is the
-job of a vector norm.  
+job of a vector norm.
 
 There are many different norms we can define.  For a vector ${\bf q}$,
 we write the norm as $\|q\|$.  Often, we'll put a subscript after the
 norm brackets to indicate which norm was used.  Some popular norms
 are:
 \begin{itemize}
-\item {\em inf norm}: 
-  \begin{equation} 
+\item {\em inf norm}:
+  \begin{equation}
     \| q \|_\infty = \max_i |q_i|
   \end{equation}
 
@@ -540,9 +540,9 @@ fourth-order accurate overall.
 % rk4_plot.py creates rk4_k[1-4].pdf, rk4_final.pdf
 \begin{figure}[p]
 \centering
-\includegraphics[width=0.48\linewidth]{rk4_k1} 
+\includegraphics[width=0.48\linewidth]{rk4_k1}
 \includegraphics[width=0.48\linewidth]{rk4_k2} \\
-\includegraphics[width=0.48\linewidth]{rk4_k3} 
+\includegraphics[width=0.48\linewidth]{rk4_k3}
 \includegraphics[width=0.48\linewidth]{rk4_k4} \\
 \includegraphics[width=0.6\linewidth]{rk4_final}
 %
@@ -759,15 +759,15 @@ books can give a good introduction to how to design an FFT algorithm.
   following transforms:
   \begin{itemize}
   \item $\sin(2\pi k_0 x)$ with $k_0 = 0.2$.  The transform should
-    have all of the power in the imaginary component only at the 
+    have all of the power in the imaginary component only at the
     frequency $0.2$.
 
   \item $\cos(2\pi k_0 x)$ with $k_0 = 0.2$.  The transform should
-    have all of the power in the real component only at the 
+    have all of the power in the real component only at the
     frequency $0.2$.
 
   \item $\sin(2\pi k_0 x + \pi/4)$ with $k_0 = 0.2$.  The transform should
-    have equal power in the real and imaginary components, only at the 
+    have equal power in the real and imaginary components, only at the
     frequency $0.2$.  Since the power is 1, the amplitude of the real and
     imaginary parts will be $1/\sqrt{2}$.
   \end{itemize}
@@ -802,7 +802,7 @@ these end points.
   imaginary parts.  The third pane shows the power (the absolute value
   of the transform).  Finally, the bottom panel shows the inverse
   transform of our transform, giving us back our original function. \\
-  \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/basic_numerics/FFT/fft_simple_examples.py}{fft\_simple\_examples.py}}}
+  \hydroexdoit{\href{https://github.com/python-hydro/hydro_examples/blob/master/basic_numerics/FFT/fft_simple_examples.py}{fft\_simple\_examples.py}}}
 \end{figure}
 
 

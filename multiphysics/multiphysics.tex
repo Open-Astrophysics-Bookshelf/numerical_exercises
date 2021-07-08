@@ -62,7 +62,7 @@ second-order accurate overall:
 where $R_{\Delta t/2}$ represents reacting for a step of $\Delta t/2$
 and $D_{\Delta t}$ represents diffusing for a step of $\Delta t$.  In
 each case, these operators act as if the other were not present, but
-they see the effect of the previous operation on the input $\phi$.  
+they see the effect of the previous operation on the input $\phi$.
 Note that no explicit source terms describing one process appear in the other
 process's update.  The procedure for updating appears as:
 \begin{enumerate}
@@ -70,7 +70,7 @@ process's update.  The procedure for updating appears as:
 
   Define $\phi^\star$ as the the solution to the ODE:
    \begin{equation}
-     \frac{d\phi}{dt} = \frac{1}{\tau} R(\phi), \quad 
+     \frac{d\phi}{dt} = \frac{1}{\tau} R(\phi), \quad
    \phi(t^n) = \phi^n, \quad t \in [t^n, t^{n+\myhalf}]
    \end{equation}
 
@@ -88,7 +88,7 @@ process's update.  The procedure for updating appears as:
 
   Define $\phi^{n+1}$ as the the solution to the ODE:
    \begin{equation}
-     \text{define } \phi^{n+1}: \, \frac{d\phi}{dt} = \frac{1}{\tau} R(\phi), \quad 
+     \text{define } \phi^{n+1}: \, \frac{d\phi}{dt} = \frac{1}{\tau} R(\phi), \quad
    \phi(t^{n+\myhalf}) = \phi^{\star\star}, \quad t \in [t^{n+\myhalf}, t^{n+1}]
    \end{equation}
 
@@ -113,7 +113,7 @@ $\tau = 1.0$ at several times.
    with 256 zones, and $\kappa = 0.1$, $\tau = 1.0$.  The lines shown
    are spaced 8.0 time-units apart.  We see the initial smoothed tophat
    profile giving rise to a traveling front. \\
-   \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/multiphysics/diffusion-reaction.py}{diffusion-reaction.py}}
+   \hydroexdoit{\href{https://github.com/python-hydro/hydro_examples/blob/master/multiphysics/diffusion-reaction.py}{diffusion-reaction.py}}
    }
 \end{figure}
 
@@ -122,10 +122,10 @@ $\tau = 1.0$ at several times.
  some details of this system).
 
 \begin{exercise}[Diffusion-reaction system]
- Solve the the difusion reaction equation with the source given in 
+ Solve the the difusion reaction equation with the source given in
  Eq.~\ref{eq:multiphyiscs:react}.  Note that you should begin with
- some smooth initial conditions---if they are too sharp than the 
- C-N discretization will cause jagged features to appear.  
+ some smooth initial conditions---if they are too sharp than the
+ C-N discretization will cause jagged features to appear.
  Compare your results to Figure~\ref{fig:diffreact}.
 \end{exercise}
 
@@ -144,36 +144,36 @@ smooth out the shock---instead of being infinitely thin, it will have
 a physical width.
 
 As we saw earlier, there are efficient, accurate methods for handling
-the advective parts explicitly, but for diffusion, we often want to 
-solve it implicitly.  We can split the solution up, but couple the 
+the advective parts explicitly, but for diffusion, we often want to
+solve it implicitly.  We can split the solution up, but couple the
 two processes together to make a method that is overall second-order
 accurate in time.  We write our equation as:
 \begin{equation}
 u_t + A(u) = D(u)
 \end{equation}
-with $A(u) = [\frac{1}{2} u^2]_x$ and $D(u) = \epsilon u_{xx}$.  Then our update 
+with $A(u) = [\frac{1}{2} u^2]_x$ and $D(u) = \epsilon u_{xx}$.  Then our update
 appears in two steps.
 \begin{enumerate}
 \item {\em Find the advective update over the timestep}:
    We use an approximation of the diffusion term at time-level $n$, $D(u^n)$
-   as a source in the construction of the interface states for the 
+   as a source in the construction of the interface states for the
    advective part.  Once the interface states, $u_{i+\myhalf}^{n+\myhalf}$ are
    known, we construct the advective update term as:
    \begin{equation}
-   A_i^{n+\myhalf} = 
+   A_i^{n+\myhalf} =
      \frac{\left [ \frac{1}{2} \left (u_{i+\myhalf}^{n+\myhalf}\right)^2\right ] -
            \left [ \frac{1}{2} \left (u_{i-\myhalf}^{n+\myhalf}\right)^2\right ]}
           {\Delta x}
     \end{equation}
 
 \item {\em Solve the diffusion equation with the advective source}:
-    We use a Crank-Nicolson discretization of the diffusion part of 
+    We use a Crank-Nicolson discretization of the diffusion part of
     our equation, with the advective update term appearing as a source.
     \begin{equation}
-    \frac{u^{n+1} - u^n}{\Delta t} = 
+    \frac{u^{n+1} - u^n}{\Delta t} =
         \frac{1}{2}D(u^n) + \frac{1}{2}D(u^{n+1}) - A^{n+\myhalf}
     \end{equation}
-    
+
     This is a linear system that can be solved as a tridiagonal matrix
     or with multigrid.  The result of this step is that $u^{n+1}$ is
     updated with both the advection and diffusion terms.
@@ -191,7 +191,7 @@ stability) for this solve is due to the advective portion only.
   with a variety of different viscosities.  The initial conditions was
   a single wavelength of a sine wave for $x \in [1/3,2/3]$, and $u = 1$
   otherwise. \\
-  \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/multiphysics/burgersvisc.py}{burgersvisc.py}}}
+  \hydroexdoit{\href{https://github.com/python-hydro/hydro_examples/blob/master/multiphysics/burgersvisc.py}{burgersvisc.py}}}
 \end{figure}
 
 For step 1, the addition of the explicit diffusion source requires
@@ -227,7 +227,7 @@ this to be the {\em right} answer / benchmark solution, and then
 compare coarser simulations to a coarsened version of the benchmark solution.
 This is done in Figure~\ref{fig:multiphysics:burgersconverge}.  The
 fine zones of the benchmark are averaged into a corresponding coarse grid zone
-to produce a coarsened representation of the benchmark, and the norm 
+to produce a coarsened representation of the benchmark, and the norm
 of the error with the coarse simulation is computed.
 
 \begin{figure}[t]
@@ -238,6 +238,6 @@ of the error with the coarse simulation is computed.
     solution with $\epsilon = 0.005$.  To test convergence a run with 4096
     zones was done as a benchmark solution.  We see second-order
     convergence for the higher-resolution runs in this sample.\\
-   \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/multiphysics/burgersvisc_converge.py}{burgersvisc\_converge.py}}
+   \hydroexdoit{\href{https://github.com/python-hydro/hydro_examples/blob/master/multiphysics/burgersvisc_converge.py}{burgersvisc\_converge.py}}
    }
 \end{figure}

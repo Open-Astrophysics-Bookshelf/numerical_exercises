@@ -41,7 +41,7 @@ Consider the Poisson equation:
 \nabla^2 \phi = f
 \end{equation}
 We will difference this in a second-order accurate fashion---see
-Figure~\ref{fig:mg:laplacian}.  
+Figure~\ref{fig:mg:laplacian}.
 \begin{figure}[t]
 \centering
 \includegraphics[width=\linewidth]{laplacian}
@@ -69,7 +69,7 @@ The extension to 2-d is straightforward.  Thinking of the Laplacian as $\nabla^2
 $\phi$ on edges:
 \begin{align}
 [\nabla \phi \cdot \hat{x}]_{i+\myhalf,j} &= \frac{\phi_{i+1,j} - \phi_{i,j}}{\dx} \\
-[\nabla \phi \cdot \hat{y}]_{i,j+\myhalf} &= \frac{\phi_{i,j+1} - \phi_{i,j}}{\dy} 
+[\nabla \phi \cdot \hat{y}]_{i,j+\myhalf} &= \frac{\phi_{i,j+1} - \phi_{i,j}}{\dy}
 \end{align}
 Again, since this is defined on edges, this represents a centered
 difference, and is therefore second-order accurate.  We then
@@ -84,7 +84,7 @@ Laplacian at cell-centers:
 %
   &= \frac{\phi_{i+1,j} - 2\phi_{i,j} + \phi_{i-1,j}}{\dx^2} +
      \frac{\phi_{i,j+1} - 2\phi_{i,j} + \phi_{i,j-1}}{\dy^2} = f_{i,j}
-\end{align}        
+\end{align}
 Again, since we used a centered-difference of the edge values, this
 expression is second-order accurate.  This is the standard {\em
   5-point stencil} for the 2-d Laplacian\footnote{There are other
@@ -112,7 +112,7 @@ will use $\imag$ as the imaginary unit:
 \phi_{i,j} &= \frac{1}{MN} \sum_{k_x = 0}^{M-1} \sum_{k_y = 0}^{N-1}
   \Phi_{k_x,k_y} e^{2\pi\imag i k_x/M} e^{2\pi\imag j k_y/N} \\
 f_{i,j} &= \frac{1}{MN} \sum_{k_x = 0}^{M-1} \sum_{k_y = 0}^{N-1}
-  F_{k_x,k_y} e^{2\pi\imag i k_x/M} e^{2\pi\imag j k_y/N} 
+  F_{k_x,k_y} e^{2\pi\imag i k_x/M} e^{2\pi\imag j k_y/N}
 \end{align}
 
 Inserting these into the differenced equation, we have:
@@ -137,7 +137,7 @@ then look at just a single $(k_x,k_y)$ term in the series:
   &\frac{\Phi_{k_x,k_x}}{\dx^2}
   \left [e^{2\pi\imag k_x/M} + e^{-2\pi\imag k_x/M} - 2 \right ] + \nonumber \\
   &\frac{\Phi_{k_x,k_x}}{\dy^2}
-  \left [e^{2\pi\imag k_y/N} + e^{-2\pi\imag k_y/N} - 2 \right ] 
+  \left [e^{2\pi\imag k_y/N} + e^{-2\pi\imag k_y/N} - 2 \right ]
   - F_{k_x,k_y}
   \biggr \} = 0
 \end{align}
@@ -183,7 +183,7 @@ Figure~\ref{fig:mg:fftpoisson} shows the solution.
   Eq.~\ref{eq:mg:fftsource}. (right) Error vs.\ the true solution as a
   function of resolution for the Fourier method, showing second-order
   convergence.
-  \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/elliptic/poisson_fft.py}{poisson\_fft.py}}}
+  \hydroexdoit{\href{https://github.com/python-hydro/hydro_examples/blob/master/elliptic/poisson_fft.py}{poisson\_fft.py}}}
 \end{figure}
 
 
@@ -205,7 +205,7 @@ work for these forms next.
 \section{Relaxation}
 
 Relaxation is an iterative technique, and as we will see shortly, it
-provides the basis for the multigrid technique.  
+provides the basis for the multigrid technique.
 
 Consider Poisson's equation, again differenced as:
 \begin{equation}
@@ -216,7 +216,7 @@ For each zone $(i,j)$, we couple in the zones $\pm 1$ in $x$ and $\pm
 1$ in $y$.  For the moment, consider the case where $\dx = \dy$.  If
 we solve this discretized equation for $\phi_{i,j}$, then we have:
 \begin{equation}
-\phi_{i,j} = \frac{1}{4} (\phi_{i+1,j} + \phi_{i-1,j} + 
+\phi_{i,j} = \frac{1}{4} (\phi_{i+1,j} + \phi_{i-1,j} +
                           \phi_{i,j+1} + \phi_{i,j-1} - \dx^2 f_{i,j} )
 \end{equation}
 A similar expression exists for every zone in our domain, coupling all
@@ -225,20 +225,20 @@ for the neighboring zones, but instead can apply an iterative
 technique called {\em relaxation} (also sometimes called {\em
   smoothing} because generally speaking the solution to elliptic
 equations is a smooth function) to find the solution for $\phi$
-everywhere.  
+everywhere.
 
 Imagine an initial guess to $\phi$: $\phi_{i,j}^{(0)}$.
 We can improve that guess by using our difference equation to define a
 new value of $\phi$, $\phi_{i,j}^{(1)}$:
 \begin{equation}
-\phi_{i,j}^{(1)} = \frac{1}{4} (\phi_{i+1,j}^{(0)} + \phi_{i-1,j}^{(0)} + 
-                                \phi_{i,j+1}^{(0)} + \phi_{i,j-1}^{(0)} - 
+\phi_{i,j}^{(1)} = \frac{1}{4} (\phi_{i+1,j}^{(0)} + \phi_{i-1,j}^{(0)} +
+                                \phi_{i,j+1}^{(0)} + \phi_{i,j-1}^{(0)} -
                                  \dx^2 f_{i,j} )
 \end{equation}
 or generally, the $k+1$ iteration will see:
 \begin{equation}
-\phi_{i,j}^{(k+1)} = \frac{1}{4} (\phi_{i+1,j}^{(k)} + \phi_{i-1,j}^{(k)} + 
-                                  \phi_{i,j+1}^{(k)} + \phi_{i,j-1}^{(k)} - 
+\phi_{i,j}^{(k+1)} = \frac{1}{4} (\phi_{i+1,j}^{(k)} + \phi_{i-1,j}^{(k)} +
+                                  \phi_{i,j+1}^{(k)} + \phi_{i,j-1}^{(k)} -
                                    \dx^2 f_{i,j} )
 \end{equation}
 This will (slowly) converge to the true solution\footnote{Formally,
@@ -256,8 +256,8 @@ place, as soon as the new value is known.  Thus the neighboring cells
 will see a mix of the old and new solutions.  We can express this in-place
 updating as:
 \begin{equation}
-\phi_{i,j} \leftarrow \frac{1}{4} (\phi_{i+1,j} + \phi_{i-1,j} + 
-                                   \phi_{i,j+1} + \phi_{i,j-1} - 
+\phi_{i,j} \leftarrow \frac{1}{4} (\phi_{i+1,j} + \phi_{i-1,j} +
+                                   \phi_{i,j+1} + \phi_{i,j-1} -
                                    \dx^2 f_{i,j} )
 \end{equation}
 This only requires a single copy of $\phi$ to be stored.  This
@@ -272,7 +272,7 @@ Next consider the Helmholz equation with constant coefficients:
 \end{equation}
 We can discretize this as:
 \begin{equation}
-\alpha \phi_{i,j} - \beta \left ( 
+\alpha \phi_{i,j} - \beta \left (
     \frac{\phi_{i+1,j} - 2 \phi_{i,j} + \phi_{i-1,j}}{\dx^2} +
     \frac{\phi_{i,j+1} - 2 \phi_{i,j} + \phi_{i,j-1}}{\dy^2} \right )
 = f_{i,j}
@@ -283,10 +283,10 @@ and the update of $\phi_{i,j}$ through relaxation is:
      \left . \left ( f_{i,j} + \frac{\beta}{\dx^2} \phi_{i+1,j}
                              + \frac{\beta}{\dx^2} \phi_{i-1,j}
                              + \frac{\beta}{\dy^2} \phi_{i,j+1}
-                             + \frac{\beta}{\dy^2} \phi_{i,j-1} \right ) 
+                             + \frac{\beta}{\dy^2} \phi_{i,j-1} \right )
 \middle / \left ( \alpha + \frac{2 \beta}{\dx^2} + \frac{2 \beta}{\dy^2} \right ) \right .
 \end{equation}
-Notice that if $\alpha = 0$, $\beta = -1$, and $\dx = \dy$, we 
+Notice that if $\alpha = 0$, $\beta = -1$, and $\dx = \dy$, we
 recover the relaxation expression for Poisson's equation from above.
 
 
@@ -305,9 +305,9 @@ restrictions apply (see discuss this later, in
 \begin{figure}[h]
 \centering
 \includegraphics[width=\linewidth]{fv-fd_grid_bc}
-\caption[Node-centered vs.\ cell-centered data at boundaries]{\label{mg:fig:bcs} 
+\caption[Node-centered vs.\ cell-centered data at boundaries]{\label{mg:fig:bcs}
   A node-centered (top) and cell-centered (bottom) finite difference
-  grid showing the data and domain boundaries.  Notice that for the 
+  grid showing the data and domain boundaries.  Notice that for the
   cell-centered grid, there is no data point precisely at the boundary.}
 \end{figure}
 
@@ -318,7 +318,7 @@ the left and $\phi_r$ on the right boundaries.\footnote{If the value,
     boundary condition}} We'll label the first zone inside the domain,
 at the left boundary, $\mathrm{lo}$, and the last zone inside the
 domain, at the right boundary, $\mathrm{hi}$---see
-Figure~\ref{mg:fig:bcs}.  To second order, we can average the zone values on 
+Figure~\ref{mg:fig:bcs}.  To second order, we can average the zone values on
 either side of the interface to get the boundary condition:
 \begin{eqnarray}
 \phi_l &=& \frac{1}{2} ( \phi_\mathrm{lo} + \phi_\mathrm{lo-1} ) \\
@@ -354,7 +354,7 @@ The {\em residual error} is a measure of how well our discrete solution
 satisfies the discretized equation.  For the Poisson equation, we
 can the residual as:
 \begin{equation}
-r_{i,j} = f_{i,j} - (L \phi)_{i,j} 
+r_{i,j} = f_{i,j} - (L \phi)_{i,j}
 \end{equation}
 and the residual error as:
 \begin{equation}
@@ -366,7 +366,7 @@ error is the measure of how well our discrete solution approximates
 the true solution.  If $\phi^\mathrm{true}$ satisfies $\nabla^2
 \phi^\mathrm{true} = f$, then the true error in each zone is
 \begin{equation}
-e_{i,j} = \phi^\mathrm{true}(x_i,y_j) - \phi_{i,j} 
+e_{i,j} = \phi^\mathrm{true}(x_i,y_j) - \phi_{i,j}
 \end{equation}
 and
 \begin{equation}
@@ -396,9 +396,9 @@ maximum error on the grid:
 \begin{equation}
 \|e\|_\infty = \max_{i,j} \{ |e_{i,j}| \}
 \end{equation}
-This will pick up on local errors.  
+This will pick up on local errors.
 
-The $L_1$ norm and $L_2$ norms are more global. 
+The $L_1$ norm and $L_2$ norms are more global.
 \begin{eqnarray}
 \|e\|_1 &=& \frac{1}{N} \sum_{i,j} |e_{i,j} | \\
 \|e\|_2 &=& \left ( \frac{1}{N} \sum_{i,j} |e_{i,j} |^2 \right )^{1/2}
@@ -423,7 +423,7 @@ in its multigrid solvers.
   L2 norm of the error compared with the true solution (solid lines)
   and the L2 norm of the residual (dotted lines) for 3 different
   resolutions (16, 32, and 64 zones). \\
-  \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/multigrid/smooth.py}{smooth.py}}}
+  \hydroexdoit{\href{https://github.com/python-hydro/hydro_examples/blob/master/multigrid/smooth.py}{smooth.py}}}
 \end{figure}
 
 Consider the simple Poisson problem\footnote{This is the test problem
@@ -433,7 +433,7 @@ Consider the simple Poisson problem\footnote{This is the test problem
 \begin{equation}
 \phi_{xx} = \sin(x), \qquad \phi(0) = \phi(1) = 0
 \end{equation}
-The analytic solution to this is simply 
+The analytic solution to this is simply
 \begin{equation}
 \phi^a(x) = -\sin(x) + x \sin(1)
 \end{equation}
@@ -465,11 +465,11 @@ choice of norm.
 \begin{figure}
 \centering
 \includegraphics[width=\linewidth]{smooth-error-norms}
-\caption[Convergence of smoothing in different norms]{\label{fig:smoothnorms} 
+\caption[Convergence of smoothing in different norms]{\label{fig:smoothnorms}
   Gauss-Seidel relaxation applied to $\phi_{xx} = \sin(x)$ with
   $\phi(0) = \phi(1) = 0$.  This is like figure \ref{fig:smootherror}, but
   now we show the error in 3 different norms: $L_1$, $L_2$, and $L_\infty$.
-  \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/multigrid/smooth-norms.py}{smooth-norms.py}}}
+  \\ \hydroexdoit{\href{https://github.com/python-hydro/hydro_examples/blob/master/multigrid/smooth-norms.py}{smooth-norms.py}}}
 \end{figure}
 
 To demonstrate the influence of the boundary conditions,
@@ -479,7 +479,7 @@ boundary conditions---simply initializing the ghost cell to the
 boundary value, instead of averaging to the interface:
 \begin{align}
 \phi_\mathrm{lo-1} &= \phi_\mathrm{lo} \\
-\phi_\mathrm{hi+1} &= \phi_\mathrm{hi} 
+\phi_\mathrm{hi+1} &= \phi_\mathrm{hi}
 \end{align}
 We see that with this mistake at the boundaries, the error of the
 entire solution is affected, and we get only first-order convergence
@@ -493,13 +493,13 @@ global solution.
 \begin{figure}
 \centering
 \includegraphics[width=\linewidth]{smooth-badBCs}
-\caption[Convergence of smoothing in first-order BCs]{\label{fig:smooth-badbcs} 
+\caption[Convergence of smoothing in first-order BCs]{\label{fig:smooth-badbcs}
   The same problem as in figure \ref{fig:smootherror}, but
   now we done with a naive first-order boundary conditions---just initializing
-  the ghost cell to the boundary value (solid lines).  We see that this 
+  the ghost cell to the boundary value (solid lines).  We see that this
   achieves only first-order convergence in the true error.  The correct
   second-order implmentation is shown as the dotted lines.
-  \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/multigrid/smooth-badbcs.py}{smooth-badbcs.py}}}
+  \\ \hydroexdoit{\href{https://github.com/python-hydro/hydro_examples/blob/master/multigrid/smooth-badbcs.py}{smooth-badbcs.py}}}
 \end{figure}
 
 
@@ -510,7 +510,7 @@ global solution.
   Error in the solution to $\phi'' = 0$ given an initial guess with 3
   different wavenumbers of noise.  A 128 zone grid was used.  The
   different curves are different numbers of smoothing
-  iterations. \\ \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/multigrid/smooth-modes.py}{smooth-modes.py}}}
+  iterations. \\ \hydroexdoit{\href{https://github.com/python-hydro/hydro_examples/blob/master/multigrid/smooth-modes.py}{smooth-modes.py}}}
 \end{figure}
 
 \subsection{Frequency/wavelength-dependent error}
@@ -555,11 +555,11 @@ Figure~\ref{fig:mg:smooth} illustrates this behavior.  We are solving
 the Laplace equation, $\phi^{\prime\prime} = 0$ in 1-d on $[0,1]$ with
 homogeneous Dirichlet boundary conditions.  The solution is simply
 $\phi = 0$.  We use Eq.~\ref{eq:mg:phimodes} as an initial guess---this is a superposition
-of 3 different modes.  We see that the after just a few iterations, the 
+of 3 different modes.  We see that the after just a few iterations, the
 shortest wavelength mode, $\sin(2\pi 16x)$ is no longer apparent in the error,
 and just the two longer wavelength modes dominate.  By 100 iterations,
 the error appears to be only due to the longest wavelength mode, $\sin(2\pi x)$.
-Even after 1000 iterations, we still see this mode in the error.  This 
+Even after 1000 iterations, we still see this mode in the error.  This
 demonstrates that the longest wavelength modes in the error take the
 longest to smooth away.
 
@@ -579,7 +579,7 @@ the operations between grids work.
 \subsection{Prolongation and restriction on cell-centered grids}
 
 Multigrid relies on transferring the problem up and down a hierarchy of
-grids. 
+grids.
 The process of moving the data from the fine grid to the coarse grid
 is called {\em restriction}.  The reverse process, moving data from
 the coarse grid to the fine grid is called {\em prolongation}.  If the
@@ -607,21 +607,21 @@ conservation requires:
 \begin{equation}
 \phi^c_j = \frac{1}{\dx^c} (\dx^f \phi^f_i + \dx^f \phi^f_{i+1} )
 \end{equation}
-or, for a jump in 2 in resolution ($\dx^c = 2 \dx^f$), 
+or, for a jump in 2 in resolution ($\dx^c = 2 \dx^f$),
 \begin{equation}
 \phi^c_j = \frac{1}{2} (\phi^f_i + \phi^f_{i+1} )
 \end{equation}
 This latter form appears as a simple average to the interface of the
 two fine cells / center of the corresponding coarse cell.
 
-The simplest type of 
+The simplest type of
 prolongation is simply {\em direct injection}:
 \begin{align}
 \phi^f_i &= \phi^c_j \\
-\phi^f_{i+1} &= \phi^c_j 
+\phi^f_{i+1} &= \phi^c_j
 \end{align}
 A higher-order method is to do linear reconstruction of the coarse
-data and then average under the profile, e.g., 
+data and then average under the profile, e.g.,
 \begin{equation}
 \phi(x) = \frac{\phi^c_{i+1} - \phi^c_{i-1}}{2\dx^c} (x - x_i^c) + \phi_i^c
 \end{equation}
@@ -636,7 +636,7 @@ x^f_{i+1} &= x^c_j + \frac{\dx^c}{4}
 giving
 \begin{align}
 \phi^f_i     &= \phi^c_i - \frac{1}{8} (\phi^c_{i+1} - \phi^c_{i-1}) \\
-\phi^f_{i+1} &= \phi^c_i + \frac{1}{8} (\phi^c_{i+1} - \phi^c_{i-1}) 
+\phi^f_{i+1} &= \phi^c_i + \frac{1}{8} (\phi^c_{i+1} - \phi^c_{i-1})
 \end{align}
 Notice that this is conservative, since $\dx^f (\phi^f_i + \phi^f_{i+1}) = \dx^c \phi^c_j$.
 
@@ -667,7 +667,7 @@ Prolongation requires us to reconstruct the coarse data and use
 this reconstruction to determine what the fine cell values are.  For
 instance, a linear reconstruction of the coarse data in $x$ and $y$ is:
 \begin{equation}
-\phi(x,y) = \frac{m_x}{\dx^c} (x - x_i^c) + 
+\phi(x,y) = \frac{m_x}{\dx^c} (x - x_i^c) +
             \frac{m_y}{\dy^c} (y - y_j^c) + \phi_{i,j}^c
 \end{equation}
 with slopes:
@@ -719,9 +719,9 @@ original system are inhomogeneous, the boundary conditions for the
 error equations are now homogeneous.  This must be understood by
 any ghost cell filling routines.
 
-There are many different forms of the multigrid process.  The simplest 
+There are many different forms of the multigrid process.  The simplest
 is called the {\em V-cycle}.  Here you start of the fine grid, restrict
-down to the coarsest, solve, and then prolong back up to the finest. 
+down to the coarsest, solve, and then prolong back up to the finest.
 The flow looks like a `V'.  You continue with additional V-cycles
 until the residual error is smaller than your tolerance.
 
@@ -797,7 +797,7 @@ Bringing the boundary condition value over to the RHS, we see
 Now the left side looks precisely like the differenced Poisson equation
 with homogeneous Dirichlet BCs.  The RHS has an additional `charge' that
 captures the boundary value.  By modifying the source term, $f$, in the
-multigrid solver to include this charge, we can use the homogeneous 
+multigrid solver to include this charge, we can use the homogeneous
 ghost cell filling routines throughout the multigrid algorithm.
 This technique is discussed a bit in~\cite{colellanotes}.
 
@@ -818,7 +818,7 @@ on the finest grid, for some user-input tolerance, $\epsilon$.  Here,
 $\|f\|$ is called the {\em source norm}.  If $\|f\| = 0$, then we stop
 when
 \begin{equation}
-\| r \| < \epsilon 
+\| r \| < \epsilon
 \end{equation}
 Picking the tolerance $\epsilon$ is sometimes problem-dependent, and
 generally speaking, a problem with a large number of zones will require
@@ -841,7 +841,7 @@ of V-cycle number, illustrating the expected performance.
   see that the true error, $\|e\|$ stalls at truncation error while
   the residual error, $\|r\|$ reaches roundoff error, the same
   behavior as seen with smoothing alone (as expected). \\
-  \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/multigrid/mg_test.py}{mg\_test.py}}}
+  \hydroexdoit{\href{https://github.com/python-hydro/hydro_examples/blob/master/multigrid/mg_test.py}{mg\_test.py}}}
 \end{figure}
 
 The overall convergence of the multigrid algorithm is limited by the
@@ -855,8 +855,8 @@ second-order convergence for our implementation.
 \includegraphics[width=0.85\linewidth]{mg-converge}
 \caption[Convergence of the multigrid
   algorithm]{\label{fig:mg:convergence} Convergence of the multigrid
-  algorithm. \\ 
-  \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/multigrid/mg_converge.py}{mg\_converge.py}}}
+  algorithm. \\
+  \hydroexdoit{\href{https://github.com/python-hydro/hydro_examples/blob/master/multigrid/mg_converge.py}{mg\_converge.py}}}
 \end{figure}
 
 
@@ -882,7 +882,7 @@ A simple example of solvability is:
 \begin{equation}
 \phi^{\prime\prime} = 0
 \end{equation}
-on $[a, b]$ with 
+on $[a, b]$ with
 \begin{align}
 \phi^\prime(a) &= A \\
 \phi^\prime(b) &= B
