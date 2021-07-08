@@ -4,8 +4,8 @@
 
 \label{ch:adv:sndorder}
 
-In these notes, we will typically use a {\em finite-volume} discretization.  Here we 
-explore this method for the 
+In these notes, we will typically use a {\em finite-volume} discretization.  Here we
+explore this method for the
 advection equation.  First we rewrite the advection equation in {\em
   conservation form}:
 \begin{equation}
@@ -13,7 +13,7 @@ a_t + \left[f(a)\right]_x = 0
 \label{eq:advect-cons}
 \end{equation}
 where $f(a) = ua$ is the flux of the quantity $a$.  In conservation form,
-the time derivative of a quantity is related to the divergence of 
+the time derivative of a quantity is related to the divergence of
 its flux.
 
 % figure created with figures/advection/fv-ghost.py
@@ -36,9 +36,9 @@ To discretize Eq.~\ref{eq:advect-cons}, we integrate it over a zone,
 from ${x_{i-\myhalf}}$ to ${x_{i+\myhalf}}$, normalizing by the zone width,
 $\Delta x$:
 \begin{align}
-\frac{1}{\Delta x} \int_{x_{i-\myhalf}}^{x_{i+\myhalf}} a_t \, dx &= 
+\frac{1}{\Delta x} \int_{x_{i-\myhalf}}^{x_{i+\myhalf}} a_t \, dx &=
    - \frac{1}{\Delta x} \int_{x_{i-\myhalf}}^{x_{i+\myhalf}} \frac{\partial}{\partial x} f(a) \, dx \\
-\frac{\partial}{\partial t} a_i &= 
+\frac{\partial}{\partial t} a_i &=
    - \frac{1}{\Delta x} \left \{ \left [f(a) \right ]_{i+\myhalf} - \left [f(a) \right ]_{i-\myhalf} \right \} \label{adv:eq:fvadv}
 \end{align}
 This is an evolution equation for the zone-average of $a$, and shows
@@ -209,7 +209,7 @@ conditions and compare to the first-order method.  See Figure~\ref{fig:fvadvect}
 {\label{fig:fvadvect} Second-order finite volume advection showing the
 result of advecting a tophat profile through five periods with both
 unlimited and limited slopes.  This calculation used 64 zones and
-$\cfl=0.7$. \\ 
+$\cfl=0.7$. \\
 \hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/advection/advection.py}{advection.py}}}
 \end{figure}
 
@@ -235,9 +235,9 @@ construct the slopes in the interface states as:
   \frac{a_i - a_{i-1}}{\Delta x}, \frac{a_{i+1} - a_i}{\Delta x} \right )
 \end{equation}
 instead of Eq.~\ref{eq:slopecentered}.
-with 
+with
 \begin{equation}
-\mathtt{minmod}(a,b) = \left \{ 
+\mathtt{minmod}(a,b) = \left \{
     \begin{array}{ll}
     a & \mathit{if~} |a| < |b| \mathrm{~and~} a\cdot b > 0 \\
     b & \mathit{if~} |b| < |a| \mathrm{~and~} a\cdot b > 0 \\
@@ -277,7 +277,7 @@ want to limit.
 \includegraphics[width=0.75\linewidth]{rea-nolimit-start_003} \\
 \includegraphics[width=0.75\linewidth]{rea-nolimit-start_004} \\
 \includegraphics[width=0.75\linewidth]{rea-nolimit-start_005} \\
-\includegraphics[width=0.75\linewidth]{rea-nolimit-start_006} 
+\includegraphics[width=0.75\linewidth]{rea-nolimit-start_006}
 %\includegraphics[width=0.55\linewidth]{rea-nolimit-start_007} \\
 %\includegraphics[width=0.55\linewidth]{rea-nolimit-start_008} \\
 \caption[The effect of no limiting on initially discontinuous data]{\label{fig:limitingex}Initially discontinuous data evolved for several steps with
@@ -310,7 +310,7 @@ difference).  First we define an extrema test,
 \end{equation}
 Then the limited difference is
 \begin{equation}
-\left . \frac{\partial a}{\partial x} \right |_i = 
+\left . \frac{\partial a}{\partial x} \right |_i =
  \left \{
 \begin{array}{ll}
 \min \left [ \frac{| a_{i+1} - a_{i-1} |}{2 \Delta x},
@@ -324,7 +324,7 @@ Then the limited difference is
 %
 Note that a slightly different form of this limiter is presented in
 \cite{leveque:2002}, where all quantities are in a {\tt minmod}, which appears to limit a bit less.
-This is second-order accurate for smooth flows.  
+This is second-order accurate for smooth flows.
 
 The main goal of a limiter is to reduce the slope near extrema.
 Figure~\ref{fig:limit} shows a finite-volume grid with the original
@@ -372,18 +372,18 @@ and to indicate the limited slope as $\overline{\Delta a}_i$.
 \subsection{Reconstruct-evolve-average}
 
 Another way to think about these methods is as a reconstruction,
-evolve, and average (R-E-A) process (see Figure~\ref{fig:rea}).  
+evolve, and average (R-E-A) process (see Figure~\ref{fig:rea}).
 
 We can write the conservative update as:
 \begin{align}
-a_i^{n+1} &= a_i^n + \frac{\Delta t}{\Delta x} 
+a_i^{n+1} &= a_i^n + \frac{\Delta t}{\Delta x}
     (u a^{n+\myhalf}_{i-\myhalf} - u a^{n+\myhalf}_{i+\myhalf} ) \\
-          &= a_i^n + \cfl (a^{n+\myhalf}_{i-\myhalf} - a^{n+\myhalf}_{i+\myhalf} ) 
+          &= a_i^n + \cfl (a^{n+\myhalf}_{i-\myhalf} - a^{n+\myhalf}_{i+\myhalf} )
 \end{align}
 If we take $u > 0$, then the Riemann problem will always choose the
 left state, so we can write this as:
 \begin{equation}
-a_i^{n+1} = a_i^n + 
+a_i^{n+1} = a_i^n +
      \cfl \biggl [\underbrace{\left (a_{i-1}^n + \frac{1}{2} (1-\cfl) \Delta a_{i-1} \right )}_{a_{i-\myhalf,L}} -
               \underbrace{\left (a_{i}^n + \frac{1}{2} (1-\cfl) \Delta a_{i} \right )}_{a_{i+\myhalf,L}}
        \biggr ] \label{eq:rea_orig}
@@ -394,20 +394,20 @@ $a$ in each zone in the form of a piecewise linear polynomial
 \begin{equation}
 a_i(x) = a_i + \frac{\Delta a_i}{\Delta x} (x - x_i)
 \end{equation}
-Consider zone $i$.  
+Consider zone $i$.
 If we are advecting with a CFL number $\cfl$, then that means that the fraction
 $\cfl$ of the zone immediately to the left of the $i-\myhalf$ interface will advect
 into zone $i$ over the timestep.  And only the fraction $1-\cfl$ in zone $i$
-immediately to the right of the interface will stay in that zone.  This 
-is indicated by the shaded regions in Figure~\ref{fig:rea}. 
+immediately to the right of the interface will stay in that zone.  This
+is indicated by the shaded regions in Figure~\ref{fig:rea}.
 
 The average of the quantity $a$ from zone $i-1$ that will advect into
-zone $i$ is 
+zone $i$ is
 \begin{eqnarray}
-\mathcal{I}_< &=& \frac{1}{\cfl \Delta x} 
+\mathcal{I}_< &=& \frac{1}{\cfl \Delta x}
    \int_{x_{i-\myhalf} - \cfl\Delta x}^{x_{i-\myhalf}} a_{i-1}(x) dx \\
 %
- &=& \frac{1}{\cfl \Delta x} 
+ &=& \frac{1}{\cfl \Delta x}
    \int_{x_{i-\myhalf} - \cfl\Delta x}^{x_{i-\myhalf}}
         \left [ a_{i-1} + \frac{\Delta a_{i-1}}{\Delta x} (x - x_{i-1} ) \right ] dx  \\
  &=& a_{i-1} + \frac{1}{2} \Delta a_{i-1} (1-\cfl)
@@ -416,16 +416,16 @@ zone $i$ is
 And the average of the quantity $a$ in zone $i$ that will remain in zone $i$
 is
 \begin{eqnarray}
-\mathcal{I}_> &=& \frac{1}{(1-\cfl) \Delta x} 
+\mathcal{I}_> &=& \frac{1}{(1-\cfl) \Delta x}
    \int_{x_{i-\myhalf}}^{x_{i-\myhalf} + (1-\cfl) \Delta x} a_{i}(x) dx \\
 %
- &=& \frac{1}{(1-\cfl) \Delta x} 
-   \int_{x_{i-\myhalf}}^{x_{i-\myhalf} + (1-\cfl)\Delta x} 
+ &=& \frac{1}{(1-\cfl) \Delta x}
+   \int_{x_{i-\myhalf}}^{x_{i-\myhalf} + (1-\cfl)\Delta x}
         \left [ a_{i} + \frac{\Delta a_{i}}{\Delta x} (x - x_{i} ) \right ] dx  \\
  &=& a_{i} - \frac{1}{2} \Delta a_{i} \cfl
 \end{eqnarray}
 
-The final part of the R-E-A procedure is to average the over the 
+The final part of the R-E-A procedure is to average the over the
 advected profiles in the new cell.  The weighted average of the
 amount brought in from the left of the interface and that that remains
 in the cell is
@@ -435,10 +435,10 @@ a_i^{n+1} &= \cfl \mathcal{I}_< + (1 - \cfl) \mathcal{I}_>  \\
    + (1-\cfl) \left [ a^n_i - \frac{1}{2} \Delta a_i \cfl \right ] \\
           &= a^n_i + \cfl \left [a^n_{i-1} + \frac{1}{2}(1 - \cfl) \Delta a_{i-1} \right ]
            - \cfl \left [ a^n_i + \frac{1}{2} (1-\cfl) \Delta a_i \right ]
-\end{align}          
+\end{align}
 This is identical to Eq.~\ref{eq:rea_orig}.  This demonstrates that the
 R-E-A procedure is equivalent to our reconstruction, prediction of the
-interface states, solving the Riemann problem, and doing the 
+interface states, solving the Riemann problem, and doing the
 conservative flux update.
 
 % this figure sequence is created by figures/advection/rea.py
@@ -490,7 +490,7 @@ Gaussian initial condition for 5 periods.}
 \begin{figure}[ht]
 \centering
 \includegraphics[width=0.8\linewidth]{fv-gaussian-limiters} \\[1em]
-\includegraphics[width=0.8\linewidth]{fv-tophat-limiters} 
+\includegraphics[width=0.8\linewidth]{fv-tophat-limiters}
 \caption[Effect of different limiters on evolution]
         {\label{fig:limiter_panel} The effect of different limiters on the
           evolution of a Gaussian initial profile (top) and a tophat initial
@@ -566,7 +566,7 @@ perimeter of ghost cells to set the boundary conditions.
 \caption[A 2-d grid with zone-centered indexes]{\label{fig:2dgrid} A
   simple 2-d grid with the zone-centered indexes.  The $\times$s mark
   the left and right interface states at the upper edge of the $i,j$ zone in each
-  coordinate direction.  For a finite-volume discretization, $a_{i,j}$ 
+  coordinate direction.  For a finite-volume discretization, $a_{i,j}$
   represents the average of $a(x,y)$ over the zone.}
 \end{figure}
 
@@ -581,21 +581,21 @@ This is the form we will integrate over zones.  As before, we will
 define the average of $a$ in a zone by integrating it over the
 volume:
 \begin{equation}
-a_{i,j} = \frac{1}{\Delta x \Delta y} 
-   \int_{x_{i-\myhalf}}^{x_{i+\myhalf}} \int_{y_{j-\myhalf}}^{y_{j+\myhalf}} 
+a_{i,j} = \frac{1}{\Delta x \Delta y}
+   \int_{x_{i-\myhalf}}^{x_{i+\myhalf}} \int_{y_{j-\myhalf}}^{y_{j+\myhalf}}
    a(x,y,t) \, dx \, dy
 \end{equation}
 Integrating Eq.~\ref{eq:advect2d-cons} over $x$ and $y$, we have:
 \begin{align}
-\frac{1}{\Delta x \Delta y} 
-  \int_{x_{i-\myhalf}}^{x_{i+\myhalf}} 
-  \int_{y_{j-\myhalf}}^{y_{j+\myhalf}} a_t \, dx \, dy =  
+\frac{1}{\Delta x \Delta y}
+  \int_{x_{i-\myhalf}}^{x_{i+\myhalf}}
+  \int_{y_{j-\myhalf}}^{y_{j+\myhalf}} a_t \, dx \, dy =
   &- \frac{1}{\Delta x \Delta y}
        \int_{x_{i-\myhalf}}^{x_{i+\myhalf}} \int_{y_{j-\myhalf}}^{y_{j+\myhalf}}
       (u a)_x \, dx \, dy \nonumber \\
   &- \frac{1}{\Delta x \Delta y}
        \int_{x_{i-\myhalf}}^{x_{i+\myhalf}} \int_{y_{j-\myhalf}}^{y_{j+\myhalf}}
-      (v a)_y \, dx \, dy 
+      (v a)_y \, dx \, dy
 \end{align}
 or using the divergence theorem,
 \begin{align}
@@ -610,7 +610,7 @@ or using the divergence theorem,
 Now we integrate over time---the left side of our expression becomes
 just the difference between the new and old state.
 \begin{align}
- a_{i,j}^{n+1} - a_{i,j}^n = 
+ a_{i,j}^{n+1} - a_{i,j}^n =
   &- \frac{1}{\Delta x\Delta y} \int_{t^n}^{t^{n+1}} \int_{y_{j-\myhalf}}^{y_{j+\myhalf}}
      \left \{ (u a)_{i+\myhalf,j} - (u a)_{i-\myhalf,j} \right \} dy dt \nonumber \\
   &- \frac{1}{\Delta x\Delta y} \int_{t^n}^{t^{n+1}} \int_{x_{i-\myhalf}}^{x_{i+\myhalf}}
@@ -628,13 +628,13 @@ of that interface and time: \MarginPar{is there a way to illustrate this, as som
 \item y-face
 \begin{equation}
 \langle (va)_{i,j+\myhalf}\rangle_{(t)} = \frac{1}{\Delta x \Delta t}
-    \int_{t^n}^{t^{n+1}} \int_{x_{i-\myhalf}}^{x_{i+\myhalf}} (va)_{i,j+\myhalf}\, dx dt 
+    \int_{t^n}^{t^{n+1}} \int_{x_{i-\myhalf}}^{x_{i+\myhalf}} (va)_{i,j+\myhalf}\, dx dt
 \end{equation}
 \end{itemize}
 where $\langle . \rangle_{(t)}$ denotes the time-average over the face.
 For a second-order accurate method in time, we replace the average in
 time with the flux at the midpoint in time and the average over the face
-with the flux at the center of the face: 
+with the flux at the center of the face:
 \begin{equation}
 \langle (ua)_{i+\myhalf,j} \rangle_{(t)} \approx (ua)_{i+\myhalf,j}^{n+\myhalf}
 \end{equation}
@@ -647,7 +647,7 @@ a_{i,j}^{n+1} = a_{i,j}^n - \Delta t \left [
 
 For the advection problem, since $u$ and $v$ are constant, we need
 to find the interface states of $a$ alone.
-There are two methods for computing these interface states, 
+There are two methods for computing these interface states,
 $a_{i\pm\myhalf,j}^{n+\myhalf}$ on $x$-interfaces and  $a_{i,j\pm\myhalf}^{n+\myhalf}$ on $y$-interfaces:
 dimensionally split and unsplit.  Dimensionally split methods are
 easier to code, since each dimension is operated on independent of the
@@ -691,17 +691,17 @@ The construction of the interface states largely mimics the one-dimensional
 case (Eq.~\ref{eq:statel} and \ref{eq:stater}).  For example, the
 $a_{i+\myhalf,j,L}^{n+\myhalf}$ state is:
 \begin{eqnarray}
-a_{i+\myhalf,j,L}^{n+\myhalf} &=& a_{i,j}^n + 
-  \frac{\Delta x}{2} \left .\frac{\partial a}{\partial x} \right |_{i,j} + 
-  \frac{\Delta t}{2} \left .\frac{\partial a}{\partial t} \right |_{i,j} + 
+a_{i+\myhalf,j,L}^{n+\myhalf} &=& a_{i,j}^n +
+  \frac{\Delta x}{2} \left .\frac{\partial a}{\partial x} \right |_{i,j} +
+  \frac{\Delta t}{2} \left .\frac{\partial a}{\partial t} \right |_{i,j} +
   \mathcal{O}(\Delta x^2) + \mathcal{O}(\Delta t^2) \nonumber \\
- &=& a_{i,j}^n + 
-   \frac{\Delta x}{2} \left .\frac{\partial a}{\partial x} \right |_{i,j} + 
-   \frac{\Delta t}{2} \left ( 
+ &=& a_{i,j}^n +
+   \frac{\Delta x}{2} \left .\frac{\partial a}{\partial x} \right |_{i,j} +
+   \frac{\Delta t}{2} \left (
    - u \left .\frac{\partial a}{\partial x} \right |_{i,j} \right
    ) + \ldots \nonumber \\
-    &=& a_{i,j}^n + 
-   \frac{\Delta x}{2} \left ( 1 - \frac{\Delta t}{\Delta x} u \right ) 
+    &=& a_{i,j}^n +
+   \frac{\Delta x}{2} \left ( 1 - \frac{\Delta t}{\Delta x} u \right )
    \left .\frac{\partial a}{\partial x} \right |_{i,j} +
    \ldots \label{eq:statels}
 \end{eqnarray}
@@ -736,18 +736,18 @@ is sometimes called the ``corner transport upwind'' or CTU method.
 
 The construction of the $a_{i+\myhalf,j,L}^{n+\myhalf}$ interface state appears as
 \begin{eqnarray}
-a_{i+\myhalf,j,L}^{n+\myhalf} &=& a_{i,j}^n + 
-  \frac{\Delta x}{2} \left .\frac{\partial a}{\partial x} \right |_{i,j} + 
-  \frac{\Delta t}{2} \left .\frac{\partial a}{\partial t} \right |_{i,j} + 
+a_{i+\myhalf,j,L}^{n+\myhalf} &=& a_{i,j}^n +
+  \frac{\Delta x}{2} \left .\frac{\partial a}{\partial x} \right |_{i,j} +
+  \frac{\Delta t}{2} \left .\frac{\partial a}{\partial t} \right |_{i,j} +
   \mathcal{O}(\Delta x^2) + \mathcal{O}(\Delta t^2) \nonumber \\
- &=& a_{i,j}^n + 
-   \frac{\Delta x}{2} \left .\frac{\partial a}{\partial x} \right |_{i,j} + 
-   \frac{\Delta t}{2} \left ( 
-   - u \left .\frac{\partial a}{\partial x} \right |_{i,j} 
+ &=& a_{i,j}^n +
+   \frac{\Delta x}{2} \left .\frac{\partial a}{\partial x} \right |_{i,j} +
+   \frac{\Delta t}{2} \left (
+   - u \left .\frac{\partial a}{\partial x} \right |_{i,j}
    - v \left .\frac{\partial a}{\partial y} \right |_{i,j} \right
    ) + \ldots \nonumber \\
-    &=& \underbrace{a_{i,j}^n + 
-   \frac{\Delta x}{2} \left ( 1 - \frac{\Delta t}{\Delta x} u \right ) 
+    &=& \underbrace{a_{i,j}^n +
+   \frac{\Delta x}{2} \left ( 1 - \frac{\Delta t}{\Delta x} u \right )
    \left .\frac{\partial a}{\partial x} \right |_{i,j}}_{\hat{a}_{i+\myhalf,j,L}^{n+\myhalf}} \underbrace{-
    \frac{\Delta t}{2} v \left .\frac{\partial a}{\partial y} \right |_{i,j}}_{\mathrm{``transverse~flux~difference''}} +
    \ldots \label{eq:statelu}
@@ -756,7 +756,7 @@ The main difference between the split and unsplit interface states is the
 explicitly appearance of the ``transverse flux difference'' in the unsplit
 interface state.  We rewrite this as:
 \begin{equation}
-a_{i+\myhalf,j,L}^{n+\myhalf} = \hat{a}_{i+\myhalf,j,L}^{n+\myhalf} 
+a_{i+\myhalf,j,L}^{n+\myhalf} = \hat{a}_{i+\myhalf,j,L}^{n+\myhalf}
    - \frac{\Delta t}{2} v \left .\frac{\partial a}{\partial y} \right |_{i,j}
 \end{equation}
 Here, the $\hat{a}_{i+\myhalf,j,L}^{n+\myhalf}$ term is just the normal
@@ -768,7 +768,7 @@ in a fashion identical to the one-dimensional and split methods.  We
 compute these one-dimensional $\hat{a}$'s at the left and right every
 interface in both coordinate directions.  Note that these states are
 still one-dimensional, since we have not used any information from the
-transverse direction in their computation.  
+transverse direction in their computation.
 
 \item Solve a Riemann problem at each of these interfaces:
 \begin{eqnarray}
@@ -778,13 +778,13 @@ a^T_{i,j+\myhalf} &=& \mathcal{R}(\hat{a}_{i,j+\myhalf,L}^{n+\myhalf},
                               \hat{a}_{i,j+\myhalf,R}^{n+\myhalf}) \\
 \end{eqnarray}
 These states are given the `$^T$' superscript since they are the states
-that are used in computing the transverse flux difference.  
+that are used in computing the transverse flux difference.
 
-\item Correct the 
+\item Correct the
 previously computed normal interface states (the $\hat{a}$'s) with
 the transverse flux difference:
 \begin{equation}
-a_{i+\myhalf,j,L}^{n+\myhalf} = \hat{a}_{i+\myhalf,j,L}^{n+\myhalf} 
+a_{i+\myhalf,j,L}^{n+\myhalf} = \hat{a}_{i+\myhalf,j,L}^{n+\myhalf}
    - \frac{\Delta t}{2} v \frac{a^T_{i,j+\myhalf} - a^T_{i,j-\myhalf}}{\Delta y}
 \end{equation}
 Notice that the
@@ -793,11 +793,11 @@ transverse, but to the left of the interface.  Similarly, for the
 right state, it would be those that are transverse, but to the right
 of the interface:
 \begin{equation}
-a_{i+\myhalf,j,R}^{n+\myhalf} = \hat{a}_{i+\myhalf,j,R}^{n+\myhalf} 
+a_{i+\myhalf,j,R}^{n+\myhalf} = \hat{a}_{i+\myhalf,j,R}^{n+\myhalf}
    - \frac{\Delta t}{2} v \frac{a^T_{i+1,j+\myhalf} - a^T_{i+1,j-\myhalf}}{\Delta y}
 \end{equation}
 \end{itemize}
-A similar procedure happens at the $y$-interfaces.  
+A similar procedure happens at the $y$-interfaces.
 
 Figure~\ref{fig:unsplitstates} illustrates the steps involved in
 the construction of the $a_{i+\myhalf,j,L}^{n+\myhalf}$ state.  \MarginPar{more panels illustrating the sequence?}
@@ -821,7 +821,7 @@ the construction of the $a_{i+\myhalf,j,L}^{n+\myhalf}$ state.  \MarginPar{more 
 
 Once all of the full states (normal prediction $+$ transverse flux
 difference) are computed to the left and right of all the interfaces
-($x$ and $y$), we solve another Riemann problem to find the final 
+($x$ and $y$), we solve another Riemann problem to find the final
 state on each interface.
 \begin{equation}
 a_{i+\myhalf,j}^{n+\myhalf} = \mathcal{R}(a_{i+\myhalf,j,L}^{n+\myhalf},
@@ -829,7 +829,7 @@ a_{i+\myhalf,j}^{n+\myhalf} = \mathcal{R}(a_{i+\myhalf,j,L}^{n+\myhalf},
 \end{equation}
 The final conservative update is then done via Eq.~\ref{eq:update2du}.
 
-See \cite{colella:1990} for more details on this unsplit method, 
+See \cite{colella:1990} for more details on this unsplit method,
 and \cite{saltzman:1994} for details of the extension to 3-d.
 
 Figures~\ref{fig:adv:gaussian-2d} and \ref{fig:adv:tophat-2d} show the
@@ -916,12 +916,12 @@ the fluxes over though a face as:
 \item x-face:
 \begin{equation}
 \langle (ua)_{i+\myhalf,j} \rangle = \frac{1}{\Delta y}
-    \int_{y_{j-\myhalf}}^{y_{j+\myhalf}} (ua)_{i+\myhalf,j}\, dy 
+    \int_{y_{j-\myhalf}}^{y_{j+\myhalf}} (ua)_{i+\myhalf,j}\, dy
 \end{equation}
 \item y-face
 \begin{equation}
 \langle (va)_{i,j+\myhalf} \rangle = \frac{1}{\Delta x}
-    \int_{x_{i-\myhalf}}^{x_{i+\myhalf}} (va)_{i,j+\myhalf}\, dx 
+    \int_{x_{i-\myhalf}}^{x_{i+\myhalf}} (va)_{i,j+\myhalf}\, dx
 \end{equation}
 \end{itemize}
 These are similar to the expressions above, except there is no
@@ -979,7 +979,7 @@ with a mode in each direction:
 \begin{equation}
 a^n_{i,j} = A^n e^{Ii\theta}e^{Ij\phi}
 \end{equation}
-Next, to simplify things, we'll assume that $u = v$, and $\Delta x = \Delta y$, 
+Next, to simplify things, we'll assume that $u = v$, and $\Delta x = \Delta y$,
 then $\cfl = u \Delta t/ \Delta x = v \Delta t / \Delta y$.
 Inserting this into our difference equation gives:
 \begin{equation}
@@ -1004,7 +1004,7 @@ integration methods can vary this limit some, for instance, the fourth-order
 method in \cite{mccorquodalecolella} allows for $\Delta t \sum_{i=1}^d (|\Ub \cdot \mathbf{e}_d|)/\Delta x_d  \lesssim 1.4$.  Total variation diminishing Runge-Kutta methods are popular
 for this application~\cite{gottliebshu:1996}.
 
-% run as: 
+% run as:
 %   ./pyro.py advection_rk tophat inputs.tophat
 %   ./plot.py -W 7.7 -H 6 -o tophat_rk4_cfl08.pdf advection_rk tophat_0040
 %
@@ -1019,7 +1019,7 @@ for this application~\cite{gottliebshu:1996}.
   the method-of-lines approach with 4th-order Runge-Kutta time integration.
   We use $u = v = 1$ for one period on a $32\times 32$ grid.  On the left
   is $\cfl = 0.8$---this is clearly unstable.  On the right is $\cfl = 0.4$,
-  which is stable.  
+  which is stable.
   This was run as {\tt ./pyro.py advection\_rk tophat inputs.tophat}}
 \end{figure}
 
@@ -1315,6 +1315,691 @@ reason I can understand}.
 \end{figure}
 %
 
+\subsection{Discontinuous Galerkin methods}
+\label{sec:dg}
+
+In addition to the issues with higher order schemes noted above, there is one
+wasteful step that is worth noting. Each time a higher order scheme reconstructs
+the data it constructs a high-order piecewise polynomial representation of the
+data everywhere. Then, in the time update, most of this information is thrown
+away. At the beginning of each timestep we only know the value of the function
+(for finite difference approaches) or its integral average (for finite volume
+approaches).
+
+Some alternative methods store the \emph{moments} or \emph{modes} of the
+solution, and update all of them. In these methods all of the information
+needed to evaluate the solution is available at all times and locations, and
+all the information is updated at every step. This should make the methods more
+efficient and more local (with a smaller stencil, and hence better on parallel
+machines). Their disadvantages will come in the timestep and with discontinuous
+data.
+
+The presentation here closely follows~\cite{hesthaven2018numerical} -- check
+there for considerably more details, particularly on the theoretical results.
+
+\subsubsection{Function basis and weak form}
+\label{sec:dg_basis}
+
+Recall that in this chapter we are looking at the advection equation
+%
+\begin{equation}
+  \tag{\ref{eq:ho-advect}}
+  a_t + u a_x = 0.
+\end{equation}
+%
+We want to be able to compute the value of the function $a(t, x)$ at any point.
+We can do this by writing $a$ in terms of a \emph{function basis} $\psi_n(t, x)$
+as
+%
+\begin{equation}
+  \label{eq:dg_fn_basis}
+  a(t, x) = \sum_n \hat{a}_n \psi_n(t, x).
+\end{equation}
+%
+Here the \emph{modes} or \emph{modal coefficients} $\hat{a}_n$ are constants. An
+example of a function basis would be
+%
+\begin{equation}
+  \label{eq:dg_monomial_basis}
+  \begin{aligned}
+    \psi_{0}(t, x) &= 1, & \psi_{1}(t, x) &= x, & \psi_{2}(t, x) &= t, \\
+    \psi_{3}(t, x) &= \tfrac{1}{2} x^2, & \psi_{4}(t, x) &= \tfrac{1}{2} t^2, &
+    \psi_{5}(t, x) &= x t.
+  \end{aligned}
+\end{equation}
+%
+These six modes will perfectly describe any function that remains quadratic for
+all space and time.
+
+It is often more convenient the explicitly separate space and time, as we saw
+using the Method of Lines in section~\ref{adv:sec:mol_2d}. In this case we can
+represent the solution using a purely spatial function basis, as
+%
+\begin{equation}
+  \label{eq:dg_fn_basis_split}
+  a(t, x) = \sum_n \hat{a}_n(t) \psi_n(x).
+\end{equation}
+%
+Now the modes depend on time, and there will only be three basis functions
+needed to describe quadratic data.
+
+Clearly we cannot store an infinite number of modes. By restricting our sum to
+the $m+1$ modes by writing
+%
+\begin{equation}
+  \label{eq:dg_fn_basis_split}
+  a(t, x) = \sum_{n=0}^{m} \hat{a}_n(t) \psi_n(x)
+\end{equation}
+%
+we are restricting out solution to live in a finite dimensional function space
+(denoted $\mathbb{V}$) with basis $\{ \psi_n \}, \ n = 0, \dots, m$.
+That means that, in general, any solution $a(t, x)$ will have an error when
+plugged into the advection equation~\ref{eq:ho-advect}.
+We can pick out \emph{a} solution by insisting that this error is orthogonal to
+$\mathbb{V}$.
+
+To see how this works, write the error term as $\epsilon(t, x)$.
+As our (infinite dimensional) function basis can describe any function, we
+expand the error in terms of the $\psi_n$ as well, as
+%
+\begin{equation}
+  \label{eq:dg_error}
+  \epsilon(t, x) = \sum_n \hat{\epsilon}_n(t) \psi_n(x).
+\end{equation}
+%
+Therefore our advection equation, including the error term, becomes
+%
+\begin{equation}
+  \label{eq:dg_advection}
+  \sum_n \left[ \left( \ddt{\hat{a}_n} - \hat{\epsilon}_n \right) \psi_n(x) +
+  u \hat{a}_n \ddx{\psi_n}(x) \right] = 0.
+\end{equation}
+%
+As our solution is finite dimensional this can be written as
+%
+\begin{equation}
+  \label{eq:dg_advection2}
+    \sum_{n=0}^{m} \left[ \ddt{\hat{a}_n} \psi_n(x) +
+    u \hat{a}_n \ddx{\psi_n}(x) \right] =
+    \sum_{n=m+1}^{\infty} \hat{\epsilon}_n \psi_n(x).
+\end{equation}
+%
+We have used here that the orthogonality of the error requires $\hat{\epsilon}_n$
+does not contribute for $n = 0, \dots, m$.
+Using standard linear algebra techniques (as $\psi_n$ is a \emph{basis}), we can
+get individual equations by taking the inner product with another member of the
+basis. If we were dealing with vectors in $\mathbb{R}^n$ then the inner product
+would be a vector dot product. As we are dealing with functions the inner
+product requires multiplication and integration over the domain,
+%
+\begin{equation}
+  \label{eq:dg_inner_product}
+  \langle f(x), \psi_l(x) \rangle = \int_V \text{d} x \, f(x) \psi_l(x).
+\end{equation}
+%
+This will also write the conservation law in the integral, weak, form.
+This leads to, after integrating by parts,
+%
+\begin{equation}
+  \label{eq:dg_advection3}
+  \begin{split}
+    \sum_{n=0}^{m} & \left[ \ddt{\hat{a}_n} \left( \int_V \text{d} x \ \psi_n(x) \psi_l(x) \right) + \left\{ \int_{\partial V} u \hat{a}_n \psi_n(x) \psi_l(x) \right\} -
+    u \hat{a}_n \int_V \text{d} x \, \psi_n \ddx{\psi_l }(x) \right] = \\ \sum_{n=m+1}^{\infty} & \hat{\epsilon}_n \int_V \text{d} x\, \psi_n(x) \psi_l(x).
+  \end{split}
+\end{equation}
+%
+Restricting ourselves to the first $m+1$ modes we see only the left hand side
+contributes.
+
+We can write this result as a matrix equation. Define the state vector
+%
+\begin{equation}
+  \label{eq:dg_state_vector}
+  \bm{\hat{a}} = (\hat{a}_0, \dots, \hat{a}_N)^T.
+\end{equation}
+%
+For now, restrict to one dimension and set $V = [-1, 1]$: we can use a
+coordinate transformation to convert to other domains. Then define the matrices
+%
+\begin{align}
+  \label{eq:dg_mass_matrix}
+  \hat{M}_{ln} &= \int_{-1}^1 \psi_l(x) \psi_n(x), \\
+  \label{eq:dg_stiffness_matrix}
+  \hat{S}_{ln} &= \int_{-1}^1 \psi_l(x) \ddx{\psi_n}(x),
+\end{align}
+%
+which can be pre-calculated and stored for repeated use. These are typically
+referred to (building on finite \emph{element} work) as the \emph{mass} matrix
+($\hat{M}$) and the \emph{stiffness} matrix ($\hat{S}$). We therefore finally
+have
+%
+\begin{equation}
+  \label{eq:dg_advection5}
+  \hat{M} \ddt{\bm{\hat{a}}} + \hat{S}^T \left( u \bm{\hat{a}} \right) =
+  -\left[ \bm{\psi F} \right]_{-1}^1.
+\end{equation}
+%
+The right hand side term is the \emph{boundary flux} and requires coupling to
+neighbouring cells, or boundary conditions. It requires evaluating a product of
+basis functions $\psi_l(x) \psi_n(x)$ at the boundary of the domain.
+
+We see that, once we have evaluated the mass and stiffness matrices, we can then
+update \emph{all} modes $\bm{\hat{a}}$ by evaluating the boundary flux term
+on the right hand side and solving a linear system. This illustrates the small
+stencil of discontinuous Galerkin schemes: the only coupling to the other cells
+is through that boundary integral, which only couples to direct neighbours.
+However, if the flux terms couple different modes (as evaluating them requires
+evaluating a product of basis functions $\psi_l(x) \psi_n(x)$), then the amount
+of information communicated may still be large. Therefore the communication cost
+of the scheme is linked to the properties of the basis functions at the domain
+boundary.
+
+We also see that the behaviour of the scheme will crucially depend on the mass
+matrix $\hat{M}$. If it is singular the scheme cannot work. If it is poorly
+conditioned then the scheme will rapidly lose accuracy. Crucially, with the
+monomial basis of equation~\ref{eq:dg_monomial_basis}, the condition number of
+the mass matrix grows very rapidly, and the scheme loses accuracy for moderate
+$m$.
+
+The choice of whether to prioritize the behaviour of the mass matrix or the
+flux terms leads to two different schemes.
+
+\subsubsection{Modal Discontinuous Galerkin}
+\label{sec:dg_modal}
+
+If we prioritize the behaviour of the mass matrix as the most important starting
+point for our scheme we are led to the \emph{modal} Discontinuous Galerkin
+approach. We noted above that the choice of a monomial basis led to a poorly
+conditioned mass matrix.
+Instead, it is sensible to pick as a function basis something from the class
+of \emph{orthogonal polynomials}, where
+%
+\begin{equation}
+  \label{eq:dg_orthog_polys}
+  \int_V w(x) \psi_l(x) \psi_n(x) \propto \delta_{ln}.
+\end{equation}
+%
+The Kronecker delta $\delta_{ln}$ ensures that the mass matrix is diagonal, and
+hence always easy to invert.
+When the \emph{weight function} $w(x)$ is identically $1$, as needed for the
+mass matrix in equation~\ref{eq:dg_mass_matrix}, this suggests we should use the
+\emph{Legendre polynomials} $\psi_n(x) = P_n(x)$, which obey
+%
+\begin{equation}
+  \label{eq:dg_legendre_poly}
+  \int_{-1}^1 P_l(x) P_n(x) = \frac{2}{2 n + 1} \delta_{ln}.
+\end{equation}
+%
+A further simplification comes from choosing the normalized Legendre polynomials
+%
+\begin{equation}
+  \label{eq:dg_legendre_poly_norm}
+  \tilde{P}_n(x) = \sqrt{\frac{2 n + 1}{2}} P_n(x)
+\end{equation}
+%
+which ensures that the mass matrix $\hat{M}$ is the identity matrix.
+
+Now that we have fixed a choice of basis functions we can evaluate the mass
+matrix (which will be the identity here) and the stiffness matrix $\hat{S}$. We
+still need to evaluate the boundary flux. If we explicitly write out equation~\ref{eq:dg_advection5}
+in index form (using Einstein summation convention over $n$) we have
+%
+\begin{equation}
+  \label{eq:dg_advection6}
+  \hat{M}_{ln} \ddt{\hat{a}_n} + \hat{S}^T_{ln} u \hat{a}_n = -\left[ u P_l(x) P_n(x) \hat{a}_n \right]_{-1}^1.
+\end{equation}
+%
+We can now directly use that $P_n(1) = 1$ and $P_n(-1) = (-1)^n$ to get the
+boundary flux term as
+%
+\begin{equation}
+  \label{eq:dg_boundary_flux_modal}
+  -\left[ u P_l(x) P_n(x) \hat{a}_n \right]_{-1}^1 = u \left\{ (-1)^{l+n} A_n(-1) - A_n(1) \right\}.
+\end{equation}
+%
+Here $A_n(1)$, for example, is the $n^{\text{th}}$ mode of the solution at the
+boundary. As there are two solutions at the boundary of the element - the
+solution at $x = 1_{-}$ from the interior of the element, and the solution at
+$x = 1_{+}$ from the exterior (either another element, or from the boundary
+conditions), we need a Riemann solver to give us a single solution at $x=1$. In
+the case of linear advection, as here, we can use the upwind solver for the
+modes as well as for the solution, so
+%
+\begin{equation}
+  \label{eq:dg_riemann_solver}
+  A_n(x; a^{-}_n, a^{+}_n) = \begin{cases}
+    a^{-}_n & \text{if } u \ge 0 \\ a^{+}_n & \text{otherwise.}
+\end{cases}
+\end{equation}
+%
+
+Two points should be immediately noted about this discontinuous Galerkin method.
+First, if we restrict to only one mode ($N=0$), then the only basis function we
+have is $\tilde{P}_0(x) = 1 / \sqrt{2}$, the mass matrix $\hat{M} = 1$, the
+stiffness matrix vanishes, and the boundary flux term reduces to the standard
+finite volume update. In general, the zero mode corresponds to the integral
+average over the cell or element.
+
+Second, we note that the boundary flux term always couples different modes (when
+including more than just one), and only in the linear case will it be simple to
+give a flux formula that works for all modes. As the boundary flux term is
+crucial in many cases, we need to change approach to simplify the calculation of
+this term using (possibly approximate) solutions to the Riemann problem.
+
+\subsubsection{Nodal Discontinuous Galerkin}
+\label{sec:dg_nodal}
+
+A problem with the modal form used above is with the boundary flux term.
+The solution (for nonlinear equations) of the flux for higher order modes is
+complex. The mode coupling at the boundary also means the amount of information
+communicated could be large, meaning the scheme is not as efficient as it could
+be. Instead we note that in standard finite volume schemes we need the value of
+the function either side of the interface. This suggests that, rather than using
+a modal expansion as above, we should use a \emph{nodal} expansion where the
+values of the functions are known at particular points. If two of those points
+are at the boundaries of the cell then those values can be used to compute the
+flux.
+
+Let us denote these nodal locations by $\xi_i$, and the values of the solution
+at these locations by $a_i$. We therefore have our solution in the form
+%
+\begin{equation}
+  \label{eq:dg_nodal_interp}
+  a(t, x) = \sum_{i=0}^m a_i(t) \ell_i(x)
+\end{equation}
+%
+where the $\ell_i(x)$ are the standard indicator interpolating polynomials that
+obey
+%
+\begin{equation}
+  \label{eq:dg_nodal_interp_indicator}
+  \ell_i(\xi_j) = \delta_{ij}.
+\end{equation}
+%
+This directly matches the \emph{modal} form of the solution,
+%
+\begin{equation}
+  \tag{\ref{eq:dg_fn_basis_split}}
+  a(t, x) = \sum_n \hat{a}_n(t) \psi_n(x),
+\end{equation}
+%
+with the basis functions $\psi_n$ being the indicator polynomials $\ell_n$. We
+immediately see that the boundary flux term will simplify hugely, as the only
+term that is non-zero at $x=-1$ comes from the product of $\ell_0(-1) \ell_0(-1)$,
+using the convention that $\xi_0 = -1$, as $\ell_n(-1) = 0$ for $n \ne 0$.
+Similarly the only term that is non-zero at $x=+1$ comes from the product of
+$\ell_m(-1) \ell_m(-1)$. Therefore, for any number of modes $m$, we only need to
+communicate one piece of information from the neighbouring element in order to
+solve the Riemann problem, and this is the value of the solution at that interface.
+
+However, by choosing as a basis the indicator polynomials $\ell_n(x)$, the
+resulting mass matrix will not be the identity, as the indicator polynomials are
+not orthogonal. The properties of the mass matrix will now crucially depend on
+how we choose the locations of the nodes, $\xi_i$. This is most easily done by
+linking the nodal form of equation~\eqref{eq:dg_nodal_interp} to the modal
+form~\eqref{eq:dg_fn_basis_split}, where here we are thinking of $\psi_n$ as
+being a different basis ($\psi_n \ne \ell_n$) which is known to be well behaved.
+This implicitly allows us to restrict $\xi_j$.
+
+By evaluating both forms at a node $\xi_j$ we get
+%
+\begin{equation}
+  \label{eq:dg_nodal_vandermonde1}
+  a_j = \sum_n \psi_n(\xi_j) \hat{a}_n.
+\end{equation}
+%
+By defining a (generalized) \emph{Vandermonde} matrix $\hat{V}$ as
+%
+\begin{equation}
+  \label{eq:dg_nodal_vandermonde2}
+  \hat{V}_{jn} = \psi_n(\xi_j)
+\end{equation}
+%
+we see that we can translate from the modal state vector
+$\bm{\hat{a}} = (\hat{a}_0, \dots, \hat{a}_N)^T$ to the nodal state vector
+$\bm{a} = (a_0, \dots, a_N)^T$ via the matrix equation
+%
+\begin{equation}
+  \label{eq:dg_nodal_vandermonde3}
+  \hat{V} \bm{\hat{a}} = \bm{a}.
+\end{equation}
+
+We can also connect the basis functions $\psi_n$ to the interpolating polynomials
+$\ell_i$ via the Vandermonde matrix. Note that
+%
+\begin{subequations}
+  \label{eq:dg_nodal_vandermonde4}
+  \begin{align}
+      && a(t, x) &= \sum_n \hat{a}_n \psi_n(x) \\
+      && &= \sum_i a_i \ell_i(x) \\
+      && &= \sum_i \sum_n \hat{V}_{in} \hat{a}_n \ell_i(x) \\
+      && &= \sum_n \sum_i \hat{V}_{in} \hat{a}_n \ell_i(x) \\
+      \implies && 0 &= \sum_n \hat{a}_n \left( \sum_i \left[ \hat{V}_{in} \ell_i(x) - \psi_n(x) \right] \right).
+  \end{align}
+\end{subequations}
+%
+This immediately gives
+%
+\begin{equation}
+  \label{eq:dg_nodal_vandermonde5}
+  \hat{V}_{in} \ell_i(x) = \psi_n(x)
+\end{equation}
+%
+or, by thinking of the basis functions and interpolating polynomials as vectors,
+%
+\begin{equation}
+  \label{eq:dg_nodal_vandermonde6}
+  \hat{V}^T \bm{\ell}(x) = \bm{\psi}(x).
+\end{equation}
+%
+This allows us to convert the modal approach to deriving a scheme to a nodal
+approach directly through the Vandermonde matrix.
+
+To construct the nodal scheme we need to fix the location of the nodal
+points. We have constructed the modal scheme to be well conditioned by looking
+at the mass matrix. This suggests that to make the nodal scheme well behaved we
+should ensure good conditioning of the Vandermonde matrix. This requires
+carefully choosing the nodes $\xi_i$. We also want to ensure that two of the
+nodes are at $x = \pm 1$, and that the accuracy of the scheme is as good as
+possible. All these conditions combine to suggest that the nodes $\xi_i$ should
+be given by the \emph{Legendre-Gauss-Lobatto} points, which are the zeros of
+$P_N'(x)$ combined with $\pm 1$.
+
+\begin{figure}[t]
+\centering
+% figure generated by hydro_examples/advection/dg.py
+\includegraphics[width=0.8\linewidth]{dg_grid}
+\caption[The grid for a Discontinuous Galerkin method]
+{\label{fig:dg_grid} The grid for a Discontinuous Galerkin method is split into
+cells or elements as indicated by the vertical dashed lines -- here there are
+only $4$ cells. Within each cell the solution is represented by an
+$m^{\text{th}}$ order polynoial, as shown by the dashed lines. This
+representation is central to the modal DG method. Equivalent information can be
+stored at specific nodes, as shown by the markers. Note how the number and
+location of the nodes varies with $m$. \\
+\hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/advection/dg.py}{dg.py}}}
+\end{figure}
+%
+Figure~\ref{fig:dg_grid} shows the nodes and modes for a sine wave represented
+by a Discontinuous Galerkin method on a grid with only $4$ cells. We see how
+rapidly the representation appears to converge to the smooth sine wave with
+increasing $m$. Note also how the locations of the nodes varies with $m$, as the
+optimal nodes changes with the order of the method. However, in all cases there
+are nodes at the boundaries of each cell.
+
+\begin{exercise}[Vandermonde matrices]
+{Construct the Vandermonde matrix converting modal coefficients, based on
+orthonormal Legendre polynomials, to nodal coefficients, based on Gauss-Lobatto
+nodal points, on the interval $x \in [-1, 1]$. For example, for $m=2$ the result
+is, to $4$ significant figures,
+%
+\begin{equation*}
+  V = \begin{pmatrix}
+        0.7071 & -1.225 & 1.581 \\
+        0.7071 & 0 & -0.7906 \\
+        0.7071 & 1.225 & 1.581
+      \end{pmatrix}.
+\end{equation*}
+%
+Using the Vandermonde matrix and its inverse, check that you can convert from
+nodes to modes and vice versa. Check that the condition number grows slowly with
+$m$ (roughly as $m^{1/2}$ for large $m$).}
+\end{exercise}
+
+With these restrictions, we can now construct the nodal scheme. As noted above,
+this scheme remains a modal scheme as generally introduced in section~\ref{sec:dg_basis},
+but the basis functions are the indicator polynomials $\ell_n(x)$. Thus the
+scheme can be written in the mass matrix form
+%
+\begin{equation}
+  \tag{\ref{eq:dg_advection5}}
+  \hat{M} \ddt{\bm{\hat{a}}} + \hat{S}^T u \bm{\hat{a}} = -\left[ \bm{\psi F} \right]_{-1}^1,
+\end{equation}
+%
+but now the two matrices are given by
+%
+\begin{align}
+  \label{eq:dg_nodal_mass_matrix}
+  \hat{M}_{ln} &= \int_{-1}^1 \ell_l(x) \ell_n(x), \\
+  \label{eq:dg_nodal_stiffness_matrix}
+  \hat{S}_{ln} &= \int_{-1}^1 \ell_l(x) \ddx{\ell_n}(x).
+\end{align}
+%
+By using the Vandermonde matrix to link the nodal basis to an orthogonal basis
+such as the Legendre polynomials we can simplify the mass matrix to
+%
+\begin{equation}
+  \label{eq:dg_nodal_mass_matrix_from_V}
+  \hat{M} = \left( \hat{V} \hat{V}^T \right)^{-1}.
+\end{equation}
+%
+The stiffness matrix can also be simplified, by re-writing $\ddx{\ell_n}(x)$ as
+an expansion in terms of $\ell_n(x)$. Defining the \emph{differentiation matrix}
+$\hat{D}$ as
+%
+\begin{equation}
+  \label{eq:dg_nodal_differentiation}
+  \hat{D}_{ln} = \left. \ddx{\ell_n}(x) \right|_{x = \xi_l}
+\end{equation}
+%
+we have $\ddx{\ell_n}(x) = \sum_k \hat{D}_{kn} \ell_k(x)$
+%
+\begin{subequations}
+  \label{eq:dg_nodal_stiffness_matrix_from_D_steps}
+  \begin{align}
+    \hat{S}_{ln} &= \int_{-1}^1 \ell_l(x) \ddx{\ell_n}(x) \\
+    &= \int_{-1}^1 \ell_l(x) \sum_k \hat{D}_{kn} \ell_k(x) \\
+    &= \sum_k \left( \ell_l(x) \ell_k(x) \right) \hat{D}_{kn} \\
+    &= \hat{M}_{lk} \hat{D}_kn.
+  \end{align}
+\end{subequations}
+%
+This shows that the stiffness matrix simplifies to
+%
+\begin{equation}
+  \label{eq:dg_nodal_stiffness_matrix_from_V}
+  \hat{S} = \hat{M} \hat{D}.
+\end{equation}
+%
+Finally, using similar methods to the steps above, we can link the differentiation
+matrix back to the Vandermonde matrix, via
+%
+\begin{equation}
+  \label{eq:dg_nodal_D_matrix_from_V}
+  \hat{D} = \left( \ddx{V} \right) \hat{V}^{-1}.
+\end{equation}
+%
+This is primarily useful when the modal function basis is a standard library
+function such as the (normalized) Legendre polynomials. This means that the
+basis functions and their derivatives, and hence the Vandermonde matrix and its
+derivatives, can be written solely in terms of library functions. For example,
+in Python the \texttt{numpy} package contains (in \texttt{numpy.polynomial.legendre})
+the functions \texttt{legval} (which evaluates the Legendre polynomials),
+\texttt{legder} (which links the derivatives of the Legendre polynomials back to
+the Legendre polynomials themselves), and \texttt{legvander} (which evaluates
+the Vandermonde matrix directly, but in un-normalized form).
+
+There is one final step needed to construct the full scheme. So far, the method
+has been built assuming a single element with the coordinates $x \in [-1, 1]$.
+For most cases we will want to use a ``small'' number of modes, say $m \le 5$,
+and split the domain into $N$ elements, like the cells in a finite volume scheme.
+If we assume a general element has coordinates $x \in [x_{j-1/2}, x_{j+1/2}]$
+with width $\Delta x$, then the \emph{form} of the scheme remains the same:
+%
+\begin{equation}
+  \label{eq:dg_nodal_final}
+  M \ddt{\bm{\hat{a}}} + S^T u \bm{\hat{a}} = -\left[ \bm{\psi F} \right]_{x_{j-1/2}}^{x_{j+1/2}}.
+\end{equation}
+%
+However, the change of coordinates needs to be factored in. We can see how this
+works by looking at the integral definitions, such as~\eqref{eq:dg_nodal_mass_matrix}
+and~\eqref{eq:dg_nodal_stiffness_matrix}. We see that the mass matrix transforms
+as
+%
+\begin{equation}
+  \label{eq:dg_nodal_mass_matrix_with_h}
+  M = \frac{\Delta x}{2} \hat{M},
+\end{equation}
+%
+but that the stiffness matrix is unchanged.
+
+\begin{exercise}[Mass and stiffness matrices]
+{From the Vandermonde matrices constructed above, build the mass, differentiation
+and stiffness matrices $\hat{M}, \hat{D}, \hat{S}$, on the interval
+$x \in [-1, 1]$. For example, for $m=2$ the results are, to $4$ significant
+figures,
+%
+\begin{align*}
+  \hat{M} &= \begin{pmatrix}
+        0.2667 & 0.1333 & -0.0667 \\
+        0.1333 & 1.067 & 0.1333 \\
+        -0.06667 & 0.1333 & 0.2667
+      \end{pmatrix}, \\
+  \hat{D} &= \begin{pmatrix}
+        -1.5 & 2 & -0.5 \\
+        -0.5 & 0 & 0.5 \\
+        0.5 & -2 & 1.5
+      \end{pmatrix}, \\
+  \hat{S} &= \begin{pmatrix}
+        -0.5 & 0.6667 & -1.667 \\
+        -0.6667 & 0 & 0.6667 \\
+        1.667 & -0.6667 & 0.5
+      \end{pmatrix}.
+\end{align*}
+}
+\end{exercise}
+
+\begin{figure}[t]
+\centering
+% figure generated by hydro_examples/advection/dg.py
+\includegraphics[width=0.8\linewidth]{dg_limiter}
+\caption[Discontinuous Galerkin methods in action]
+{\label{fig:dg_limiter} The left panel shows a Discontinuous Galerkin method
+with $m=3$ and $16$ elements applied to the advection equation, where a sine
+wave is advected once around the domain. Even at this low resolution the result
+without limiting is visually exact, and using moment limiting is very accurate.
+In the right panel the same methods are applied to the ``top hat'' initial data,
+again advected once the periodic domain. The unlimited method shows the expected
+Gibbs oscillations, which are confined to the elements next to the
+discontinuities. The moment limited method shows no oscillations. \\
+\hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/advection/dg.py}{dg.py}}}
+\end{figure}
+%
+By combining the nodal DG update described above with a time integrator we can
+look at the performance of the scheme. We need to take care in choosing the
+timestep. From the nodal point of view we can see that the width of the cell,
+$\Delta x$, is not going to be the limiting factor. Instead, the smallest
+distance between the (unequally spaced!) nodes is going to be crucial. General
+results (see e.g.~\cite{hesthaven2018numerical}) suggest that reducing the
+timestep by a factor of $2 m + 1$ is sufficient to ensure stability, but it does
+increase computational cost.
+
+Figure~\ref{fig:dg_limiter} advects two initial profiles one period around a
+periodic domain. In the left panel we see the excellent performance when applied
+to a smooth profile. The unlimited method is essentially indistinguishable from
+the exact solution. However, the right panel shows that when the unlimited
+method is applied to a discontinuous initial profile then Gibbs oscillations
+result. The only ``nice'' feature of the Discontinuous Galerkin method here is
+that these oscillations are confined to the elements next to the
+discontinuities, and do not spread to cover the entire grid.
+
+As with finite difference schemes, there are a range of modifications that can
+be made to limit or eliminate these oscillations. In Discontinuous Galerkin
+methods it is typical to do this in two steps: first, identify which elements
+need limiting, and second, modify the data in the required cells. The
+identification step can be done using the nodal values: construct limited slopes
+from cell average values and compare the predicted values at cell boundaries to
+the nodal values actually stored. The modification step can be done in many
+ways. A number are outlined in~\cite{hesthaven2018numerical}, but here we show a
+method that modifies the modal values, rather than the nodal values, as
+developed by~\cite{biswas1994parallel}. This \emph{moment limiting} approach
+removes the oscillations, as seen in Figure~\ref{fig:dg_limiter}.
+
+\begin{figure}[t]
+\centering
+% figure generated by hydro_examples/advection/dg.py
+\includegraphics[width=0.8\linewidth]{dg_convergence_sine}
+\caption[Convergence of Discontinuous Galerkin methods]
+{\label{fig:dg_convergence_sine} Each panel shows the convergence of the
+Discontinuous Galerkin methods for $m = 1, \dots, 5$, when using different time
+integrators (the left panel uses RK3, the other panels an $8^{\text{th}}$ order
+RK method) or using limiters (the right panel uses moment limiting, whilst the
+other panels use no limiting). The expected convergence rate should be $m+1$,
+which is seen only for the low order methods when the time integrator is RK3.
+For higher $m$ schemes the error from the time integrator dominates, but using
+a higher order time integrator shows that the expected convergence rate can be
+recovered, as seen in the central and right panel. Comparing the central and
+right panel we see that it is possible, with moment limiting, to retain the high
+order convergence, but that moment limiting increase the absolute error by
+roughly an order of magnitude. \\
+\hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/advection/dg.py}{dg.py}}}
+\end{figure}
+%
+The Discontinuous Galerkin methods are constructed to have high-order accuracy.
+In principle, the convergence rate should be $\propto (\Delta x)^{m+1}$. As with
+the WENO schemes above this can be difficult to see in reality.
+Figure~\ref{fig:dg_convergence_sine} shows the convergence rate when advecting
+a sine wave once around a periodic domain. In the left panel the third order
+SSP RK3 time integrator has been used. The expected $2^{\text{nd}}$ and
+$3^{\text{rd}}$ order convergence is seen for $m=1$ and $m=2$. However, for
+higher orders the limitations of the third-order time integrator reduce the
+convergence rate.
+
+In the central panel of Figure~\ref{fig:dg_convergence_sine} an $8^{\text{th}}$
+order time integrator is used. This reduces the time integrator error far below
+what is needed, and we now see that every scheme converges at the expected rate.
+In more complex systems in multiple dimensions the error from the spatial terms
+will be much larger, and so the RK3 method can be used without compromising the
+accuracy. The right panel shows that the moment limiter does not affect the
+convergence rate of the method, although it does increase the absolute error in
+nearly all cases.
+
+\begin{figure}[t]
+\centering
+% figure generated by hydro_examples/advection/compare_schemes.py
+\includegraphics[width=0.8\linewidth]{dg_weno_efficiency}
+\caption[Efficiency of high order methods]
+{\label{fig:dg_weno_efficiency} Comparing a Discontinuous Galerkin scheme to a
+finite difference or finite volume scheme needs some care, as the number of
+cells used stops being a fair comparison: the DG method stores $m+1$ times more
+information per cell than a typical finite difference scheme. Instead, it is
+better to compare the efficiency of the methods -- for example, by comparing
+the runtime required to get a solution with a certain accuracy. This figure
+shows the efficiency for high order DG and WENO schemes, by advecting a sine
+wave once around a periodic domain and comparing the errors. The two
+implementations here are comparable, particularly when the order of the schemes
+match (both WENO with $r=3$ and DG with $m=4$ should converge at $5^{\text{th}}$
+order).\\
+\hydroexdoit{\href{https://github.com/zingale/hydro_examples/blob/master/advection/compare_schemes.py}{compare\_schemes.py}}}
+\end{figure}
+%
+When comparing the errors produced by a second order scheme (as shown in
+Figure~\ref{fig:advnorm}) or a WENO scheme (as shown in
+Figure~\ref{fig:weno-converge-sine}) with those produced by a Discontinuous
+Galerkin scheme (as shown in Figure~\ref{fig:dg_convergence_sine}), we need to
+be careful to interpret the results fairly. Leave aside that the results for the
+second order schemes come from advecting different profiles for longer times.
+More importantly we should note that Discontinuous Galerkin schemes use far more
+resources for each cell: $m+1$ nodes of information are stored per cell, rather
+than the single value used for a finite volume or finite difference scheme.
+
+Instead it is better to compare the efficiency of the method, by measuring how
+long it takes, and how much resources (e.g., memory) it requires, to reach a
+certain accuracy. This can be very implementation specific, so should also be
+done carefully. An example of this, comparing WENO and DG schemes, is given in
+Figure~\ref{fig:dg_weno_efficiency}. We see that higher-order schemes increase
+in efficiency with more resources, as expected (the WENO7 scheme converges at
+$13^{\text{th}}$ order, compared to the DG4 scheme which converges at
+$5^{\text{th}}$ order). The implementations here are both optimized using
+\texttt{numba}, and the DG scheme is using moment limiting. We see that results
+are comparable, particularly when the orders of convergence match. In particular,
+the WENO($r=3$) scheme should be compared to the DG($m=4$), and the WENO($r=5$)
+scheme should be compared to the DG($m=8$). Note that whilst the efficiency
+comparison may be comparable, the number of grid points is not. The closest
+comparable single point between WENO($r=3$) and DG($m=4$) uses $54$ grid points
+for the WENO scheme and $8$ for the DG (hence $40 = 8 \times (4 + 1)$ total
+nodal values). These results are likely to depend heavily on the implementation
+and the initial data.
 
 \section{Going further}
 
@@ -1341,18 +2026,18 @@ reason I can understand}.
   \end{equation}
   The solution procedure is largely the same as described above.  We write:
 \begin{align}
-\phi_{i+\myhalf,j,L}^{n+\myhalf} &= \phi_{i,j}^n + 
+\phi_{i+\myhalf,j,L}^{n+\myhalf} &= \phi_{i,j}^n +
    \frac{\Delta x}{2} \frac{\partial \phi}{\partial x} +
    \frac{\Delta t}{2} \frac{\partial \phi}{\partial t} + \ldots \nonumber \\
 %
- &= \phi_{i,j}^n + 
+ &= \phi_{i,j}^n +
     \frac{\Delta x}{2} \frac{\partial \phi}{\partial x} +
     \frac{\Delta t}{2} \left [ -(\phi u)_x -(\phi v)_y \right ]_{i,j} \nonumber\\
 %
- &= \underbrace{\phi_{i,j}^n + 
+ &= \underbrace{\phi_{i,j}^n +
    \frac{\Delta x}{2} \left ( 1 - \frac{\Delta t}{\Delta x} u_{i,j} \right )
         \frac{\partial \phi}{\partial x}}_{\hat{\phi}_{i+\myhalf,j,L}^{n+\myhalf}}
-   - \frac{\Delta t}{2} \left [\phi u_x \right ]_{i,j} 
+   - \frac{\Delta t}{2} \left [\phi u_x \right ]_{i,j}
    - \frac{\Delta t}{2} \left [ (\phi v)_y \right ]_{i,j}
 \end{align}
   and upwinding is used to resolve the Riemann problem for both the
@@ -1361,7 +2046,7 @@ reason I can understand}.
   according to the velocity field in much the fashion shown here, and
   is described in \S~\ref{sec:lm:density}.
 
-  
+
   For compressible hydrodynamics, we often have density-weighted quantities
   that we advect.  This extension is described in \S~\ref{sec:euler:further}.
 
@@ -1370,7 +2055,7 @@ reason I can understand}.
 
 \section{\pyro\ experimentation}
 
-To gain some experiences with these ideas, we can use the advection 
+To gain some experiences with these ideas, we can use the advection
 solver in \pyro\ (see Appendix~\ref{app:pyro} to get started).
 The \pyro\ advection solver implements the second-order unsplit
 advection algorithm described in the previous sections.  To run
@@ -1402,4 +2087,3 @@ exercises:
 and compare the results to the unsplit version.  Pick a suitable norm
 and measure the convergence of the methods.}
 \end{exercise}
-
