@@ -623,7 +623,7 @@ prolongation is simply {\em direct injection}:
 A higher-order method is to do linear reconstruction of the coarse
 data and then average under the profile, e.g., 
 \begin{equation}
-\phi(x) = \frac{\phi^c_{i+1} - \phi^c_{i-1}}{2\dx^c} (x - x_i^c) + \phi_i^c
+\phi(x) = \frac{\phi^c_{j+1} - \phi^c_{j-1}}{2\dx^c} (x - x_j^c) + \phi_j^c
 \end{equation}
 
 To second-order, we can find the values of $\phi^f_i$ and
@@ -635,8 +635,8 @@ x^f_{i+1} &= x^c_j + \frac{\dx^c}{4}
 \end{align}
 giving
 \begin{align}
-\phi^f_i     &= \phi^c_i - \frac{1}{8} (\phi^c_{i+1} - \phi^c_{i-1}) \\
-\phi^f_{i+1} &= \phi^c_i + \frac{1}{8} (\phi^c_{i+1} - \phi^c_{i-1}) 
+\phi^f_i     &= \phi^c_j - \frac{1}{8} (\phi^c_{j+1} - \phi^c_{j-1}) \\
+\phi^f_{i+1} &= \phi^c_j + \frac{1}{8} (\phi^c_{j+1} - \phi^c_{j-1}) 
 \end{align}
 Notice that this is conservative, since $\dx^f (\phi^f_i + \phi^f_{i+1}) = \dx^c \phi^c_j$.
 
