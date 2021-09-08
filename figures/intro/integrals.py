@@ -18,159 +18,186 @@ plt.rcParams.update({'xtick.labelsize': 18,
 
 
 
-N_fine = 200
-N_bins = 4
+def plot_base(xp, fp, xfine, a, b, label_mid=False):
 
-xmin = 0.0
-xmax = 2.0
+    fmax = fp.max()
 
-x = np.linspace(xmin, xmax, N_fine)
+    for xl in xp:
+        plt.plot([xl,xl], [0.0, 1.2*fmax], ls="--", color="0.5", zorder=-1)
 
-xp = np.linspace(xmin, xmax, N_bins+1)
-fp = f(xp)
+    plt.scatter(xp, fp, marker="o", color="r", zorder=100)
 
-# integral range
-a = 0.5
-b = 1.5
+    plt.figtext(0.9, 0.05, '$x$', fontsize=20)
+    plt.figtext(0.1, 0.9, '$y$', fontsize=20)
 
+    ax = plt.gca()
 
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
+    ax.xaxis.set_ticks_position('bottom')
 
+    if label_mid:
+        ax.set_xticks((a, (a+b)/2, b))
+        ax.set_xticklabels(('$a$', r'$\frac{(a+b)}{2}$', '$b$'))
+    else:
+        ax.set_xticks((a, b))
+        ax.set_xticklabels(('$a$', '$b$'))
 
-#---------------------------------------------------------------------
-# rectangle method
-#---------------------------------------------------------------------
-plt.plot(x, f(x), "r", linewidth=2)
-plt.ylim(ymin = 0)
+    ax.set_yticks([])
 
-ax = plt.gca()
+    plt.plot(xfine, f(xfine), "r", linewidth=2)
 
-
-for x1, x2 in [(a, (a+b)/2), ((a+b)/2, b)]:
-
-    # shade region
-    fl = f(x1)
-
-    verts = [(x1, 0), (x1, fl), (x2, fl), (x2, 0)]
-    ax.add_patch(Polygon(verts, facecolor="0.8", edgecolor="k"))
+    plt.xlim(np.min(xfine), 1.05*np.max(xfine))
+    plt.ylim(ymin = 0)
 
 
-fmax = fp.max()
 
-for xl in xp:
-    plt.plot([xl,xl], [0.0, 1.2*fmax], ls="--", color="0.5", zorder=-1)
+def rectangle(xp, fp, a, b):
 
-plt.scatter(xp, fp, marker="o", color="r", zorder=100)
+    ax = plt.gca()
 
-plt.figtext(0.9, 0.05, '$x$', fontsize=20)
-plt.figtext(0.1, 0.9, '$y$', fontsize=20)
+    for n in range(len(xp)-1):
 
-ax.spines['right'].set_visible(False)
-ax.spines['top'].set_visible(False)
-ax.xaxis.set_ticks_position('bottom')
+        xl = xp[n]
+        xr = xp[n+1]
 
-ax.set_xticks((a, b))
-ax.set_xticklabels(('$a$', '$b$'))
-ax.set_yticks([])
+        print(xl)
+        fl = fp[n]
 
-plt.xlim(xmin, 1.05*xmax)
+        # shade region
+        verts = [(xl, 0), (xl, fl), (xr, fl), (xr, 0)]
+        ax.add_patch(Polygon(verts, facecolor="0.8", edgecolor="k"))
 
-plt.savefig("rectangle.pdf", bbox_inches="tight")
+def trapezoid(xp, fp, a, b):
 
+    ax = plt.gca()
 
-#---------------------------------------------------------------------
-# trapezoid method
-#---------------------------------------------------------------------
-plt.clf()
+    for n in range(len(xp)-1):
 
-plt.plot(x, f(x), "r", linewidth=2)
-plt.ylim(ymin = 0)
+        xl = xp[n]
+        xr = xp[n+1]
 
-ax = plt.gca()
+        # shade region
+        fl = f(xl)
+        fr = f(xr)
 
+        verts = [(xl, 0), (xl, fl), (xr, fr), (xr, 0)]
+        ax.add_patch(Polygon(verts, facecolor="0.8", edgecolor="k"))
 
-for x1, x2 in [(a, (a+b)/2), ((a+b)/2, b)]:
+def simpsons(xp, fp, a, b):
 
-    # shade region
-    f1 = f(x1)
-    f2 = f(x2)
+    ax = plt.gca()
 
-    verts = [(x1, 0), (x1, f1), (x2, f2), (x2, 0)]
-    ax.add_patch(Polygon(verts, facecolor="0.8", edgecolor="k"))
+    for n in range(0, len(xp)-1, 2):
 
-fmax = fp.max()
+        # we need to handle the 1 bin case specially
 
-for xl in xp:
-    plt.plot([xl,xl], [0.0, 1.2*fmax], ls="--", color="0.5", zorder=-1)
+        if len(xp) == 2:
 
+            xl = xp[0]
+            xr = xp[1]
+            xm = 0.5 * (xl + xr)
 
-ax.add_patch(Polygon(verts, facecolor="0.8"))
+            f0 = f(xl)
+            f1 = f(xm)
+            f2 = f(xr)
 
-plt.scatter(xp, fp, marker="o", color="r", zorder=100)
+        else:
+            f0 = fp[n]
+            f1 = fp[n+1]
+            f2 = fp[n+2]
 
-plt.figtext(0.9, 0.05, '$x$', fontsize=20)
-plt.figtext(0.1, 0.9, '$y$', fontsize=20)
+            xl = xp[n]
+            xr = xp[n+2]
 
-ax.spines['right'].set_visible(False)
-ax.spines['top'].set_visible(False)
-ax.xaxis.set_ticks_position('bottom')
+        delta = 0.5*(xr - xl)
 
-ax.set_xticks((a, b))
-ax.set_xticklabels(('$a$', '$b$'))
-ax.set_yticks([])
+        A = (f0 - 2*f1 + f2)/(2*delta**2)
+        B = -(f2 - 4*f1 + 3*f0)/(2*delta)
+        C = f0
 
-plt.xlim(xmin, 1.05*xmax)
+        xsimp = np.linspace(xl, xr, 100)
+        fsimp = A * (xsimp - xl)**2  + B * (xsimp - xl) + C
 
-plt.savefig("trapezoid.pdf", bbox_inches="tight")
+        simpvert = list(zip(xsimp, fsimp))
 
-
-#---------------------------------------------------------------------
-# simpsons method
-#---------------------------------------------------------------------
-plt.clf()
-
-plt.plot(x, f(x), "r", linewidth=2)
-plt.ylim(ymin = 0)
-
-ax = plt.gca()
+        verts = [(xl, 0)] + simpvert + [(xr, 0)]
+        ax.add_patch(Polygon(verts, facecolor="0.8", edgecolor="k"))
 
 
-# shade region -- get the coefficients of the parabola
-f0 = f(a)
-f1 = f((a+b)/2)
-f2 = f(b)
+def main():
 
-delta = 0.5*(b-a)
+    N_fine = 200
 
-A = (f0 - 2*f1 + f2)/(2*delta**2)
-B = -(f2 - 4*f1 + 3*f0)/(2*delta)
-C = f0
+    # the number of bins to divide [a, b]
+    N_bins = 1
 
-xsimp = np.linspace(a,b,100)
-fsimp = A*(xsimp-a)**2  + B*(xsimp-a) + C
+    xmin = 0.5
+    xmax = 1.5
 
-simpvert = list(zip(xsimp, fsimp))
+    dx_extra  = 0.5
 
-verts = [(a, 0)] + simpvert + [(b, 0)]
-ax.add_patch(Polygon(verts, facecolor="0.8", edgecolor="k"))
+    # add a bin on each end of the domain outside of the integral
+    xmin_plot = xmin - dx_extra
+    xmax_plot = xmax + dx_extra
 
-fmax = fp.max()
+    xfine = np.linspace(xmin_plot, xmax_plot, N_fine+2)
 
-for xl in xp:
-    plt.plot([xl,xl], [0.0, 1.2*fmax], ls="--", color="0.5", zorder=-1)
+    xp = np.linspace(xmin, xmax, N_bins+1)
 
-plt.scatter(xp, fp, marker="o", color="r", zorder=100)
+    # integral range
+    a = xmin
+    b = xmax
 
-plt.figtext(0.9, 0.05, '$x$', fontsize=20)
-plt.figtext(0.1, 0.9, '$y$', fontsize=20)
+    # function points
+    fp = f(xp)
 
-ax.spines['right'].set_visible(False)
-ax.spines['top'].set_visible(False)
-ax.xaxis.set_ticks_position('bottom')
 
-ax.set_xticks((a, b))
-ax.set_xticklabels(('$a$', '$b$'))
-ax.set_yticks([])
+    # rectangle method
 
-plt.xlim(xmin, 1.05*xmax)
+    plt.clf()
 
-plt.savefig("simpsons.pdf",bbox_inches="tight")
+    plot_base(xp, fp, xfine, a, b)
+    rectangle(xp, fp, a, b)
+
+    plt.savefig("rectangle.pdf", bbox_inches="tight")
+
+    # trapezoid method
+
+    plt.clf()
+
+    plot_base(xp, fp, xfine, a, b)
+    trapezoid(xp, fp, a, b)
+
+    plt.savefig("trapezoid.pdf", bbox_inches="tight")
+
+
+    # simpsons method
+
+    plt.clf()
+
+    xp_tmp = list(xp)
+    fp_tmp = list(fp)
+    label_mid = False
+
+    # if N_bins is 1, we need an extra point for Simpsons
+    if N_bins == 1:
+        xp_tmp.append((a + b)/2)
+        fp_tmp.append(f((a + b)/2))
+        label_mid = True
+
+    plot_base(np.array(xp_tmp), np.array(fp_tmp), xfine, a, b,
+              label_mid=label_mid)
+
+
+    simpsons(xp, fp, a, b)
+
+    plt.savefig("simpsons.pdf", bbox_inches="tight")
+
+
+
+if __name__ == "__main__":
+    main()
+
+
+
