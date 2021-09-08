@@ -9,10 +9,12 @@ import matplotlib as mpl
 # Use LaTeX for rendering
 mpl.rcParams["text.usetex"] = True
 # load the xfrac package
-mpl.rcParams["text.latex.preamble"].append(r'\usepackage{xfrac}')
-mpl.rcParams["text.latex.preamble"].append(r'\newcommand{\myhalf}{\sfrac{1}{2}}')
-mpl.rcParams["text.latex.preamble"].append(r'\newcommand{\mythreehalf}{\sfrac{3}{2}}')
-mpl.rcParams["text.latex.preamble"].append(r'\newcommand{\myfivehalf}{\sfrac{5}{2}}')
+mpl.rcParams["text.latex.preamble"] += r"""
+\usepackage{xfrac}
+\newcommand{\myhalf}{\sfrac{1}{2}}
+\newcommand{\mythreehalf}{\sfrac{3}{2}}
+\newcommand{\myfivehalf}{\sfrac{5}{2}}
+"""
 mpl.rcParams['mathtext.fontset'] = 'cm'
 mpl.rcParams['mathtext.rm'] = 'serif'
 
