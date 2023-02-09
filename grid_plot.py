@@ -36,7 +36,7 @@ class FDGrid(object):
         self.ng = ng
         self.xmin = xmin
         self.xmax = xmax
-        
+
         self.ilo = ng
         self.ihi = ng+nx-1
 
@@ -62,36 +62,36 @@ class FDGrid(object):
 
         if not draw_ghost:
             if emphasize_end:
-                plt.plot([self.xmin, self.xmax], 
+                plt.plot([self.xmin, self.xmax],
                          [self.voff, self.voff], color=color, lw=2)
             else:
-                plt.plot([self.xmin-0.5*self.dx, self.xmax+0.5*self.dx], 
+                plt.plot([self.xmin-0.5*self.dx, self.xmax+0.5*self.dx],
                          [self.voff,self.voff], color=color, lw=2)
         else:
             plt.plot([self.xmin-self.ng*self.dx, self.xmin],
                      [self.voff,self.voff], color=color, lw=2, ls=":")
-            plt.plot([self.xmax, self.xmax+self.ng*self.dx], 
+            plt.plot([self.xmax, self.xmax+self.ng*self.dx],
                      [self.voff,self.voff], color=color, lw=2, ls=":")
-            plt.plot([self.xmin, self.xmax], 
+            plt.plot([self.xmin, self.xmax],
                      [self.voff,self.voff], color=color, lw=2)
 
         for n in range(nstart, nstop+1):
 
             # draw center (node) indicator line
             if n < self.ilo or n > self.ihi:
-                plt.plot([self.xc[n], self.xc[n]], 
-                         [-0.05+self.voff, grid_top+self.voff], 
+                plt.plot([self.xc[n], self.xc[n]],
+                         [-0.05+self.voff, grid_top+self.voff],
                          color=color, ls=":", lw=2)
             else:
-                plt.plot([self.xc[n], self.xc[n]], 
+                plt.plot([self.xc[n], self.xc[n]],
                          [-0.05+self.voff, grid_top+self.voff], color=color, lw=2)
-      
+
 
         if emphasize_end:
-            plt.plot([self.xc[self.ilo], self.xc[self.ilo]], 
+            plt.plot([self.xc[self.ilo], self.xc[self.ilo]],
                      [-0.05+self.voff, grid_top+self.voff], color=color, lw=4)
 
-            plt.plot([self.xc[self.ihi], self.xc[self.ihi]], 
+            plt.plot([self.xc[self.ihi], self.xc[self.ihi]],
                      [-0.05+self.voff, grid_top+self.voff], color=color, lw=4)
 
     def label_node(self, idx, string, fontsize="small"):
@@ -113,7 +113,7 @@ class FDGrid(object):
                  fontsize=fontsize, color=color)
 
     def draw_data(self, idx, value, color="0.5", marker="o"):
-        plt.scatter([self.xc[idx]], [self.voff+value], 
+        plt.scatter([self.xc[idx]], [self.voff+value],
                     color=color, marker=marker, zorder=100)
 
 
@@ -125,7 +125,7 @@ class FDGrid(object):
         plt.text(0.5*(self.xc[idx-1] + self.xc[idx]), -0.45, r"$\Delta x$",
                  horizontalalignment="center")
 
-            
+
     def clean_axes(self, show_ghost=False, padding=True, ylim=None, pad_fac=1.0):
         xmin = self.xmin
         xmax = self.xmax
@@ -172,12 +172,11 @@ class FVGrid(object):
 
     def draw_grid(self, center_only=0, draw_ghost=0,
                   emphasize_end=0, draw_end=True,
-                  edge_ticks=True, color="k"):
+                  edge_ticks=True, center_ticks=True,
+                  grid_top = 1.0, color="k"):
 
         if center_only and emphasize_end:
             sys.exit("center_only and emphasize_end are incompatible")
-
-        grid_top = 1.0
 
         if not draw_ghost:
             if center_only == 1:
@@ -216,35 +215,36 @@ class FVGrid(object):
 
             # draw right edge
             if emphasize_end and n == self.ihi:
-                plt.plot([self.xr[n], self.xr[n]], 
+                plt.plot([self.xr[n], self.xr[n]],
                          [self.voff, grid_top+self.voff],
                          color=color, lw=4)
 
             elif n < nstop or (n == nstop and draw_end):
-                plt.plot([self.xr[n], self.xr[n]], 
+                plt.plot([self.xr[n], self.xr[n]],
                          [self.voff, grid_top+self.voff],
                          color=color, lw=2)
 
             # draw center marker
-            plt.plot([self.xc[n], self.xc[n]], 
-                     [-0.05+self.voff, self.voff], color=color)
+            if center_ticks:
+                plt.plot([self.xc[n], self.xc[n]],
+                         [-0.05+self.voff, self.voff], color=color)
 
             # draw edge marker
-            
+
             if edge_ticks:
                 if n == nstart:
                     if emphasize_end:
                         lw = 4
                     else:
                         lw = 2
-                    plt.plot([self.xl[nstart], self.xl[nstart]], 
+                    plt.plot([self.xl[nstart], self.xl[nstart]],
                              [-0.05+self.voff, self.voff], color=color, lw=lw)
 
                 if n == nstop and emphasize_end:
                     lw = 4
                 else:
                     lw = 2
-                plt.plot([self.xr[n], self.xr[n]], 
+                plt.plot([self.xr[n], self.xr[n]],
                          [-0.05+self.voff, self.voff], color=color, lw=lw)
 
 
@@ -254,14 +254,15 @@ class FVGrid(object):
                  horizontalalignment='center', verticalalignment='top',
                  fontsize=fontsize)
 
-    def label_edge(self, idx, string, fontsize="small", right_edge=False):
+    def label_edge(self, idx, string, fontsize="small",
+                   right_edge=False, offset=-0.075):
 
         if not right_edge:
-            plt.text(self.xl[idx], self.voff-0.075, string,
+            plt.text(self.xl[idx], self.voff-offset, string,
                      horizontalalignment='center', verticalalignment='top',
                      fontsize=fontsize)
         else:
-            plt.text(self.xr[idx], self.voff-0.075, string,
+            plt.text(self.xr[idx], self.voff-offset, string,
                      horizontalalignment='center', verticalalignment='top',
                      fontsize=fontsize)
 
@@ -283,11 +284,11 @@ class FVGrid(object):
     def mark_cell_edge(self, idx, string, color="k", value=0.5,
                        vertical="center", fontsize="medium"):
 
-        plt.scatter(self.xl[idx], self.voff+value, 
+        plt.scatter(self.xl[idx], self.voff+value,
                     marker="x", color=color, zorder=100)
 
         plt.text(self.xl[idx]+0.05*self.dx, self.voff+value, string,
-                 horizontalalignment='left', verticalalignment=vertical, 
+                 horizontalalignment='left', verticalalignment=vertical,
                  color=color, fontsize=fontsize)
 
     def mark_cell_right_state(self, idx, string, color="k", value=0.5,
@@ -382,11 +383,11 @@ class PiecewiseConstant(object):
 
     def draw_cell_avg(self, idx, color="0.5", ls="-", filled=False):
         plt.plot([self.gr.xl[idx], self.gr.xr[idx]],
-                 [self.gr.voff+self.a[idx]/self.scale, 
+                 [self.gr.voff+self.a[idx]/self.scale,
                   self.gr.voff+self.a[idx]/self.scale], color=color, ls=ls)
         if filled:
             plt.fill([self.gr.xl[idx], self.gr.xl[idx], self.gr.xr[idx], self.gr.xr[idx], self.gr.xl[idx]],
-                     [self.gr.voff, self.gr.voff+self.a[idx]/self.scale, 
+                     [self.gr.voff, self.gr.voff+self.a[idx]/self.scale,
                       self.gr.voff+self.a[idx]/self.scale, self.gr.voff, self.gr.voff], color=color, alpha=0.25, ls=ls, zorder=-100)
 
 class PiecewiseLinear(PiecewiseConstant):
@@ -401,7 +402,7 @@ class PiecewiseLinear(PiecewiseConstant):
         self.nolimit = nolimit
 
         self.calculate_slopes()
- 
+
     def calculate_slopes(self):
         # calculate the slopes
         for n in range(1, len(self.a)-1):
@@ -600,7 +601,7 @@ class PiecewiseParabolic(PiecewiseConstant):
 class Grid2d(object):
     """ the base 2-d grid """
 
-    def __init__(self, nx, ny, ng = 0, 
+    def __init__(self, nx, ny, ng = 0,
                  xmin=0.0, xmax=1.0, ymin=0.0, ymax=1.0):
 
         # finite-volume or cell-centered finite-difference
@@ -633,22 +634,22 @@ class Grid2d(object):
     def draw_grid(self, color="k"):
         # x lines
         for n in range(self.ny):
-            plt.plot([self.xmin-0.25*self.dx, self.xmax+0.25*self.dx], 
-                     [self.yl[self.ng+n], self.yl[self.ng+n]], 
+            plt.plot([self.xmin-0.25*self.dx, self.xmax+0.25*self.dx],
+                     [self.yl[self.ng+n], self.yl[self.ng+n]],
                      color=color, lw=2)
-        
-        plt.plot([self.xmin-0.25*self.dx, self.xmax+0.25*self.dx], 
-                 [self.yr[self.ng+self.ny-1], self.yr[self.ng+self.ny-1]], 
+
+        plt.plot([self.xmin-0.25*self.dx, self.xmax+0.25*self.dx],
+                 [self.yr[self.ng+self.ny-1], self.yr[self.ng+self.ny-1]],
                  color=color, lw=2)
 
         # y lines
         for n in range(self.nx):
-            plt.plot([self.xl[self.ng+n], self.xl[self.ng+n]], 
-                     [self.ymin-0.25*self.dy, self.ymax+0.25*self.dy], 
+            plt.plot([self.xl[self.ng+n], self.xl[self.ng+n]],
+                     [self.ymin-0.25*self.dy, self.ymax+0.25*self.dy],
                      color=color, lw=2)
-        
-        plt.plot([self.xr[self.ng+self.nx-1], self.xr[self.ng+self.nx-1]], 
-                 [self.ymin-0.25*self.dy, self.ymax+0.25*self.dy], 
+
+        plt.plot([self.xr[self.ng+self.nx-1], self.xr[self.ng+self.nx-1]],
+                 [self.ymin-0.25*self.dy, self.ymax+0.25*self.dy],
                  color=color, lw=2)
 
 
@@ -670,7 +671,7 @@ class FVGrid2d(Grid2d):
     """ a 2-d finite-volume grid """
 
     def label_cell_center(self, idx, jdx, string, fontsize="medium", color="k"):
-        plt.text(self.xc[idx], self.yc[jdx], 
+        plt.text(self.xc[idx], self.yc[jdx],
                  string, fontsize=fontsize, color=color,
                  horizontalalignment='center', verticalalignment='center')
 
@@ -681,48 +682,48 @@ class FVGrid2d(Grid2d):
         yr = self.yr[jdx]
         plt.fill([xl, xl, xr, xr, xl], [yl, yr, yr, yl, yl], "0.75")
 
-    def mark_cell_left_state_x(self, idx, jdx, string, color="k", 
+    def mark_cell_left_state_x(self, idx, jdx, string, color="k",
                                fontsize="medium"):
-        plt.scatter(self.xr[idx]-0.05*self.dx, self.yc[jdx], 
+        plt.scatter(self.xr[idx]-0.05*self.dx, self.yc[jdx],
                       marker="x", s=50, color=color)
-        plt.text(self.xr[idx]-0.075*self.dx, self.yc[jdx], string, 
+        plt.text(self.xr[idx]-0.075*self.dx, self.yc[jdx], string,
                    fontsize=fontsize, rotation="270", color=color,
                    horizontalalignment='right', verticalalignment='center')
 
-    def mark_cell_right_state_x(self, idx, jdx, string, color="k", 
+    def mark_cell_right_state_x(self, idx, jdx, string, color="k",
                                 fontsize="medium"):
-        plt.scatter(self.xl[idx]+0.05*self.dx, self.yc[jdx], 
+        plt.scatter(self.xl[idx]+0.05*self.dx, self.yc[jdx],
                       marker="x", s=50, color=color)
-        plt.text(self.xl[idx]+0.075*self.dx, self.yc[jdx], string, 
+        plt.text(self.xl[idx]+0.075*self.dx, self.yc[jdx], string,
                    fontsize=fontsize, rotation="270", color=color,
                    horizontalalignment='left', verticalalignment='center')
 
-    def mark_cell_state_y(self, idx, jdx, string, color="k", 
+    def mark_cell_state_y(self, idx, jdx, string, color="k",
                           fontsize="medium", off_sign=1.0):
-        plt.scatter(self.xc[idx], self.yr[jdx], 
+        plt.scatter(self.xc[idx], self.yr[jdx],
                       marker="x", s=50, color=color)
         if off_sign > 0:
             align = "bottom"
         else:
             align = "top"
 
-        plt.text(self.xc[idx], self.yr[jdx]+off_sign*0.05*self.dy, string, 
+        plt.text(self.xc[idx], self.yr[jdx]+off_sign*0.05*self.dy, string,
                    fontsize=fontsize, rotation="0", color=color,
                    horizontalalignment='center', verticalalignment=align)
 
-    def mark_cell_left_state_y(self, idx, jdx, string, color="k", 
+    def mark_cell_left_state_y(self, idx, jdx, string, color="k",
                                fontsize="medium"):
-        plt.scatter(self.xc[idx], self.yr[jdx]-0.05*self.dy, 
+        plt.scatter(self.xc[idx], self.yr[jdx]-0.05*self.dy,
                       marker="x", s=50, color=color)
-        plt.text(self.xc[idx], self.yr[jdx]-0.075*self.dy, string, 
+        plt.text(self.xc[idx], self.yr[jdx]-0.075*self.dy, string,
                    fontsize=fontsize, rotation="0", color=color,
                    horizontalalignment='center', verticalalignment='top')
 
-    def mark_cell_right_state_y(self, idx, jdx, string, color="k", 
+    def mark_cell_right_state_y(self, idx, jdx, string, color="k",
                                 fontsize="medium"):
-        plt.scatter(self.xc[idx], self.yl[jdx]+0.05*self.dy, 
+        plt.scatter(self.xc[idx], self.yl[jdx]+0.05*self.dy,
                       marker="x", s=50, color=color)
-        plt.text(self.xc[idx], self.yl[jdx]+0.075*self.dy, string, 
+        plt.text(self.xc[idx], self.yl[jdx]+0.075*self.dy, string,
                    fontsize=fontsize, rotation="0", color=color,
                    horizontalalignment='center', verticalalignment='bottom')
 
@@ -733,7 +734,6 @@ class FDGrid2d(Grid2d):
 
     def label_cell_center(self, idx, jdx, string, fontsize="medium", color="k"):
         plt.scatter([self.xc[idx]], [self.yc[jdx]], marker="x", color=color)
-        plt.text(self.xc[idx]+0.075*self.dx, self.yc[jdx]+0.075*self.dy, 
+        plt.text(self.xc[idx]+0.075*self.dx, self.yc[jdx]+0.075*self.dy,
                  string, fontsize=fontsize, color=color,
                  horizontalalignment='left', verticalalignment='center')
-
