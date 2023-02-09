@@ -25,7 +25,7 @@ mpl.rcParams['figure.titlesize'] = 'medium'
 
 import sys
 
-class FDGrid(object):
+class FDGrid:
     """ a 1-d finite-difference grid """
 
     def __init__(self, nx, ng=0, xmin=0.0, xmax=1.0, voff=0.0):
@@ -144,7 +144,7 @@ class FDGrid(object):
         plt.subplots_adjust(left=0.05, right=0.95, bottom=0.05, top=0.95)
 
 
-class FVGrid(object):
+class FVGrid:
     """ a 1-d finite-volume grid """
 
     def __init__(self, nx, ng=0, xmin=0.0, xmax=1.0, voff=0.0):
@@ -334,7 +334,7 @@ class FVGrid(object):
         plt.subplots_adjust(left=0.05,right=0.95,bottom=0.05,top=0.95)
 
 
-class CellCentered(object):
+class CellCentered:
     """ cell-centered data defined on a 1-d finite-volume grid """
 
     def __init__(self, gr, a):
@@ -354,7 +354,7 @@ class CellCentered(object):
                     color=color, marker=marker, zorder=100)
 
 
-class PiecewiseConstant(object):
+class PiecewiseConstant:
     """ piecewise constant data defined on a 1-d finite-volume grid """
 
     def __init__(self, gr, a, scale=1.0):
@@ -598,7 +598,7 @@ class PiecewiseParabolic(PiecewiseConstant):
         plt.fill(xx, yy/self.scale, color=color, lw=1, zorder=-1)
 
 
-class Grid2d(object):
+class Grid2d:
     """ the base 2-d grid """
 
     def __init__(self, nx, ny, ng = 0,
