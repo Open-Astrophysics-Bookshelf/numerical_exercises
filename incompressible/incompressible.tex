@@ -594,7 +594,7 @@ the gradient, $G\phi$ must also be cell centered so $L\phi = DG\phi$ is
 cell-centered.  This means that we must have
 \begin{eqnarray}
 (G\phi)^{(x)}_{i,j} &=& \frac{\phi_{i+1,j} - \phi_{i-1,j}}{2\Delta x} \\
-(G\phi)^{(y)}_{i,j} &=& \frac{\phi_{i,j+1} - \phi_{i,j+1}}{2\Delta y}
+(G\phi)^{(y)}_{i,j} &=& \frac{\phi_{i,j+1} - \phi_{i,j-1}}{2\Delta y}
 \end{eqnarray}
 The resulting Laplacian would then be a 5-point stencil that skips over
 the immediate neighbors:
