@@ -24,10 +24,19 @@ jobs:
       - name: Build
         run: |
           make
+          mkdir out
+          mv CompHydroTutorial.pdf out
 
       - name: Archive
         uses: actions/upload-artifact@v3
         with:
           name: book-pdf
-          path: CompHydroTutorial.pdf
+          path: out/CompHydroTutorial.pdf
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./out
+          keep_files: true
 
