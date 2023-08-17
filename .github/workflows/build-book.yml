@@ -1,0 +1,33 @@
+name: build book
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  cpp-linter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -y -qq
+          sudo apt-get -qq -y install texlive build-essential
+
+      - name: Build
+        run: |
+          make
+
+      - name: Archive
+        uses: actions/upload-artifact@v3
+        with:
+          name: book-pdf
+          path: CompHydroTutorial.pdf
+
