@@ -9,7 +9,8 @@ mpl.rcParams['mathtext.rm'] = 'serif'
 
 def f(x):
     """ the function we are integrating """
-    return 1.0 + x*0.25*np.sin(np.pi*x)
+    #return 1.0 + x*0.25*np.sin(np.pi*x)
+    return (1.0 + x*0.25*np.sin(5*np.pi*x)) * np.exp(-(x - 1.0)**2/0.5)
 
 
 plt.rcParams.update({'xtick.labelsize': 18,
@@ -56,21 +57,30 @@ def rectangle(xp, fp, a, b):
 
     ax = plt.gca()
 
+    integral = 0.0
+
     for n in range(len(xp)-1):
 
         xl = xp[n]
         xr = xp[n+1]
 
-        print(xl)
         fl = fp[n]
 
         # shade region
         verts = [(xl, 0), (xl, fl), (xr, fl), (xr, 0)]
         ax.add_patch(Polygon(verts, facecolor="0.8", edgecolor="k"))
 
+        # and bonus! actually compute the integral in this approximation
+        integral += (xr - xl) * fl
+
+    return integral
+
+
 def trapezoid(xp, fp, a, b):
 
     ax = plt.gca()
+
+    integral = 0.0
 
     for n in range(len(xp)-1):
 
@@ -84,9 +94,15 @@ def trapezoid(xp, fp, a, b):
         verts = [(xl, 0), (xl, fl), (xr, fr), (xr, 0)]
         ax.add_patch(Polygon(verts, facecolor="0.8", edgecolor="k"))
 
+        integral += 0.5 * (xr - xl) * (fl + fr)
+
+    return integral
+
 def simpsons(xp, fp, a, b):
 
     ax = plt.gca()
+
+    integral = 0.0
 
     for n in range(0, len(xp)-1, 2):
 
@@ -124,13 +140,16 @@ def simpsons(xp, fp, a, b):
         verts = [(xl, 0)] + simpvert + [(xr, 0)]
         ax.add_patch(Polygon(verts, facecolor="0.8", edgecolor="k"))
 
+        integral += (xr - xl) / 6.0 * (f0 + 4 * f1 + f2)
+
+    return integral
 
 def main():
 
     N_fine = 200
 
     # the number of bins to divide [a, b]
-    N_bins = 1
+    N_bins = 16
 
     xmin = 0.5
     xmax = 1.5
@@ -158,18 +177,18 @@ def main():
     plt.clf()
 
     plot_base(xp, fp, xfine, a, b)
-    rectangle(xp, fp, a, b)
+    I_r = rectangle(xp, fp, a, b)
 
-    plt.savefig("rectangle.pdf", bbox_inches="tight")
+    plt.savefig(f"rectangle_N{N_bins}.png", bbox_inches="tight")
 
     # trapezoid method
 
     plt.clf()
 
     plot_base(xp, fp, xfine, a, b)
-    trapezoid(xp, fp, a, b)
+    I_t = trapezoid(xp, fp, a, b)
 
-    plt.savefig("trapezoid.pdf", bbox_inches="tight")
+    plt.savefig(f"trapezoid_N{N_bins}.png", bbox_inches="tight")
 
 
     # simpsons method
@@ -190,11 +209,11 @@ def main():
               label_mid=label_mid)
 
 
-    simpsons(xp, fp, a, b)
+    I_s = simpsons(xp, fp, a, b)
 
-    plt.savefig("simpsons.pdf", bbox_inches="tight")
+    plt.savefig(f"simpsons_N{N_bins}.png", bbox_inches="tight")
 
-
+    print(f"integral approximations: {I_r}, {I_t}, {I_s}")
 
 if __name__ == "__main__":
     main()

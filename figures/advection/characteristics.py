@@ -75,5 +75,5 @@ f.set_size_inches(6.0, 8.0)
 
 plt.tight_layout()
 
-plt.savefig("advection-characteristics.pdf")
+plt.savefig("advection-characteristics.png")
 
