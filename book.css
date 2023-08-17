@@ -1,0 +1,20 @@
+body {
+   background: #eeeeee;
+   font-size: 12pt;
+   background-image:url('star-space-tile.jpg');
+}
+
+body, h1, h2, h3 {
+   font-family: "Carlito", "Calibri", Helvetica, sans-serif;
+   color: #331166;
+}
+
+#main {
+  width: 800px;
+  margin: 0 auto;
+  margin-top: 1em;
+  border: 1px solid #331166;
+  padding: 1em;
+  background: #ffffff;
+}
+
