@@ -107,7 +107,7 @@ def domains(method="FTCS"):
     f.set_size_inches(9.0,5.0)
 
     plt.tight_layout()
-    plt.savefig("domains_{}.pdf".format(method), bbox_inches="tight")
+    plt.savefig(f"domains_{method}.pdf", bbox_inches="tight")
 
 
 if __name__== "__main__":
