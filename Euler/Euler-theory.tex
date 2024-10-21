@@ -918,7 +918,7 @@ Now we need to find $u_{*,\mathrm{fan}}$, $\rho_{*,\mathrm{fan}}$, and $p_{*,\ma
 where $*$ represents either $L_*$ or $R_*$ regions, and $\mathrm{fan}$ represents
 solutions in the rarefaction fan itself.
 
-To start, use the Riemann invariant that we obtained by assuming $\gamma$ law eos to relate
+To start, use the Riemann invariant that we obtained by assuming $\gamma$-law EOS to relate
 the L or R region to $L_*$ or $R_*$ region:
 \begin{equation}
 u_{L,R} \pm \frac{2c_{L,R}}{\gamma - 1} = u_{*,\mathrm{fan}} \pm \frac{2c_{*,\mathrm{fan}}}{\gamma - 1}
@@ -936,9 +936,9 @@ $-$ is for determining $u_{R_*,\mathrm{fan}}$ using $c_R$.
 
 Now using the definition of sound speed:
 \begin{equation}
-c{*,\mathrm{fan}} = \sqrt{\frac{\gamma p}{\rho}} = \pm (u_{*,\mathrm{fan}} - \frac{x}{t})
+c_{*,\mathrm{fan}} = \sqrt{\frac{\gamma p_{*,\mathrm{fan}}}{\rho_{*,\mathrm{fan}}}} = \pm (u_{*,\mathrm{fan}} - \frac{x}{t})
 \end{equation}
-along with $\gamma$ law eos and isentropic condition:
+along with $\gamma$-law EOS and isentropic condition:
 \begin{equation}
 \rho_{*,\mathrm{fan}} = \rho_{L,R}\left( \frac{p_{*,\mathrm{fan}}}{p_{L,R}} \right)^{\frac{1}{\gamma}}
 \end{equation}
@@ -954,7 +954,7 @@ After inserting the previous result for $u_{*,\mathrm{fan}}$, we get:
 \begin{equation}
 p_{*,\mathrm{fan}} = p_{L,R} \left[\frac{2}{\gamma + 1} \pm \frac{\gamma - 1}{(\gamma + 1) c_{L,R}} \left(u_{L,R} - \frac{x}{t}\right)\right]^{\frac{2 \gamma}{\gamma - 1}}
 \end{equation}
-And we can relate pressure to density via the $\gamma$ law eos as:
+And we can relate pressure to density via the $\gamma$-law EOS as:
 \begin{equation}
 \frac{\rho_{*,\mathrm{fan}}}{\rho_{L,R}} = \left(\frac{p_{*,\mathrm{fan}}}{p_{L,R}}\right)^{\frac{1}{\gamma}}
 \end{equation}
@@ -963,8 +963,8 @@ After inserting in the expression for pressure, we ultimately get the expression
 \rho_{*,\mathrm{fan}} = \rho_{L,R} \left[\frac{2}{\gamma + 1} \pm \frac{\gamma - 1}{(\gamma + 1) c_{L,R}} \left(u_{L,R} - \frac{x}{t}\right)\right]^{\frac{2}{\gamma - 1}}
 \end{equation}
 
-Note that we will set $\frac{x}{t} = 0$ since we're determining the condition at the interface, i.e. $x=0$.
-
+Note that when we're solving the Riemann problem at the interface,
+$\frac{x}{t} = 0$ since by definition $x=0$.
 
 % figure from figures/Euler/rarefaction_cartoon.py
 \begin{figure}
