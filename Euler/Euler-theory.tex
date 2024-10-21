@@ -941,7 +941,7 @@ c{*,\mathrm{fan}} = \sqrt{\frac{\gamma p}{\rho}} = \pm (u_{*,\mathrm{fan}} - \fr
 along with $\gamma$ law eos and isentropic condition:
 \begin{equation}
 \rho_{*,\mathrm{fan}} = \rho_{L,R}\left( \frac{p_{*,\mathrm{fan}}}{p_{L,R}} \right)^{\frac{1}{\gamma}}
-\end{\rho}
+\end{equation}
 Sound speed can be rewritten as:
 \begin{equation}
 c_{*,\mathrm{fan}} = c_{L,R} \left( \frac{p_{*,\mathrm{fan}}}{p_{L,R}} \right)^{\frac{\gamma - 1}{2 \gamma}}
@@ -956,12 +956,14 @@ p_{*,\mathrm{fan}} = p_{L,R} \left[\frac{2}{\gamma + 1} \pm \frac{\gamma - 1}{(\
 \end{equation}
 And we can relate pressure to density via the $\gamma$ law eos as:
 \begin{equation}
-\frac{\rho_{*,\mathrm{fan}}}{\rho_{L,R} = \left(\frac{p_{*,\mathrm{fan}}}{p_{L,R}\right)^{\frac{1}{\gamma}}
+\frac{\rho_{*,\mathrm{fan}}}{\rho_{L,R}} = \left(\frac{p_{*,\mathrm{fan}}}{p_{L,R}}\right)^{\frac{1}{\gamma}}
 \end{equation}
-After inserting in the expression for pressure, we ultimately get the expression for $\rho$ in the rarefaction as:
+After inserting in the expression for pressure, we ultimately get the expression for $\rho_{*,\mathrm{fan}}$ in the rarefaction as:
 \begin{equation}
 \rho_{*,\mathrm{fan}} = \rho_{L,R} \left[\frac{2}{\gamma + 1} \pm \frac{\gamma - 1}{(\gamma + 1) c_{L,R}} \left(u_{L,R} - \frac{x}{t}\right)\right]^{\frac{2}{\gamma - 1}}
 \end{equation}
+
+Note that we will set $\frac{x}{t} = 0$ since we're determining the condition at the interface, i.e. $x=0$.
 
 
 % figure from figures/Euler/rarefaction_cartoon.py
