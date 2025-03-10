@@ -10,13 +10,13 @@ The more general equation set, the Navier-Stokes equations, includes
 dissipative terms.  However, for astrophysical flows, the scales on
 which these dissipative terms operate are usually much smaller than
 the system of interest (equivalently, Reynolds numbers of
-astrophysical flows are very large).} describe conservation of 
+astrophysical flows are very large).} describe conservation of
 mass, momentum, and energy in the fluid approximation.  Their general
 form, without any source terms, is:  \MarginPar{need to add a discussion of the N-S equations and dimensionless numbers}
 \begin{align}
 \ddt{\rho} + \nabla \cdot (\rho \Ub) &= 0 \\
 \ddt{(\rho \Ub)} + \nabla \cdot (\rho \Ub \Ub) + \nabla p &= 0 \\
-\ddt{(\rho E)} + \nabla \cdot (\rho E \Ub + p \Ub ) &= 0 
+\ddt{(\rho E)} + \nabla \cdot (\rho E \Ub + p \Ub ) &= 0
 \end{align}
 Here $\rho$ is the density, $\Ub$ is the velocity vector, $\Ub =
 u\hat{x} + v\hat{y}$, $p$ is the pressure, and $E$ is the total energy
@@ -80,7 +80,7 @@ flux vector in terms of the conserved variables directly.  Taking $m
 \equiv \rho u$, $\mathcal{E} \equiv \rho E$, and assuming a gamma-law
 EOS%
 \footnote{we can relax this assumption by writing $p = p(\rho, e)$, and then
-taking the derivatives of this as needed:  $\partial p/\partial \rho$, 
+taking the derivatives of this as needed:  $\partial p/\partial \rho$,
 $\partial p/\partial m = \partial p /\partial e|_\rho \partial e/\partial m$,
 and $\partial p/\partial \mathcal{E} = \partial p/\partial e|_\rho \partial e/\partial \mathcal{E}$,
 with $e = (\mathcal{E} - \myhalf m^2/\rho)/\rho$.  But as we'll see, there are
@@ -99,14 +99,14 @@ we have
 The Jacobian%
 \footnote{
 The Jacobian, ${\bf J}$ of a vector $\Fb(\Uc)$ with $\Fb = (f_1, f_2, \ldots, f_n)^\intercal$ and
-$\Uc = (u_1, u_2, \ldots, u_n)^\intercal$ is 
+$\Uc = (u_1, u_2, \ldots, u_n)^\intercal$ is
 \begin{equation*}
 {\bf J} \equiv \frac{\partial \Fb}{\partial \Uc} = \left (
   \begin{array}{cccc}
      \partial f_1/\partial u_1 & \partial f_1/\partial u_2 & \ldots & \partial f_1/\partial u_n \\
      \partial f_2/\partial u_1 & \partial f_2/\partial u_2 & \ldots & \partial f_2/\partial u_n \\
      \vdots                    & \vdots                    & \ddots & \vdots \\
-     \partial f_n/\partial u_1 & \partial f_n/\partial u_2 & \ldots & \partial f_n/\partial u_n 
+     \partial f_n/\partial u_1 & \partial f_n/\partial u_2 & \ldots & \partial f_n/\partial u_n
   \end{array} \right )
 \end{equation*}
 }
@@ -142,7 +142,7 @@ An alternate way to express these equations is using the {\em
 \end{align}
 }
 \end{exercise}
-Notice that the velocity equation looks like Burgers' equation, and 
+Notice that the velocity equation looks like Burgers' equation, and
 is nonlinear.  This nonlinearity will admit shock and rarefaction
 solutions like we saw with Burgers' equation.
 
@@ -283,7 +283,7 @@ simply the 3 eigenvalues we found above:
 \end{equation}
 }
 \end{exercise}
-To transform our primitive variable system into the characteristic form, we 
+To transform our primitive variable system into the characteristic form, we
 start by multiplying by $\Lb$:
 \begin{equation}
 \Lb\qb_t + \Lb \Ab \qb_x = 0
@@ -304,7 +304,7 @@ decoupled advection-like equations:
 \begin{align}
 w_t^\evm + \lambda^\evm w_x^\evm &= 0 \\
 w_t^\evz + \lambda^\evz w_x^\evz &= 0 \\
-w_t^\evp + \lambda^\evp w_x^\evp &= 0 
+w_t^\evp + \lambda^\evp w_x^\evp &= 0
 \end{align}
 
 If the system were linear, then the solution to each would simply be
@@ -466,9 +466,9 @@ the evolution behaves across that wave.  The constancy of the middle and right c
 wave gives us the conditions (using our original primitive variable system):
 \begin{align}
 \lb^\evp \cdot d\qb &= 0 \\
-\lb^\evz \cdot d\qb &= 0 
+\lb^\evz \cdot d\qb &= 0
 \end{align}
-or 
+or
 \begin{equation}
 \left ( \begin{array}{ccc} 0 & \frac{\rho}{2c} & \frac{1}{2c^2} \end{array} \right)
    \left ( \begin{array}{c} d\rho \\ du \\ dp \end{array} \right ) = 0
@@ -480,9 +480,9 @@ or
 Expanding these, we have the system:
 \begin{align}
 du + \frac{1}{\rho c} dp &= 0 \\
-d\rho - \frac{1}{c^2} dp &= 0 
+d\rho - \frac{1}{c^2} dp &= 0
 \end{align}
-Defining the {\em Lagrangian sound speed}, $C \equiv \rho c$, and the 
+Defining the {\em Lagrangian sound speed}, $C \equiv \rho c$, and the
 specific volume, $\tau = 1/\rho$, we can rewrite this system as:
 \begin{equation}
 du = -\frac{dp}{C} , \,\,\, d\tau = -\frac{dp}{C^2} \quad \mbox{across the left wave}
@@ -509,7 +509,7 @@ the solution.  This allows us to write our equation of state as:
 \begin{equation}
 p = K \rho^\gamma
 \end{equation}
-where $K$ is a constant that depends on the entropy, and do the 
+where $K$ is a constant that depends on the entropy, and do the
 integrals analytically.
 
 \begin{exercise}[Riemann invariants for gamma-law gas]
@@ -558,7 +558,7 @@ Burgers' equation, we can understand the shock by looking at the
 Rankine-Hugoniot jump conditions.  There will be one condition for
 each of our conservation laws, and together they tell us the speed of
 the shock and how density and pressure jump across
-it.  
+it.
 
 The Rankine-Hugoniot conditions are:
 \begin{equation}
@@ -579,10 +579,10 @@ For the one-dimensional system of Euler equations, we have the conditions:
 \begin{align}
 \rho_\star \hat{u}_\star &= \rho_s \hat{u}_s \\
 \rho_\star \hat{u}_\star^2 + p_\star &= \rho_s \hat{u}_s^2 + p_s \\
-\rho_\star \hat{u}_\star e_\star + \frac{1}{2} \rho_\star \hat{u}_\star^3 + \hat{u}_\star p_\star &= 
+\rho_\star \hat{u}_\star e_\star + \frac{1}{2} \rho_\star \hat{u}_\star^3 + \hat{u}_\star p_\star &=
   \rho_s \hat{u}_s e_s + \frac{1}{2} \rho_s \hat{u}_s^3 + \hat{u}_s p_s
 \end{align}
-Our goal is to find how each variable jumps across the shock.  We'll 
+Our goal is to find how each variable jumps across the shock.  We'll
 work this out for the general EOS case, following the ideas in \cite{colellaglaz:1985}.
 
 Starting with the mass flux, we can express:
@@ -641,9 +641,9 @@ giving
 [u] = \frac{[p]}{W_R}
 \end{equation}
 
-The last jump condition is for energy.  Since all the terms in the 
+The last jump condition is for energy.  Since all the terms in the
 energy equation are proportional to velocity, there will be no sign
-difference between the left and right shock jump conditions.  
+difference between the left and right shock jump conditions.
 We start by introducing the mass flux:
 \begin{equation}
 W_s e_\star + \frac{1}{2} W_s \hat{u}_\star^2 + \frac{W_s}{\rho_\star} p_\star =
@@ -653,7 +653,7 @@ The mass flux cancels, leaving
 \begin{equation}
 [e] + \frac{p_\star}{\rho_\star} - \frac{p_s}{\rho_s} + \frac{1}{2} \left ( \hat{u}_\star^2 - \hat{u}_s^2 \right ) = 0
 \end{equation}
-getting rid of the velocities using $\hat{u}_\star^2 = W_s^2/\rho_\star^2$ and 
+getting rid of the velocities using $\hat{u}_\star^2 = W_s^2/\rho_\star^2$ and
 $\hat{u}_s^2 = W_s^2/\rho_s^2$, we have:
 \begin{equation}
 [e] + \frac{p_\star}{\rho_\star} - \frac{p_s}{\rho_s} + \frac{1}{2} W_s^2 \left ( \frac{1}{\rho_\star^2} - \frac{1}{\rho_s^2} \right ) = 0
@@ -682,7 +682,7 @@ a proposed value for $p_\star$, then:
   \item use Newton's method (or another technique) with $[e] = -\bar{p} [\tau]$
      to find a correction to $\rho_\star$
   \end{enumerate}
-\item compute 
+\item compute
   \begin{equation}
     \frac{1}{W_s^2} = - \frac{[\tau]}{[p]}
   \end{equation}
@@ -708,7 +708,7 @@ if we assume a gamma-law gas.
 
 \begin{exercise}[Shock jump conditions for $\gamma$-law EOS]
 {
-Introducing 
+Introducing
 \begin{equation}
 e = \frac{p}{\rho} \frac{1}{\gamma -1}
 \end{equation}
@@ -744,7 +744,7 @@ S = u_s \mp c \left [ \left ( \frac{p_\star}{p_s} \right ) \frac{\gamma+1}{2\gam
 \end{equation}
 with the `$-$' or the left shock and the `+' for the right shock.
 \end{exercise}
-  
+
 \subsection{Finding the Star State}
 
 \label{Euler:riemann:starstate}
@@ -757,12 +757,12 @@ corresponding to the left and one to the right state:
 \begin{equation}
 u_{\star,L}(p) = \begin{cases}
    u_{\star,L}^\mathrm{shock}(p) & p > p_L \\
-   u_{\star,L}^\mathrm{rare}(p) & p \le p_L 
+   u_{\star,L}^\mathrm{rare}(p) & p \le p_L
    \end{cases}
 \qquad
 u_{\star,r}(p) = \begin{cases}
    u_{\star,R}^\mathrm{shock}(p) & p > p_R \\
-   u_{\star,R}^\mathrm{rare}(p) & p \le p_R 
+   u_{\star,R}^\mathrm{rare}(p) & p \le p_R
    \end{cases}
 \end{equation}
 The solution
@@ -832,7 +832,7 @@ interface, then $\xi = 0$.
 \includegraphics[width=0.49\linewidth]{riemann_waves_ifc_R}
 \includegraphics[width=0.49\linewidth]{riemann_waves_ifc_Rstar} \\
 \includegraphics[width=0.49\linewidth]{riemann_waves_ifc_Lstar}
-\includegraphics[width=0.49\linewidth]{riemann_waves_ifc_L} 
+\includegraphics[width=0.49\linewidth]{riemann_waves_ifc_L}
 \caption[Wave configuration for the Riemann problem]
         {\label{fig:euler:riemann_sample} An illustration of the 3
           waves emanating from an initial discontinuity (the origin of
@@ -849,7 +849,7 @@ Figure~\ref{fig:euler:riemann_sample} shows the possible
 configurations of the waves.  Note that the middle wave is always a
 contact but the left (1) and right (3) waves can be either a shock or
 rarefaction.  To find out which region the interface falls in, we simply
-look at the speeds.  
+look at the speeds.
 
 The first speed to consider is the contact wave, that has a speed of
 simply $S_c = u_\star$.  If $S_c < \xi$, then we are choosing between
@@ -865,7 +865,7 @@ The direction of the contact reduces the problem down to choosing
 between just two regions, either $L$-$L_\star$ or $R$-$R_\star$.  This
 leaves just a single wave to consider: the right wave for cases a and
 b; and the left wave for cases c and d.  We need the wave speed for
-this---it will depend on whether it is a shock or a rarefaction.  
+this---it will depend on whether it is a shock or a rarefaction.
 
 For a shock, the wave speed is given by
 Eq.~\ref{eq:euler-theory:shockgeneral}.  We do the same procedure as
@@ -882,13 +882,13 @@ rarefaction (the {\em head}) and trailing part (the {\em tail}).  The
 corresponding wave speeds are:
 \begin{itemize}
 \item left (1) rarefaction:
-  \begin{itemize} 
+  \begin{itemize}
   \item $\lambda_\mathrm{head} = u_L - c_L$
   \item $\lambda_\mathrm{tail} = u_\star - c_\star$
   \end{itemize}
-  
+
 \item right (3) rarefaction:
-  \begin{itemize} 
+  \begin{itemize}
   \item $\lambda_\mathrm{head} = u_R + c_R$
   \item $\lambda_\mathrm{tail} = u_\star + c_\star$
   \end{itemize}
@@ -911,8 +911,60 @@ $(x, t)$, in the $x$-$t$ plane.  For an initial discontinuity at the
 origin, we can imagine a line connecting this point and the origin,
 which has the form:
 \begin{equation}
-\frac{x}{t} = u - c
+\frac{x}{t} = u \mp c
 \end{equation}
+where $-$ and $+$ are for the left and right rarefaction waves, respectively.
+Now we need to find $u_{*,\mathrm{fan}}$, $\rho_{*,\mathrm{fan}}$, and $p_{*,\mathrm{fan}}$,
+where $*$ represents either $L_*$ or $R_*$ regions, and $\mathrm{fan}$ represents
+solutions in the rarefaction fan itself.
+
+To start, use the Riemann invariant that we obtained by assuming $\gamma$-law EOS to relate
+the L or R region to $L_*$ or $R_*$ region:
+\begin{equation}
+u_{L,R} \pm \frac{2c_{L,R}}{\gamma - 1} = u_{*,\mathrm{fan}} \pm \frac{2c_{*,\mathrm{fan}}}{\gamma - 1}
+\end{equation}
+Now using the characteristic slope, we can rewrite it as:
+\begin{equation}
+\pm c_{*,\mathrm{fan}} = u_{*,\mathrm{fan}} - \frac{x}{t}
+\end{equation}
+Insert the equation for sound speed into the Riemann invariant equation, we ultimately get:
+\begin{equation}
+u_{*,\mathrm{fan}} = \frac{2}{\gamma + 1} \left[ \frac{\gamma - 1}{2}u_{L,R} \pm c_{L,R} + \frac{x}{t}\right]
+\end{equation}
+where $+$ is for determining $u_{L_*,\mathrm{fan}}$ using $c_L$ and
+$-$ is for determining $u_{R_*,\mathrm{fan}}$ using $c_R$.
+
+Now using the definition of sound speed:
+\begin{equation}
+c_{*,\mathrm{fan}} = \sqrt{\frac{\gamma p_{*,\mathrm{fan}}}{\rho_{*,\mathrm{fan}}}} = \pm (u_{*,\mathrm{fan}} - \frac{x}{t})
+\end{equation}
+along with $\gamma$-law EOS and isentropic condition:
+\begin{equation}
+\rho_{*,\mathrm{fan}} = \rho_{L,R}\left( \frac{p_{*,\mathrm{fan}}}{p_{L,R}} \right)^{\frac{1}{\gamma}}
+\end{equation}
+Sound speed can be rewritten as:
+\begin{equation}
+c_{*,\mathrm{fan}} = c_{L,R} \left( \frac{p_{*,\mathrm{fan}}}{p_{L,R}} \right)^{\frac{\gamma - 1}{2 \gamma}}
+\end{equation}
+Now combine the above equation with the characteristic slope equation, we can relate velocity to pressure as:
+\begin{equation}
+c_{*,\mathrm{fan}} = c_{L,R} \left( \frac{p_{*,\mathrm{fan}}}{p_{L,R}} \right)^{\frac{\gamma - 1}{2 \gamma}} = \pm (u_{*,\mathrm{fan}} - \frac{x}{t})
+\end{equation}
+After inserting the previous result for $u_{*,\mathrm{fan}}$, we get:
+\begin{equation}
+p_{*,\mathrm{fan}} = p_{L,R} \left[\frac{2}{\gamma + 1} \pm \frac{\gamma - 1}{(\gamma + 1) c_{L,R}} \left(u_{L,R} - \frac{x}{t}\right)\right]^{\frac{2 \gamma}{\gamma - 1}}
+\end{equation}
+And we can relate pressure to density via the $\gamma$-law EOS as:
+\begin{equation}
+\frac{\rho_{*,\mathrm{fan}}}{\rho_{L,R}} = \left(\frac{p_{*,\mathrm{fan}}}{p_{L,R}}\right)^{\frac{1}{\gamma}}
+\end{equation}
+After inserting in the expression for pressure, we ultimately get the expression for $\rho_{*,\mathrm{fan}}$ in the rarefaction as:
+\begin{equation}
+\rho_{*,\mathrm{fan}} = \rho_{L,R} \left[\frac{2}{\gamma + 1} \pm \frac{\gamma - 1}{(\gamma + 1) c_{L,R}} \left(u_{L,R} - \frac{x}{t}\right)\right]^{\frac{2}{\gamma - 1}}
+\end{equation}
+
+Note that when we're solving the Riemann problem at the interface,
+$\frac{x}{t} = 0$ since by definition $x=0$.
 
 % figure from figures/Euler/rarefaction_cartoon.py
 \begin{figure}
@@ -921,15 +973,15 @@ which has the form:
 \includegraphics[width=0.6\linewidth]{rarefaction_center} \\
 \includegraphics[width=0.6\linewidth]{rarefaction_right}
 \caption[Rarefaction configuration for the Riemann problem]
-        {\label{fig:euler:rarefaction_sample} An illustration of the 
+        {\label{fig:euler:rarefaction_sample} An illustration of the
           structure of the left rarefaction wave, for the case
           where the contact and right wave are to the right of the
           interface.  Here, we are choosing between states $L$ and $L_\star$.
-          In (a), both the head and tail of the rarefaction are to the 
+          In (a), both the head and tail of the rarefaction are to the
           left of the interface, so state $L_\star$ is on the interface.
-          In (c), both the head and tail of the rarefaction are to the 
+          In (c), both the head and tail of the rarefaction are to the
           right of the interface, so state $L$ is on the interface.
-          Inbetween, case (b), shows a rarefaction that spans the 
+          Inbetween, case (b), shows a rarefaction that spans the
           interface.  For this case, we need to integrate the Riemann
           invariants to find the state on the interface.}
 \end{figure}
@@ -962,7 +1014,7 @@ equation to give:
 
 Notice that internal energy, $(\rho e)$ is not a conserved quantity
 (in particular, the $p\nabla \cdot \Ub$ term is not in conservative
-form).  
+form).
 
 Another energy-like quantity that we can consider is specific enthalpy,
 \begin{equation}
@@ -1192,4 +1244,3 @@ pressure gradient picks up a composition gradient term.
 The eigensystem will change with this addition.  We don't explore this here at this
 time.
 \fi
-
